@@ -1,0 +1,207 @@
+package hex;
+
+// Hex object
+// Offset coordinate system (X, Y) using the "odd-r" horizontal layout
+// See http://www.redblobgames.com/grids/hexagons/ for more information
+public class HexOff {
+	
+	// Coordinate of the hex object
+	int x;
+	int y;
+	
+	
+	public HexOff(int initialX, int initialY) {
+		x = initialX;
+		y = initialY;
+	}
+	
+	// -----------------------Distance calculations --------------------------//
+	/**
+	 * Takes two offset hex coordinates and returns the distance.
+	 * It does this by converting them to Axial coordinates and calculating the distance that way.
+	 */
+	public static int DistOff(HexOff origin, HexOff target) {
+		HexAx axOrigin = origin.ConvertToAx();
+		HexAx axTarget = target.ConvertToAx();	
+		
+		return axOrigin.DistFrom(axTarget);
+	}
+	
+	/**
+	 * Calculates the distance between this offset hex and another offset hex
+	 */
+	public int DistFrom(HexOff target) {
+		return HexOff.DistOff(this, target);		
+	}
+	
+	// -----------------------Azimuth calculations --------------------------//
+	
+	/**
+	 * Calculates the normalized azimuth in degrees between two offset coordinates
+	 */
+	public static double AzimuthOff(HexOff origin, HexOff target) {
+		double result;
+		int deltaX = target.x - origin.x;
+		int deltaY = target.y - origin.y;
+		
+		// Converts first to an absolute x/y coordinate system
+		// Algorithm from www.redblobgames.com/grids/hexagons
+		
+		double x = Math.sqrt(3) * (deltaX + 0.5 * (deltaY & 1));
+		double y = 1.5 * deltaY;
+		
+		result = Math.atan2(x, -y) * (180 / Math.PI);
+		if (result < 0) result += 360;
+		
+		return result;
+	}
+	
+	/**
+	 * Calculates the normalized azimuth in degrees between this offset hex and another offset hex. 
+	 */
+	public double AzimuthTo(HexOff target) {
+		return HexOff.AzimuthOff(this, target);
+	}
+	
+	// -----------------------Rounding calculations --------------------------//
+	
+	/**
+	 * Given a floating point cube coordinate (not an object but component coordinates), 
+	 * rounds each component to the nearest integer and makes adjustments to ensure that x + y + z = 0
+	 * Converts the result into an offset coordinate.
+	 * Algorithm from www.redblobgames.com/grids/hexagons
+	 */
+	
+	public static HexOff RoundOff (double x, double y, double z)
+	{
+		return HexCube.RoundCube(x, y, z).ConvertToOff();		
+	}
+	
+	
+	// ---------Conversions between floating point and integer coords-----------------//
+	
+	/**
+	 * Takes an offset hex coordinate and returns the result as a 2D floating point number
+	 */
+	public static HexDouble HexIs (HexOff in)
+	{
+		return new HexDouble(Math.sqrt(3) * (in.x + 0.5 * (in.y & 1)), 1.5 * in.y);		
+	}
+	
+	public HexDouble ThisHexIs()
+	{
+		return HexOff.HexIs(this);
+	}
+	
+	/**
+	 * Takes a 2D floating point number (HexDouble class) and converts it to an Offset Hex coordinate
+	 */
+	public static HexOff HexAt (HexDouble in)
+	{
+		double approxX = in.CalcHexAtX();
+		double approxZ = in.CalcHexAtY();
+		double approxY = -approxX - approxZ;
+		
+		return RoundOff(approxX, approxY, approxZ);
+	}
+	
+	
+	
+	// -----------------------Conversion to other hex formats --------------------------//
+	
+	/**
+	 * Converts this odd-r Offset Hex object into an Axial Hex object
+	 */
+	public HexAx ConvertToAx() {
+		int newX = x - (y - (y & 1)) / 2;
+		
+		return new HexAx(newX, y);
+	}
+	
+	/**
+	 * Converts this odd-r Offset Hex object into a Cubic Hex object
+	 */
+	public HexCube ConvertToCube() {
+		int newX = x - (y - (y & 1)) / 2;
+		
+		return new HexCube(newX, -newX - y, y);
+	}
+	
+	
+	// -----------------------Hexes between --------------------------//
+	
+	public static void HexesBetween (HexOff origin, HexOff target)
+	{
+		int distance = HexOff.DistOff(origin, target);
+		
+		HexDouble originD = HexOff.HexIs(origin);
+		HexDouble targetD = HexOff.HexIs(target);
+		double dx = targetD.x - originD.x;
+		double dy = targetD.y - originD.y;
+		
+		// Interpolates at (distance + 1) points along the line
+		for (int i = 0; i <= distance; i++)
+		{
+			double progress = (double)i / (double)distance;
+			HexDouble resultD = new HexDouble(originD.x + dx * progress,
+											  originD.y + dy * progress);
+			HexOff result = HexOff.HexAt(resultD);		
+			
+			System.out.print("Interpolation " + i + " of " + distance + " is coordinate: ");
+			result.DisplayHex();
+		}
+	}
+	
+	// Hexcasting
+	/**
+	 * Returns the hex at a certain distance and azimuth from the origin hex
+	 */
+	public static void HexCast (HexOff origin, double azimuth, int range)
+	{
+		// Convert into 2D coordinates
+		HexDouble originD = HexOff.HexIs(origin);
+		double dx = range * Math.sin(Math.toRadians(azimuth)) * Math.sqrt(3);
+		double dy = range * Math.cos(Math.toRadians(azimuth)) * -Math.sqrt(3);	// Inverted due to Y-axis increasing as you go south.
+		
+		HexDouble targetD = new HexDouble(originD.x + dx, originD.y + dy);
+		targetD.DisplayHex();
+		
+		// Converts target hex into the desired coordinate type
+		HexOff target = HexOff.HexAt(targetD);
+		
+		target.DisplayHex();
+	}
+	
+	// ---------------------- Neighboring hexes ------------------------//		
+	public static int[][][] neighbors = {{{0, -1}, {1, 0}, {0, 1}, {-1, 1}, {-1, 0}, {-1, -1}},
+									{{1, -1}, {1, 0}, {1, 1}, {0, 1}, {-1, 0}, {0, -1}}};
+	
+	/**
+	 * Given an origin hex and direction, returns the odd-r offset hex object to the appropriate neighbor
+	 * Direction 0 is 30 degrees (NE), direction 1 is 90 degrees (E), etc. in a clockwise pattern
+	 */
+	public static HexOff NeighborOff (HexOff origin, int direction) {
+		int parity = origin.y & 1;
+		return new HexOff(origin.x + neighbors[parity][direction][0], origin.y + neighbors[parity][direction][1]);		
+	}
+	
+	public HexOff findNeighbor (int direction) {
+		return NeighborOff(this, direction);
+	}
+
+	
+	
+	// ---------------------- Display functions ------------------------//
+	
+	/**
+	 * Displays this Offset Hex in an (x, y) format.
+	 * Includes newline at the end.
+	 */
+	public void DisplayHex() {
+		System.out.print( "(" + x + ", " + y + ")\n" );
+	}
+		
+	public void DisplayType() {
+		System.out.print("Offset hex\n");
+	}
+}
