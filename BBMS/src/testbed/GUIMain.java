@@ -1,8 +1,11 @@
-package bbms;
+package testbed;
 
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.*;
+
+import bbms.GUIMenu;
 
 public class GUIMain {
 	
@@ -11,6 +14,7 @@ public class GUIMain {
 	GUIMain(){		
 		
 		JFrame jf = new JFrame("Bare Bones Military Simulator");
+		
 		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		jf.setSize(1024, 800);
 		jf.setResizable(false);		

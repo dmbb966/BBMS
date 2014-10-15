@@ -1,4 +1,4 @@
-package bbms;
+package testbed;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;

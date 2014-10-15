@@ -18,7 +18,7 @@ public class GUIMenu extends JMenuBar{
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				System.out.println("File - New");
-				GUIMain.GC.GCOutput("File - new");
+				GUI_NB.GCO("File - new");
 			}
 		});
 		
@@ -30,7 +30,7 @@ public class GUIMenu extends JMenuBar{
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				System.out.println("File - Exit");
-				GUIMain.GC.GCOutput("File - Exit");
+				GUI_NB.GCO("File - Exit");
 				System.exit(0);
 			}
 		});
@@ -46,7 +46,7 @@ public class GUIMenu extends JMenuBar{
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				System.out.println("Test - Test 7");
-				GUIMain.GC.GCOutput("Test - Test 7");
+				GUI_NB.GCO("Test - Test 7");
 				FOVj.test7();
 			}
 		});
@@ -62,7 +62,7 @@ public class GUIMenu extends JMenuBar{
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				System.out.println("Bare Bones Military Simulator Experimental Version");
-				GUIMain.GC.GCOutput("Bare Bones Military Simulator Experimental Version");
+				GUI_NB.GCO("Bare Bones Military Simulator Experimental Version");
 			}
 		});
 		menu.add(menuItem);

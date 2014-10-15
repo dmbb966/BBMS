@@ -1,4 +1,4 @@
-package bbms;
+package testbed;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -12,16 +12,16 @@ public class GUIMainDisp extends JPanel{
 		setBorder(BorderFactory.createLineBorder(Color.BLUE, 5));
 
 		JTabbedPane jtp = new JTabbedPane();
-		jtp.addTab("Main", new CitiesPanel());
+		jtp.addTab("Main", new CitiesPanelX());
 			
 		this.add(jtp);
 	}
 }
 
 @SuppressWarnings("serial")
-class CitiesPanel extends JPanel {
+class CitiesPanelX extends JPanel {
 
-	public CitiesPanel() {
+	public CitiesPanelX() {
 		JButton b1 = new JButton("Berlin");
 		add(b1);
 		JButton b2 = new JButton("London");
