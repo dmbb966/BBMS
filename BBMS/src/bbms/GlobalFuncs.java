@@ -1,8 +1,13 @@
 package bbms;
 
 import bbms.MersenneTwister;
+import hex.*;
 
 public class GlobalFuncs {
+	
+	public static GUI_NB gui;
+	public static HexMap scenMap;
+	public static boolean mapInitialized = false;
 
 	/**
 	 * Random number object, uses the Mersenne Twister algorithm, coded in Java by Sean Luke (http://cs.gmu.edu/~sean/research/)
@@ -25,6 +30,28 @@ public class GlobalFuncs {
 	public static int randMean (int mean, int var) {
 		int min = mean - var;
 		return min + randGen.nextInt(var * 2);
+	}
+	
+	public static void initializeMap (int x, int y) {
+		scenMap = new HexMap(x, y);
+		mapInitialized = true;
+		GUI_NB.GCO("Generating main map.");		
+	}
+	
+	/**
+	 * If s is less than length, will return a new string with sufficient blank spaces concatanated on to the end
+	 * to bring the string up to the desired length.  Returns the original string otherwise.
+	 */
+	public static String whiteFill (String s, int len) {
+		if (s.length() >= len) return s;
+		else {
+			int whiteFill = len - s.length();
+			for (int i = 0; i < whiteFill; i++) {
+				s = s.concat(" ");
+			}
+			
+			return s;
+		}
 	}
 
 }

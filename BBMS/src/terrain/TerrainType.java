@@ -1,11 +1,15 @@
 package terrain;
 
+import java.awt.Graphics;
+
 import unit.MoveClass;
 
 abstract public class TerrainType {
 		
 	// Returns the movement cost for this type of terrain, given a movement class
 	public abstract int getMoveCost (MoveClass mClass);
+	
+	public abstract TerrainEnum getTerrainEnum();
 	
 	// Returns the display name for this terrain type
 	public abstract String displayType ();

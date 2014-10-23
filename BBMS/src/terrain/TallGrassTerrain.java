@@ -45,5 +45,10 @@ public class TallGrassTerrain extends TerrainType{
 	public int generateHeight() {
 		return GlobalFuncs.randRange(1, 3);
 	}
+	
+	@Override
+	public TerrainEnum getTerrainEnum() {
+		return TerrainEnum.T_GRASS;
+	}
 
 }

@@ -44,6 +44,11 @@ public class ClearTerrain extends TerrainType{
 	public int generateHeight() {
 		return 0;
 	}
+
+	@Override
+	public TerrainEnum getTerrainEnum() {
+		return TerrainEnum.CLEAR;
+	}
 	
 	
 

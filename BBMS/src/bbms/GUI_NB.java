@@ -1,7 +1,5 @@
 package bbms;
 
-import javax.swing.UIManager;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -33,16 +31,18 @@ public class GUI_NB extends javax.swing.JFrame {
 
         DisplayPanel = new javax.swing.JPanel();
         DisplayTabs = new javax.swing.JTabbedPane();
-        MainDisplay = new javax.swing.JPanel();
+        MainDisplay = new GUIMainDisp();
         InformationPanel = new javax.swing.JPanel();
-        ClockPane = new javax.swing.JPanel();
-        DateLabel = new javax.swing.JLabel();
-        DateDisplay = new javax.swing.JLabel();
-        TimeLabel = new javax.swing.JLabel();
-        TimeDisplay = new javax.swing.JLabel();
-        AccelLabel = new javax.swing.JLabel();
-        AccelDisplay = new javax.swing.JLabel();
-        InfoPane = new javax.swing.JPanel();
+        BasicInfoPane = new GUIBasicInfo();
+        BI_Hex = new javax.swing.JLabel();
+        BI_HexType = new javax.swing.JLabel();
+        BI_HexElev = new javax.swing.JLabel();
+        BI_HexObsc = new javax.swing.JLabel();
+        BI_HexDens = new javax.swing.JLabel();
+        BI_HexOHeight = new javax.swing.JLabel();
+        BI_UpperDisp = new javax.swing.JLabel();
+        BI_LowerDisp = new javax.swing.JLabel();
+        DetailedInfoPane = new javax.swing.JPanel();
         MiniMap = new javax.swing.JPanel();
         ConsolePanel = new javax.swing.JPanel();
         ConsoleScroll = new javax.swing.JScrollPane();
@@ -50,20 +50,35 @@ public class GUI_NB extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Bare Bones Military Simulator");
+        setMaximumSize(new java.awt.Dimension(1024, 800));
         setMinimumSize(new java.awt.Dimension(1024, 800));
+        setPreferredSize(new java.awt.Dimension(1024, 800));
         setResizable(false);
 
         DisplayPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 255), 3));
+
+        DisplayTabs.setPreferredSize(new java.awt.Dimension(710, 530));
+
+        MainDisplay.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                MainDisplayMouseClicked(evt);
+            }
+        });
+        MainDisplay.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                MainDisplayMouseMoved(evt);
+            }
+        });
 
         javax.swing.GroupLayout MainDisplayLayout = new javax.swing.GroupLayout(MainDisplay);
         MainDisplay.setLayout(MainDisplayLayout);
         MainDisplayLayout.setHorizontalGroup(
             MainDisplayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 709, Short.MAX_VALUE)
+            .addGap(0, 705, Short.MAX_VALUE)
         );
         MainDisplayLayout.setVerticalGroup(
             MainDisplayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 529, Short.MAX_VALUE)
+            .addGap(0, 502, Short.MAX_VALUE)
         );
 
         DisplayTabs.addTab("Main Display", MainDisplay);
@@ -74,87 +89,95 @@ public class GUI_NB extends javax.swing.JFrame {
             DisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(DisplayPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(DisplayTabs)
+                .addComponent(DisplayTabs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         DisplayPanelLayout.setVerticalGroup(
             DisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(DisplayPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(DisplayTabs)
+                .addComponent(DisplayTabs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         InformationPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 255, 51), 3));
 
-        ClockPane.setBorder(javax.swing.BorderFactory.createTitledBorder("Clock"));
+        BasicInfoPane.setBorder(javax.swing.BorderFactory.createTitledBorder("Basic Info"));
 
-        DateLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        DateLabel.setText("Date:");
+        BI_Hex.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        BI_Hex.setText("Hex: (xxx, yyy)");
 
-        DateDisplay.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        DateDisplay.setText("11/14/1942");
+        BI_HexType.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        BI_HexType.setText("Hex Type");
 
-        TimeLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        TimeLabel.setText("Time:");
+        BI_HexElev.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        BI_HexElev.setText("Elev: xxxm");
 
-        TimeDisplay.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        TimeDisplay.setText("8:42:00");
+        BI_HexObsc.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        BI_HexObsc.setText("Obsc: xxx");
 
-        AccelLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        AccelLabel.setText("Accel:");
+        BI_HexDens.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        BI_HexDens.setText("Density: xxx");
 
-        AccelDisplay.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        AccelDisplay.setText("1x");
+        BI_HexOHeight.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        BI_HexOHeight.setText("Obs H: xxm");
 
-        javax.swing.GroupLayout ClockPaneLayout = new javax.swing.GroupLayout(ClockPane);
-        ClockPane.setLayout(ClockPaneLayout);
-        ClockPaneLayout.setHorizontalGroup(
-            ClockPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(ClockPaneLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(ClockPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(ClockPaneLayout.createSequentialGroup()
-                        .addComponent(DateLabel)
+        BI_UpperDisp.setText("Upper Hex Display");
+
+        BI_LowerDisp.setText("Lower Hex Display");
+
+        javax.swing.GroupLayout BasicInfoPaneLayout = new javax.swing.GroupLayout(BasicInfoPane);
+        BasicInfoPane.setLayout(BasicInfoPaneLayout);
+        BasicInfoPaneLayout.setHorizontalGroup(
+            BasicInfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, BasicInfoPaneLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(BasicInfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(BI_LowerDisp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(BI_UpperDisp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(BasicInfoPaneLayout.createSequentialGroup()
+                        .addGroup(BasicInfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(BI_Hex)
+                            .addComponent(BI_HexObsc))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(DateDisplay))
-                    .addGroup(ClockPaneLayout.createSequentialGroup()
-                        .addComponent(TimeLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(TimeDisplay)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
-                .addGroup(ClockPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(AccelLabel)
-                    .addComponent(AccelDisplay))
-                .addGap(16, 16, 16))
+                        .addGroup(BasicInfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(BI_HexType)
+                            .addComponent(BI_HexDens))
+                        .addGap(18, 18, 18)
+                        .addGroup(BasicInfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(BI_HexElev)
+                            .addComponent(BI_HexOHeight)))))
         );
-        ClockPaneLayout.setVerticalGroup(
-            ClockPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(ClockPaneLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(ClockPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(DateLabel)
-                    .addComponent(DateDisplay)
-                    .addComponent(AccelLabel))
+        BasicInfoPaneLayout.setVerticalGroup(
+            BasicInfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(BasicInfoPaneLayout.createSequentialGroup()
+                .addGroup(BasicInfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(BI_Hex)
+                    .addComponent(BI_HexType)
+                    .addComponent(BI_HexElev))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(ClockPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(TimeLabel)
-                    .addComponent(TimeDisplay)
-                    .addComponent(AccelDisplay))
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addGroup(BasicInfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(BI_HexObsc)
+                    .addComponent(BI_HexDens)
+                    .addComponent(BI_HexOHeight))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(BI_UpperDisp, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(BI_LowerDisp)
+                .addGap(0, 11, Short.MAX_VALUE))
         );
 
-        InfoPane.setBorder(javax.swing.BorderFactory.createTitledBorder("Info Display"));
+        DetailedInfoPane.setBorder(javax.swing.BorderFactory.createTitledBorder("Selected Unit Info"));
 
-        javax.swing.GroupLayout InfoPaneLayout = new javax.swing.GroupLayout(InfoPane);
-        InfoPane.setLayout(InfoPaneLayout);
-        InfoPaneLayout.setHorizontalGroup(
-            InfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout DetailedInfoPaneLayout = new javax.swing.GroupLayout(DetailedInfoPane);
+        DetailedInfoPane.setLayout(DetailedInfoPaneLayout);
+        DetailedInfoPaneLayout.setHorizontalGroup(
+            DetailedInfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        InfoPaneLayout.setVerticalGroup(
-            InfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 447, Short.MAX_VALUE)
+        DetailedInfoPaneLayout.setVerticalGroup(
+            DetailedInfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 420, Short.MAX_VALUE)
         );
 
         MiniMap.setBackground(new java.awt.Color(0, 0, 0));
@@ -174,16 +197,17 @@ public class GUI_NB extends javax.swing.JFrame {
         InformationPanel.setLayout(InformationPanelLayout);
         InformationPanelLayout.setHorizontalGroup(
             InformationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(ClockPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(InfoPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(MiniMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(InformationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addComponent(BasicInfoPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(DetailedInfoPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         InformationPanelLayout.setVerticalGroup(
             InformationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(InformationPanelLayout.createSequentialGroup()
-                .addComponent(ClockPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(BasicInfoPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(InfoPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(DetailedInfoPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(MiniMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -199,11 +223,11 @@ public class GUI_NB extends javax.swing.JFrame {
         ConsolePanel.setLayout(ConsolePanelLayout);
         ConsolePanelLayout.setHorizontalGroup(
             ConsolePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(ConsoleScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 734, Short.MAX_VALUE)
+            .addComponent(ConsoleScroll)
         );
         ConsolePanelLayout.setVerticalGroup(
             ConsolePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(ConsoleScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
+            .addComponent(ConsoleScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -216,8 +240,8 @@ public class GUI_NB extends javax.swing.JFrame {
                     .addComponent(DisplayPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(ConsolePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(InformationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(InformationPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(16, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -235,6 +259,14 @@ public class GUI_NB extends javax.swing.JFrame {
         pack();
     }// </editor-fold>                        
 
+    private void MainDisplayMouseMoved(java.awt.event.MouseEvent evt) {                                       
+        GUIMainDisp.MouseMotionEvents(evt);
+    }                                      
+
+    private void MainDisplayMouseClicked(java.awt.event.MouseEvent evt) {                                         
+        GUIMainDisp.MouseClickedEvents(evt);
+    }                                        
+
     /**
      * @param args the command line arguments
      */
@@ -245,70 +277,51 @@ public class GUI_NB extends javax.swing.JFrame {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
-        UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        javax.swing.UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
         
         }
         catch (Exception e) {
             System.err.println("ERROR: Cannot load Windows-like displays.");
             e.printStackTrace();
         }
-    	
-        /*
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GUI_NB.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GUI_NB.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GUI_NB.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GUI_NB.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        */
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new GUI_NB().setVisible(true);
+                GlobalFuncs.gui = new GUI_NB();
+                GlobalFuncs.gui.setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify                     
-    private javax.swing.JLabel AccelDisplay;
-    private javax.swing.JLabel AccelLabel;
-    private javax.swing.JPanel ClockPane;
+    public javax.swing.JLabel BI_Hex;
+    public javax.swing.JLabel BI_HexDens;
+    public javax.swing.JLabel BI_HexElev;
+    public javax.swing.JLabel BI_HexOHeight;
+    public javax.swing.JLabel BI_HexObsc;
+    public javax.swing.JLabel BI_HexType;
+    public javax.swing.JLabel BI_LowerDisp;
+    public javax.swing.JLabel BI_UpperDisp;
+    private javax.swing.JPanel BasicInfoPane;
     private javax.swing.JPanel ConsolePanel;
     private javax.swing.JScrollPane ConsoleScroll;
-    private javax.swing.JLabel DateDisplay;
-    private javax.swing.JLabel DateLabel;
+    private javax.swing.JPanel DetailedInfoPane;
     private javax.swing.JPanel DisplayPanel;
     private javax.swing.JTabbedPane DisplayTabs;
     private static javax.swing.JTextArea GUIConsole;
-    private javax.swing.JPanel InfoPane;
     private javax.swing.JPanel InformationPanel;
     private javax.swing.JPanel MainDisplay;
     private javax.swing.JPanel MiniMap;
-    private javax.swing.JLabel TimeDisplay;
-    private javax.swing.JLabel TimeLabel;
     // End of variables declaration                   
-    
-	/**
-	 * Prints output to the GUI Console output.  Automatically appends newline.
-	 */
+
+    /**
+     * Prints output to the GUI Console output.  Automatically appends newline.
+     */
     public static void GCO(String str) {
     	GUIConsole.append(str + "\n");
     	GUIConsole.setCaretPosition(GUIConsole.getDocument().getLength());		
     }
+    
 }
-
-
-
-

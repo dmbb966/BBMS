@@ -200,8 +200,24 @@ public class HexOff {
 	public void DisplayHex() {
 		System.out.print( "(" + x + ", " + y + ")\n" );
 	}
+	
+	/**
+	 * Returns a string with the x, y coordinates of this offset hex.
+	 * Does not include a newline.
+	 */
+	public String DisplayHexStr() {
+		return "(" + x + ", " + y + ")";
+	}
 		
 	public void DisplayType() {
 		System.out.print("Offset hex\n");
+	}
+	
+	public int getX() {
+		return x;
+	}
+	
+	public int getY() {
+		return y;
 	}
 }

@@ -168,9 +168,12 @@ public class HexAx {
 	 * Converts this Axial Hex object into an odd-r Offset Hex object
 	 */
 	public HexOff ConvertToOff() {
+		// int z = -x - y;
+		int z = y;
 		int newX = x + (y - (y & 1)) / 2;
+		int newY = z;
 		
-		return new HexOff(newX, y);
+		return new HexOff(newX, newY);
 	}
 	
 	
@@ -182,6 +185,14 @@ public class HexAx {
 	 */
 	public void DisplayHex() {
 		System.out.print( "(" + x + ", " + y + ")\n" );
+	}
+	
+	/**
+	 * Returns a string with the x, y coordinates of this offset hex.
+	 * Does not include a newline.
+	 */
+	public String DisplayHexStr() {
+		return "(" + x + ", " + y + ")";
 	}
 	
 	public void DisplayType() {
