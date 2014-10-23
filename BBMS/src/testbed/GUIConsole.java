@@ -1,7 +1,6 @@
 package testbed;
 
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
 
 @SuppressWarnings("serial")

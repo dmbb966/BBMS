@@ -2,6 +2,7 @@ package bbms;
 
 import java.util.Vector;
 
+import unit.Unit;
 import bbms.MersenneTwister;
 import hex.*;
 
@@ -12,7 +13,7 @@ public class GlobalFuncs {
 	public static boolean mapInitialized = false;
 	public static int placeUnit = 0;
 	
-	public static Vector unitList = new Vector();
+	public static Vector<unit.Unit> unitList = new Vector<Unit>();
 	
 	private static int unitCount = 0;
 

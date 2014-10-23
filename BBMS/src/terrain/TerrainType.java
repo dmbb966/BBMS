@@ -1,7 +1,5 @@
 package terrain;
 
-import java.awt.Graphics;
-
 import unit.MoveClass;
 
 abstract public class TerrainType {

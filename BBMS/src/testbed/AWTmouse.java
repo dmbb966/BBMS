@@ -2,7 +2,7 @@ package testbed;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.applet.*;
+
 
 public class AWTmouse extends Frame {
 	String keymsg = "This is a test.";

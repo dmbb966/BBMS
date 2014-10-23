@@ -4,7 +4,6 @@ import hex.Hex;
 import hex.HexAx;
 import hex.HexCube;
 import hex.HexOff;
-import bbms.GlobalFuncs;
 import terrain.TerrainEnum;
 
 import javax.swing.UIManager;

@@ -1,9 +1,6 @@
 package hex;
 
-import java.io.File;
-
 import terrain.TerrainEnum;
-import bbms.GUI_NB;
 import bbms.GlobalFuncs;
 
 public class HexMap {

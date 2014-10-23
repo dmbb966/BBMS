@@ -51,10 +51,10 @@ public class GUI_NB extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Bare Bones Military Simulator");
-        setMaximumSize(new java.awt.Dimension(1024, 800));
+        setMaximumSize(new java.awt.Dimension(1200, 800));
         setMinimumSize(new java.awt.Dimension(1024, 800));
-        setPreferredSize(new java.awt.Dimension(1024, 800));
-        setResizable(false);
+        setPreferredSize(new java.awt.Dimension(1200, 800));
+        //setResizable(false);
 
         DisplayPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 255), 3));
 
@@ -106,22 +106,22 @@ public class GUI_NB extends javax.swing.JFrame {
         BasicInfoPane.setBorder(javax.swing.BorderFactory.createTitledBorder("Basic Info"));
 
         BI_Hex.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        BI_Hex.setText("Hex: (xxx, yyy)");
+        BI_Hex.setText("");
 
         BI_HexType.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        BI_HexType.setText("Hex Type");
+        BI_HexType.setText("");
 
         BI_HexElev.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        BI_HexElev.setText("Elev: xxxm");
+        BI_HexElev.setText("");
 
         BI_HexObsc.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        BI_HexObsc.setText("Obsc: xxx");
+        BI_HexObsc.setText("");
 
         BI_HexDens.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        BI_HexDens.setText("Density: xxx");
+        BI_HexDens.setText("");
 
         BI_HexOHeight.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        BI_HexOHeight.setText("Obs H: xxm");
+        BI_HexOHeight.setText("");
 
         BI_UpperDisp.setText("Upper Hex Display");
 

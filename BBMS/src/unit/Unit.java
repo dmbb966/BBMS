@@ -1,7 +1,5 @@
 package unit;
 
-import hex.HexOff;
-
 import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
@@ -34,12 +32,12 @@ public class Unit {
 		side = s;
 		type = givenType;
 		if (type == "M1A2") {
-			HullOffset = new hex.HexOff(54/2, 25/2);
-			TurretRing = new hex.HexOff(30, 12);
+			HullOffset = new hex.HexOff(27, 12);
+			TurretRing = new hex.HexOff(30 - HullOffset.getX(), 13 - HullOffset.getY());
 			TurretOffset = new hex.HexOff(25, 11);
 		} else if (type == "T-72") {
 			HullOffset = new hex.HexOff(25, 12);
-			TurretRing = new hex.HexOff(28, 11);
+			TurretRing = new hex.HexOff(28 - HullOffset.getX(), 11 - HullOffset.getY());
 			TurretOffset = new hex.HexOff(13, 10);
 		}
 		
@@ -47,12 +45,13 @@ public class Unit {
 		
 		unitID = GlobalFuncs.getNewUnitCount();
 		
-		GlobalFuncs.unitList.add(this);
+		//GlobalFuncs.unitList.add(this);
+		GlobalFuncs.unitList.addElement(this);
 	}
 	
 	public String DispUnitInfo() {
 		return "Unit " + unitID + " is type: " + type + ", callsign " + callsign + " at location " + 
-					location.loc.getX() + ", " + location.loc.getY() + " on side " + side;				
+					location.x + ", " + location.y + " on side " + side;				
 	}
 	
 	public void DrawUnit(int xi, int yi, Graphics g) {
@@ -69,7 +68,9 @@ public class Unit {
 			g.drawImage(img,  xi - HullOffset.getX(),  yi - HullOffset.getY(), null);
 			
 			img = ImageIO.read(turretFile);
-			g.drawImage(img,  xi - TurretOffset.getX(),  yi - TurretOffset.getY(),  null);
+			g.drawImage(img,  xi - TurretOffset.getX() + TurretRing.getX(),  
+					yi - TurretOffset.getY() + TurretRing.getY(),  null);
+			
 			
 		} catch (IOException ie) {
 			System.out.println(ie.getMessage());

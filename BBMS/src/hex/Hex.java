@@ -8,13 +8,13 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import bbms.GUI_NB;
-import bbms.GlobalFuncs;
 import terrain.*;
 
 
 public class Hex {
 	
-	public HexOff loc;			// The current location (odd-r offset hex)
+	public int x;
+	public int y;
 	public TerrainType tType;	// Type of terrain
 	public int elevation;		// Relative height of the ground (m)
 	public int obsHeight;		// Additional height from buildings/obstacles
@@ -27,8 +27,9 @@ public class Hex {
 	// TODO: Include unit list of all units in this hex
 	// TODO: Include a cover value which affects the deadliness of various types of weapons
 	
-	public Hex (int x, int y, TerrainEnum iTerrain, int iElev) {
-		loc = new HexOff(x, y);		
+	public Hex (int xi, int yi, TerrainEnum iTerrain, int iElev) {
+		x = xi;
+		y = yi;		
 		
 		switch (iTerrain) {
 		case CLEAR: tType = new ClearTerrain(); break;
@@ -44,12 +45,12 @@ public class Hex {
 	}
 	
 	public void DisplayInfo() {
-		System.out.print ("Hex: (" + loc.x + ", " + loc.y + ") is terrain type: " + tType.displayType() + " (" + tType.displayChar() + ")\n");
+		System.out.print ("Hex: (" + x + ", " + y + ") is terrain type: " + tType.displayType() + " (" + tType.displayChar() + ")\n");
 		System.out.print ("Elevation: " + elevation + "   Obs Height: " + obsHeight + "    Density: " + density + "    Obscur: " + obscuration + "\n");		
 	}
 	
 	public void GCODisplay() {
-		bbms.GUI_NB.GCO("Hex: (" + loc.x + ", " + loc.y + ") is terrain type: " + tType.displayType() + " (" + tType.displayChar() + ")");
+		bbms.GUI_NB.GCO("Hex: (" + x + ", " + y + ") is terrain type: " + tType.displayType() + " (" + tType.displayChar() + ")");
 		bbms.GUI_NB.GCO("Elevation: " + elevation + "   Obs Height: " + obsHeight + "    Density: " + density + "    Obscur: " + obscuration);
 	}
 	
@@ -93,8 +94,9 @@ public class Hex {
 			GUI_NB.GCO(ie.getMessage());
 		}				
 		
+		/*
 		if (HexUnit != null) {
 			HexUnit.DrawUnit(xi, yi, g);
-		}
+		} */
 	}
 }

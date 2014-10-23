@@ -1,7 +1,6 @@
 package bbms;
 
 import hex.HexMap;
-import hex.HexOff;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -14,7 +13,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import unit.Unit;
@@ -28,7 +26,10 @@ public class GUIMainDisp extends JPanel {
 	private int squareH = 20;
 	private static int defaultHexSize = 30;		
 	
-	private Polygon poly;
+	// ULH corner of the display frame is centered on these hexes
+	public int mapDisplayX = 0;
+	public int mapDisplayY = 0;
+	
 	private Polygon[] polyMap = {};
 	
 	public GUIMainDisp() {
@@ -128,26 +129,6 @@ public class GUIMainDisp extends JPanel {
 		
 	}
 	
-	public void drawHex(int x, int y, int size) {
-		int[] xPoly = new int[6];
-		int[] yPoly = new int[6];
-		
-		for (int i = 0; i < 6; i++) {
-			double angle = 2 * Math.PI / 6 * (i + 0.5);			
-			xPoly[i] = (int) (x + size * Math.cos(angle));
-			yPoly[i] = (int) (y + size * Math.sin(angle));;
-		}
-		
-		for (int i = 0; i < 5; i++) {
-			
-			GUI_NB.GCO("Coordinate " + i + " is: (" + xPoly[i] + ", " + yPoly[i] + ")");
-		}
-		
-		poly = new Polygon(xPoly, yPoly, xPoly.length);
-		
-				
-	}
-	
 	public Polygon genHex(int x, int y, int size) {
 		int[] xPoly = new int[6];
 		int[] yPoly = new int[6];		
@@ -194,13 +175,9 @@ public class GUIMainDisp extends JPanel {
 		int hexesX = (710 / hWidth) + 1;
 		int hexesY = (530 / hHeight) + 1;
 		
-		// Number of hexes to interate over
-		int xi = 0;
-		int yi = 0;
-		int xf = Math.min(xi + hexesX, hMap.getXDim());
-		int yf = Math.min(yi + hexesY, hMap.getYDim());
-		int xd = xf - xi;
-		int yd = yf - yi;
+		// Number of hexes to iterate over		
+		int xd = Math.min(hexesX, hMap.getXDim());
+		int yd = Math.min(hexesY, hMap.getYDim());		
 		
 		// Specific points as it iterates over the display
 		int xPoint = 0;
@@ -208,17 +185,10 @@ public class GUIMainDisp extends JPanel {
 		
 		for (int y = 0; y < yd; y++) {
 			for (int x = 0; x < xd; x++) {
-				yPoint = hexSize + (hHeight * y);
-				// Even-numbered rows: hexes are aligned all the way to the right
-				if (y % 2 == 0) {
-					xPoint = hexSize + (hWidth * x);
-				}
-				// Odd-numbered rows: hexes are offset to the right
-				else {
-					xPoint = hexSize + (int)(hWidth * (x + 0.5));
-				}
+				xPoint = (int) (hexSize * Math.sqrt(3.0) * (x + 0.5 * (y & 1))) + defaultHexSize;
+				yPoint = (int) (1.5 * hexSize * y) + defaultHexSize;
 				
-				hMap.getHex(x + xi, y + yi).DrawHex(xPoint, yPoint, hexSize, g);
+				hMap.getHex(x + mapDisplayX, y + mapDisplayY).DrawHex(xPoint, yPoint, hexSize, g);
 				g.drawPolygon(genHex(xPoint, yPoint, hexSize));
 			}
 		}
@@ -292,15 +262,40 @@ public class GUIMainDisp extends JPanel {
 		}
 	}
 	
-	public void drawUnits(Graphics g) {
+	public void drawUnits(Graphics g, int hexSize) {
 		unit.Unit u;
-		int xi, yi;
 		for (int i = 0; i < GlobalFuncs.unitList.size(); i++) {
 			u = (Unit) GlobalFuncs.unitList.elementAt(i);
 			// GUI_NB.GCO(u.DispUnitInfo());
 			
 			
-			u.DrawUnit(xi, yi, g);
+			// u.DrawUnit(xi, yi, g);
+			
+			int hWidth = (int) (Math.sqrt(3) * hexSize);
+			int hHeight = (int) (1.5 * hexSize);
+			
+			// Number of hexes to display
+			int hexesX = (710 / hWidth) + 1;
+			int hexesY = (530 / hHeight) + 1;
+			
+			// Specific points as it iterates over the display
+			int xPoint = 0;
+			int yPoint = 0;
+			
+			int unitX = u.location.x;
+			int unitY = u.location.y;
+			
+			if (unitX >= mapDisplayX - 1 && unitX <= mapDisplayX + hexesX) {
+				if (unitY >= mapDisplayY - 1 && unitY <= mapDisplayY + hexesY) {
+					// Unit icon is within the display bounds, will draw it now.
+					int relativeHexX = unitX - mapDisplayX;
+					int relativeHexY = unitY - mapDisplayY;
+					xPoint = (int) (hexSize * Math.sqrt(3.0) * (relativeHexX + 0.5 * (relativeHexY & 1))) + defaultHexSize;
+					yPoint = (int) (1.5 * hexSize * relativeHexY) + defaultHexSize;
+					
+					u.DrawUnit(xPoint, yPoint, g);
+				}
+			}
 		}
 	}
 	
@@ -316,7 +311,7 @@ public class GUIMainDisp extends JPanel {
 		g.drawRect(squareX, squareY, squareW, squareH); */
 		
 		drawHexMapComposite(GlobalFuncs.scenMap, 30, g);
-		drawUnits(g);
+		drawUnits(g, 30);
 		// drawHexMapComposite(15, 15, defaultHexSize, g);
 	}
 
