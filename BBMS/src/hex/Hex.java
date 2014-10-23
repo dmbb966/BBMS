@@ -20,7 +20,9 @@ public class Hex {
 	public int obsHeight;		// Additional height from buildings/obstacles
 	public int density;		// Obstructs line of sight if cumulative density >30
 	
-	public int obscuration;	// Level of visual obscuration on the hex (adds to density, but can dissipate over time)		
+	public int obscuration;	// Level of visual obscuration on the hex (adds to density, but can dissipate over time)	
+	
+	public unit.Unit HexUnit = null;
 	
 	// TODO: Include unit list of all units in this hex
 	// TODO: Include a cover value which affects the deadliness of various types of weapons
@@ -90,5 +92,9 @@ public class Hex {
 			System.out.println(ie.getMessage());
 			GUI_NB.GCO(ie.getMessage());
 		}				
+		
+		if (HexUnit != null) {
+			HexUnit.DrawUnit(xi, yi, g);
+		}
 	}
 }

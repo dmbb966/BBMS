@@ -1,5 +1,7 @@
 package bbms;
 
+import java.util.Vector;
+
 import bbms.MersenneTwister;
 import hex.*;
 
@@ -8,6 +10,11 @@ public class GlobalFuncs {
 	public static GUI_NB gui;
 	public static HexMap scenMap;
 	public static boolean mapInitialized = false;
+	public static int placeUnit = 0;
+	
+	public static Vector unitList = new Vector();
+	
+	private static int unitCount = 0;
 
 	/**
 	 * Random number object, uses the Mersenne Twister algorithm, coded in Java by Sean Luke (http://cs.gmu.edu/~sean/research/)
@@ -52,6 +59,14 @@ public class GlobalFuncs {
 			
 			return s;
 		}
+	}
+	
+	public static int getUnitCount() {
+		return unitCount;
+	}
+	
+	public static int getNewUnitCount() {
+		return unitCount += 1;
 	}
 
 }

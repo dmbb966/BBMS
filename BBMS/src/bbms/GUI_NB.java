@@ -12,6 +12,7 @@ package bbms;
  */
 public class GUI_NB extends javax.swing.JFrame {
 
+	GUIMainDisp GMD = new GUIMainDisp();
     /**
      * Creates new form BBGUI
      */
@@ -264,7 +265,7 @@ public class GUI_NB extends javax.swing.JFrame {
     }                                      
 
     private void MainDisplayMouseClicked(java.awt.event.MouseEvent evt) {                                         
-        GUIMainDisp.MouseClickedEvents(evt);
+        GMD.MouseClickedEvents(evt);
     }                                        
 
     /**

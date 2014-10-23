@@ -51,6 +51,32 @@ public class GUIMenu extends JMenuBar{
 		});
 		menu.add(menuItem);
 		
+		menuItem = new JMenuItem("Mode: Place M1A2", KeyEvent.VK_2);		
+		menuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {				
+				GUI_NB.GCO("Clicking will now place a M1A2");
+				GlobalFuncs.placeUnit = 1;
+			}
+		});
+		menu.add(menuItem);
+		 
+		menuItem = new JMenuItem("Mode: Place T-72", KeyEvent.VK_3);		
+		menuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {				
+				GUI_NB.GCO("Clicking will now place a T-72.");
+				GlobalFuncs.placeUnit = 2;
+			}
+		});
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Mode: Place Nothing", KeyEvent.VK_4);		
+		menuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {				
+				GUI_NB.GCO("Clicking will now do nothing.");
+				GlobalFuncs.placeUnit = 0;
+			}
+		});
+		menu.add(menuItem);
 		
 		// Help Menu
 		menu = new JMenu("Help");

@@ -17,6 +17,8 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
+import unit.Unit;
+
 @SuppressWarnings("serial")
 public class GUIMainDisp extends JPanel {
 	
@@ -39,7 +41,7 @@ public class GUIMainDisp extends JPanel {
 				// drawHexMap(e.getX(), e.getY(), 3, 3, 40);
 				// GUI_NB.GCO("Repainting.");
 				// repaint();
-				GlobalFuncs.gui.BI_Hex.setText("Hellow!");
+				// GlobalFuncs.gui.BI_Hex.setText("Hellow!");
 			}
 		});
 		
@@ -89,8 +91,40 @@ public class GUIMainDisp extends JPanel {
 		// GUI_NB.GCO("Cursor Hex is: " + cursorHex.DisplayHexStr() + " with cursor at: (" + e.getX() + ", " + e.getY() + ")");			
 	}
 	
-	public static void MouseClickedEvents(java.awt.event.MouseEvent e)
+	public void MouseClickedEvents(java.awt.event.MouseEvent e)
 	{
+		hex.HexOff cursorHexOff;
+		hex.Hex h;
+		switch(GlobalFuncs.placeUnit) {
+		case 0:
+			// Does nothing
+			GUI_NB.GCO("Clicked, but no mode selected");
+			break;
+		case 1:
+			// Places M1A2 at cursor hex
+			cursorHexOff = pixelToHexOff(e.getX(), e.getY(), -defaultHexSize, -defaultHexSize);
+			h = GlobalFuncs.scenMap.getHex(cursorHexOff.getX(), cursorHexOff.getY());
+			GUI_NB.GCO("Adding M1A2");
+			if (h != null && h.HexUnit == null) {
+				h.HexUnit = new unit.Unit(h, unit.SideEnum.FRIENDLY, "M1A2", "Dealer 66");	
+				GUI_NB.GCO(h.HexUnit.DispUnitInfo());
+			}			
+			break;
+		case 2:
+			// Places T-72 at cursor hex
+			GUI_NB.GCO("Adding T-72");
+			cursorHexOff = pixelToHexOff(e.getX(), e.getY(), -defaultHexSize, -defaultHexSize);
+			h = GlobalFuncs.scenMap.getHex(cursorHexOff.getX(), cursorHexOff.getY());
+			if (h != null && h.HexUnit == null) {
+				h.HexUnit = new unit.Unit(h, unit.SideEnum.ENEMY, "T-72", "Warmonger 5");
+				GUI_NB.GCO(h.HexUnit.DispUnitInfo());
+				
+			}
+			break;
+		}
+		
+		//GlobalFuncs.gui.validate();
+		GlobalFuncs.gui.repaint();
 		
 	}
 	
@@ -258,6 +292,18 @@ public class GUIMainDisp extends JPanel {
 		}
 	}
 	
+	public void drawUnits(Graphics g) {
+		unit.Unit u;
+		int xi, yi;
+		for (int i = 0; i < GlobalFuncs.unitList.size(); i++) {
+			u = (Unit) GlobalFuncs.unitList.elementAt(i);
+			// GUI_NB.GCO(u.DispUnitInfo());
+			
+			
+			u.DrawUnit(xi, yi, g);
+		}
+	}
+	
 	public void paintComponent(Graphics g) {		
 		super.paintComponent(g);
 		
@@ -270,6 +316,7 @@ public class GUIMainDisp extends JPanel {
 		g.drawRect(squareX, squareY, squareW, squareH); */
 		
 		drawHexMapComposite(GlobalFuncs.scenMap, 30, g);
+		drawUnits(g);
 		// drawHexMapComposite(15, 15, defaultHexSize, g);
 	}
 
