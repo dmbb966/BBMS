@@ -1,6 +1,14 @@
 package bbms;
 
+import java.awt.Desktop.Action;
+import java.awt.event.ActionEvent;
 import java.util.Vector;
+
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 
 import unit.Unit;
 import bbms.MersenneTwister;
@@ -68,6 +76,27 @@ public class GlobalFuncs {
 	
 	public static int getNewUnitCount() {
 		return unitCount += 1;
+	}
+	
+	/**
+	 * Initialize keyboard commands once the map loads
+	 */
+	public static void initializeKeyCommands() {
+		
+		AbstractAction fireCommand = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				GUI_NB.GCO("Fire!");
+			}
+		};
+		
+		GUI_NB.GCO("Keyboard commands initialized.");
+		InputMap imap = gui.BasicInfoPane.getInputMap(JComponent.WHEN_FOCUSED);
+		KeyStroke fKey = KeyStroke.getKeyStroke('f');
+		imap.put(fKey,  "fire");
+		
+		ActionMap amap = gui.BasicInfoPane.getActionMap();
+		amap.put("fire",  fireCommand);
+		gui.BasicInfoPane.requestFocus();
 	}
 
 }

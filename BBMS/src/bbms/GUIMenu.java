@@ -42,11 +42,12 @@ public class GUIMenu extends JMenuBar{
 		menu.setMnemonic(KeyEvent.VK_T);			
 		add(menu);
 		
-		menuItem = new JMenuItem("Initialize 15x15 Map", KeyEvent.VK_1);		
+		menuItem = new JMenuItem("Initialize 5x5 Map", KeyEvent.VK_1);		
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {				
-				GUI_NB.GCO("Initializing a 15x15 map");
-				GlobalFuncs.initializeMap(15, 15);
+				GUI_NB.GCO("Initializing a 5x5 map");
+				GlobalFuncs.initializeMap(5, 5);
+				GlobalFuncs.initializeKeyCommands();
 			}
 		});
 		menu.add(menuItem);

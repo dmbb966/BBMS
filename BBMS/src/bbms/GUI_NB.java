@@ -1,5 +1,7 @@
 package bbms;
 
+import javax.swing.JComponent;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -11,8 +13,9 @@ package bbms;
  * @author Brian
  */
 public class GUI_NB extends javax.swing.JFrame {
+    
+    GUIMainDisp GMD = new GUIMainDisp();
 
-	GUIMainDisp GMD = new GUIMainDisp();
     /**
      * Creates new form BBGUI
      */
@@ -51,10 +54,10 @@ public class GUI_NB extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Bare Bones Military Simulator");
-        setMaximumSize(new java.awt.Dimension(1200, 800));
+        setMaximumSize(new java.awt.Dimension(1024, 800));
         setMinimumSize(new java.awt.Dimension(1024, 800));
-        setPreferredSize(new java.awt.Dimension(1200, 800));
-        //setResizable(false);
+        setPreferredSize(new java.awt.Dimension(1024, 800));
+        setResizable(false);
 
         DisplayPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 255), 3));
 
@@ -106,22 +109,22 @@ public class GUI_NB extends javax.swing.JFrame {
         BasicInfoPane.setBorder(javax.swing.BorderFactory.createTitledBorder("Basic Info"));
 
         BI_Hex.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        BI_Hex.setText("");
+        BI_Hex.setText("Hex: (xxx, yyy)");
 
         BI_HexType.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        BI_HexType.setText("");
+        BI_HexType.setText("Hex Type");
 
         BI_HexElev.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        BI_HexElev.setText("");
+        BI_HexElev.setText("Elev: xxxm");
 
         BI_HexObsc.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        BI_HexObsc.setText("");
+        BI_HexObsc.setText("Obsc: xxx");
 
         BI_HexDens.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        BI_HexDens.setText("");
+        BI_HexDens.setText("Density: xxx");
 
         BI_HexOHeight.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        BI_HexOHeight.setText("");
+        BI_HexOHeight.setText("Obs H: xxm");
 
         BI_UpperDisp.setText("Upper Hex Display");
 
@@ -305,7 +308,7 @@ public class GUI_NB extends javax.swing.JFrame {
     public javax.swing.JLabel BI_HexType;
     public javax.swing.JLabel BI_LowerDisp;
     public javax.swing.JLabel BI_UpperDisp;
-    private javax.swing.JPanel BasicInfoPane;
+    public javax.swing.JPanel BasicInfoPane;
     private javax.swing.JPanel ConsolePanel;
     private javax.swing.JScrollPane ConsoleScroll;
     private javax.swing.JPanel DetailedInfoPane;

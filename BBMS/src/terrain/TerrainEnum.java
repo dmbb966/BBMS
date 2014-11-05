@@ -1,5 +1,5 @@
 package terrain;
 
 public enum TerrainEnum {
-	CLEAR, TREES, T_GRASS
+	CLEAR, TREES, T_GRASS, INVALID
 }

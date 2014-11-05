@@ -41,9 +41,9 @@ public class HexMap {
 	}
 	
 	public Hex getHex(int getX, int getY) {
-		if (getX > xDim || getX < 0 || getY > yDim || getY < 0) {
+		if (getX >= xDim || getX < 0 || getY >= yDim || getY < 0) {
 			// GUI_NB.GCO("ERROR: Cannot get hex at " + getX + ", " + getY + " because map dimensions are " + xDim + " x " + yDim);
-			return null;
+			return new Hex(getX, getY, TerrainEnum.INVALID, 0);
 		}
 		
 		return hexArray[getX][getY];

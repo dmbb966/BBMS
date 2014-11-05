@@ -35,6 +35,7 @@ public class Hex {
 		case CLEAR: tType = new ClearTerrain(); break;
 		case TREES: tType = new TreesTerrain(); break;
 		case T_GRASS: tType = new TallGrassTerrain(); break;
+		case INVALID: tType = new InvalidTerrain(); break;
 		}
 		
 		elevation = iElev + tType.generateHeight();		
@@ -81,6 +82,8 @@ public class Hex {
 				background = new File("src/hex/graphics/Grassland1-Z4.png");
 				foreground = new File("src/hex/graphics/Trees1-Z4.png");
 				break;
+			case INVALID:
+				background = new File("src/hex/graphics/Pavement-Z4.png");
 			};
 			
 			Image img = ImageIO.read(background);

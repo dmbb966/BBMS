@@ -92,6 +92,12 @@ public class GUIMainDisp extends JPanel {
 		// GUI_NB.GCO("Cursor Hex is: " + cursorHex.DisplayHexStr() + " with cursor at: (" + e.getX() + ", " + e.getY() + ")");			
 	}
 	
+    public static void KeyReleasedEvents (java.awt.event.KeyEvent evt)
+    {
+    	GUI_NB.GCO("Key released");
+        
+    }
+	
 	public void MouseClickedEvents(java.awt.event.MouseEvent e)
 	{
 		hex.HexOff cursorHexOff;
@@ -176,8 +182,8 @@ public class GUIMainDisp extends JPanel {
 		int hexesY = (530 / hHeight) + 1;
 		
 		// Number of hexes to iterate over		
-		int xd = Math.min(hexesX, hMap.getXDim());
-		int yd = Math.min(hexesY, hMap.getYDim());		
+		int xd = hexesX; //Math.min(hexesX, hMap.getXDim());
+		int yd = hexesY; //Math.min(hexesY, hMap.getYDim());		
 		
 		// Specific points as it iterates over the display
 		int xPoint = 0;
