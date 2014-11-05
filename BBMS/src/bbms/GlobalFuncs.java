@@ -98,5 +98,7 @@ public class GlobalFuncs {
 		amap.put("fire",  fireCommand);
 		gui.BasicInfoPane.requestFocus();
 	}
+	
+	
 
 }

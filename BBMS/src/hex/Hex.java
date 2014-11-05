@@ -1,13 +1,22 @@
 package hex;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.awt.image.FilteredImageSource;
+import java.awt.image.ImageFilter;
+import java.awt.image.ImageProducer;
+import java.awt.image.RescaleOp;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
 import bbms.GUI_NB;
+import bbms.GlobalFuncs;
 import terrain.*;
 
 
@@ -20,6 +29,8 @@ public class Hex {
 	public int obsHeight;		// Additional height from buildings/obstacles
 	public int density;		// Obstructs line of sight if cumulative density >30
 	
+	public boolean shaded;	// Will the hex be drawn shaded or not?
+	
 	public int obscuration;	// Level of visual obscuration on the hex (adds to density, but can dissipate over time)	
 	
 	public unit.Unit HexUnit = null;
@@ -30,6 +41,9 @@ public class Hex {
 	public Hex (int xi, int yi, TerrainEnum iTerrain, int iElev) {
 		x = xi;
 		y = yi;		
+				
+		shaded = false;
+		if (GlobalFuncs.randRange(0, 1) == 0) shaded = true;
 		
 		switch (iTerrain) {
 		case CLEAR: tType = new ClearTerrain(); break;
@@ -85,13 +99,38 @@ public class Hex {
 			case INVALID:
 				background = new File("src/hex/graphics/Pavement-Z4.png");
 			};
-			
+			//background = new File("src/hex/graphics/test.bmp");
 			Image img = ImageIO.read(background);
-			g.drawImage(img,  x,  y, null);
-			if (foreground != null) {
+			//img = Transparency.makeColorTransparent(img,  new Color(0).white);
+/*
+			// Create a buffered image with transparency
+		    BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+
+		    // Draw the image on to the buffered image
+		    Graphics2D bGr = bimage.createGraphics();
+		    bGr.drawImage(img, 0, 0, null);
+		    bGr.dispose();			
+			RescaleOp op = new RescaleOp(1.0f, 0, null);
+			BufferedImage oimg = op.filter(bimage,  null);
+			// BufferedImage bimg = (BufferedImage) img;
+			// bimg = op.filter(bimg, null);
+	*/		
+			
+			
+			BufferedImage bimg = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_RGB);
+			Graphics2D g2d = bimg.createGraphics();
+			g2d.drawImage(img, 0, 0, null);
+			g2d.dispose();
+			if (shaded) {
+				float scaleFactor = 0.5f;
+				RescaleOp op = new RescaleOp(scaleFactor, 0, null);
+				bimg = op.filter(bimg, null);				
+			}  
+			g.drawImage(bimg,  x,  y, null);
+			/* if (foreground != null) {
 				img = ImageIO.read(foreground);
 				g.drawImage(img,  x,  y,  null);
-			}
+			} */
 		} catch (IOException ie) {
 			System.out.println(ie.getMessage());
 			GUI_NB.GCO(ie.getMessage());
