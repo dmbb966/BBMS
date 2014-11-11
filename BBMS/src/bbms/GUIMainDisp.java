@@ -5,6 +5,7 @@ import hex.HexMap;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Polygon;
 import java.awt.event.InputEvent;
@@ -123,7 +124,9 @@ public class GUIMainDisp extends JPanel {
 				else {
 					GUI_NB.GCO("Hex " + clickedHex.x + ", " + clickedHex.y + " has units.");
 					GlobalFuncs.highlightedHex = clickedHex;
-					GUI_NB.GCO(clickedHex.HexUnit.DispUnitInfo());
+					GlobalFuncs.selectedUnit = clickedHex.HexUnit;
+					GUI_NB.GCO(GlobalFuncs.selectedUnit.DispUnitInfo());
+					
 				}
 			}
 			
@@ -375,6 +378,7 @@ public class GUIMainDisp extends JPanel {
 	
 	public void paintComponent(Graphics g) {		
 		super.paintComponent(g);
+		// Graphics2D g2d = (Graphics2D)g;
 		
 		// Draw text		
 		//g.drawString("Custom panel.",  10, 20);		

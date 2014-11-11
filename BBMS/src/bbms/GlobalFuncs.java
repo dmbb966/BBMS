@@ -25,6 +25,7 @@ public class GlobalFuncs {
 	
 	public static Vector<unit.Unit> unitList = new Vector<Unit>();
 	public static Hex highlightedHex = null; 
+	public static Unit selectedUnit = null;
 	
 	private static int unitCount = 0;
 
@@ -94,7 +95,7 @@ public class GlobalFuncs {
 		imap.put(k,  "scroll up");
 		AbstractAction scrollUp = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {				
-				gui.GMD.mapDisplayY--;
+				gui.GMD.mapDisplayY -= 2;
 				gui.repaint();
 				GUI_NB.GCO("Scroll Up, displaying at " + gui.GMD.mapDisplayX + ", " + gui.GMD.mapDisplayY);
 			}
@@ -105,7 +106,7 @@ public class GlobalFuncs {
 		imap.put(k, "scroll left");
 		AbstractAction scrollLeft = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				gui.GMD.mapDisplayX--;
+				gui.GMD.mapDisplayX -= 2;
 				gui.repaint();
 				GUI_NB.GCO("Scroll Left, displaying at " + gui.GMD.mapDisplayX + ", " + gui.GMD.mapDisplayY);
 			}
@@ -116,7 +117,7 @@ public class GlobalFuncs {
 		imap.put(k, "scroll down");
 		AbstractAction scrollDown = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {				
-				gui.GMD.mapDisplayY++;
+				gui.GMD.mapDisplayY += 2;
 				gui.repaint();
 				GUI_NB.GCO("Scroll Down, displaying at " + gui.GMD.mapDisplayX + ", " + gui.GMD.mapDisplayY);				
 			}
@@ -127,7 +128,7 @@ public class GlobalFuncs {
 		imap.put(k, "scroll right");
 		AbstractAction scrollRight = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {				
-				gui.GMD.mapDisplayX++;
+				gui.GMD.mapDisplayX += 2;
 				gui.repaint();
 				GUI_NB.GCO("Scroll Right, displaying at " + gui.GMD.mapDisplayX + ", " + gui.GMD.mapDisplayY);
 			}
