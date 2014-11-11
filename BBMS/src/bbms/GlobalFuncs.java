@@ -61,6 +61,10 @@ public class GlobalFuncs {
 	public static void initializeMap (int x, int y) {
 		scenMap = new HexMap(x, y);
 		mapInitialized = true;
+		unitCount = 0;
+		selectedUnit = null;
+		highlightedHex = null;
+		unitList = new Vector<Unit>();
 		GUI_NB.GCO("Generating main map.");		
 	}
 	
@@ -175,9 +179,11 @@ public class GlobalFuncs {
 		imap.put(k, "decrease rotation");
 		AbstractAction debugDecRotate = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				if (RotateHull) debugRotateHull -= 0.1;
-				else debugRotateTurret -= 0.1;
-				rotateDebugDisplay();
+				if (selectedUnit != null) {
+					if (RotateHull) selectedUnit.hullOrientation = normalizeAngle(selectedUnit.hullOrientation - 10);
+					else selectedUnit.turretOrientation = normalizeAngle(selectedUnit.turretOrientation - 10);
+					rotateDebugDisplay();
+				} else GUI_NB.GCO("No unit selected!");			
 			}
 		};
 		amap.put("decrease rotation", debugDecRotate);
@@ -185,10 +191,12 @@ public class GlobalFuncs {
 		k = KeyStroke.getKeyStroke(']');
 		imap.put(k, "increase rotation");
 		AbstractAction debugIncRotate = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {				
-				if (RotateHull) debugRotateHull += 0.1;
-				else debugRotateTurret += 0.1;
-				rotateDebugDisplay();
+			public void actionPerformed(ActionEvent e) {
+				if (selectedUnit != null) {
+					if (RotateHull) selectedUnit.hullOrientation = normalizeAngle(selectedUnit.hullOrientation + 10);
+					else selectedUnit.turretOrientation = normalizeAngle(selectedUnit.turretOrientation + 10);
+					rotateDebugDisplay();
+				} else GUI_NB.GCO("No unit selected!");
 			}
 		};
 		amap.put("increase rotation", debugIncRotate);
@@ -248,11 +256,22 @@ public class GlobalFuncs {
 	}
 	
 	public static void rotateDebugDisplay() {
-		GUI_NB.GCO("Rotation debug: Angle " + String.format("%.1f", debugRotateHull) + " and " + String.format("%.1f", debugRotateTurret) + " with center at " + debugRotateX + ", " + debugRotateY);
+		// GUI_NB.GCO("Rotation debug: Angle " + String.format("%.1f", debugRotateHull) + " and " + String.format("%.1f", debugRotateTurret) + " with center at " + debugRotateX + ", " + debugRotateY);
 		
 		gui.repaint();
 	}
 	
+	public static int normalizeAngle(int a) {
+		if (a >= 360) return normalizeAngle(a -= 360);
+		else if (a < 0) return normalizeAngle(a += 360);
+		else return a;
+	}
+	
+	public static double normalizeAngle(double a) {
+		if (a >= 360) return normalizeAngle(a -= 360);
+		else if (a < 0) return normalizeAngle(a += 360);
+		else return a;
+	}
 	
 
 }

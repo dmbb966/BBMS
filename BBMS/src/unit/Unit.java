@@ -88,7 +88,7 @@ public class Unit {
 			Graphics2D g2d = (Graphics2D)g;
 			AffineTransform backup = g2d.getTransform();
 			AffineTransform trans = new AffineTransform();
-			trans.rotate(GlobalFuncs.debugRotateHull, xi, yi);
+			trans.rotate(Math.toRadians(hullOrientation - 90), xi, yi);		// Translates cardinal degrees to that of the coord system
 			g2d.transform(trans);
 			g2d.drawImage(img,  xi - HullOffset.getX(),  yi - HullOffset.getY(), null);
 			g2d.setTransform(backup);
@@ -96,11 +96,12 @@ public class Unit {
 			
 			// g.drawImage(img,  xi - HullOffset.getX(),  yi - HullOffset.getY(), null);
 			
-			trans.rotate(GlobalFuncs.debugRotateTurret, xi + TurretRing.getX(), yi + TurretRing.getY());
+			// No translation needed since turret orientation is relative to the hull direction, 0 degrees = 12 oclock
+			trans.rotate(Math.toRadians(turretOrientation), xi + TurretRing.getX(), yi + TurretRing.getY());
 			g2d.transform(trans);
 			img = ImageIO.read(turretFile);
-			g2d.drawImage(img,  xi - TurretOffset.getX() + TurretRing.getX() + GlobalFuncs.debugRotateX,  
-					yi - TurretOffset.getY() + TurretRing.getY() + GlobalFuncs.debugRotateY,  null);
+			g2d.drawImage(img,  xi - TurretOffset.getX() + TurretRing.getX(),  
+					yi - TurretOffset.getY() + TurretRing.getY(),  null);
 			
 			g2d.setTransform(backup);
 			
