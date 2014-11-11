@@ -24,6 +24,7 @@ public class GlobalFuncs {
 	public static boolean showHighlighted = false;
 	
 	public static Vector<unit.Unit> unitList = new Vector<Unit>();
+	public static Hex highlightedHex = null; 
 	
 	private static int unitCount = 0;
 
@@ -154,12 +155,10 @@ public class GlobalFuncs {
 				
 				gui.repaint();
 				if (showHighlighted) {
-					GUI_NB.GCO("Highlighted hexes (1, 1) toggled to ON");
-					scenMap.getHex(1, 1).highlighted = true;
+					GUI_NB.GCO("Highlighted hex toggled to ON");
 				}
 				else {
-					GUI_NB.GCO("Highlighted hexes toggled to OFF");
-					scenMap.getHex(1, 1).highlighted = false;
+					GUI_NB.GCO("Highlighted hex toggled to OFF");
 				}
 			}
 		};

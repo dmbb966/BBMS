@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Polygon;
+import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -103,14 +104,37 @@ public class GUIMainDisp extends JPanel {
 	
 	public void MouseClickedEvents(java.awt.event.MouseEvent e)
 	{
+		if (!GlobalFuncs.mapInitialized) return;
+		
 		hex.HexOff cursorHexOff;
 		hex.Hex h;
 		switch(GlobalFuncs.placeUnit) {
 		case 0:
 			// Selects units if there are any in the hex
 			cursorHexOff = pixelToHexOff(e.getX(), e.getY(), -defaultHexSize, -defaultHexSize);
+			Hex clickedHex = GlobalFuncs.scenMap.getHex(cursorHexOff.getX(), cursorHexOff.getY());
 			
-			GUI_NB.GCO("Clicked, but no mode selected");
+			// Left button - select unit
+			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK) {
+				if (clickedHex.HexUnit == null) {
+					GUI_NB.GCO("Hex " + clickedHex.x + ", " + clickedHex.y + " has no units.");
+					GlobalFuncs.highlightedHex = clickedHex;
+				}
+				else {
+					GUI_NB.GCO("Hex " + clickedHex.x + ", " + clickedHex.y + " has units.");
+					GlobalFuncs.highlightedHex = clickedHex;
+					GUI_NB.GCO(clickedHex.HexUnit.DispUnitInfo());
+				}
+			}
+			
+			
+			// RIght button
+			if ((e.getModifiers() & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK) {
+				GUI_NB.GCO("Clicked right mouse button");
+			}
+			
+
+		
 			break;
 		case 1:
 			// Places M1A2 at cursor hex
@@ -192,9 +216,7 @@ public class GUIMainDisp extends JPanel {
 		
 		// Specific points as it iterates over the display
 		int xPoint = 0;
-		int yPoint = 0;
-		
-		Hex highlightedHex = null;
+		int yPoint = 0;	
 		
 		// TODO - I have some objects crossed here...
 		mapDisplayX = GlobalFuncs.gui.GMD.mapDisplayX;
@@ -213,7 +235,6 @@ public class GUIMainDisp extends JPanel {
 				
 				g.drawPolygon(genHex(xPoint, yPoint, hexSize));
 				
-				if (currentHex.highlighted) highlightedHex = currentHex;
 			}
 		}
 		
@@ -235,9 +256,9 @@ public class GUIMainDisp extends JPanel {
 		}
 		
 		// If there is a shaded hex, it will highlight it last
-		if (highlightedHex != null) {
-			int x = highlightedHex.x - mapDisplayX;
-			int y = highlightedHex.y - mapDisplayY;
+		if (GlobalFuncs.highlightedHex != null) {
+			int x = GlobalFuncs.highlightedHex.x - mapDisplayX;
+			int y = GlobalFuncs.highlightedHex.y - mapDisplayY;
 			
 			xPoint = (int) (hexSize * Math.sqrt(3.0) * (x + 0.5 * (y & 1))) + defaultHexSize;
 			yPoint = (int) (1.5 * hexSize * y) + defaultHexSize;
