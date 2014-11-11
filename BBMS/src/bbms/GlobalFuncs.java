@@ -23,6 +23,12 @@ public class GlobalFuncs {
 	public static boolean showShaded = false;
 	public static boolean showHighlighted = false;
 	
+	public static double debugRotateHull = 0.0;
+	public static double debugRotateTurret = 0.0;
+	public static int debugRotateX = 0;
+	public static int debugRotateY = 0;
+	public static boolean RotateHull = true;
+	
 	public static Vector<unit.Unit> unitList = new Vector<Unit>();
 	public static Hex highlightedHex = null; 
 	public static Unit selectedUnit = null;
@@ -164,8 +170,87 @@ public class GlobalFuncs {
 			}
 		};
 		amap.put("toggle highlight", toggleHighlighted);
+		
+		k = KeyStroke.getKeyStroke('[');
+		imap.put(k, "decrease rotation");
+		AbstractAction debugDecRotate = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				if (RotateHull) debugRotateHull -= 0.1;
+				else debugRotateTurret -= 0.1;
+				rotateDebugDisplay();
+			}
+		};
+		amap.put("decrease rotation", debugDecRotate);
+		
+		k = KeyStroke.getKeyStroke(']');
+		imap.put(k, "increase rotation");
+		AbstractAction debugIncRotate = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {				
+				if (RotateHull) debugRotateHull += 0.1;
+				else debugRotateTurret += 0.1;
+				rotateDebugDisplay();
+			}
+		};
+		amap.put("increase rotation", debugIncRotate);
+		
+		k = KeyStroke.getKeyStroke('4');
+		imap.put(k, "shift rotate left");
+		AbstractAction debugLeftTarget = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {				
+				debugRotateX -= 1;
+				rotateDebugDisplay();
+			}
+		};
+		amap.put("shift rotate left", debugLeftTarget);
+		
+		k = KeyStroke.getKeyStroke('6');
+		imap.put(k, "shift rotate right");
+		AbstractAction debugRightTarget = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {				
+				debugRotateX += 1;
+				rotateDebugDisplay();
+			}
+		};
+		amap.put("shift rotate right", debugRightTarget);
+		
+		k = KeyStroke.getKeyStroke('8');
+		imap.put(k, "shift rotate up");
+		AbstractAction debugUpTarget = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {				
+				debugRotateY -= 1;
+				rotateDebugDisplay();
+			}
+		};
+		amap.put("shift rotate up", debugUpTarget);
+		
+		k = KeyStroke.getKeyStroke('2');
+		imap.put(k, "shift rotate down");
+		AbstractAction debugDownTarget = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {				
+				debugRotateY += 1;
+				rotateDebugDisplay();
+			}
+		};
+		amap.put("shift rotate down", debugDownTarget);
+		
+		k = KeyStroke.getKeyStroke('t');
+		imap.put(k, "toggle rotation");
+		AbstractAction toggleRotation = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {				
+				RotateHull = !RotateHull;
+				if (RotateHull) GUI_NB.GCO("Rotating hull");
+				else GUI_NB.GCO("Rotating turret");
+			}
+		};
+		amap.put("toggle rotation", toggleRotation);
 				
 		// gui.BasicInfoPane.requestFocus();
+	}
+	
+	public static void rotateDebugDisplay() {
+		GUI_NB.GCO("Rotation debug: Angle " + String.format("%.1f", debugRotateHull) + " and " + String.format("%.1f", debugRotateTurret) + " with center at " + debugRotateX + ", " + debugRotateY);
+		
+		gui.repaint();
 	}
 	
 	

@@ -51,7 +51,7 @@ public class Unit {
 		
 		if (type == "M1A2") {
 			HullOffset = new hex.HexOff(27, 12);
-			TurretRing = new hex.HexOff(30 - HullOffset.getX(), 13 - HullOffset.getY());
+			TurretRing = new hex.HexOff(30 - HullOffset.getX(), 12 - HullOffset.getY());
 			TurretOffset = new hex.HexOff(25, 11);
 		} else if (type == "T-72") {
 			HullOffset = new hex.HexOff(25, 12);
@@ -85,10 +85,10 @@ public class Unit {
 		File turretFile = new File(turretPath);
 		try {
 			Image img = ImageIO.read(hullFile);
-			/* Graphics2D g2d = (Graphics2D)g;
+			Graphics2D g2d = (Graphics2D)g;
 			AffineTransform backup = g2d.getTransform();
 			AffineTransform trans = new AffineTransform();
-			trans.rotate(0.1, 5, 5);
+			trans.rotate(GlobalFuncs.debugRotateHull, xi, yi);
 			g2d.transform(trans);
 			g2d.drawImage(img,  xi - HullOffset.getX(),  yi - HullOffset.getY(), null);
 			g2d.setTransform(backup);
@@ -96,10 +96,13 @@ public class Unit {
 			
 			// g.drawImage(img,  xi - HullOffset.getX(),  yi - HullOffset.getY(), null);
 			
-			/* img = ImageIO.read(turretFile);
-			g.drawImage(img,  xi - TurretOffset.getX() + TurretRing.getX(),  
-					yi - TurretOffset.getY() + TurretRing.getY(),  null);
-			*/
+			trans.rotate(GlobalFuncs.debugRotateTurret, xi + TurretRing.getX(), yi + TurretRing.getY());
+			g2d.transform(trans);
+			img = ImageIO.read(turretFile);
+			g2d.drawImage(img,  xi - TurretOffset.getX() + TurretRing.getX() + GlobalFuncs.debugRotateX,  
+					yi - TurretOffset.getY() + TurretRing.getY() + GlobalFuncs.debugRotateY,  null);
+			
+			g2d.setTransform(backup);
 			
 		} catch (IOException ie) {
 			System.out.println(ie.getMessage());
