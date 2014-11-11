@@ -88,11 +88,12 @@ public class GUIMenu extends JMenuBar{
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {				
 				GUI_NB.GCO("W/A/S/D - Scroll the map");
-				GUI_NB.GCO("V - Toggle shaded hex visibility");
-				GUI_NB.GCO("H - Debug - toggles hex 1, 1 highlight");
+				GUI_NB.GCO("V - Toggle shaded hex visibility");				
 				GUI_NB.GCO("NUMPAD arrows - shift rotation target");
 				GUI_NB.GCO("[] - shift rotation");
 				GUI_NB.GCO("T - switches between rotating turret and hull");
+				GUI_NB.GCO("F - orients the turret to target");
+				GUI_NB.GCO("L - finds LOS to the selected hex");
 				
 			}
 		});

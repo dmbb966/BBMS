@@ -1,5 +1,10 @@
 package hex;
 
+import java.util.Vector;
+
+import bbms.GlobalFuncs;
+import unit.Unit;
+
 // Hex object
 // Offset coordinate system (X, Y) using the "odd-r" horizontal layout
 // See http://www.redblobgames.com/grids/hexagons/ for more information
@@ -130,9 +135,10 @@ public class HexOff {
 	
 	// -----------------------Hexes between --------------------------//
 	
-	public static void HexesBetween (HexOff origin, HexOff target)
+	public static Vector<hex.Hex> HexesBetween (HexOff origin, HexOff target)
 	{
 		int distance = HexOff.DistOff(origin, target);
+		Vector<hex.Hex> hexList = new Vector<Hex>();
 		
 		HexDouble originD = HexOff.HexIs(origin);
 		HexDouble targetD = HexOff.HexIs(target);
@@ -145,11 +151,15 @@ public class HexOff {
 			double progress = (double)i / (double)distance;
 			HexDouble resultD = new HexDouble(originD.x + dx * progress,
 											  originD.y + dy * progress);
-			HexOff result = HexOff.HexAt(resultD);		
+			HexOff result = HexOff.HexAt(resultD);
 			
-			System.out.print("Interpolation " + i + " of " + distance + " is coordinate: ");
-			result.DisplayHex();
+			hexList.add(GlobalFuncs.scenMap.getHex(result.x, result.y));
+			bbms.GUI_NB.GCO("Adding hex " + result.x + ", " + result.y + " to hex list");
+			// System.out.print("Interpolation " + i + " of " + distance + " is coordinate: ");
+			// result.DisplayHex();
 		}
+		
+		return hexList;
 	}
 	
 	// Hexcasting

@@ -20,8 +20,7 @@ public class GlobalFuncs {
 	public static HexMap scenMap;
 	public static boolean mapInitialized = false;
 	public static int placeUnit = 0;
-	public static boolean showShaded = false;
-	public static boolean showHighlighted = false;
+	public static boolean showShaded = true;	
 	
 	public static double debugRotateHull = 0.0;
 	public static double debugRotateTurret = 0.0;
@@ -157,24 +156,7 @@ public class GlobalFuncs {
 				else GUI_NB.GCO("Shaded hexes toggled to OFF");
 			}
 		};
-		amap.put("toggle visibility", toggleVisibility);
-		
-		k = KeyStroke.getKeyStroke('h');
-		imap.put(k, "toggle highlight");
-		AbstractAction toggleHighlighted = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {				
-				showHighlighted = !showHighlighted;
-				
-				gui.repaint();
-				if (showHighlighted) {
-					GUI_NB.GCO("Highlighted hex toggled to ON");
-				}
-				else {
-					GUI_NB.GCO("Highlighted hex toggled to OFF");
-				}
-			}
-		};
-		amap.put("toggle highlight", toggleHighlighted);
+		amap.put("toggle visibility", toggleVisibility);	
 		
 		k = KeyStroke.getKeyStroke('[');
 		imap.put(k, "decrease rotation");
@@ -268,6 +250,28 @@ public class GlobalFuncs {
 			}
 		};
 		amap.put("aim unit", aimUnit);
+		
+		k = KeyStroke.getKeyStroke('l');
+		imap.put(k, "find LOS");
+		AbstractAction findLOS = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {	
+				GUI_NB.GCO("Find LOS");
+				if (selectedUnit != null && selectedUnit.location != highlightedHex) {
+					HexOff currentHex = new HexOff(selectedUnit.location.x, selectedUnit.location.y);
+					HexOff targetHex = new HexOff(highlightedHex.x, highlightedHex.y);
+					Vector<hex.Hex> hexList = HexOff.HexesBetween(currentHex, targetHex);
+					
+					GUI_NB.GCO("Hex list is of size " + hexList.size());
+					for (int i = 0; i < hexList.size(); i++) {
+						Hex h = hexList.elementAt(i);
+						h.shaded = true;
+						GUI_NB.GCO("Setting hex " + h.x + ", " + h.y + " to shaded");
+					}
+					gui.repaint();
+				}
+			}
+		};
+		amap.put("find LOS", findLOS);
 				
 		// gui.BasicInfoPane.requestFocus();
 	}
