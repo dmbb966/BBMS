@@ -20,6 +20,7 @@ public class GlobalFuncs {
 	public static HexMap scenMap;
 	public static boolean mapInitialized = false;
 	public static int placeUnit = 0;
+	public static boolean showShaded = false;
 	
 	public static Vector<unit.Unit> unitList = new Vector<Unit>();
 	
@@ -83,20 +84,68 @@ public class GlobalFuncs {
 	 */
 	public static void initializeKeyCommands() {
 		
-		AbstractAction fireCommand = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				GUI_NB.GCO("Fire!");
+		GUI_NB.GCO("Keyboard commands initialized.");
+		InputMap imap = gui.BasicInfoPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+		ActionMap amap = gui.BasicInfoPane.getActionMap();
+		
+		KeyStroke k = KeyStroke.getKeyStroke('w');
+		imap.put(k,  "scroll up");
+		AbstractAction scrollUp = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {				
+				gui.GMD.mapDisplayY--;
+				gui.repaint();
+				GUI_NB.GCO("Scroll Up, displaying at " + gui.GMD.mapDisplayX + ", " + gui.GMD.mapDisplayY);
 			}
 		};
+		amap.put("scroll up", scrollUp);
 		
-		GUI_NB.GCO("Keyboard commands initialized.");
-		InputMap imap = gui.BasicInfoPane.getInputMap(JComponent.WHEN_FOCUSED);
-		KeyStroke fKey = KeyStroke.getKeyStroke('f');
-		imap.put(fKey,  "fire");
+		k = KeyStroke.getKeyStroke('a');
+		imap.put(k, "scroll left");
+		AbstractAction scrollLeft = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				gui.GMD.mapDisplayX--;
+				gui.repaint();
+				GUI_NB.GCO("Scroll Left, displaying at " + gui.GMD.mapDisplayX + ", " + gui.GMD.mapDisplayY);
+			}
+		};		
+		amap.put("scroll left",  scrollLeft);
 		
-		ActionMap amap = gui.BasicInfoPane.getActionMap();
-		amap.put("fire",  fireCommand);
-		gui.BasicInfoPane.requestFocus();
+		k = KeyStroke.getKeyStroke('s');
+		imap.put(k, "scroll down");
+		AbstractAction scrollDown = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {				
+				gui.GMD.mapDisplayY++;
+				gui.repaint();
+				GUI_NB.GCO("Scroll Down, displaying at " + gui.GMD.mapDisplayX + ", " + gui.GMD.mapDisplayY);				
+			}
+		};
+		amap.put("scroll down", scrollDown);
+		
+		k = KeyStroke.getKeyStroke('d');
+		imap.put(k, "scroll right");
+		AbstractAction scrollRight = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {				
+				gui.GMD.mapDisplayX++;
+				gui.repaint();
+				GUI_NB.GCO("Scroll Right, displaying at " + gui.GMD.mapDisplayX + ", " + gui.GMD.mapDisplayY);
+			}
+		};
+		amap.put("scroll right", scrollRight);
+		
+		
+		k = KeyStroke.getKeyStroke('v');
+		imap.put(k, "toggle visibility");
+		AbstractAction toggleVisibility = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {				
+				showShaded = !showShaded;
+				gui.repaint();
+				if (showShaded) GUI_NB.GCO("Shaded hexes toggled to ON");
+				else GUI_NB.GCO("Shaded hexes toggled to OFF");
+			}
+		};
+		amap.put("toggle visibility", toggleVisibility);		
+				
+		// gui.BasicInfoPane.requestFocus();
 	}
 	
 	

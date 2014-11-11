@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.FilteredImageSource;
 import java.awt.image.ImageFilter;
 import java.awt.image.ImageProducer;
+import java.awt.image.IndexColorModel;
 import java.awt.image.RescaleOp;
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +30,8 @@ public class Hex {
 	public int obsHeight;		// Additional height from buildings/obstacles
 	public int density;		// Obstructs line of sight if cumulative density >30
 	
-	public boolean shaded;	// Will the hex be drawn shaded or not?
+	public boolean shaded;		// Will the hex be drawn shaded or not?
+	public boolean highlighted;	// Is this hex highlighted (apart from shading)
 	
 	public int obscuration;	// Level of visual obscuration on the hex (adds to density, but can dissipate over time)	
 	
@@ -43,6 +45,7 @@ public class Hex {
 		y = yi;		
 				
 		shaded = false;
+		highlighted = false;
 		if (GlobalFuncs.randRange(0, 1) == 0) shaded = true;
 		
 		switch (iTerrain) {
@@ -87,7 +90,7 @@ public class Hex {
 		try {
 			switch(tType.getTerrainEnum()){
 			case CLEAR:
-				background = new File("src/hex/graphics/Grassland1-Z4.png"); 
+				background = new File("src/hex/graphics/Grassland1-Z4.png");				
 				break;
 			case T_GRASS:
 				background = new File("src/hex/graphics/HighGrass1-Z4.png");
@@ -97,10 +100,16 @@ public class Hex {
 				foreground = new File("src/hex/graphics/Trees1-Z4.png");
 				break;
 			case INVALID:
-				background = new File("src/hex/graphics/Pavement-Z4.png");
+				background = new File("src/hex/graphics/Pavement-Z44.png");
 			};
 			//background = new File("src/hex/graphics/test.bmp");
-			Image img = ImageIO.read(background);
+			BufferedImage img = ImageIO.read(background);
+			// BufferedImage index = convertType(img, BufferedImage.TYPE_BYTE_INDEXED);
+			// index = rescale(index, 0.5f, 0);
+			
+			// RescaleOp op = new RescaleOp(1.0f, 0, null);
+			// img = op.filter(img, null);
+			
 			//img = Transparency.makeColorTransparent(img,  new Color(0).white);
 /*
 			// Create a buffered image with transparency
@@ -116,7 +125,7 @@ public class Hex {
 			// bimg = op.filter(bimg, null);
 	*/		
 			
-			
+			/*
 			BufferedImage bimg = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_RGB);
 			Graphics2D g2d = bimg.createGraphics();
 			g2d.drawImage(img, 0, 0, null);
@@ -126,11 +135,18 @@ public class Hex {
 				RescaleOp op = new RescaleOp(scaleFactor, 0, null);
 				bimg = op.filter(bimg, null);				
 			}  
-			g.drawImage(bimg,  x,  y, null);
-			/* if (foreground != null) {
+			*/
+			
+			g.drawImage(img,  x,  y, null);
+			if (foreground != null) {
 				img = ImageIO.read(foreground);
 				g.drawImage(img,  x,  y,  null);
+			}
+			
+			/* if (shaded) {
+				g.drawString("S", x, y);
 			} */
+			
 		} catch (IOException ie) {
 			System.out.println(ie.getMessage());
 			GUI_NB.GCO(ie.getMessage());
@@ -140,5 +156,53 @@ public class Hex {
 		if (HexUnit != null) {
 			HexUnit.DrawUnit(xi, yi, g);
 		} */
+	}
+
+	// https://community.oracle.com/thread/1269537?start=0&tstart=0
+	public static BufferedImage convertType(BufferedImage img, int typeByteIndexed) {
+		if (img.getType() == typeByteIndexed) return img;
+		BufferedImage result = new BufferedImage(img.getWidth(), img.getHeight(), typeByteIndexed);
+		Graphics2D g2d = result.createGraphics();
+		g2d.drawImage(img, 0, 0, null);
+		//g2d.drawRenderedImage(img,  null);
+		g2d.dispose();
+		return result;
+	}
+	
+	// https://community.oracle.com/thread/1269537?start=0&tstart=0
+	public static IndexColorModel rescale (IndexColorModel icm, float scaleFactor, float offset) {
+		int size = icm.getMapSize();
+		byte[] reds = new byte[size];
+		byte[] greens = new byte[size];
+		byte[] blues = new byte[size];
+		byte[] alphas = new byte[size];
+		
+		icm.getReds(reds);
+		icm.getGreens(greens);
+		icm.getBlues(blues);
+		icm.getAlphas(alphas);
+		
+		rescale(reds, scaleFactor, offset);
+		rescale(greens, scaleFactor, offset);
+		rescale(blues, scaleFactor, offset);
+		
+		return new IndexColorModel(8, size, reds, greens, blues, alphas);
+	}
+	
+	// https://community.oracle.com/thread/1269537?start=0&tstart=0
+	public static void rescale(byte[] comps, float scaleFactor, float offset) {
+		for (int i = 0; i < comps.length; i++) {
+			int comp = 0xff & comps[i];			
+			int newComp = Math.round(comp * scaleFactor + offset);
+			if (newComp < 0) newComp = 0;
+			else if (newComp > 255) newComp = 255;
+			comps[i] = (byte) newComp;
+		}
+	}
+	
+	// https://community.oracle.com/thread/1269537?start=0&tstart=0
+	public static BufferedImage rescale (BufferedImage indexed, float scaleFactor, float offset) {
+		IndexColorModel icm = (IndexColorModel) indexed.getColorModel();
+		return new BufferedImage(rescale(icm, scaleFactor, offset), indexed.getRaster(), false, null);
 	}
 }

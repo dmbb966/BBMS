@@ -1,5 +1,6 @@
 package bbms;
 
+import hex.Hex;
 import hex.HexMap;
 
 import java.awt.Color;
@@ -85,7 +86,7 @@ public class GUIMainDisp extends JPanel {
 			if (h != null) h.GCODisplay(); */
 			
 			GlobalFuncs.gui.BI_Hex.setText("Curs: " + e.getX() + ", " + e.getY());
-			GUIBasicInfo.UpdateHexInfo(cursorHexOff.getX(), cursorHexOff.getY());
+			GUIBasicInfo.UpdateHexInfo(cursorHexOff.getX() + GlobalFuncs.gui.GMD.mapDisplayX, cursorHexOff.getY() + GlobalFuncs.gui.GMD.mapDisplayY);
 
 		}
 		
@@ -189,13 +190,39 @@ public class GUIMainDisp extends JPanel {
 		int xPoint = 0;
 		int yPoint = 0;
 		
+		// TODO - I have some objects crossed here...
+		mapDisplayX = GlobalFuncs.gui.GMD.mapDisplayX;
+		mapDisplayY = GlobalFuncs.gui.GMD.mapDisplayY;
+		
+		GUI_NB.GCO("DEBUG: Map display is at " + mapDisplayX + ", " + mapDisplayY);
+		// GUI_NB.GCO("DEBUG: Object map display " + GlobalFuncs.gui.GMD.mapDisplayX + ", " + GlobalFuncs.gui.GMD.mapDisplayY);
+		
 		for (int y = 0; y < yd; y++) {
 			for (int x = 0; x < xd; x++) {
 				xPoint = (int) (hexSize * Math.sqrt(3.0) * (x + 0.5 * (y & 1))) + defaultHexSize;
 				yPoint = (int) (1.5 * hexSize * y) + defaultHexSize;
 				
-				hMap.getHex(x + mapDisplayX, y + mapDisplayY).DrawHex(xPoint, yPoint, hexSize, g);
+				Hex currentHex = hMap.getHex(x + mapDisplayX, y + mapDisplayY);
+				currentHex.DrawHex(xPoint, yPoint, hexSize, g);
+				
 				g.drawPolygon(genHex(xPoint, yPoint, hexSize));
+			}
+		}
+		
+		// Second loop if you are displaying shaded hexes
+		// TODO: This can be implemented a lot more efficiently.
+		if (!GlobalFuncs.showShaded) return;
+		
+		for (int y = 0; y < yd; y++) {
+			for (int x = 0; x < xd; x++) {
+				xPoint = (int) (hexSize * Math.sqrt(3.0) * (x + 0.5 * (y & 1))) + defaultHexSize;
+				yPoint = (int) (1.5 * hexSize * y) + defaultHexSize;
+				
+				Hex currentHex = hMap.getHex(x + mapDisplayX, y + mapDisplayY);
+				g.setColor(Color.WHITE);
+				if (currentHex.shaded) {
+					g.drawPolygon(genHex(xPoint, yPoint, hexSize));
+				}
 			}
 		}
 	}

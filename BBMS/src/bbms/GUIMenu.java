@@ -42,11 +42,11 @@ public class GUIMenu extends JMenuBar{
 		menu.setMnemonic(KeyEvent.VK_T);			
 		add(menu);
 		
-		menuItem = new JMenuItem("Initialize 5x5 Map", KeyEvent.VK_1);		
+		menuItem = new JMenuItem("Initialize 30x30 Map", KeyEvent.VK_1);		
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {				
-				GUI_NB.GCO("Initializing a 5x5 map");
-				GlobalFuncs.initializeMap(5, 5);
+				GUI_NB.GCO("Initializing a 30x30 map");
+				GlobalFuncs.initializeMap(30, 30);
 				GlobalFuncs.initializeKeyCommands();
 			}
 		});
@@ -83,6 +83,15 @@ public class GUIMenu extends JMenuBar{
 		menu = new JMenu("Help");
 		menu.setMnemonic(KeyEvent.VK_H);			
 		add(menu);
+		
+		menuItem = new JMenuItem("Keyboard Shortcuts", KeyEvent.VK_K);
+		menuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {				
+				GUI_NB.GCO("W/A/S/D - Scroll the map");
+				GUI_NB.GCO("V - Toggle shaded hex visibility");
+			}
+		});
+		menu.add(menuItem);
 		
 		menuItem = new JMenuItem("About", KeyEvent.VK_A);		
 		menuItem.addActionListener(new ActionListener() {
