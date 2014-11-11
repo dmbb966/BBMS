@@ -71,7 +71,9 @@ public class GUIMainDisp extends JPanel {
 	
 	private static hex.HexOff pixelToHexOff(int x, int y, int offsetX, int offsetY) {
 		hex.HexAx interim = pixelToHex(x, y, offsetX, offsetY);
-		return interim.ConvertToOff();
+		hex.HexOff result = interim.ConvertToOff();
+		
+		return new hex.HexOff(result.getX() + GlobalFuncs.gui.GMD.mapDisplayX, result.getY() + GlobalFuncs.gui.GMD.mapDisplayY);
 	}
 	
 	public static void MouseMotionEvents(java.awt.event.MouseEvent e)
@@ -86,7 +88,7 @@ public class GUIMainDisp extends JPanel {
 			if (h != null) h.GCODisplay(); */
 			
 			GlobalFuncs.gui.BI_Hex.setText("Curs: " + e.getX() + ", " + e.getY());
-			GUIBasicInfo.UpdateHexInfo(cursorHexOff.getX() + GlobalFuncs.gui.GMD.mapDisplayX, cursorHexOff.getY() + GlobalFuncs.gui.GMD.mapDisplayY);
+			GUIBasicInfo.UpdateHexInfo(cursorHexOff.getX(), cursorHexOff.getY());
 
 		}
 		
@@ -105,7 +107,9 @@ public class GUIMainDisp extends JPanel {
 		hex.Hex h;
 		switch(GlobalFuncs.placeUnit) {
 		case 0:
-			// Does nothing
+			// Selects units if there are any in the hex
+			cursorHexOff = pixelToHexOff(e.getX(), e.getY(), -defaultHexSize, -defaultHexSize);
+			
 			GUI_NB.GCO("Clicked, but no mode selected");
 			break;
 		case 1:
@@ -190,11 +194,13 @@ public class GUIMainDisp extends JPanel {
 		int xPoint = 0;
 		int yPoint = 0;
 		
+		Hex highlightedHex = null;
+		
 		// TODO - I have some objects crossed here...
 		mapDisplayX = GlobalFuncs.gui.GMD.mapDisplayX;
 		mapDisplayY = GlobalFuncs.gui.GMD.mapDisplayY;
 		
-		GUI_NB.GCO("DEBUG: Map display is at " + mapDisplayX + ", " + mapDisplayY);
+		// GUI_NB.GCO("DEBUG: Map display is at " + mapDisplayX + ", " + mapDisplayY);
 		// GUI_NB.GCO("DEBUG: Object map display " + GlobalFuncs.gui.GMD.mapDisplayX + ", " + GlobalFuncs.gui.GMD.mapDisplayY);
 		
 		for (int y = 0; y < yd; y++) {
@@ -206,24 +212,38 @@ public class GUIMainDisp extends JPanel {
 				currentHex.DrawHex(xPoint, yPoint, hexSize, g);
 				
 				g.drawPolygon(genHex(xPoint, yPoint, hexSize));
+				
+				if (currentHex.highlighted) highlightedHex = currentHex;
 			}
 		}
 		
-		// Second loop if you are displaying shaded hexes
+		// Second loop if you are displaying shaded and highlighted hexes
 		// TODO: This can be implemented a lot more efficiently.
-		if (!GlobalFuncs.showShaded) return;
-		
-		for (int y = 0; y < yd; y++) {
-			for (int x = 0; x < xd; x++) {
-				xPoint = (int) (hexSize * Math.sqrt(3.0) * (x + 0.5 * (y & 1))) + defaultHexSize;
-				yPoint = (int) (1.5 * hexSize * y) + defaultHexSize;
-				
-				Hex currentHex = hMap.getHex(x + mapDisplayX, y + mapDisplayY);
-				g.setColor(Color.WHITE);
-				if (currentHex.shaded) {
-					g.drawPolygon(genHex(xPoint, yPoint, hexSize));
+		if (GlobalFuncs.showShaded) {		
+			for (int y = 0; y < yd; y++) {
+				for (int x = 0; x < xd; x++) {
+					xPoint = (int) (hexSize * Math.sqrt(3.0) * (x + 0.5 * (y & 1))) + defaultHexSize;
+					yPoint = (int) (1.5 * hexSize * y) + defaultHexSize;
+					
+					Hex currentHex = hMap.getHex(x + mapDisplayX, y + mapDisplayY);
+					g.setColor(Color.WHITE);
+					if (currentHex.shaded) {
+						g.drawPolygon(genHex(xPoint, yPoint, hexSize));
+					}
 				}
 			}
+		}
+		
+		// If there is a shaded hex, it will highlight it last
+		if (highlightedHex != null) {
+			int x = highlightedHex.x - mapDisplayX;
+			int y = highlightedHex.y - mapDisplayY;
+			
+			xPoint = (int) (hexSize * Math.sqrt(3.0) * (x + 0.5 * (y & 1))) + defaultHexSize;
+			yPoint = (int) (1.5 * hexSize * y) + defaultHexSize;
+			
+			g.setColor(Color.YELLOW);
+			g.drawPolygon(genHex(xPoint, yPoint, hexSize));
 		}
 	}
 	

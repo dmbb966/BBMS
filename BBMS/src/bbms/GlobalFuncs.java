@@ -21,6 +21,7 @@ public class GlobalFuncs {
 	public static boolean mapInitialized = false;
 	public static int placeUnit = 0;
 	public static boolean showShaded = false;
+	public static boolean showHighlighted = false;
 	
 	public static Vector<unit.Unit> unitList = new Vector<Unit>();
 	
@@ -143,7 +144,26 @@ public class GlobalFuncs {
 				else GUI_NB.GCO("Shaded hexes toggled to OFF");
 			}
 		};
-		amap.put("toggle visibility", toggleVisibility);		
+		amap.put("toggle visibility", toggleVisibility);
+		
+		k = KeyStroke.getKeyStroke('h');
+		imap.put(k, "toggle highlight");
+		AbstractAction toggleHighlighted = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {				
+				showHighlighted = !showHighlighted;
+				
+				gui.repaint();
+				if (showHighlighted) {
+					GUI_NB.GCO("Highlighted hexes (1, 1) toggled to ON");
+					scenMap.getHex(1, 1).highlighted = true;
+				}
+				else {
+					GUI_NB.GCO("Highlighted hexes toggled to OFF");
+					scenMap.getHex(1, 1).highlighted = false;
+				}
+			}
+		};
+		amap.put("toggle highlight", toggleHighlighted);
 				
 		// gui.BasicInfoPane.requestFocus();
 	}

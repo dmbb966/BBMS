@@ -70,10 +70,10 @@ public class GUIMenu extends JMenuBar{
 		});
 		menu.add(menuItem);
 		
-		menuItem = new JMenuItem("Mode: Place Nothing", KeyEvent.VK_4);		
+		menuItem = new JMenuItem("Mode: Select Unit", KeyEvent.VK_4);		
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {				
-				GUI_NB.GCO("Clicking will now do nothing.");
+				GUI_NB.GCO("Clicking will now select units.");
 				GlobalFuncs.placeUnit = 0;
 			}
 		});
@@ -89,6 +89,7 @@ public class GUIMenu extends JMenuBar{
 			public void actionPerformed(ActionEvent event) {				
 				GUI_NB.GCO("W/A/S/D - Scroll the map");
 				GUI_NB.GCO("V - Toggle shaded hex visibility");
+				GUI_NB.GCO("H - Debug - toggles hex 1, 1 highlight");
 			}
 		});
 		menu.add(menuItem);
