@@ -135,12 +135,20 @@ public class GUIMainDisp extends JPanel {
 			if ((e.getModifiers() & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK) {
 				if (GlobalFuncs.selectedUnit != null) {
 					if (clickedHex.HexUnit == null) {
-						GUI_NB.GCO("No target found");
+						if (GlobalFuncs.RotateHull){							
+							GlobalFuncs.selectedUnit.OrientHullTo(clickedHex.x, clickedHex.y);
+						} else {							
+							GlobalFuncs.selectedUnit.OrientTurretTo(clickedHex.x, clickedHex.y);
+						}
+						
+						GlobalFuncs.gui.repaint();
+						
 					} else if(clickedHex.HexUnit == GlobalFuncs.selectedUnit) {
 						GUI_NB.GCO("You clicked on yourself!");
 					} else {
 						GlobalFuncs.selectedUnit.target = clickedHex.HexUnit;
-						GUI_NB.GCO("New target selected");
+						GlobalFuncs.selectedUnit.OrientTurretTo(GlobalFuncs.selectedUnit.target.location.x, GlobalFuncs.selectedUnit.target.location.y);
+						GUI_NB.GCO("New target selected, aiming weapon system.");
 					}					
 				}
 			}

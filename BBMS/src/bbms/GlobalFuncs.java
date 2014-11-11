@@ -252,6 +252,22 @@ public class GlobalFuncs {
 			}
 		};
 		amap.put("toggle rotation", toggleRotation);
+		
+		k = KeyStroke.getKeyStroke('f');
+		imap.put(k, "aim unit");
+		AbstractAction aimUnit = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {				
+				if (GlobalFuncs.selectedUnit != null) {
+					if (GlobalFuncs.selectedUnit.target != null) {
+						if (RotateHull) selectedUnit.OrientHullTo(selectedUnit.target.location.x, selectedUnit.target.location.y);
+						else selectedUnit.OrientTurretTo(selectedUnit.target.location.x,  selectedUnit.target.location.y);
+						gui.repaint();
+						GUI_NB.GCO("Orienting on target");
+					}
+				}
+			}
+		};
+		amap.put("aim unit", aimUnit);
 				
 		// gui.BasicInfoPane.requestFocus();
 	}

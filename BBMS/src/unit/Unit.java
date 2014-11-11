@@ -1,5 +1,7 @@
 package unit;
 
+import hex.HexOff;
+
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -23,6 +25,7 @@ public class Unit {
 	public double turretOrientation;	// Relative to the hull
 	
 	public Unit target;
+	// public boolean trackTarget;
 	
 	// Used for determining hull and turret graphic files
 	public String type;
@@ -39,6 +42,7 @@ public class Unit {
 		side = s;
 		type = givenType;
 		target = null;
+		// trackTarget = true;
 		
 		if (s == SideEnum.ENEMY) {
 			hullOrientation = 270.0;
@@ -112,5 +116,31 @@ public class Unit {
 			System.out.println(ie.getMessage());
 			GUI_NB.GCO(ie.getMessage());
 		}				
+	}
+	
+	public double getAzimuth(int x1, int y1, int x2, int y2) {
+		HexOff currentHex = new HexOff(x1, y1);
+		HexOff targetHex = new HexOff(x2, y2);
+		return HexOff.AzimuthOff(currentHex,  targetHex);
+	}
+	
+	/**
+	 * Orients the hull to the specified hex; if there is no target, the turret remains in its current position.
+	 * If the unit has a target, the turret will remain on the target
+	 */
+	public void OrientHullTo(int x, int y) {		
+		hullOrientation = getAzimuth(location.x, location.y, x, y);
+		if (target != null) {			
+			turretOrientation = getAzimuth(location.x, location.y, target.location.x, target.location.y) - hullOrientation;
+		}
+	}
+	
+	/**
+	 * Orients the turret to the specified hex and leaves the hull in place.  Takes the turret off the selected target,
+	 * if applicable.
+	 */
+	public void OrientTurretTo(int x, int y) {
+		turretOrientation = getAzimuth(location.x, location.y, x, y) - hullOrientation;
+		// trackTarget = false;
 	}
 }
