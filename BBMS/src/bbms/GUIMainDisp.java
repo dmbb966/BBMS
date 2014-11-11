@@ -133,7 +133,16 @@ public class GUIMainDisp extends JPanel {
 			
 			// RIght button
 			if ((e.getModifiers() & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK) {
-				GUI_NB.GCO("Clicked right mouse button");
+				if (GlobalFuncs.selectedUnit != null) {
+					if (clickedHex.HexUnit == null) {
+						GUI_NB.GCO("No target found");
+					} else if(clickedHex.HexUnit == GlobalFuncs.selectedUnit) {
+						GUI_NB.GCO("You clicked on yourself!");
+					} else {
+						GlobalFuncs.selectedUnit.target = clickedHex.HexUnit;
+						GUI_NB.GCO("New target selected");
+					}					
+				}
 			}
 			
 
@@ -258,7 +267,7 @@ public class GUIMainDisp extends JPanel {
 			}
 		}
 		
-		// If there is a shaded hex, it will highlight it last
+		// If there is a highlighted hex, it will highlight it last
 		if (GlobalFuncs.highlightedHex != null) {
 			int x = GlobalFuncs.highlightedHex.x - mapDisplayX;
 			int y = GlobalFuncs.highlightedHex.y - mapDisplayY;
@@ -268,6 +277,32 @@ public class GUIMainDisp extends JPanel {
 			
 			g.setColor(Color.YELLOW);
 			g.drawPolygon(genHex(xPoint, yPoint, hexSize));
+		}
+		
+		// Highlights current unit hex
+		if (GlobalFuncs.selectedUnit != null) {
+			int x = GlobalFuncs.selectedUnit.location.x - mapDisplayX;
+			int y = GlobalFuncs.selectedUnit.location.y - mapDisplayY;
+			
+			xPoint = (int) (hexSize * Math.sqrt(3.0) * (x + 0.5 * (y & 1))) + defaultHexSize;
+			yPoint = (int) (1.5 * hexSize * y) + defaultHexSize;
+			
+			g.setColor(Color.GREEN);
+			g.drawPolygon(genHex(xPoint, yPoint, hexSize));
+		}
+		
+		// Highlights current unit's target
+		if (GlobalFuncs.selectedUnit != null) {
+			if (GlobalFuncs.selectedUnit.target != null) {
+				int x = GlobalFuncs.selectedUnit.target.location.x - mapDisplayX;
+				int y = GlobalFuncs.selectedUnit.target.location.y - mapDisplayY;
+				
+				xPoint = (int) (hexSize * Math.sqrt(3.0) * (x + 0.5 * (y & 1))) + defaultHexSize;
+				yPoint = (int) (1.5 * hexSize * y) + defaultHexSize;
+				
+				g.setColor(Color.RED);
+				g.drawPolygon(genHex(xPoint, yPoint, hexSize));
+			}
 		}
 	}
 	

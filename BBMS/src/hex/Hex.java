@@ -45,8 +45,7 @@ public class Hex {
 		y = yi;		
 				
 		shaded = false;
-		highlighted = false;
-		if (GlobalFuncs.randRange(0, 1) == 0) shaded = true;
+		highlighted = false;	
 		
 		switch (iTerrain) {
 		case CLEAR: tType = new ClearTerrain(); break;

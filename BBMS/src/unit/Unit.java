@@ -22,6 +22,8 @@ public class Unit {
 	public double hullOrientation;
 	public double turretOrientation;	// Relative to the hull
 	
+	public Unit target;
+	
 	// Used for determining hull and turret graphic files
 	public String type;
 	public String callsign;
@@ -36,6 +38,7 @@ public class Unit {
 		location = locn;
 		side = s;
 		type = givenType;
+		target = null;
 		
 		if (s == SideEnum.ENEMY) {
 			hullOrientation = 270.0;

@@ -32,6 +32,7 @@ public class GlobalFuncs {
 	public static Vector<unit.Unit> unitList = new Vector<Unit>();
 	public static Hex highlightedHex = null; 
 	public static Unit selectedUnit = null;
+	public static Hex selectedHex = null;
 	
 	private static int unitCount = 0;
 
