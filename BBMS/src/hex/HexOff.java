@@ -157,7 +157,7 @@ public class HexOff {
 			HexOff result = HexOff.HexAt(resultD);
 			
 			hexList.add(GlobalFuncs.scenMap.getHex(result.x, result.y));
-			bbms.GUI_NB.GCO("Adding hex " + result.x + ", " + result.y + " to hex list");
+			// bbms.GUI_NB.GCO("Adding hex " + result.x + ", " + result.y + " to hex list");
 			// System.out.print("Interpolation " + i + " of " + distance + " is coordinate: ");
 			// result.DisplayHex();
 		}

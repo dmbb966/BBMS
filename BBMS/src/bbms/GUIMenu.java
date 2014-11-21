@@ -79,6 +79,14 @@ public class GUIMenu extends JMenuBar{
 		});
 		menu.add(menuItem);
 		
+		menuItem = new JMenuItem("Run Test #8 - Waypoints", KeyEvent.VK_5);		
+		menuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {								
+				FOVj.test8();
+			}
+		});
+		menu.add(menuItem);
+		
 		// Help Menu
 		menu = new JMenu("Help");
 		menu.setMnemonic(KeyEvent.VK_H);			

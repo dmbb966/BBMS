@@ -24,6 +24,7 @@ public class HexMap {
 	
 	public void shadeHex(Hex h, Color c) {
 		h.shadedColor = c;
+		if (h.shaded) return;
 		h.shaded = true;
 		shadedHexList.add(h);
 	}

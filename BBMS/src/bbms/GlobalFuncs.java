@@ -78,6 +78,16 @@ public class GlobalFuncs {
 		GUI_NB.GCO("Generating main map.");		
 	}
 	
+	public static boolean checkMapBounds(int x, int y) {
+		if (!mapInitialized) return false;
+		
+		if (x < 0 || y < 0) return false;
+		
+		if (x > scenMap.getXDim() || y > scenMap.getYDim()) return false;
+		
+		return true;
+	}
+	
 	/**
 	 * If s is less than length, will return a new string with sufficient blank spaces concatanated on to the end
 	 * to bring the string up to the desired length.  Returns the original string otherwise.

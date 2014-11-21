@@ -169,5 +169,53 @@ public class FOVj {
 			}
 		}
 	}
+	
+	/**
+	 * test8() tests waypoints
+	 */
+	public static void test8() {
+		unit.WaypointList testList = new unit.WaypointList();
+		
+		GUI_NB.GCO("Beginning Test #8:  Testing empty set.");
+		GUI_NB.GCO(testList.displayWaypoints());
+		
+		GUI_NB.GCO("Test #8: Adding five random waypoints to the front.");
+		for (int i = 0; i < 5; i++) {
+			HexOff testPoint = new HexOff(GlobalFuncs.randRange(0, 9), GlobalFuncs.randRange(0, 9));
+			GUI_NB.GCO("Adding " + testPoint.DisplayHexStr());
+			testList.addFirstWaypoint(testPoint.getX(), testPoint.getY());
+		}
+		
+		GUI_NB.GCO("Test #8: Displaying waypoints.");
+		GUI_NB.GCO(testList.displayWaypoints());
+		
+		GUI_NB.GCO("Test #8: Adding one random waypoint to the rear.");
+		HexOff testPoint = new HexOff(GlobalFuncs.randRange(0, 9), GlobalFuncs.randRange(0, 9));
+		GUI_NB.GCO("Adding " + testPoint.DisplayHexStr());
+		testList.addWaypoint(testPoint.getX(), testPoint.getY());
+		
+		GUI_NB.GCO("Test #8: Removing first three waypoints.");
+		for (int i = 0; i < 5; i++) {
+			testList.removeFirstWaypoint();
+		}
+		
+		GUI_NB.GCO(testList.displayWaypoints());
+		
+		GUI_NB.GCO("Test #8: Removing rear two waypoints.");
+		for (int i = 0; i < 2; i++) {
+			testList.removeLastWaypoint();
+		}
+		
+		GUI_NB.GCO(testList.displayWaypoints());
+		
+		GUI_NB.GCO("Test #8: Removing remaining waypoints.");
+		for (int i = 3; i < 3; i++) {
+			testList.removeFirstWaypoint();
+		}
+		
+		GUI_NB.GCO(testList.displayWaypoints());
+		GUI_NB.GCO("----Test #8 complete---");
+		
+	}
 
 }

@@ -10,6 +10,8 @@ import java.awt.Image;
 import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Vector;
 
 import javax.imageio.ImageIO;
@@ -26,6 +28,8 @@ public class Unit {
 	
 	public double hullOrientation;
 	public double turretOrientation;	// Relative to the hull
+	
+	public WaypointList waypointList = new WaypointList();
 	
 	public Unit target;
 	// public boolean trackTarget;
