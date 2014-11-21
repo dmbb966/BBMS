@@ -96,6 +96,7 @@ public class GUIMenu extends JMenuBar{
 				GUI_NB.GCO("L - finds LOS to the selected hex");
 				GUI_NB.GCO("C - clears any shaded hexes");
 				GUI_NB.GCO("E - Display LOS to all enemies of selected unit");
+				GUI_NB.GCO("X - Test key, varies from build to build");
 				
 			}
 		});

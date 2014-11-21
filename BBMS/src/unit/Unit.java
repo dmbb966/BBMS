@@ -164,11 +164,11 @@ public class Unit {
 		for (int i = 1; i < hexList.size(); i++) {
 			Hex h = hexList.elementAt(i);			
 			if (visibility <= 15) {
-				GlobalFuncs.scenMap.shadeHex(h,  Color.WHITE);							
+				GlobalFuncs.scenMap.shadeHex(h,  Color.GREEN);							
 			} else if (visibility <= 30) {
-				GlobalFuncs.scenMap.shadeHex(h, Color.ORANGE);
+				GlobalFuncs.scenMap.shadeHex(h, Color.YELLOW);
 			} else GlobalFuncs.scenMap.shadeHex(h, Color.RED);						
-			GUI_NB.GCO("Setting hex " + h.x + ", " + h.y + " to shaded with visibility " + visibility);
+			// GUI_NB.GCO("Setting hex " + h.x + ", " + h.y + " to shaded with visibility " + visibility);
 			visibility += h.density;
 		}
 		GlobalFuncs.gui.repaint();
@@ -192,6 +192,15 @@ public class Unit {
 				DisplayLOSTo(selected.location.x, selected.location.y, false);
 				// GUI_NB.GCO(currentTarget.DispUnitInfo());
 			}
+		}
+	}
+	
+	public void DisplayLOSToRange(int range) {
+		Vector<Hex> ring = HexOff.HexRing(location.x, location.y, range);
+		
+		for (int i = 0; i < ring.size(); i++) {
+			Hex finger = ring.elementAt(i);
+			DisplayLOSTo(finger.x, finger.y, false);
 		}
 	}
 }

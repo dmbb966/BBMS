@@ -294,13 +294,22 @@ public class GlobalFuncs {
 				}
 				else {
 					GUI_NB.GCO("ERROR: No unit selected!");
-				}
-				
-				
-				
+				}											
 			}
 		};
 		amap.put("display LOS to enemies", LOStoEnemies);
+		
+		k = KeyStroke.getKeyStroke('x');
+		imap.put(k, "test key");
+		AbstractAction testX = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				if (GlobalFuncs.selectedUnit != null) {
+					GlobalFuncs.selectedUnit.DisplayLOSToRange(GlobalFuncs.scenMap.getXDim());
+					// HexOff.HexRing(highlightedHex.x, highlightedHex.y, 3);
+				}
+			}
+		};
+		amap.put("test key", testX);
 				
 		// gui.BasicInfoPane.requestFocus();
 	}

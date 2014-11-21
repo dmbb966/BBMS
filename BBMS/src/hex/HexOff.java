@@ -1,5 +1,6 @@
 package hex;
 
+import java.awt.Color;
 import java.util.Vector;
 
 import bbms.GlobalFuncs;
@@ -13,6 +14,8 @@ public class HexOff {
 	// Coordinate of the hex object
 	int x;
 	int y;
+	
+	
 	
 	
 	public HexOff(int initialX, int initialY) {
@@ -38,7 +41,7 @@ public class HexOff {
 	public int DistFrom(HexOff target) {
 		return HexOff.DistOff(this, target);		
 	}
-	
+		
 	// -----------------------Azimuth calculations --------------------------//
 	
 	/**
@@ -162,11 +165,33 @@ public class HexOff {
 		return hexList;
 	}
 	
+	public static Vector<hex.Hex> HexRing (int x, int y, int distance) {
+		Vector<hex.Hex> hexRing = new Vector<Hex>();
+		HexOff origin = new HexOff(x, y);
+		// Find starting hex
+		HexOff target = HexCast(origin, 270.0, distance);
+		Hex finger = GlobalFuncs.scenMap.getHex(target.x, target.y);
+		
+		for (int direction = 0; direction < 6; direction ++) {
+			for (int walk = 0; walk < distance; walk ++) {
+				hexRing.addElement(finger);
+				target = target.findNeighbor(direction);
+				finger = GlobalFuncs.scenMap.getHex(target.x, target.y);
+				// GlobalFuncs.scenMap.shadeHex(finger, Color.WHITE);								
+				// bbms.GUI_NB.GCO("Add at " + target.DisplayHexStr());
+			}
+		}
+		
+		// GlobalFuncs.gui.repaint();
+		
+		return hexRing;
+	}
+	
 	// Hexcasting
 	/**
 	 * Returns the hex at a certain distance and azimuth from the origin hex
 	 */
-	public static void HexCast (HexOff origin, double azimuth, int range)
+	public static HexOff HexCast (HexOff origin, double azimuth, int range)
 	{
 		// Convert into 2D coordinates
 		HexDouble originD = HexOff.HexIs(origin);
@@ -174,12 +199,14 @@ public class HexOff {
 		double dy = range * Math.cos(Math.toRadians(azimuth)) * -Math.sqrt(3);	// Inverted due to Y-axis increasing as you go south.
 		
 		HexDouble targetD = new HexDouble(originD.x + dx, originD.y + dy);
-		targetD.DisplayHex();
+		// targetD.DisplayHex();
 		
 		// Converts target hex into the desired coordinate type
 		HexOff target = HexOff.HexAt(targetD);
 		
-		target.DisplayHex();
+		// target.DisplayHex();
+		
+		return target;
 	}
 	
 	// ---------------------- Neighboring hexes ------------------------//		
@@ -197,6 +224,38 @@ public class HexOff {
 	
 	public HexOff findNeighbor (int direction) {
 		return NeighborOff(this, direction);
+	}
+	
+	public HexOff neighborW() {
+		return new HexOff(x - 1, y);
+	}
+	
+	public HexOff neighborE() {
+		return new HexOff(x + 1, y);	
+	}
+	
+	public HexOff neighborNW() {
+		int parity = y & 1;
+		if (parity == 1) return new HexOff(x, y-1);
+		else return new HexOff(x-1, y-1);		
+	}
+	
+	public HexOff neighborNE() {
+		int parity = y & 1;
+		if (parity == 1) return new HexOff(x + 1, y - 1);
+		else return new HexOff(x, y-1);
+	}
+	
+	public HexOff neighborSW() {
+		int parity = y & 1;
+		if (parity == 1) return new HexOff(x, y+1);
+		else return new HexOff(x-1, y+1);
+	}
+	
+	public HexOff neighborSE() {
+		int parity = y & 1;
+		if (parity == 1) return new HexOff(x+1, y+1);
+		else return new HexOff(x, y+1);
 	}
 
 	
