@@ -8,6 +8,7 @@ import bbms.GlobalFuncs;
 
 public class HexMap {
 	
+	private int randPool;
 	int xDim, yDim;
 	Hex[][] hexArray;
 	
@@ -46,25 +47,29 @@ public class HexMap {
 		bbms.GlobalFuncs.gui.repaint();
 	}
 	
+	public TerrainEnum chooseTerrain(int r) {
+		randPool = r;
+		if (TerrainEval(randPool, GlobalFuncs.chanceClear)) return TerrainEnum.CLEAR;
+		if (TerrainEval(randPool, GlobalFuncs.chanceHighGrass)) return TerrainEnum.T_GRASS;
+		if (TerrainEval(randPool, GlobalFuncs.chanceTrees)) return TerrainEnum.TREES;
+		return TerrainEnum.INVALID;					
+	}
+	
+	public boolean TerrainEval(int r, int threshold) {
+		if (r <= threshold) return true;
+		else {
+			randPool -= threshold;
+			return false;
+		}
+	}
+	
 	/**
 	 * NOTE: For now, does not change the default elevation from 0
 	 */
 	public void GenerateMap() {
 		for (int y = 0; y < yDim; y++) {
 			for (int x = 0; x < xDim; x++) {
-				int r = GlobalFuncs.randRange(1, 3);
-				TerrainEnum tType = TerrainEnum.CLEAR;		// Default
-				switch(r){
-					case 1:
-						tType = TerrainEnum.CLEAR;						
-						break;
-					case 2:
-						tType = TerrainEnum.T_GRASS;						
-						break;
-					case 3:
-						tType = TerrainEnum.TREES;
-						break;
-				};
+				TerrainEnum tType = chooseTerrain(GlobalFuncs.randRange(1, GlobalFuncs.totalWeight));
 				hexArray[x][y] = new Hex(x, y, tType, 0);
 				// hexArray[x][y].GCODisplay();
 			}

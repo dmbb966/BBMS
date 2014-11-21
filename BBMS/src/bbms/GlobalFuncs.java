@@ -34,6 +34,11 @@ public class GlobalFuncs {
 	public static Unit selectedUnit = null;
 	public static Hex selectedHex = null;
 	
+	public static int chanceClear = 60;
+	public static int chanceHighGrass = 30;
+	public static int chanceTrees = 10;
+	public static int totalWeight = chanceClear + chanceHighGrass + chanceTrees;
+	
 	private static int unitCount = 0;
 
 	/**
@@ -108,7 +113,7 @@ public class GlobalFuncs {
 			public void actionPerformed(ActionEvent e) {				
 				gui.GMD.mapDisplayY -= 2;
 				gui.repaint();
-				GUI_NB.GCO("Scroll Up, displaying at " + gui.GMD.mapDisplayX + ", " + gui.GMD.mapDisplayY);
+				// GUI_NB.GCO("Scroll Up, displaying at " + gui.GMD.mapDisplayX + ", " + gui.GMD.mapDisplayY);
 			}
 		};
 		amap.put("scroll up", scrollUp);
@@ -119,7 +124,7 @@ public class GlobalFuncs {
 			public void actionPerformed(ActionEvent e) {
 				gui.GMD.mapDisplayX -= 2;
 				gui.repaint();
-				GUI_NB.GCO("Scroll Left, displaying at " + gui.GMD.mapDisplayX + ", " + gui.GMD.mapDisplayY);
+				// GUI_NB.GCO("Scroll Left, displaying at " + gui.GMD.mapDisplayX + ", " + gui.GMD.mapDisplayY);
 			}
 		};		
 		amap.put("scroll left",  scrollLeft);
@@ -130,7 +135,7 @@ public class GlobalFuncs {
 			public void actionPerformed(ActionEvent e) {				
 				gui.GMD.mapDisplayY += 2;
 				gui.repaint();
-				GUI_NB.GCO("Scroll Down, displaying at " + gui.GMD.mapDisplayX + ", " + gui.GMD.mapDisplayY);				
+				// GUI_NB.GCO("Scroll Down, displaying at " + gui.GMD.mapDisplayX + ", " + gui.GMD.mapDisplayY);				
 			}
 		};
 		amap.put("scroll down", scrollDown);
@@ -141,7 +146,7 @@ public class GlobalFuncs {
 			public void actionPerformed(ActionEvent e) {				
 				gui.GMD.mapDisplayX += 2;
 				gui.repaint();
-				GUI_NB.GCO("Scroll Right, displaying at " + gui.GMD.mapDisplayX + ", " + gui.GMD.mapDisplayY);
+				// GUI_NB.GCO("Scroll Right, displaying at " + gui.GMD.mapDisplayX + ", " + gui.GMD.mapDisplayY);
 			}
 		};
 		amap.put("scroll right", scrollRight);
