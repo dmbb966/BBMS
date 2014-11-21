@@ -90,74 +90,22 @@ public class Hex {
 		int y = yi - (hHeight / 2) - 8;
 		
 		try {
-			switch(tType.getTerrainEnum()){
-			case CLEAR:
-				background = new File("src/hex/graphics/Grassland1-Z4.png");				
-				break;
-			case T_GRASS:
-				background = new File("src/hex/graphics/HighGrass1-Z4.png");
-				break;
-			case TREES:
-				background = new File("src/hex/graphics/Grassland1-Z4.png");
-				foreground = new File("src/hex/graphics/Trees1-Z4.png");
-				break;
-			case INVALID:
-				background = new File("src/hex/graphics/Pavement-Z44.png");
-			};
-			//background = new File("src/hex/graphics/test.bmp");
+			background = new File(tType.getTerrainEnum().backgroundFile);
+			if (tType.getTerrainEnum().foregroundFile != null) {
+				foreground = new File(tType.getTerrainEnum().foregroundFile);
+			}
+						
 			BufferedImage img = ImageIO.read(background);
-			// BufferedImage index = convertType(img, BufferedImage.TYPE_BYTE_INDEXED);
-			// index = rescale(index, 0.5f, 0);
-			
-			// RescaleOp op = new RescaleOp(1.0f, 0, null);
-			// img = op.filter(img, null);
-			
-			//img = Transparency.makeColorTransparent(img,  new Color(0).white);
-/*
-			// Create a buffered image with transparency
-		    BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-
-		    // Draw the image on to the buffered image
-		    Graphics2D bGr = bimage.createGraphics();
-		    bGr.drawImage(img, 0, 0, null);
-		    bGr.dispose();			
-			RescaleOp op = new RescaleOp(1.0f, 0, null);
-			BufferedImage oimg = op.filter(bimage,  null);
-			// BufferedImage bimg = (BufferedImage) img;
-			// bimg = op.filter(bimg, null);
-	*/		
-			
-			/*
-			BufferedImage bimg = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_RGB);
-			Graphics2D g2d = bimg.createGraphics();
-			g2d.drawImage(img, 0, 0, null);
-			g2d.dispose();
-			if (shaded) {
-				float scaleFactor = 0.5f;
-				RescaleOp op = new RescaleOp(scaleFactor, 0, null);
-				bimg = op.filter(bimg, null);				
-			}  
-			*/
-			
 			g.drawImage(img,  x,  y, null);
 			if (foreground != null) {
 				img = ImageIO.read(foreground);
 				g.drawImage(img,  x,  y,  null);
-			}
-			
-			/* if (shaded) {
-				g.drawString("S", x, y);
-			} */
+			}					
 			
 		} catch (IOException ie) {
 			System.out.println(ie.getMessage());
 			GUI_NB.GCO(ie.getMessage());
 		}				
-		
-		/*
-		if (HexUnit != null) {
-			HexUnit.DrawUnit(xi, yi, g);
-		} */
 	}
 
 	// https://community.oracle.com/thread/1269537?start=0&tstart=0

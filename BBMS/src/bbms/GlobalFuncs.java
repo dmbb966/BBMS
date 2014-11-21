@@ -30,6 +30,7 @@ public class GlobalFuncs {
 	public static boolean RotateHull = true;
 	
 	public static Vector<unit.Unit> unitList = new Vector<Unit>();
+	public static Vector<unit.Unit> friendlyUnitList = new Vector<Unit>();
 	public static Hex highlightedHex = null; 
 	public static Unit selectedUnit = null;
 	public static Hex selectedHex = null;
