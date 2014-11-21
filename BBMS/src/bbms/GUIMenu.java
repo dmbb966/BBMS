@@ -95,6 +95,7 @@ public class GUIMenu extends JMenuBar{
 				GUI_NB.GCO("F - orients the turret to target");
 				GUI_NB.GCO("L - finds LOS to the selected hex");
 				GUI_NB.GCO("C - clears any shaded hexes");
+				GUI_NB.GCO("E - Display LOS to all enemies of selected unit");
 				
 			}
 		});

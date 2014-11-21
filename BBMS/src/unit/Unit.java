@@ -50,9 +50,11 @@ public class Unit {
 		if (s == SideEnum.ENEMY) {
 			hullOrientation = 270.0;
 			turretOrientation = 0.0;
+			GlobalFuncs.enemyUnitList.addElement(this);
 		} else if (s == SideEnum.FRIENDLY){
 			hullOrientation = 90.0;
 			turretOrientation = 0.0;
+			GlobalFuncs.friendlyUnitList.addElement(this);
 		} else {
 			hullOrientation = 0.0;
 			turretOrientation = 0.0;
@@ -147,28 +149,49 @@ public class Unit {
 		// trackTarget = false;
 	}
 	
-	public void DisplayLOSTo(int x, int y) {
+	/**
+	 * Displays the LOS from the current unit to a given x, y coordinate.
+	 * If "clear" is set to true, clears all shaded hexes before drawing.
+	 */
+	public void DisplayLOSTo(int x, int y, boolean clear) {
 		HexOff currentHex = new HexOff(location.x, location.y);
 		HexOff targetHex = new HexOff(x, y);
 		Vector<hex.Hex> hexList = HexOff.HexesBetween(currentHex, targetHex);
-		GlobalFuncs.scenMap.unshadeAll();
+		if (clear) GlobalFuncs.scenMap.unshadeAll();
 				
 		int visibility = 0;
 		// Does not count the hex the unit itself is in, hence, i starts at 1
 		for (int i = 1; i < hexList.size(); i++) {
-			Hex h = hexList.elementAt(i);
-			visibility += h.density;
+			Hex h = hexList.elementAt(i);			
 			if (visibility <= 15) {
 				GlobalFuncs.scenMap.shadeHex(h,  Color.WHITE);							
 			} else if (visibility <= 30) {
 				GlobalFuncs.scenMap.shadeHex(h, Color.ORANGE);
 			} else GlobalFuncs.scenMap.shadeHex(h, Color.RED);						
 			GUI_NB.GCO("Setting hex " + h.x + ", " + h.y + " to shaded with visibility " + visibility);
+			visibility += h.density;
 		}
 		GlobalFuncs.gui.repaint();
 	}
 	
 	public void DisplayLOSToTarget() {
-		DisplayLOSTo(target.location.x, target.location.y);
+		DisplayLOSTo(target.location.x, target.location.y, true);
+	}
+	
+	public void DisplayLOSToEnemies() {
+		Vector<unit.Unit> enemyList;
+		Unit selected;
+		
+		if (this.side == SideEnum.ENEMY) enemyList = GlobalFuncs.friendlyUnitList;
+		else enemyList = GlobalFuncs.enemyUnitList;
+		
+		if (enemyList.size() == 0) GUI_NB.GCO("ERROR!  There are no opposing units on the map!");
+		else {
+			for (int i = 0; i < enemyList.size(); i++) {
+				selected = enemyList.elementAt(i);
+				DisplayLOSTo(selected.location.x, selected.location.y, false);
+				// GUI_NB.GCO(currentTarget.DispUnitInfo());
+			}
+		}
 	}
 }

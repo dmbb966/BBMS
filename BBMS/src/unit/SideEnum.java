@@ -7,6 +7,8 @@ public enum SideEnum {
 	ENEMY(1),
 	NEUTRAL(2);
 	
+	// NOTE: Neutral side is not fully implemented.
+	
 	public final int id;	
 	
 	SideEnum(int i) {

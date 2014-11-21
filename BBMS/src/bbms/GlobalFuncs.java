@@ -31,6 +31,7 @@ public class GlobalFuncs {
 	
 	public static Vector<unit.Unit> unitList = new Vector<Unit>();
 	public static Vector<unit.Unit> friendlyUnitList = new Vector<Unit>();
+	public static Vector<unit.Unit> enemyUnitList = new Vector<Unit>();	
 	public static Hex highlightedHex = null; 
 	public static Unit selectedUnit = null;
 	public static Hex selectedHex = null;
@@ -72,6 +73,8 @@ public class GlobalFuncs {
 		selectedUnit = null;
 		highlightedHex = null;
 		unitList = new Vector<Unit>();
+		friendlyUnitList = new Vector<Unit>();
+		enemyUnitList = new Vector<Unit>();
 		GUI_NB.GCO("Generating main map.");		
 	}
 	
@@ -264,27 +267,7 @@ public class GlobalFuncs {
 			public void actionPerformed(ActionEvent e) {	
 				GUI_NB.GCO("Find LOS");
 				if (selectedUnit != null && selectedUnit.location != highlightedHex) {
-					scenMap.unshadeAll();
-					HexOff currentHex = new HexOff(selectedUnit.location.x, selectedUnit.location.y);
-					HexOff targetHex = new HexOff(highlightedHex.x, highlightedHex.y);
-					Vector<hex.Hex> hexList = HexOff.HexesBetween(currentHex, targetHex);
-					
-					GUI_NB.GCO("Hex list is of size " + hexList.size());
-					int visibility = 0;
-					// Does not count the hex the unit itself is in, hence, i starts at 1
-					for (int i = 1; i < hexList.size(); i++) {
-						Hex h = hexList.elementAt(i);
-						visibility += h.density;
-						if (visibility <= 15) {
-							scenMap.shadeHex(h,  Color.WHITE);							
-						} else if (visibility <= 30) {
-							scenMap.shadeHex(h, Color.ORANGE);
-						} else scenMap.shadeHex(h, Color.RED);						
-						GUI_NB.GCO("Setting hex " + h.x + ", " + h.y + " to shaded with visibility " + visibility);
-					}
-					gui.repaint();
-					
-					scenMap.displayShadedList();
+					selectedUnit.DisplayLOSTo(highlightedHex.x, highlightedHex.y, true);					
 				}
 			}
 		};
@@ -300,6 +283,24 @@ public class GlobalFuncs {
 			}
 		};
 		amap.put("clear shading", clearShading);
+		
+		k = KeyStroke.getKeyStroke('e');
+		imap.put(k, "display LOS to enemies");
+		AbstractAction LOStoEnemies = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				if (GlobalFuncs.selectedUnit != null) {
+					GUI_NB.GCO("Displaying LOS to enemies.");
+					GlobalFuncs.selectedUnit.DisplayLOSToEnemies();
+				}
+				else {
+					GUI_NB.GCO("ERROR: No unit selected!");
+				}
+				
+				
+				
+			}
+		};
+		amap.put("display LOS to enemies", LOStoEnemies);
 				
 		// gui.BasicInfoPane.requestFocus();
 	}
