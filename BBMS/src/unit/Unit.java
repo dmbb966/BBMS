@@ -1,13 +1,16 @@
 package unit;
 
+import hex.Hex;
 import hex.HexOff;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.IOException;
+import java.util.Vector;
 
 import javax.imageio.ImageIO;
 
@@ -142,5 +145,30 @@ public class Unit {
 	public void OrientTurretTo(int x, int y) {
 		turretOrientation = getAzimuth(location.x, location.y, x, y) - hullOrientation;
 		// trackTarget = false;
+	}
+	
+	public void DisplayLOSTo(int x, int y) {
+		HexOff currentHex = new HexOff(location.x, location.y);
+		HexOff targetHex = new HexOff(x, y);
+		Vector<hex.Hex> hexList = HexOff.HexesBetween(currentHex, targetHex);
+		GlobalFuncs.scenMap.unshadeAll();
+				
+		int visibility = 0;
+		// Does not count the hex the unit itself is in, hence, i starts at 1
+		for (int i = 1; i < hexList.size(); i++) {
+			Hex h = hexList.elementAt(i);
+			visibility += h.density;
+			if (visibility <= 15) {
+				GlobalFuncs.scenMap.shadeHex(h,  Color.WHITE);							
+			} else if (visibility <= 30) {
+				GlobalFuncs.scenMap.shadeHex(h, Color.ORANGE);
+			} else GlobalFuncs.scenMap.shadeHex(h, Color.RED);						
+			GUI_NB.GCO("Setting hex " + h.x + ", " + h.y + " to shaded with visibility " + visibility);
+		}
+		GlobalFuncs.gui.repaint();
+	}
+	
+	public void DisplayLOSToTarget() {
+		DisplayLOSTo(target.location.x, target.location.y);
 	}
 }

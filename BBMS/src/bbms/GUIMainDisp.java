@@ -267,8 +267,8 @@ public class GUIMainDisp extends JPanel {
 					yPoint = (int) (1.5 * hexSize * y) + defaultHexSize;
 					
 					Hex currentHex = hMap.getHex(x + mapDisplayX, y + mapDisplayY);
-					g.setColor(Color.WHITE);
 					if (currentHex.shaded) {
+						g.setColor(currentHex.shadedColor);
 						g.drawPolygon(genHex(xPoint, yPoint, hexSize));
 					}
 				}

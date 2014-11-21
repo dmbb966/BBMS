@@ -31,6 +31,8 @@ public class Hex {
 	public int density;		// Obstructs line of sight if cumulative density >30
 	
 	public boolean shaded;		// Will the hex be drawn shaded or not?
+	public Color shadedColor;
+	
 	public boolean highlighted;	// Is this hex highlighted (apart from shading)
 	
 	public int obscuration;	// Level of visual obscuration on the hex (adds to density, but can dissipate over time)	
@@ -45,6 +47,7 @@ public class Hex {
 		y = yi;		
 				
 		shaded = false;
+		shadedColor = Color.WHITE;
 		highlighted = false;	
 		
 		switch (iTerrain) {

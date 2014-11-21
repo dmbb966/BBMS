@@ -1,5 +1,6 @@
 package bbms;
 
+import java.awt.Color;
 import java.awt.Desktop.Action;
 import java.awt.event.ActionEvent;
 import java.util.Vector;
@@ -257,21 +258,42 @@ public class GlobalFuncs {
 			public void actionPerformed(ActionEvent e) {	
 				GUI_NB.GCO("Find LOS");
 				if (selectedUnit != null && selectedUnit.location != highlightedHex) {
+					scenMap.unshadeAll();
 					HexOff currentHex = new HexOff(selectedUnit.location.x, selectedUnit.location.y);
 					HexOff targetHex = new HexOff(highlightedHex.x, highlightedHex.y);
 					Vector<hex.Hex> hexList = HexOff.HexesBetween(currentHex, targetHex);
 					
 					GUI_NB.GCO("Hex list is of size " + hexList.size());
-					for (int i = 0; i < hexList.size(); i++) {
+					int visibility = 0;
+					// Does not count the hex the unit itself is in, hence, i starts at 1
+					for (int i = 1; i < hexList.size(); i++) {
 						Hex h = hexList.elementAt(i);
-						h.shaded = true;
-						GUI_NB.GCO("Setting hex " + h.x + ", " + h.y + " to shaded");
+						visibility += h.density;
+						if (visibility <= 15) {
+							scenMap.shadeHex(h,  Color.WHITE);							
+						} else if (visibility <= 30) {
+							scenMap.shadeHex(h, Color.ORANGE);
+						} else scenMap.shadeHex(h, Color.RED);						
+						GUI_NB.GCO("Setting hex " + h.x + ", " + h.y + " to shaded with visibility " + visibility);
 					}
 					gui.repaint();
+					
+					scenMap.displayShadedList();
 				}
 			}
 		};
 		amap.put("find LOS", findLOS);
+		
+		k = KeyStroke.getKeyStroke('c');
+		imap.put(k, "clear shading");
+		AbstractAction clearShading = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {	
+				GUI_NB.GCO("Clearing shaded hexes.");
+				scenMap.unshadeAll();
+				
+			}
+		};
+		amap.put("clear shading", clearShading);
 				
 		// gui.BasicInfoPane.requestFocus();
 	}

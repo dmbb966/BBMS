@@ -1,5 +1,8 @@
 package hex;
 
+import java.awt.Color;
+import java.util.Vector;
+
 import terrain.TerrainEnum;
 import bbms.GlobalFuncs;
 
@@ -8,11 +11,39 @@ public class HexMap {
 	int xDim, yDim;
 	Hex[][] hexArray;
 	
+	Vector<hex.Hex> shadedHexList;
+	
 	public HexMap(int x, int y) {
 		xDim = x;
 		yDim = y;
 		hexArray = new Hex[xDim][yDim];
+		shadedHexList = new Vector<Hex>();
 		GenerateMap();
+	}
+	
+	public void shadeHex(Hex h, Color c) {
+		h.shadedColor = c;
+		h.shaded = true;
+		shadedHexList.add(h);
+	}
+	
+	public void unshadeHex(Hex h) {
+		h.shaded = false;
+		shadedHexList.remove(h);
+	}
+	
+	public void displayShadedList() {
+		bbms.GUI_NB.GCO("There are " + shadedHexList.size() + " hexes shaded.");
+		for (int i = 0; i < shadedHexList.size(); i++) {
+			bbms.GUI_NB.GCO("Hex " + i + " at " + shadedHexList.elementAt(i).x + ", " + shadedHexList.elementAt(i).y);
+		}
+	}
+	
+	public void unshadeAll() {
+		for (int i = shadedHexList.size() - 1; i >= 0; i--) {
+			unshadeHex(shadedHexList.elementAt(i));
+		}
+		bbms.GlobalFuncs.gui.repaint();
 	}
 	
 	/**
