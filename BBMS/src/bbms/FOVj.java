@@ -194,8 +194,11 @@ public class FOVj {
 		GUI_NB.GCO("Adding " + testPoint.DisplayHexStr());
 		testList.addWaypoint(testPoint.getX(), testPoint.getY());
 		
+		GUI_NB.GCO("Test #8: Displaying waypoints.");
+		GUI_NB.GCO(testList.displayWaypoints());
+		
 		GUI_NB.GCO("Test #8: Removing first three waypoints.");
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 3; i++) {
 			testList.removeFirstWaypoint();
 		}
 		
@@ -209,7 +212,7 @@ public class FOVj {
 		GUI_NB.GCO(testList.displayWaypoints());
 		
 		GUI_NB.GCO("Test #8: Removing remaining waypoints.");
-		for (int i = 3; i < 3; i++) {
+		for (int i = 0; i < 3; i++) {
 			testList.removeFirstWaypoint();
 		}
 		

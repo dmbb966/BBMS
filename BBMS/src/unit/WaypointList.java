@@ -2,16 +2,17 @@ package unit;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.LinkedList;
 
 import hex.HexOff;
 import bbms.GlobalFuncs;
 
 public class WaypointList {
 	
-	public Deque<HexOff> waypointList;
+	public LinkedList<HexOff> waypointList;
 	
 	public WaypointList() {
-		waypointList = new ArrayDeque<HexOff>();
+		waypointList = new LinkedList<HexOff>();
 	}
 	
 	
@@ -48,12 +49,10 @@ public class WaypointList {
 	
 	public String displayWaypoints() {
 		String output = "Total size: " + waypointList.size() + "\n";
-		Deque<HexOff> clone = waypointList;
-		output = output + "Total size: " + clone.size() + "\n";
 		
 		for (int i = 0; i < waypointList.size(); i++) {
-			output = output + "Total size: " + clone.size() + "\n";
-			HexOff finger = clone.removeFirst();
+			output = output + "Total size: " + waypointList.size() + "\n";
+			HexOff finger = waypointList.get(i);
 			output = output + "Waypoint " + i + ": (" + finger.getX() + ", " + finger.getY() + ")\n"; 
 		}
 		
