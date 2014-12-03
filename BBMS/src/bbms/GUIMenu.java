@@ -157,5 +157,13 @@ public class GUIMenu extends JMenuBar{
 			}
 		});
 		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Reinitialize keyboard", KeyEvent.VK_K);
+		menuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				GUIKeyboard.initializeKeyCommands();
+			}
+		});
+		menu.add(menuItem);
 	}
 }
