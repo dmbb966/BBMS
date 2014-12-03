@@ -1,0 +1,23 @@
+3DEC14:
+
+* Add save/load functionality
+* Add unit GUI (?)
+* Terrain editing (?)
+* Elevation and relief (?)
+* More efficient circular LOS?  
+* LOS over a particular view arc?
+* Varying move cost per terrain / fine grained clock
+* Real time clock functionality
+
+[Static]
+* Clustering / preprocessing
+* Integration of a NN
+* Training for NN for formation recognition
+
+[Spatiotemporal clustering]
+
+[The Scouting Problem]
+* Spatiotemporal clustering --> gas diffusion model --> projecting enemy location in the future
+* Identify OP positions to observe (particularly decision points) - maybe some input based on hexes you 
+  can observe and likelihood of enemy presence?  Perhaps the variance in the sub vectors for gas diffusion?
+* Spotting ranges, enemy can "kill" you - factors concealment of where you're at, possible escape vector?

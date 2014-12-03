@@ -17,12 +17,36 @@ public class GUIMenu extends JMenuBar{
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				System.out.println("File - New");
-				GUI_NB.GCO("File - new");
+				GUI_NB.GCO("Initializing a 30x30 map");
+				GlobalFuncs.initializeMap(30, 30);
+				GUIKeyboard.initializeKeyCommands();
 			}
 		});
 		
-		menu.add(menuItem);		
+		menu.add(menuItem);	
+		
+		menuItem = new JMenuItem("Save", KeyEvent.VK_S);
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
+		menuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				if (GlobalFuncs.saveState()) GUI_NB.GCO("Save successful.");
+				else GUI_NB.GCO("Save failed.");				
+			}
+		});
+		menu.add(menuItem);	
+		
+		menuItem = new JMenuItem("Load", KeyEvent.VK_L);
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK));
+		menuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				if (GlobalFuncs.loadState()) GUI_NB.GCO("Load successful.");
+				else GUI_NB.GCO("Load failed.");
+				
+			}
+		});
+		menu.add(menuItem);	
+		
+		
 		menu.addSeparator();
 		
 		menuItem = new JMenuItem("Exit", KeyEvent.VK_X);
@@ -41,16 +65,6 @@ public class GUIMenu extends JMenuBar{
 		menu = new JMenu("Setup");
 		menu.setMnemonic(KeyEvent.VK_S);			
 		add(menu);
-		
-		menuItem = new JMenuItem("Initialize 30x30 Map", KeyEvent.VK_1);		
-		menuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {				
-				GUI_NB.GCO("Initializing a 30x30 map");
-				GlobalFuncs.initializeMap(30, 30);
-				GUIKeyboard.initializeKeyCommands();
-			}
-		});
-		menu.add(menuItem);
 		
 		menuItem = new JMenuItem("Mode: Place M1A2", KeyEvent.VK_2);		
 		menuItem.addActionListener(new ActionListener() {
@@ -123,6 +137,7 @@ public class GUIMenu extends JMenuBar{
 			}
 		});
 		menu.add(menuItem);
+
 		
 		// Help Menu
 		menu = new JMenu("Help");

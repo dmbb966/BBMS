@@ -1,7 +1,10 @@
 package bbms;
 
 import java.awt.Color;
+import java.lang.Enum;
 import java.awt.Desktop.Action;
+import java.io.File;
+import java.nio.file.Path;
 import java.util.Vector;
 
 import javax.swing.JLabel;
@@ -108,5 +111,35 @@ public class GlobalFuncs {
 		else return a;
 	}
 	
+	/**
+	 * Saves the game.
+	 */
+	public static boolean saveState() {
+		if (!GlobalFuncs.mapInitialized) return false;
+		String saveFile = "src/saves/save.txt";
+		File f = new File(saveFile);
+		if (!f.exists()) FIO.newFile(saveFile);
+		
+		Path p = f.toPath();
+		
+		FIO.overwriteFile(p, "Hello world! | ");
+		FIO.appendFile(p, "Next line! ");
+		FIO.appendFile(p, "Fun times! ");
+		
+		return true;
+	}
+	
+	public static boolean loadState() {
+		// TODO: Reset all variables as if you were reinitializing the map
+		
+		String loadFile = "src/saves/save.txt";
+		File f = new File(loadFile);
+		if (!f.exists()) return false;
+		
+		Path p = f.toPath();
+		GUI_NB.GCO(FIO.BReadFile(p, loadFile));
+		
+		return true;
+	}
 
 }
