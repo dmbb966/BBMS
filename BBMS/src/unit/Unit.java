@@ -207,4 +207,14 @@ public class Unit {
 			DisplayLOSTo(finger.x, finger.y, false);
 		}
 	}
+	
+	public void DisplayWaypoints() {
+		GlobalFuncs.scenMap.clearTextAll();
+		for (int i = 0; i < waypointList.waypointList.size(); i++) {
+			HexOff staticFinger = waypointList.waypointList.get(i);
+			Hex finger = GlobalFuncs.scenMap.getHex(staticFinger.getX(), staticFinger.getY());
+			
+			GlobalFuncs.scenMap.setHexText(finger, "WP " + (i + 1), Color.WHITE);
+		}
+	}
 }

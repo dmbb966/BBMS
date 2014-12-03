@@ -14,7 +14,7 @@ import javax.swing.JComponent;
  */
 public class GUI_NB extends javax.swing.JFrame {
     
-    GUIMainDisp GMD = new GUIMainDisp();
+    public GUIMainDisp GMD = new GUIMainDisp();
 
     /**
      * Creates new form BBGUI

@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.JLabel;
 
 import bbms.GUI_NB;
 import bbms.GlobalFuncs;
@@ -33,6 +34,10 @@ public class Hex {
 	public boolean shaded;		// Will the hex be drawn shaded or not?
 	public Color shadedColor;
 	
+	public boolean displayText;
+	public String hexText;
+	public Color textColor;
+	
 	public boolean highlighted;	// Is this hex highlighted (apart from shading)
 	
 	public int obscuration;	// Level of visual obscuration on the hex (adds to density, but can dissipate over time)	
@@ -49,6 +54,10 @@ public class Hex {
 		shaded = false;
 		shadedColor = Color.WHITE;
 		highlighted = false;	
+		
+		displayText = false;
+		hexText = "";
+		textColor = Color.WHITE;
 		
 		switch (iTerrain) {
 		case CLEAR: tType = new ClearTerrain(); break;
@@ -100,7 +109,15 @@ public class Hex {
 			if (foreground != null) {
 				img = ImageIO.read(foreground);
 				g.drawImage(img,  x,  y,  null);
-			}					
+			}
+			
+			if (displayText) {
+				Color oldBrush = g.getColor();
+				g.setColor(textColor);
+				g.drawString(hexText, xi - hexText.length() * 3, yi);
+				
+				g.setColor(oldBrush);
+			}
 			
 		} catch (IOException ie) {
 			System.out.println(ie.getMessage());

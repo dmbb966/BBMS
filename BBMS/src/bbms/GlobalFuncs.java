@@ -9,6 +9,7 @@ import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.KeyStroke;
 
 import unit.Unit;
@@ -287,8 +288,9 @@ public class GlobalFuncs {
 		imap.put(k, "clear shading");
 		AbstractAction clearShading = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {	
-				GUI_NB.GCO("Clearing shaded hexes.");
+				GUI_NB.GCO("Clearing shaded and texted hexes.");
 				scenMap.unshadeAll();
+				scenMap.clearTextAll();
 				
 			}
 		};
@@ -309,17 +311,7 @@ public class GlobalFuncs {
 		};
 		amap.put("display LOS to enemies", LOStoEnemies);
 		
-		k = KeyStroke.getKeyStroke('x');
-		imap.put(k, "test key");
-		AbstractAction testX = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				if (GlobalFuncs.selectedUnit != null) {
-					GlobalFuncs.selectedUnit.DisplayLOSToRange(GlobalFuncs.scenMap.getXDim());
-					// HexOff.HexRing(highlightedHex.x, highlightedHex.y, 3);
-				}
-			}
-		};
-		amap.put("test key", testX);
+
 		
 		
 		k = KeyStroke.getKeyStroke(';');
@@ -373,6 +365,7 @@ public class GlobalFuncs {
 			public void actionPerformed(ActionEvent e) {
 				if (GlobalFuncs.selectedUnit != null) {
 					if (GlobalFuncs.selectedUnit.waypointList.waypointList.size() > 0) {
+						GlobalFuncs.selectedUnit.DisplayWaypoints();
 						GUI_NB.GCO(GlobalFuncs.selectedUnit.waypointList.displayWaypoints());
 					}
 					else {
@@ -384,7 +377,34 @@ public class GlobalFuncs {
 		};
 		amap.put("view waypoints", viewWP);
 				
-		// gui.BasicInfoPane.requestFocus();
+		k = KeyStroke.getKeyStroke('L');
+		imap.put(k, "full LOS");
+		AbstractAction fullLOS = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				if (GlobalFuncs.selectedUnit != null) {
+					GlobalFuncs.selectedUnit.DisplayLOSToRange(GlobalFuncs.scenMap.getXDim());
+					// HexOff.HexRing(highlightedHex.x, highlightedHex.y, 3);
+				}
+			}
+		};
+		amap.put("full LOS", fullLOS);
+		
+		
+		k = KeyStroke.getKeyStroke('x');
+		imap.put(k, "test key");
+		AbstractAction testX = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+			
+				GUI_NB.GCO("Set 1");
+				if (GlobalFuncs.highlightedHex != null) {
+					GlobalFuncs.scenMap.setHexText(GlobalFuncs.highlightedHex, "GG", Color.WHITE);
+															
+					GlobalFuncs.gui.repaint();
+					// HexOff.HexRing(highlightedHex.x, highlightedHex.y, 3);
+				}
+			}
+		};
+		amap.put("test key", testX);
 	}
 	
 	public static void rotateDebugDisplay() {

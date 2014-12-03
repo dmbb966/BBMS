@@ -13,12 +13,14 @@ public class HexMap {
 	Hex[][] hexArray;
 	
 	Vector<hex.Hex> shadedHexList;
+	Vector<hex.Hex> textHexList;
 	
 	public HexMap(int x, int y) {
 		xDim = x;
 		yDim = y;
 		hexArray = new Hex[xDim][yDim];
 		shadedHexList = new Vector<Hex>();
+		textHexList = new Vector<Hex>();
 		GenerateMap();
 	}
 	
@@ -34,6 +36,30 @@ public class HexMap {
 		shadedHexList.remove(h);
 	}
 	
+	public void setHexText(Hex h, String s, Color c) {
+		h.textColor = c;
+		h.hexText = s;
+		if (h.displayText) return;
+		h.displayText = true;
+		textHexList.add(h);		
+	}	
+	
+	public void showHexText(Hex h) {
+		setHexText(h, h.hexText, h.textColor);
+	}
+	
+	public void hideHexText(Hex h) {
+		h.displayText = false;
+		textHexList.remove(h);
+	}
+	
+	public void removeHexText(Hex h) {
+		h.displayText = false;
+		h.hexText = "";
+		h.textColor = Color.WHITE;
+		textHexList.remove(h);
+	}
+	
 	public void displayShadedList() {
 		bbms.GUI_NB.GCO("There are " + shadedHexList.size() + " hexes shaded.");
 		for (int i = 0; i < shadedHexList.size(); i++) {
@@ -44,6 +70,20 @@ public class HexMap {
 	public void unshadeAll() {
 		for (int i = shadedHexList.size() - 1; i >= 0; i--) {
 			unshadeHex(shadedHexList.elementAt(i));
+		}
+		bbms.GlobalFuncs.gui.repaint();
+	}
+	
+	public void hideTextAll() {
+		for (int i = textHexList.size() - 1; i >= 0; i--) {
+			hideHexText(textHexList.elementAt(i));
+		}
+		bbms.GlobalFuncs.gui.repaint();
+	}
+	
+	public void clearTextAll() {
+		for (int i = textHexList.size() - 1; i >= 0; i--) {
+			removeHexText(textHexList.elementAt(i));
 		}
 		bbms.GlobalFuncs.gui.repaint();
 	}
