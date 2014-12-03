@@ -3,6 +3,8 @@ package bbms;
 import unit.Unit;
 
 public class Clock {
+	
+	public static int time = 0;
 
 	/**
 	 * Also updates LOS
@@ -18,6 +20,8 @@ public class Clock {
 			Unit finger = GlobalFuncs.enemyUnitList.elementAt(i);
 			finger.MoveToWaypoint();
 		}
+		
+		time += 1;
 		
 		GlobalFuncs.gui.repaint();
 	}

@@ -28,6 +28,8 @@ public class GlobalFuncs {
 	public static Hex selectedHex = null;
 	
 	private static int unitCount = 0;
+	
+	public static spotting.SpotRecords allSpots = new spotting.SpotRecords();
 
 	/**
 	 * Random number object, uses the Mersenne Twister algorithm, coded in Java by Sean Luke (http://cs.gmu.edu/~sean/research/)
@@ -80,10 +82,16 @@ public class GlobalFuncs {
 		}
 	}
 	
+	/**
+	 * Returns the current unit count
+	 */
 	public static int getUnitCount() {
 		return unitCount;
 	}
 	
+	/**
+	 * Increments the total unit count by one and returns the new value
+	 */
 	public static int getNewUnitCount() {
 		return unitCount += 1;
 	}

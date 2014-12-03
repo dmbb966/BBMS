@@ -18,6 +18,7 @@ import java.util.Vector;
 import javax.imageio.ImageIO;
 
 import terrain.TerrainEnum;
+import bbms.Clock;
 import bbms.GUI_NB;
 import bbms.GlobalFuncs;
 
@@ -229,8 +230,13 @@ public class Unit {
 			for (int i = 0; i < enemyList.size(); i++) {
 				selected = enemyList.elementAt(i);
 				if (HasLOSTo(selected.location.x, selected.location.y)) {
+					spotting.SpotReport SPOTREP = new spotting.SpotReport(Clock.time, this, selected, selected.location.toHO());
+					GlobalFuncs.allSpots.addReport(SPOTREP);
+					GUI_NB.GCO("Added spot record: " + SPOTREP.displaySPOTREP());
+					GUI_NB.GCO("Checking record: " + GlobalFuncs.allSpots.getReport(GlobalFuncs.allSpots.records.size() - 1).displaySPOTREP());
+					
 					DisplayLOSTo(selected.location.x, selected.location.y, false);
-					GUI_NB.GCO(callsign + " has LOS to " + selected.callsign);
+					GUI_NB.GCO(callsign + " has LOS to " + selected.callsign + " at time " + Clock.time);										
 				}				
 			}
 		}				
@@ -312,12 +318,12 @@ public class Unit {
 			else moveDirection = 5;
 		}
 					
-		GUI_NB.GCO("Move dir: " + moveDirection);
+		// GUI_NB.GCO("Move dir: " + moveDirection);
 		if (moveDirection < 0) return;
 		MoveUnit(moveDirection);				
 		
 		if (location.toHO().ConvertToAx().getX() == nextWP.getX() && location.toHO().ConvertToAx().getY() == nextWP.getY()) {
-			GUI_NB.GCO("Waypoint reached.");
+			// GUI_NB.GCO("Waypoint reached.");
 			waypointList.removeFirstWaypoint();			
 		}
 	}

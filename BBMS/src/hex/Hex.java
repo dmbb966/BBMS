@@ -178,5 +178,5 @@ public class Hex {
 	public HexOff toHO() {
 		HexOff converted = new HexOff(x, y);
 		return converted;
-	}
+	}		
 }

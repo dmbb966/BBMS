@@ -118,11 +118,11 @@ public class GUIMainDisp extends JPanel {
 			// Left button - select unit
 			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK) {
 				if (clickedHex.HexUnit == null) {
-					GUI_NB.GCO("Hex " + clickedHex.x + ", " + clickedHex.y + " has no units.");
+					//GUI_NB.GCO("Hex " + clickedHex.x + ", " + clickedHex.y + " has no units.");
 					GlobalFuncs.highlightedHex = clickedHex;
 				}
 				else {
-					GUI_NB.GCO("Hex " + clickedHex.x + ", " + clickedHex.y + " has units.");
+					//GUI_NB.GCO("Hex " + clickedHex.x + ", " + clickedHex.y + " has units.");
 					GlobalFuncs.highlightedHex = clickedHex;
 					GlobalFuncs.selectedUnit = clickedHex.HexUnit;
 					GUI_NB.GCO(GlobalFuncs.selectedUnit.DispUnitInfo());
@@ -162,7 +162,7 @@ public class GUIMainDisp extends JPanel {
 			h = GlobalFuncs.scenMap.getHex(cursorHexOff.getX(), cursorHexOff.getY());
 			GUI_NB.GCO("Adding M1A2");
 			if (h != null && h.HexUnit == null) {
-				h.HexUnit = new unit.Unit(h, unit.SideEnum.FRIENDLY, "M1A2", "Dealer 66");	
+				h.HexUnit = new unit.Unit(h, unit.SideEnum.FRIENDLY, "M1A2", "Dealer " + (GlobalFuncs.getUnitCount() + 1));	
 				GUI_NB.GCO(h.HexUnit.DispUnitInfo());
 			}			
 			break;
@@ -172,7 +172,7 @@ public class GUIMainDisp extends JPanel {
 			cursorHexOff = pixelToHexOff(e.getX(), e.getY(), -defaultHexSize, -defaultHexSize);
 			h = GlobalFuncs.scenMap.getHex(cursorHexOff.getX(), cursorHexOff.getY());
 			if (h != null && h.HexUnit == null) {
-				h.HexUnit = new unit.Unit(h, unit.SideEnum.ENEMY, "T-72", "Warmonger 5");
+				h.HexUnit = new unit.Unit(h, unit.SideEnum.ENEMY, "T-72", "Warmonger " + (GlobalFuncs.getUnitCount() + 1));
 				GUI_NB.GCO(h.HexUnit.DispUnitInfo());
 				
 			}

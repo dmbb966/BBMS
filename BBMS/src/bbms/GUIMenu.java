@@ -88,6 +88,24 @@ public class GUIMenu extends JMenuBar{
 		});
 		menu.add(menuItem);
 		
+		menuItem = new JMenuItem("Display spots for this turn", KeyEvent.VK_6);		
+		menuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {								
+				spotting.SpotRecords x = GlobalFuncs.allSpots.getReportsTime(Clock.time);
+				GUI_NB.GCO(x.DisplayRecords());
+			}
+		});
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Display spots for all time", KeyEvent.VK_7);		
+		menuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {								
+				spotting.SpotRecords x = GlobalFuncs.allSpots.getReportsTime(0, Clock.time);
+				GUI_NB.GCO(x.DisplayRecords());
+			}
+		});
+		menu.add(menuItem);
+		
 		// Help Menu
 		menu = new JMenu("Help");
 		menu.setMnemonic(KeyEvent.VK_H);			

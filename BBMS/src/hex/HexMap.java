@@ -130,6 +130,10 @@ public class HexMap {
 		return hexArray[getX][getY];
 	}
 	
+	public Hex getHex(HexOff h) {
+		return getHex(h.x, h.y);
+	}
+	
 	public int getXDim() {
 		return xDim;
 	}

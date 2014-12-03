@@ -15,6 +15,7 @@ public class GUIKeyboard {
 	/**
 	 * Initialize keyboard commands once the map loads
 	 */
+	@SuppressWarnings("serial")
 	public static void initializeKeyCommands() {
 		
 		GUI_NB.GCO("Keyboard commands initialized.");
