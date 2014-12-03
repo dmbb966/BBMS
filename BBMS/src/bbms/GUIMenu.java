@@ -47,7 +47,7 @@ public class GUIMenu extends JMenuBar{
 			public void actionPerformed(ActionEvent event) {				
 				GUI_NB.GCO("Initializing a 30x30 map");
 				GlobalFuncs.initializeMap(30, 30);
-				GlobalFuncs.initializeKeyCommands();
+				GUIKeyboard.initializeKeyCommands();
 			}
 		});
 		menu.add(menuItem);
@@ -82,8 +82,8 @@ public class GUIMenu extends JMenuBar{
 		menuItem = new JMenuItem("Move all units and update LOS", KeyEvent.VK_5);		
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {								
-				GlobalFuncs.moveAllUnits();
-				GlobalFuncs.updateLOSFriendly();
+				Clock.moveAllUnits();
+				Clock.updateLOSFriendly();
 			}
 		});
 		menu.add(menuItem);

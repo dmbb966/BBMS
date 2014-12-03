@@ -13,7 +13,11 @@ public class HexMap {
 	Hex[][] hexArray;
 	
 	Vector<hex.Hex> shadedHexList;
-	Vector<hex.Hex> textHexList;
+	Vector<hex.Hex> textHexList;	
+	public static int chanceTrees = 10;
+	public static int chanceHighGrass = 30;
+	public static int chanceClear = 60;
+	public static int totalWeight = chanceClear + chanceHighGrass + chanceTrees;
 	
 	public HexMap(int x, int y) {
 		xDim = x;
@@ -90,9 +94,9 @@ public class HexMap {
 	
 	public TerrainEnum chooseTerrain(int r) {
 		randPool = r;
-		if (TerrainEval(randPool, GlobalFuncs.chanceClear)) return TerrainEnum.CLEAR;
-		if (TerrainEval(randPool, GlobalFuncs.chanceHighGrass)) return TerrainEnum.T_GRASS;
-		if (TerrainEval(randPool, GlobalFuncs.chanceTrees)) return TerrainEnum.TREES;
+		if (TerrainEval(randPool, HexMap.chanceClear)) return TerrainEnum.CLEAR;
+		if (TerrainEval(randPool, HexMap.chanceHighGrass)) return TerrainEnum.T_GRASS;
+		if (TerrainEval(randPool, HexMap.chanceTrees)) return TerrainEnum.TREES;
 		return TerrainEnum.INVALID;					
 	}
 	
@@ -110,7 +114,7 @@ public class HexMap {
 	public void GenerateMap() {
 		for (int y = 0; y < yDim; y++) {
 			for (int x = 0; x < xDim; x++) {
-				TerrainEnum tType = chooseTerrain(GlobalFuncs.randRange(1, GlobalFuncs.totalWeight));
+				TerrainEnum tType = chooseTerrain(GlobalFuncs.randRange(1, HexMap.totalWeight));
 				hexArray[x][y] = new Hex(x, y, tType, 0);
 				// hexArray[x][y].GCODisplay();
 			}
@@ -132,6 +136,16 @@ public class HexMap {
 	
 	public int getYDim() {
 		return yDim;
+	}
+
+	public static boolean checkMapBounds(int x, int y) {
+		if (!GlobalFuncs.mapInitialized) return false;
+		
+		if (x < 0 || y < 0) return false;
+		
+		if (x > GlobalFuncs.scenMap.getXDim() || y > GlobalFuncs.scenMap.getYDim()) return false;
+		
+		return true;
 	}
 
 }

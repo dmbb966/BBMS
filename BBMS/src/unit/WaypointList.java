@@ -4,8 +4,8 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.LinkedList;
 
+import hex.HexMap;
 import hex.HexOff;
-import bbms.GlobalFuncs;
 
 public class WaypointList {
 	
@@ -18,7 +18,7 @@ public class WaypointList {
 	
 	
 	public boolean addWaypoint(int x, int y) {
-		if (!GlobalFuncs.checkMapBounds(x, y)) return false;
+		if (!HexMap.checkMapBounds(x, y)) return false;
 		
 		HexOff newWayPoint = new HexOff(x, y);
 		waypointList.addLast(newWayPoint);		
@@ -26,7 +26,7 @@ public class WaypointList {
 	}
 	
 	public boolean addFirstWaypoint(int x, int y) {
-		if (!GlobalFuncs.checkMapBounds(x, y)) return false;
+		if (!HexMap.checkMapBounds(x, y)) return false;
 		
 		HexOff newWayPoint = new HexOff(x, y);
 		waypointList.addFirst(newWayPoint);		
