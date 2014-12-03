@@ -49,16 +49,21 @@ public class HexOff {
 	 */
 	public static double AzimuthOff(HexOff origin, HexOff target) {
 		double result;
-		int deltaX = target.x - origin.x;
-		int deltaY = target.y - origin.y;
 		
 		// Converts first to an absolute x/y coordinate system
 		// Algorithm from www.redblobgames.com/grids/hexagons
+
 		
-		double x = Math.sqrt(3) * (deltaX + 0.5 * (deltaY & 1));
-		double y = 1.5 * deltaY;
+		double x1 = Math.sqrt(3) * (origin.x + 0.5 * (origin.y & 1));
+		double y1 = 1.5 * origin.y;
 		
-		result = Math.atan2(x, -y) * (180 / Math.PI);
+		double x2 = Math.sqrt(3) * (target.x + 0.5 * (target.y & 1));
+		double y2 = 1.5 * target.y;
+		
+		double deltaX = x2 - x1;
+		double deltaY = y2 - y1;
+				
+		result = Math.atan2(deltaX, -deltaY) * (180 / Math.PI);
 		if (result < 0) result += 360;
 		
 		return result;

@@ -16,6 +16,7 @@ import java.util.Vector;
 
 import javax.imageio.ImageIO;
 
+import terrain.TerrainEnum;
 import bbms.GUI_NB;
 import bbms.GlobalFuncs;
 
@@ -217,4 +218,28 @@ public class Unit {
 			GlobalFuncs.scenMap.setHexText(finger, "WP " + (i + 1), Color.WHITE);
 		}
 	}
+	
+	/**
+	 * Moves the unit one hex in the direction specified.
+	 * Direction is an integer with 1 = 30 degrees, 2 = 90 degrees, etc. in a clockwise pattern
+	 * @param direction
+	 */
+	public void MoveUnit(int direction) {
+		if (direction < 0 || direction > 5) return;
+		
+		HexOff newLoc = HexOff.NeighborOff(location.toHO(), direction);
+		Hex destination = GlobalFuncs.scenMap.getHex(newLoc.getX(), newLoc.getY());
+		
+		GUI_NB.GCO("Current loc: (" + location.x + ", " + location.y + ").  Dest loc: (" + newLoc.getX() + ", " + newLoc.getY() + ")");
+		
+		if (destination.tEnum != TerrainEnum.INVALID) {
+			// Orients vehicle to destination hex
+			OrientHullTo(destination.x, destination.y);
+			
+			// Moves vehicle
+			location = destination;			
+		}	
+	}
+	
+	 
 }

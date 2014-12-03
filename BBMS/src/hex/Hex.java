@@ -27,6 +27,7 @@ public class Hex {
 	public int x;
 	public int y;
 	public TerrainType tType;	// Type of terrain
+	public TerrainEnum tEnum;
 	public int elevation;		// Relative height of the ground (m)
 	public int obsHeight;		// Additional height from buildings/obstacles
 	public int density;		// Obstructs line of sight if cumulative density >30
@@ -58,6 +59,7 @@ public class Hex {
 		displayText = false;
 		hexText = "";
 		textColor = Color.WHITE;
+		tEnum = iTerrain;
 		
 		switch (iTerrain) {
 		case CLEAR: tType = new ClearTerrain(); break;
@@ -171,5 +173,10 @@ public class Hex {
 	public static BufferedImage rescale (BufferedImage indexed, float scaleFactor, float offset) {
 		IndexColorModel icm = (IndexColorModel) indexed.getColorModel();
 		return new BufferedImage(rescale(icm, scaleFactor, offset), indexed.getRaster(), false, null);
+	}
+	
+	public HexOff toHO() {
+		HexOff converted = new HexOff(x, y);
+		return converted;
 	}
 }

@@ -396,11 +396,13 @@ public class GlobalFuncs {
 			public void actionPerformed(ActionEvent e) {
 			
 				GUI_NB.GCO("Set 1");
-				if (GlobalFuncs.highlightedHex != null) {
-					GlobalFuncs.scenMap.setHexText(GlobalFuncs.highlightedHex, "GG", Color.WHITE);
-															
-					GlobalFuncs.gui.repaint();
-					// HexOff.HexRing(highlightedHex.x, highlightedHex.y, 3);
+				if (GlobalFuncs.selectedUnit != null) {
+					int direction = randRange(0, 5);
+					GlobalFuncs.selectedUnit.MoveUnit(direction);
+					
+					gui.repaint();
+					GUI_NB.GCO("Moving unit one hex in direction " + direction);
+					
 				}
 			}
 		};
