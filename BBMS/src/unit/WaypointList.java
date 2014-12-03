@@ -47,11 +47,24 @@ public class WaypointList {
 		return true;
 	}
 	
+	public HexOff getFirstWaypoint() {
+		if (waypointList.size() == 0) return new HexOff(-1, -1);
+		HexOff currentWP = waypointList.getFirst();
+		
+		return currentWP;
+	}
+	
+	public HexOff getLastWaypoint() {
+		if (waypointList.size() == 0) return new HexOff(-1, -1);
+		HexOff lastWP = waypointList.getLast();
+		
+		return lastWP;
+	}
+	
 	public String displayWaypoints() {
 		String output = "Total size: " + waypointList.size() + "\n";
-		
-		for (int i = 0; i < waypointList.size(); i++) {
-			output = output + "Total size: " + waypointList.size() + "\n";
+				
+		for (int i = 0; i < waypointList.size(); i++) {			
 			HexOff finger = waypointList.get(i);
 			output = output + "Waypoint " + i + ": (" + finger.getX() + ", " + finger.getY() + ")\n"; 
 		}

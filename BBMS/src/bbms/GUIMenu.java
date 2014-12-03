@@ -104,8 +104,10 @@ public class GUIMenu extends JMenuBar{
 				GUI_NB.GCO("L - finds LOS to the selected hex");
 				GUI_NB.GCO("C - clears any shaded hexes");
 				GUI_NB.GCO("E - Display LOS to all enemies of selected unit");
+				GUI_NB.GCO("P - Displays waypoint list for the current unit");
+				GUI_NB.GCO("; - Adds a waypoint for the currently selected unit");
+				GUI_NB.GCO(": - Removes the next waypoint for the currently selected unit");
 				GUI_NB.GCO("X - Test key, varies from build to build");
-				
 			}
 		});
 		menu.add(menuItem);

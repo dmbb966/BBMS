@@ -320,6 +320,69 @@ public class GlobalFuncs {
 			}
 		};
 		amap.put("test key", testX);
+		
+		
+		k = KeyStroke.getKeyStroke(';');
+		imap.put(k, "add waypoint key");
+		AbstractAction addWP = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				if (GlobalFuncs.selectedUnit != null && GlobalFuncs.highlightedHex != null) {	
+					int x = GlobalFuncs.highlightedHex.x;
+					int y = GlobalFuncs.highlightedHex.y;
+					HexOff lastWP = GlobalFuncs.selectedUnit.waypointList.getLastWaypoint();
+					
+					if (x == GlobalFuncs.selectedUnit.location.x && y == GlobalFuncs.selectedUnit.location.y) {
+						GUI_NB.GCO("Can't add waypoint since highlighted hex is the unit's current location.");
+					}
+					else if (x != lastWP.getX() || y != lastWP.getY()) 
+					{
+						GlobalFuncs.selectedUnit.waypointList.addWaypoint(GlobalFuncs.highlightedHex.x, GlobalFuncs.highlightedHex.y);
+						GUI_NB.GCO("Added waypoint at (" + x + ", " + y + ")");
+						GUI_NB.GCO(GlobalFuncs.selectedUnit.waypointList.displayWaypoints());						
+					}
+					else {
+						GUI_NB.GCO("Can't add waypoint since highlighted hex is the unit's last waypoint.");
+					}
+				}
+			}
+		};
+		amap.put("add waypoint key", addWP);
+		
+		k = KeyStroke.getKeyStroke(':');
+		imap.put(k, "remove waypoint key");
+		AbstractAction removeWP = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				if (GlobalFuncs.selectedUnit != null) {
+					if (GlobalFuncs.selectedUnit.waypointList.waypointList.size() > 0) {
+						GlobalFuncs.selectedUnit.waypointList.removeFirstWaypoint();
+						GUI_NB.GCO("Removed the next waypoint of the unit.");
+						GUI_NB.GCO(GlobalFuncs.selectedUnit.waypointList.displayWaypoints());
+					}
+					else {
+						GUI_NB.GCO("Can't remove waypoint as this unit doesn't have any.");
+					}
+					
+				}
+			}
+		};
+		amap.put("remove waypoint key", removeWP);
+		
+		k = KeyStroke.getKeyStroke('p');
+		imap.put(k, "view waypoints");
+		AbstractAction viewWP = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				if (GlobalFuncs.selectedUnit != null) {
+					if (GlobalFuncs.selectedUnit.waypointList.waypointList.size() > 0) {
+						GUI_NB.GCO(GlobalFuncs.selectedUnit.waypointList.displayWaypoints());
+					}
+					else {
+						GUI_NB.GCO("This unit has no waypoints.");
+					}
+					
+				}
+			}
+		};
+		amap.put("view waypoints", viewWP);
 				
 		// gui.BasicInfoPane.requestFocus();
 	}
