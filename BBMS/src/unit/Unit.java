@@ -254,8 +254,8 @@ public class Unit {
 		int deltaX = nextWP.getX() - currentLoc.getX();
 		int deltaY = nextWP.getY() - currentLoc.getY();
 		
-		GUI_NB.GCO("Loc: " + currentLoc.getX() + ", " + currentLoc.getY() + 
-				" Dest: " + nextWP.getX() + ", " + nextWP.getY() + "  || Delta: " + deltaX + ", " + deltaY);
+		// GUI_NB.GCO("Loc: " + currentLoc.getX() + ", " + currentLoc.getY() + 
+		//		" Dest: " + nextWP.getX() + ", " + nextWP.getY() + "  || Delta: " + deltaX + ", " + deltaY);
 		
 		int moveDirection = -1;
 		

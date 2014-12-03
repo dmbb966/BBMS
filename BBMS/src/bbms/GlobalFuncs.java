@@ -393,12 +393,9 @@ public class GlobalFuncs {
 		k = KeyStroke.getKeyStroke('x');
 		imap.put(k, "test key");
 		AbstractAction testX = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {							
-				if (GlobalFuncs.selectedUnit != null) {
-					GlobalFuncs.selectedUnit.MoveToWaypoint();
-					
-					gui.repaint();										
-				}
+			public void actionPerformed(ActionEvent e) {			
+				
+				moveAllUnits();
 			}
 		};
 		amap.put("test key", testX);
@@ -420,6 +417,21 @@ public class GlobalFuncs {
 		if (a >= 360) return normalizeAngle(a -= 360);
 		else if (a < 0) return normalizeAngle(a += 360);
 		else return a;
+	}
+	
+	
+	public static void moveAllUnits() {
+		for (int i = 0; i < friendlyUnitList.size(); i++) {
+			Unit finger = friendlyUnitList.elementAt(i);
+			finger.MoveToWaypoint();
+		}
+		
+		for (int i = 0; i < enemyUnitList.size(); i++) {
+			Unit finger = enemyUnitList.elementAt(i);
+			finger.MoveToWaypoint();
+		}
+		
+		gui.repaint();
 	}
 	
 
