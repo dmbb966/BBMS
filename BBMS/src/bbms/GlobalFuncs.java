@@ -393,9 +393,9 @@ public class GlobalFuncs {
 		k = KeyStroke.getKeyStroke('x');
 		imap.put(k, "test key");
 		AbstractAction testX = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {			
-				
+			public void actionPerformed(ActionEvent e) {							
 				moveAllUnits();
+				GlobalFuncs.updateLOSFriendly();
 			}
 		};
 		amap.put("test key", testX);
@@ -419,17 +419,30 @@ public class GlobalFuncs {
 		else return a;
 	}
 	
-	
+	/**
+	 * Also updates LOS
+	 */
 	public static void moveAllUnits() {
+		
 		for (int i = 0; i < friendlyUnitList.size(); i++) {
 			Unit finger = friendlyUnitList.elementAt(i);
-			finger.MoveToWaypoint();
+			finger.MoveToWaypoint();			
 		}
 		
 		for (int i = 0; i < enemyUnitList.size(); i++) {
 			Unit finger = enemyUnitList.elementAt(i);
 			finger.MoveToWaypoint();
 		}
+		
+		gui.repaint();
+	}
+	
+	public static void updateLOSFriendly() {
+		scenMap.unshadeAll();
+		for (int i = 0; i < friendlyUnitList.size(); i++) {
+			Unit finger = friendlyUnitList.elementAt(i);
+			finger.FindLOSToEnemies();
+		}		
 		
 		gui.repaint();
 	}

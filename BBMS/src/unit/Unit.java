@@ -180,6 +180,23 @@ public class Unit {
 		GlobalFuncs.gui.repaint();
 	}
 	
+	public boolean HasLOSTo(int x, int y) {
+		HexOff currentHex = new HexOff(location.x, location.y);
+		HexOff targetHex = new HexOff(x, y);
+		Vector<hex.Hex> hexList = HexOff.HexesBetween(currentHex, targetHex);
+		
+		int visibility = 0;
+		// Does not count the hex the unit itself is in, hence, i starts at 1
+		for (int i = 1; i < hexList.size(); i++) {
+			Hex h = hexList.elementAt(i);			
+			if (visibility > 30) return false;			
+			
+			visibility += h.density;
+		}
+		
+		return true;
+	}
+	
 	public void DisplayLOSToTarget() {
 		DisplayLOSTo(target.location.x, target.location.y, true);
 	}
@@ -199,6 +216,24 @@ public class Unit {
 				// GUI_NB.GCO(currentTarget.DispUnitInfo());
 			}
 		}
+	}
+	
+	public void FindLOSToEnemies() {
+		Vector<unit.Unit> enemyList;
+		Unit selected;
+		
+		if (this.side == SideEnum.ENEMY) enemyList = GlobalFuncs.friendlyUnitList;
+		else enemyList = GlobalFuncs.enemyUnitList;
+		
+		if (enemyList.size() != 0) {
+			for (int i = 0; i < enemyList.size(); i++) {
+				selected = enemyList.elementAt(i);
+				if (HasLOSTo(selected.location.x, selected.location.y)) {
+					DisplayLOSTo(selected.location.x, selected.location.y, false);
+					GUI_NB.GCO(callsign + " has LOS to " + selected.callsign);
+				}				
+			}
+		}				
 	}
 	
 	public void DisplayLOSToRange(int range) {

@@ -79,10 +79,11 @@ public class GUIMenu extends JMenuBar{
 		});
 		menu.add(menuItem);
 		
-		menuItem = new JMenuItem("Run Test #8 - Waypoints", KeyEvent.VK_5);		
+		menuItem = new JMenuItem("Move all units and update LOS", KeyEvent.VK_5);		
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {								
-				FOVj.test8();
+				GlobalFuncs.moveAllUnits();
+				GlobalFuncs.updateLOSFriendly();
 			}
 		});
 		menu.add(menuItem);
