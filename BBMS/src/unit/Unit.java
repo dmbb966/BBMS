@@ -1,6 +1,7 @@
 package unit;
 
 import hex.Hex;
+import hex.HexAx;
 import hex.HexOff;
 
 import java.awt.Color;
@@ -244,41 +245,45 @@ public class Unit {
 	/**
 	 * Moves the unit one hex towards the waypoint
 	 */
-	public void MoveToWaypoint() {				
-		HexOff nextWP = waypointList.getFirstWaypoint();
-		if (nextWP.getX() < 0) return;		// Invalid waypoint or no waypoint set
-		HexOff currentLoc = location.toHO();
+	public void MoveToWaypoint() {
+		if (waypointList.getFirstWaypoint().getX() < 0) return;		// Invalid waypoint or no waypoint set
+		
+		HexAx nextWP = waypointList.getFirstWaypoint().ConvertToAx();		
+		HexAx currentLoc = location.toHO().ConvertToAx();		
 		
 		int deltaX = nextWP.getX() - currentLoc.getX();
 		int deltaY = nextWP.getY() - currentLoc.getY();
 		
-		boolean moveX = (Math.abs(deltaX) >= Math.abs(deltaY));
+		GUI_NB.GCO("Loc: " + currentLoc.getX() + ", " + currentLoc.getY() + 
+				" Dest: " + nextWP.getX() + ", " + nextWP.getY() + "  || Delta: " + deltaX + ", " + deltaY);
 		
-		GUI_NB.GCO("Dest: " + nextWP.getX() + ", " + nextWP.getY() + "  || Delta: " + deltaX + ", " + deltaY);
 		int moveDirection = -1;
 		
-		if (moveX) {
+		if (Math.abs(deltaX) == Math.abs(deltaY)) {
+			// Move direction will be either 0 (NE) or 3 (SW)
+			if (deltaX > deltaY) moveDirection = 0;
+			if (deltaX < deltaY) moveDirection = 3;
+			if (deltaX == deltaY) {
+				if (deltaX > 0) moveDirection = 1;
+				else moveDirection = 4;
+			}
+		}
+		else if (Math.abs(deltaX) > Math.abs(deltaY)){
 			if (deltaX > 0) moveDirection = 1;
-			if (deltaX < 0) moveDirection = 4;
+			else moveDirection = 4;
 		}
 		else {
-			if (deltaX >= 0) {
-				if (deltaY > 0) moveDirection = 2;
-				if (deltaY < 0) moveDirection = 0; 
-			}
-			else {
-				if (deltaY > 0) moveDirection = 3;
-				if (deltaY < 0) moveDirection = 5;
-			}
+			if (deltaY > 0) moveDirection = 2;
+			else moveDirection = 5;
 		}
-		
+					
 		GUI_NB.GCO("Move dir: " + moveDirection);
 		if (moveDirection < 0) return;
 		MoveUnit(moveDirection);				
 		
-		if (location.toHO().getX() == nextWP.getX() && location.toHO().getY() == nextWP.getY()) {
+		if (location.toHO().ConvertToAx().getX() == nextWP.getX() && location.toHO().ConvertToAx().getY() == nextWP.getY()) {
 			GUI_NB.GCO("Waypoint reached.");
-			waypointList.removeFirstWaypoint();
+			waypointList.removeFirstWaypoint();			
 		}
 	}
 	

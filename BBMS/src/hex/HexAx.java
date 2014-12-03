@@ -198,4 +198,12 @@ public class HexAx {
 	public void DisplayType() {
 		System.out.print("Axial hex\n");
 	}
+	
+	public int getX() {
+		return x;
+	}
+	
+	public int getY() {
+		return y;
+	}
 }
