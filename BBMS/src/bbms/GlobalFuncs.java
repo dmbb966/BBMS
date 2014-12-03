@@ -393,16 +393,11 @@ public class GlobalFuncs {
 		k = KeyStroke.getKeyStroke('x');
 		imap.put(k, "test key");
 		AbstractAction testX = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-			
-				GUI_NB.GCO("Set 1");
+			public void actionPerformed(ActionEvent e) {							
 				if (GlobalFuncs.selectedUnit != null) {
-					int direction = randRange(0, 5);
-					GlobalFuncs.selectedUnit.MoveUnit(direction);
+					GlobalFuncs.selectedUnit.MoveToWaypoint();
 					
-					gui.repaint();
-					GUI_NB.GCO("Moving unit one hex in direction " + direction);
-					
+					gui.repaint();										
 				}
 			}
 		};
