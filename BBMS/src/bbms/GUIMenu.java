@@ -38,8 +38,8 @@ public class GUIMenu extends JMenuBar{
 		
 		
 		// Test Menu
-		menu = new JMenu("Test");
-		menu.setMnemonic(KeyEvent.VK_T);			
+		menu = new JMenu("Setup");
+		menu.setMnemonic(KeyEvent.VK_S);			
 		add(menu);
 		
 		menuItem = new JMenuItem("Initialize 30x30 Map", KeyEvent.VK_1);		
@@ -79,7 +79,13 @@ public class GUIMenu extends JMenuBar{
 		});
 		menu.add(menuItem);
 		
-		menuItem = new JMenuItem("Move all units and update LOS", KeyEvent.VK_5);		
+		
+		// Actions Menu
+		menu = new JMenu("Actions");
+		menu.setMnemonic(KeyEvent.VK_A);			
+		add(menu);		
+		
+		menuItem = new JMenuItem("Move all units and update LOS", KeyEvent.VK_1);		
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {								
 				Clock.moveAllUnits();
@@ -88,7 +94,7 @@ public class GUIMenu extends JMenuBar{
 		});
 		menu.add(menuItem);
 		
-		menuItem = new JMenuItem("Display spots for this turn", KeyEvent.VK_6);		
+		menuItem = new JMenuItem("Display spots for this turn", KeyEvent.VK_2);		
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {								
 				spotting.SpotRecords x = GlobalFuncs.allSpots.getReportsTime(Clock.time);
@@ -97,11 +103,23 @@ public class GUIMenu extends JMenuBar{
 		});
 		menu.add(menuItem);
 		
-		menuItem = new JMenuItem("Display spots for all time", KeyEvent.VK_7);		
+		menuItem = new JMenuItem("Display spots for all time", KeyEvent.VK_3);		
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {								
 				spotting.SpotRecords x = GlobalFuncs.allSpots.getReportsTime(0, Clock.time);
 				GUI_NB.GCO(x.DisplayRecords());
+			}
+		});
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Display spots for selected unit", KeyEvent.VK_4);		
+		menuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {		
+				if (GlobalFuncs.selectedUnit != null) {
+					spotting.SpotRecords x = GlobalFuncs.allSpots.getReportsTarget(GlobalFuncs.selectedUnit);
+					GUI_NB.GCO(x.DisplayRecords());
+				}
+				
 			}
 		});
 		menu.add(menuItem);

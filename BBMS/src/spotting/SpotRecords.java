@@ -54,6 +54,22 @@ public class SpotRecords {
 	}
 	
 	/**
+	 * Returns all spot reports of a given enemy unit
+	 */
+	public SpotRecords getReportsTarget(unit.Unit enemy) {
+		SpotRecords result = new SpotRecords();
+		
+		for (int i = 0; i < records.size(); i++) {
+			SpotReport finger = records.elementAt(i);
+			if (finger.target == enemy) {
+				result.addReport(finger);
+			}
+		}
+		
+		return result;
+	}
+	
+	/**
 	 * Displays all records, each record on a separate line 
 	 */
 	public String DisplayRecords() {
