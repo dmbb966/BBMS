@@ -89,7 +89,7 @@ public class Unit {
 	public String DispUnitInfo() {
 		return "Unit " + unitID + " is type: " + type + ", callsign " + callsign + " at location " + 
 					location.x + ", " + location.y + " on side " + side + "\n with turret and hull orientation " + 
-				turretOrientation + " and " + hullOrientation;				
+				String.format("%.2f", turretOrientation) + " and " + String.format("%.2f", hullOrientation);				
 		
 	}
 	
@@ -232,11 +232,11 @@ public class Unit {
 				if (HasLOSTo(selected.location.x, selected.location.y)) {
 					spotting.SpotReport SPOTREP = new spotting.SpotReport(Clock.time, this, selected, selected.location.toHO());
 					GlobalFuncs.allSpots.addReport(SPOTREP);
-					GUI_NB.GCO("Added spot record: " + SPOTREP.displaySPOTREP());
-					GUI_NB.GCO("Checking record: " + GlobalFuncs.allSpots.getReport(GlobalFuncs.allSpots.records.size() - 1).displaySPOTREP());
+					// GUI_NB.GCO("Added spot record: " + SPOTREP.displaySPOTREP());
+					// GUI_NB.GCO("Checking record: " + GlobalFuncs.allSpots.getReport(GlobalFuncs.allSpots.records.size() - 1).displaySPOTREP());
 					
 					DisplayLOSTo(selected.location.x, selected.location.y, false);
-					GUI_NB.GCO(callsign + " has LOS to " + selected.callsign + " at time " + Clock.time);										
+					// GUI_NB.GCO(callsign + " has LOS to " + selected.callsign + " at time " + Clock.time);										
 				}				
 			}
 		}				
@@ -278,8 +278,11 @@ public class Unit {
 			// Orients vehicle to destination hex
 			OrientHullTo(destination.x, destination.y);
 			
+			// TODO There will be a bug if two units occupy the same space simultaneously, but it isn't debilitating.
 			// Moves vehicle
-			location = destination;			
+			location.HexUnit = null;
+			location = destination;
+			location.HexUnit = this;
 		}	
 	}
 	
