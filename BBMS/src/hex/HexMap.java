@@ -1,9 +1,11 @@
 package hex;
 
 import java.awt.Color;
+import java.nio.file.Path;
 import java.util.Vector;
 
 import terrain.TerrainEnum;
+import bbms.FIO;
 import bbms.GlobalFuncs;
 
 public class HexMap {
@@ -150,6 +152,23 @@ public class HexMap {
 		if (x > GlobalFuncs.scenMap.getXDim() || y > GlobalFuncs.scenMap.getYDim()) return false;
 		
 		return true;
+	}
+	
+	public void saveMap(Path p) {		
+		// Stores map characteristics
+		FIO.overwriteFile(p, "# Map characteristics (x, y)");
+		FIO.appendFile(p, xDim + ", " + yDim + "\n");
+
+		// Stores hex information 
+		FIO.appendFile(p, "# Hex data, stored rows");
+		FIO.appendFile(p, "# Format is: TerrainEnumID, elevation, obstacle height, density, obscuration");
+		
+		for (int y = 0; y < yDim; y++) {
+			FIO.appendFile(p, "\n# Row " + y);
+			for (int x = 0; x < xDim; x++) {
+				FIO.appendFile(p, hexArray[x][y].saveHex());
+			}
+		}
 	}
 
 }

@@ -122,10 +122,8 @@ public class GlobalFuncs {
 		
 		Path p = f.toPath();
 		
-		FIO.overwriteFile(p, "Hello world! | ");
-		FIO.appendFile(p, "Next line! ");
-		FIO.appendFile(p, "Fun times! ");
-		
+		GlobalFuncs.scenMap.saveMap(p);
+			
 		return true;
 	}
 	
@@ -137,8 +135,8 @@ public class GlobalFuncs {
 		if (!f.exists()) return false;
 		
 		Path p = f.toPath();
-		GUI_NB.GCO(FIO.BReadFile(p, loadFile));
-		
+		FIO.LoadFile(p);
+				
 		return true;
 	}
 

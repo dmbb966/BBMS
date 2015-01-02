@@ -15,7 +15,7 @@ public class FIO {
 
 	public static boolean BWriteFile(Path p, String s, StandardOpenOption opt) {
 		try (BufferedWriter writer = Files.newBufferedWriter(p, cSet, opt)) {
-			writer.write(s, 0, s.length());
+			writer.write(s + "\n", 0, s.length() + 1);
 		} catch (IOException e) {
 			System.err.format("IO Error writing to file: %s%n", e);
 			return false;
@@ -51,6 +51,24 @@ public class FIO {
 			return output;
 		}
 		return output;
+	}
+	
+	public static boolean LoadFile(Path p) {
+		// TODO: Reset old environment
+		
+		try {
+			BufferedReader reader = Files.newBufferedReader(p,  cSet);
+			String readL;
+			while ((readL = reader.readLine()) != null) {				
+				if (readL.startsWith("#")) GUI_NB.GCO("Comment follows: " + readL);
+				else GUI_NB.GCO(readL);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		return true;
 	}
 
 	public static boolean overwriteFile(Path p, String s) {

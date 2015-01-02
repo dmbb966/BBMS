@@ -48,7 +48,17 @@ public class Hex {
 	// TODO: Include unit list of all units in this hex
 	// TODO: Include a cover value which affects the deadliness of various types of weapons
 	
+	// Constructor with random height, obsHeight, and density
 	public Hex (int xi, int yi, TerrainEnum iTerrain, int iElev) {
+		this(xi, yi, iTerrain, 
+				iElev + iTerrain.tType.generateHeight(), 
+				iTerrain.tType.generateObsHeight(),
+				iTerrain.tType.generateDensity(),
+				0);			
+	}
+	
+	// Constructor with specific height, obsHeight, density, and obscuration
+	public Hex (int xi, int yi, TerrainEnum iTerrain, int iElev, int iObsHeight, int iDensity, int iObsc) {
 		x = xi;
 		y = yi;		
 				
@@ -59,20 +69,14 @@ public class Hex {
 		displayText = false;
 		hexText = "";
 		textColor = Color.WHITE;
-		tEnum = iTerrain;
+		tEnum = iTerrain;				
+		tType = tEnum.tType;		// There's probably a more efficient way of doing this.
+				
+		elevation = iElev;		
+		obsHeight = iObsHeight;
+		density = iDensity;				
 		
-		switch (iTerrain) {
-		case CLEAR: tType = new ClearTerrain(); break;
-		case TREES: tType = new TreesTerrain(); break;
-		case T_GRASS: tType = new TallGrassTerrain(); break;
-		case INVALID: tType = new InvalidTerrain(); break;
-		}
-		
-		elevation = iElev + tType.generateHeight();		
-		obsHeight = tType.generateObsHeight();
-		density = tType.generateDensity();				
-		
-		obscuration = 0;		
+		obscuration = iObsc;		
 	}
 	
 	public void DisplayInfo() {
@@ -179,4 +183,11 @@ public class Hex {
 		HexOff converted = new HexOff(x, y);
 		return converted;
 	}		
+	
+	// NOTE: Does NOT save hex text 
+	public String saveHex() {
+		String output = tEnum.id + ", " + elevation + ", " + obsHeight + ", " + density + ", " + obscuration;
+		
+		return output;
+	}
 }
