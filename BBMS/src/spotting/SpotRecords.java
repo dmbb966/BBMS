@@ -1,7 +1,9 @@
 package spotting;
 
+import java.nio.file.Path;
 import java.util.Vector;
 
+import bbms.FIO;
 import bbms.GUI_NB;
 
 public class SpotRecords {
@@ -79,6 +81,16 @@ public class SpotRecords {
 		}
 		
 		return result;
+	}
+	
+	public void SaveSpots(Path p) {
+		FIO.appendFile(p, "# Spot reports");
+		FIO.appendFile(p, "# Format: Time index, spotter unit ID, observed unit ID, observed unit x, observed unit y\n");
+		
+		for (int i = 0; i < records.size(); i++) {
+			FIO.appendFile(p, records.elementAt(i).saveSPOTREP());
+		}
+		
 	}
 
 }

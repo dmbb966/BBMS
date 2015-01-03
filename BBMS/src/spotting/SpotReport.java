@@ -20,4 +20,13 @@ public class SpotReport {
 	public String displaySPOTREP() {
 		return "Time " + timeSpotted + " || " + spotter.callsign + " spotted " + target.callsign + " at " + targetLoc.DisplayHexStr();
 	}
+	
+	public String saveSPOTREP() {
+		String output = timeSpotted + ", " + 
+						spotter.unitID + ", " +
+						target.unitID + ", " +
+						targetLoc.getX() + ", " + targetLoc.getY();
+		
+		return output;
+	}
 }

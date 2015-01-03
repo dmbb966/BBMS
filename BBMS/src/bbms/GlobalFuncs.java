@@ -123,8 +123,22 @@ public class GlobalFuncs {
 		Path p = f.toPath();
 		
 		GlobalFuncs.scenMap.saveMap(p);
+		GlobalFuncs.saveUnits(p);
+		GlobalFuncs.allSpots.SaveSpots(p);
+		
 			
 		return true;
+	}
+	
+	public static void saveUnits(Path p) {
+		// Stores unit information
+		FIO.appendFile(p, "\n# Unit information");
+		FIO.appendFile(p, "# Format is: unitID, callsign, x, y, hullOrientation, turretOrientation, type, side, targetID, waypoints\n");
+		
+		for (int i = 0; i < GlobalFuncs.unitList.size(); i++) {
+			FIO.appendFile(p, GlobalFuncs.unitList.elementAt(i).SaveUnit(p));
+		}
+		FIO.appendFile(p, ">Last Unit<\n");
 	}
 	
 	public static boolean loadState() {

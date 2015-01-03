@@ -11,8 +11,11 @@ import java.awt.Image;
 import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.Formatter;
+import java.util.Locale;
 import java.util.Vector;
 
 import javax.imageio.ImageIO;
@@ -330,6 +333,24 @@ public class Unit {
 			waypointList.removeFirstWaypoint();			
 		}
 	}
+	
+	public String SaveUnit(Path p) {		
+		String tgtStr;
+		if (target != null) tgtStr = String.format("%d", target.unitID);
+		else tgtStr = "_";
+		
+		String output = unitID + ", " +
+						callsign + ", " +
+						location.x + ", " + location.y + ", " +
+						String.format("%.2f", hullOrientation) + ", " + 
+						String.format("%.2f", turretOrientation) + ", " + 
+						type + ", " + 
+						side + ", " +
+						tgtStr + ", " +
+						waypointList.saveWaypoints();				
+		
+		return output;
+	}	
 	
 	 
 }

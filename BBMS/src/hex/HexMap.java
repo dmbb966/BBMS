@@ -169,6 +169,10 @@ public class HexMap {
 				FIO.appendFile(p, hexArray[x][y].saveHex());
 			}
 		}
+		
+
+		
+		// Stores spotting information
 	}
 
 }

@@ -71,4 +71,17 @@ public class WaypointList {
 		
 		return output;
 	}
+	
+	public String saveWaypoints() {
+		String output = "";
+		for (int i = 0; i < waypointList.size(); i++) {
+			HexOff finger = waypointList.get(i);	// This can probably be optimized
+			output = output + "(" + finger.getX() + ", " + finger.getY() + "), "; 
+		}
+		
+		if (waypointList.size() == 0) output = "_";
+		// output = output + "*";
+		
+		return output;
+	}
 }
