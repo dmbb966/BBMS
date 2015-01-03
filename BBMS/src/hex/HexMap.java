@@ -12,7 +12,7 @@ public class HexMap {
 	
 	private int randPool;
 	int xDim, yDim;
-	Hex[][] hexArray;
+	public Hex[][] hexArray;
 	
 	Vector<hex.Hex> shadedHexList;
 	Vector<hex.Hex> textHexList;	
@@ -130,6 +130,10 @@ public class HexMap {
 		}
 		
 		return hexArray[getX][getY];
+	}
+	
+	public void storeHex(int x, int y, Hex in) {
+		hexArray[x][y] = in;
 	}
 	
 	public Hex getHex(HexOff h) {

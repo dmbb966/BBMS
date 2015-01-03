@@ -1,8 +1,12 @@
 package bbms;
 
+import hex.Hex;
+
 import java.awt.event.*;
 
 import javax.swing.*;
+
+import terrain.TerrainEnum;
 
 @SuppressWarnings("serial")
 public class GUIMenu extends JMenuBar{
@@ -98,6 +102,20 @@ public class GUIMenu extends JMenuBar{
 		menu = new JMenu("Actions");
 		menu.setMnemonic(KeyEvent.VK_A);			
 		add(menu);		
+		
+		menuItem = new JMenuItem("Test - ReplaceHex", KeyEvent.VK_0);
+		menuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {								
+				for (int y = 0; y < 30; y++) {
+					for (int x = 0; x < 30; x++) {
+						GlobalFuncs.scenMap.storeHex(x, y, new Hex(x, y, TerrainEnum.CLEAR, 20));
+					}
+				}
+				//GlobalFuncs.scenMap.storeHex(0, 0, new Hex(0, 0, TerrainEnum.TREES, 20));
+				GlobalFuncs.gui.repaint();
+			}
+		});
+		menu.add(menuItem);		
 		
 		menuItem = new JMenuItem("Move all units and update LOS", KeyEvent.VK_1);		
 		menuItem.addActionListener(new ActionListener() {
