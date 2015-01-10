@@ -21,13 +21,17 @@ public class HexMap {
 	public static int chanceClear = 60;
 	public static int totalWeight = chanceClear + chanceHighGrass + chanceTrees;
 	
-	public HexMap(int x, int y) {
+	public HexMap(int x, int y, boolean cleanMap) {
 		xDim = x;
 		yDim = y;
 		hexArray = new Hex[xDim][yDim];
 		shadedHexList = new Vector<Hex>();
 		textHexList = new Vector<Hex>();
-		GenerateMap();
+		if (!cleanMap) GenerateMap();
+	}
+	
+	public HexMap(int x, int y) {
+		this(x, y, true);
 	}
 	
 	public void shadeHex(Hex h, Color c) {

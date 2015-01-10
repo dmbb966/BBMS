@@ -2,6 +2,7 @@ package bbms;
 
 import hex.Hex;
 import hex.HexMap;
+import hex.HexOff;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -13,20 +14,28 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
 import terrain.TerrainEnum;
+import unit.SideEnum;
+import unit.Unit;
+import unit.WaypointList;
 
 public class FIO {
 	static Charset cSet = Charset.forName("US-ASCII");
 	static int readFinger = 0;
 
 	public static boolean BWriteFile(Path p, String s, StandardOpenOption opt) {
+		return BWriteFile(p, s, opt, true);
+	}
+	
+	public static boolean BWriteFile(Path p, String s, StandardOpenOption opt, boolean newLine) {
 		try (BufferedWriter writer = Files.newBufferedWriter(p, cSet, opt)) {
-			writer.write(s + "\n", 0, s.length() + 1);
+			if (newLine) writer.write(s + "\n", 0, s.length() + 1);
+			else writer.write(s, 0, s.length());
 		} catch (IOException e) {
 			System.err.format("IO Error writing to file: %s%n", e);
 			return false;
 		}
 		
-		return true;
+		return true;		
 	}
 
 	public static File newFile(String s) {
@@ -59,13 +68,11 @@ public class FIO {
 	}
 	
 	public static boolean LoadFile(Path p) {
-		// TODO: Reset old environment
-		
+	
 		int newMapX = 0;
 		int newMapY = 0;
 		int loadHexX = 0;
-		int loadHexY = 0;
-		HexMap newMap = null;
+		int loadHexY = 0;		
 		// Stage in reading the save game file
 		// 0 = Just started
 		// 1 = Loading map hex information
@@ -75,8 +82,7 @@ public class FIO {
 		
 		try {
 			BufferedReader reader = Files.newBufferedReader(p,  cSet);
-			String readL;
-			String chunk;
+			String readL;			
 			while ((readL = reader.readLine()) != null) {				
 				if (readL.startsWith("#")) {} 			//GUI_NB.GCO("Comment follows: " + readL);
 				else if (readL.contentEquals("")) {} 	//GUI_NB.GCO("Blank line: " + readL);
@@ -84,7 +90,7 @@ public class FIO {
 				// With the above non-data holding lines stripped out, only valid input will be evaluated here
 				else {
 					readFinger = 0;
-					GUI_NB.GCO("Reading string: " + readL);
+					GUI_NB.GCO("Reading string: *" + readL + "*");
 					
 					switch (mode) {
 					case 0:
@@ -97,7 +103,7 @@ public class FIO {
 						
 						GUI_NB.GCO("Map dimensions are " + newMapX + " by " + newMapY);
 						
-						newMap = new HexMap(newMapX, newMapY);						
+						GlobalFuncs.initializeMap(newMapX, newMapY, true);			
 						mode = 1;						
 						
 						break;
@@ -113,22 +119,74 @@ public class FIO {
 						int obscuration = Integer.parseInt(ReadNextChunk(readL, ',')); 
 						TerrainEnum tEnum = TerrainEnum.loadEnum(TerrainEnumID);
 												
-						newMap.storeHex(loadHexX, loadHexY, new Hex(loadHexX, loadHexY, tEnum, elevation, obsHeight, density, obscuration));
+						GlobalFuncs.scenMap.storeHex(loadHexX, loadHexY, new Hex(loadHexX, loadHexY, tEnum, elevation, obsHeight, density, obscuration));
 						
 						loadHexX++;
 						if (loadHexX == newMapX) {
 							loadHexY++;
 							loadHexX = 0;
 							
-							if (loadHexY == newMapY) mode = 2;
+							if (loadHexY == newMapY) {	
+								mode = 2;
+							}
 						}
 						
-						break;
+						break;		
 					case 2:
-						GlobalFuncs.scenMap = newMap;
-						GlobalFuncs.gui.repaint();
-						mode = 3;
+						if (readL.equals(">Last Unit<")) 
+						{
+							GUI_NB.GCO("Last unit reached");		
+							mode = 3;							
+						}
+						else {													
+							//# Unit information
+							//# Format is: unitID, callsign, x, y, hullOrientation, turretOrientation, type, side, waypoints
+							int unitID = Integer.parseInt(ReadNextChunk(readL, ','));
+							String callsign = ReadNextChunk(readL, ',');
+							int x = Integer.parseInt(ReadNextChunk(readL, ','));
+							int y = Integer.parseInt(ReadNextChunk(readL, ','));
+							double hullOrientation = Double.parseDouble(ReadNextChunk(readL, ','));
+							double turretOrientation = Double.parseDouble(ReadNextChunk(readL, ','));
+							String type = ReadNextChunk(readL, ',');
+							String side = ReadNextChunk(readL, ',');
+							
+							String wpStr = ReadNextChunk(readL, ')');
+							WaypointList wpList =new WaypointList();						
+							// Finds waypoints until there are no more to add				
+							while (!wpStr.equals("")) {							
+								GUI_NB.GCO("WP Str: >" + wpStr + "<");
+								GUI_NB.GCO("WP Str Size: " + wpStr.length());
+								HexOff newWP = WaypointList.readWaypoint(wpStr);
+								wpList.addWaypoint(newWP.getX(), newWP.getY());
+								
+								wpStr = ReadNextChunk(readL, ')');
+							}
+							
+							Hex locn = GlobalFuncs.scenMap.getHex(x, y);
+							SideEnum sideE;
+							switch (side) {
+							case "FRIENDLY":
+								sideE = SideEnum.FRIENDLY;
+								break;
+							case "ENEMY":
+								sideE = SideEnum.ENEMY;
+								break;
+							default:
+								sideE = SideEnum.NEUTRAL;
+								break;
+							}
+							
+							locn.HexUnit = new Unit(locn, sideE, type, callsign, hullOrientation, turretOrientation, wpList);
+						}
+
 						
+						break;
+					case 3:
+						
+						// Now that the map and units have been uploaded, we can repaint the GUI.
+						GlobalFuncs.gui.repaint();
+						
+						mode = 4;
 						break;
 					default: 
 						GUI_NB.GCO("Mode is " + mode + ", string: " + readL);
@@ -150,7 +208,7 @@ public class FIO {
 	public static String ReadNextChunk (String x, char stopper, boolean trim) {
 		String chunk = "";
 		char finger = ' ';
-		int len = 0;
+		int len = 0;		
 		
 		while (readFinger < x.length()) {
 			finger = x.charAt(readFinger);
@@ -158,22 +216,22 @@ public class FIO {
 			// Reaches a delimiter
 			if (finger == stopper) {
 				readFinger++;
-				GUI_NB.GCO("Stopper reached, returning chunk: " + chunk);
+				
+				if (trim) chunk = chunk.trim();
+				GUI_NB.GCO("Stopper reached, returning chunk: |" + chunk + "|");
 				return chunk;
 			}
 			else {
 				readFinger++;
-				if (len == 0 && finger == ' ') {
-					// Do nothing since this is a leading space
-				} 
-				else {
-					chunk += finger;
-					len++;
-				}
+				chunk += finger;
+				len++;				
 			}
 		}
-		
-		GUI_NB.GCO("EOL reached, returning chunk: " + chunk);
+
+		if (trim) {
+			chunk = chunk.trim();
+		}
+		GUI_NB.GCO("EOL reached, returning chunk: |" + chunk + "|");
 		return chunk;		
 	}
 
@@ -182,6 +240,10 @@ public class FIO {
 	}
 
 	public static boolean appendFile(Path p, String s) {
-		return BWriteFile(p, s, StandardOpenOption.APPEND);
+		return BWriteFile(p, s, StandardOpenOption.APPEND, true);
+	}
+	
+	public static boolean appendFile(Path p, String s, boolean newLine) {
+		return BWriteFile(p, s, StandardOpenOption.APPEND, newLine);		
 	}
 }

@@ -316,7 +316,7 @@ public class GUI_NB extends javax.swing.JFrame {
     private javax.swing.JTabbedPane DisplayTabs;
     private static javax.swing.JTextArea GUIConsole;
     private javax.swing.JPanel InformationPanel;
-    private javax.swing.JPanel MainDisplay;
+    public javax.swing.JPanel MainDisplay;
     private javax.swing.JPanel MiniMap;
     // End of variables declaration                   
 

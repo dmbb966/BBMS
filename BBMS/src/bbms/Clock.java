@@ -11,14 +11,17 @@ public class Clock {
 	 */
 	public static void moveAllUnits() {
 		
-		for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
-			Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
-			finger.MoveToWaypoint();			
-		}
+		// Move units first
 		
-		for (int i = 0; i < GlobalFuncs.enemyUnitList.size(); i++) {
-			Unit finger = GlobalFuncs.enemyUnitList.elementAt(i);
+		for (int i = 0; i < GlobalFuncs.unitList.size(); i++) {
+			Unit finger = GlobalFuncs.unitList.elementAt(i);
 			finger.MoveToWaypoint();
+		}
+				
+		// Now update turret orientations appropriately
+		for (int i = 0; i < GlobalFuncs.unitList.size(); i++) {
+			Unit finger = GlobalFuncs.unitList.elementAt(i);
+			if (finger.target != null) finger.OrientTurretToTarget();
 		}
 		
 		time += 1;

@@ -7,6 +7,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import terrain.TerrainEnum;
+import unit.WaypointList;
 
 @SuppressWarnings("serial")
 public class GUIMenu extends JMenuBar{
@@ -22,8 +23,7 @@ public class GUIMenu extends JMenuBar{
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				GUI_NB.GCO("Initializing a 30x30 map");
-				GlobalFuncs.initializeMap(30, 30);
-				GUIKeyboard.initializeKeyCommands();
+				GlobalFuncs.initializeMap(30, 30);			
 			}
 		});
 		
@@ -103,14 +103,10 @@ public class GUIMenu extends JMenuBar{
 		menu.setMnemonic(KeyEvent.VK_A);			
 		add(menu);		
 		
-		menuItem = new JMenuItem("Test - ReplaceHex", KeyEvent.VK_0);
+		menuItem = new JMenuItem("Test - WP Str (5, 3", KeyEvent.VK_0);
 		menuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {								
-				for (int y = 0; y < 30; y++) {
-					for (int x = 0; x < 30; x++) {
-						GlobalFuncs.scenMap.storeHex(x, y, new Hex(x, y, TerrainEnum.CLEAR, 20));
-					}
-				}
+				GUI_NB.GCO(WaypointList.readWaypoint("(5, 3").DisplayHexStr());
 				//GlobalFuncs.scenMap.storeHex(0, 0, new Hex(0, 0, TerrainEnum.TREES, 20));
 				GlobalFuncs.gui.repaint();
 			}

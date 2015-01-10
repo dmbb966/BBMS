@@ -50,49 +50,50 @@ public class Unit {
 	// What side its on
 	public SideEnum side;
 	
-	public Unit (hex.Hex locn, SideEnum s, String givenType, String givenCallsign) {
+	public Unit (hex.Hex locn, SideEnum s, String givenType, String givenCallsign, double hullOrient, double turretOrient, WaypointList wpL) {
 		location = locn;
 		side = s;
 		type = givenType;
 		target = null;
 		// trackTarget = true;
 		
-		if (s == SideEnum.ENEMY) {
-			hullOrientation = 270.0;
-			turretOrientation = 0.0;
-			GlobalFuncs.enemyUnitList.addElement(this);
-		} else if (s == SideEnum.FRIENDLY){
-			hullOrientation = 90.0;
-			turretOrientation = 0.0;
-			GlobalFuncs.friendlyUnitList.addElement(this);
-		} else {
-			hullOrientation = 0.0;
-			turretOrientation = 0.0;
+		hullOrientation = hullOrient;
+		turretOrientation = turretOrient;
+		if (wpL != null) waypointList = wpL;
+		
+		switch (s) {
+			case ENEMY:
+				GlobalFuncs.enemyUnitList.addElement(this);
+				break;
+			case FRIENDLY:
+				GlobalFuncs.friendlyUnitList.addElement(this);
+				break;								
 		}
 		
 		
-		if (type == "M1A2") {
+		
+		if (type.matches("M1A2")) {			
 			HullOffset = new hex.HexOff(27, 12);
 			TurretRing = new hex.HexOff(30 - HullOffset.getX(), 12 - HullOffset.getY());
 			TurretOffset = new hex.HexOff(25, 11);
-		} else if (type == "T-72") {
+		} else if (type.matches("T-72")) {
 			HullOffset = new hex.HexOff(25, 12);
 			TurretRing = new hex.HexOff(28 - HullOffset.getX(), 11 - HullOffset.getY());
 			TurretOffset = new hex.HexOff(13, 10);
 		}
 		
-		callsign = givenCallsign;
-		
+		callsign = givenCallsign;		
 		unitID = GlobalFuncs.getNewUnitCount();
-		
-		//GlobalFuncs.unitList.add(this);
+			
 		GlobalFuncs.unitList.addElement(this);
 	}
-	
+		
 	public String DispUnitInfo() {
 		return "Unit " + unitID + " is type: " + type + ", callsign " + callsign + " at location " + 
 					location.x + ", " + location.y + " on side " + side + "\n with turret and hull orientation " + 
-				String.format("%.2f", turretOrientation) + " and " + String.format("%.2f", hullOrientation);				
+				String.format("%.2f", turretOrientation) + " and " + String.format("%.2f", hullOrientation) + 
+				"\n Hull offsets: " + HullOffset.getX() + " and " + HullOffset.getY();
+	
 		
 	}
 	
@@ -157,6 +158,15 @@ public class Unit {
 	public void OrientTurretTo(int x, int y) {
 		turretOrientation = getAzimuth(location.x, location.y, x, y) - hullOrientation;
 		// trackTarget = false;
+	}
+	
+	/**
+	 * Orients the turret to the specified target
+	 */
+	public void OrientTurretToTarget() {
+		if (target != null) {
+			OrientTurretTo(target.location.x, target.location.y);			
+		}		
 	}
 	
 	/**
@@ -334,11 +344,7 @@ public class Unit {
 		}
 	}
 	
-	public String SaveUnit(Path p) {		
-		String tgtStr;
-		if (target != null) tgtStr = String.format("%d", target.unitID);
-		else tgtStr = "_";
-		
+	public String SaveUnit() {				
 		String output = unitID + ", " +
 						callsign + ", " +
 						location.x + ", " + location.y + ", " +
@@ -346,11 +352,19 @@ public class Unit {
 						String.format("%.2f", turretOrientation) + ", " + 
 						type + ", " + 
 						side + ", " +
-						tgtStr + ", " +
 						waypointList.saveWaypoints();				
 		
 		return output;
 	}	
+	
+	public String SaveTarget() {
+		String tgtStr = "_";
+		if (target != null) tgtStr = String.format("%d", target.unitID);
+		
+		String output = unitID + ", " + tgtStr;
+		
+		return output;
+	}
 	
 	 
 }

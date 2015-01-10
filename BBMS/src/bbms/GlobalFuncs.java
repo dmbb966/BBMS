@@ -57,8 +57,8 @@ public class GlobalFuncs {
 		return min + randGen.nextInt(var * 2);
 	}
 	
-	public static void initializeMap (int x, int y) {
-		scenMap = new HexMap(x, y);
+	public static void initializeMap (int x, int y, boolean loadMap) {
+		scenMap = new HexMap(x, y, loadMap);
 		mapInitialized = true;
 		unitCount = 0;
 		selectedUnit = null;
@@ -66,7 +66,12 @@ public class GlobalFuncs {
 		unitList = new Vector<Unit>();
 		friendlyUnitList = new Vector<Unit>();
 		enemyUnitList = new Vector<Unit>();
-		GUI_NB.GCO("Generating main map.");		
+		GUIKeyboard.initializeKeyCommands();
+		GUI_NB.GCO("Generating main map.");				
+	}
+	
+	public static void initializeMap (int x, int y) {
+		initializeMap(x, y, false);		
 	}
 	
 	/**
@@ -133,12 +138,24 @@ public class GlobalFuncs {
 	public static void saveUnits(Path p) {
 		// Stores unit information
 		FIO.appendFile(p, "\n# Unit information");
-		FIO.appendFile(p, "# Format is: unitID, callsign, x, y, hullOrientation, turretOrientation, type, side, targetID, waypoints\n");
+		FIO.appendFile(p, "# Format is: unitID, callsign, x, y, hullOrientation, turretOrientation, type, side, waypoints\n");
 		
 		for (int i = 0; i < GlobalFuncs.unitList.size(); i++) {
-			FIO.appendFile(p, GlobalFuncs.unitList.elementAt(i).SaveUnit(p));
+			FIO.appendFile(p, GlobalFuncs.unitList.elementAt(i).SaveUnit());
 		}
 		FIO.appendFile(p, ">Last Unit<\n");
+		
+		FIO.appendFile(p, "# Unit target information");
+		FIO.appendFile(p, "# Format is: unitID, targetID");
+		
+		for (int i = 0; i < GlobalFuncs.unitList.size(); i++) {
+			Unit finger = GlobalFuncs.unitList.elementAt(i);
+			if (finger.target != null) {
+				FIO.appendFile(p,  finger.SaveTarget());
+			}
+		}
+		
+		FIO.appendFile(p, ">Last Target<\n");
 	}
 	
 	public static boolean loadState() {
