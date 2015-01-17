@@ -75,7 +75,8 @@ public class GlobalFuncs {
 		Clock.SetTime(8, 24, 13);
 		Thread GameClock = new Thread(new ClockThread());
 		GameClock.start();
-		GUI_NB.GCO("Generating main map.");				
+		GUI_NB.GCO("Generating main map.");		
+		gui.repaint();
 	}
 	
 	public static void initializeMap (int x, int y) {

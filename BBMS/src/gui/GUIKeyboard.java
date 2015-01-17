@@ -3,6 +3,7 @@ package gui;
 import hex.HexOff;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
@@ -316,7 +317,30 @@ public class GUIKeyboard {
 	}
 		
 	
-
+	/** Displays Keyboard Shortcut Info - also accessed from the Help Menu
+	 */
+	public static class HelpKeyboardShortcuts extends AbstractAction {
+		public HelpKeyboardShortcuts() {
+			super("Keyboard Shortcuts");
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent event) {				
+			GUI_NB.GCO("W/A/S/D - Scroll the map");
+			GUI_NB.GCO("V - Toggle shaded hex visibility");								
+			GUI_NB.GCO("[] - shift rotation");
+			GUI_NB.GCO("T - switches between rotating turret and hull");
+			GUI_NB.GCO("F - orients the turret to target");
+			GUI_NB.GCO("L - finds LOS to the selected hex (CAPS = 360 view)");
+			GUI_NB.GCO("C - clears any shaded hexes");
+			GUI_NB.GCO("E - Display LOS to all enemies of selected unit");
+			GUI_NB.GCO("' - Displays waypoint list for the current unit");
+			GUI_NB.GCO("; - Adds a waypoint for the currently selected unit");
+			GUI_NB.GCO(": - Removes the next waypoint for the currently selected unit");
+			GUI_NB.GCO("X - Test key, varies from build to build");
+		}
+	}
+	
 
 	/**
 	 * Initialize keyboard commands once the map loads
@@ -376,6 +400,9 @@ public class GUIKeyboard {
 				
 		imap.put(KeyStroke.getKeyStroke('x'), "step the clock");
 		amap.put("step the clock", new ClockStep());
+		
+		imap.put(KeyStroke.getKeyStroke("F1"), "keyboard shortcuts");
+		amap.put("keyboard shortcuts", new HelpKeyboardShortcuts());
 			
 	}
 	
