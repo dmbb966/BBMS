@@ -1,5 +1,6 @@
 package gui;
 
+import clock.Clock;
 import bbms.GlobalFuncs;
 
 /*
@@ -290,5 +291,13 @@ public class GUI_NB extends javax.swing.JFrame {
     	GUIConsole.append(str + "\n");
     	GUIConsole.setCaretPosition(GUIConsole.getDocument().getLength());		
     }
+    
+    /**
+     * Prints out to the GUI Console output with a timestamp.  Automatically appends newline.
+     */
+    public static void GCODTG(String str) {    	
+    	GUIConsole.append(Clock.DisplayTime() + "> " + str + "\n");
+    	GUIConsole.setCaretPosition(GUIConsole.getDocument().getLength());	    
+	}
     
 }
