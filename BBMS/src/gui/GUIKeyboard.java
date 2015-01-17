@@ -321,7 +321,7 @@ public class GUIKeyboard {
 	 */
 	public static class HelpKeyboardShortcuts extends AbstractAction {
 		public HelpKeyboardShortcuts() {
-			super("Keyboard Shortcuts");
+			super("Keyboard Shortcuts (F1)");
 		}
 		
 		@Override

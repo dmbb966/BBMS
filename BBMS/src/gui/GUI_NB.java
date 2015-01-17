@@ -173,6 +173,7 @@ public class GUI_NB extends javax.swing.JFrame {
 
         GUIConsole.setEditable(false);
         GUIConsole.setColumns(20);
+        GUIConsole.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
         GUIConsole.setRows(5);
         GUIConsole.setFocusable(false);
         ConsoleScroll.setViewportView(GUIConsole);
@@ -276,7 +277,7 @@ public class GUI_NB extends javax.swing.JFrame {
     private javax.swing.JPanel DetailedInfoPane;
     private javax.swing.JPanel DisplayPanel;
     private javax.swing.JTabbedPane DisplayTabs;
-    private static javax.swing.JTextArea GUIConsole;
+    public static javax.swing.JTextArea GUIConsole;
     private javax.swing.JPanel InformationPanel;
     public javax.swing.JPanel MainDisplay;
     private javax.swing.JPanel MiniMap;

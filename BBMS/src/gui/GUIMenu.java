@@ -2,6 +2,10 @@ package gui;
 
 import hex.Hex;
 
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
 
 import javax.swing.*;
@@ -113,6 +117,19 @@ public class GUIMenu extends JMenuBar{
 		}
 	}
 	
+	/** Copies the contents of the GUI Console to the clipboard
+	 */
+	public static class CopyConsole implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			GUI_NB.GUIConsole.selectAll();
+			GUI_NB.GUIConsole.copy();
+			GUI_NB.GUIConsole.select(0, 0);
+			GUI_NB.GCO("Copyied to clipboard.");
+			
+
+		}
+	}
+	
 
 	
 	public void HelpMenu() {		
@@ -208,6 +225,13 @@ public class GUIMenu extends JMenuBar{
 		
 		menuItem = new JMenuItem("Display spots for selected unit");		
 		menuItem.addActionListener(new DisplayAllSpotsForUnit());
+		menu.add(menuItem);
+		
+		menu.addSeparator();
+		
+		menuItem = new JMenuItem("Copy console output to clipboard");
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.CTRL_MASK));
+		menuItem.addActionListener(new CopyConsole());
 		menu.add(menuItem);
 		
 	}
