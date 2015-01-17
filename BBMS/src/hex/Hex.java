@@ -1,5 +1,7 @@
 package hex;
 
+import gui.GUI_NB;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
@@ -17,7 +19,6 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JLabel;
 
-import bbms.GUI_NB;
 import bbms.GlobalFuncs;
 import terrain.*;
 
@@ -85,8 +86,8 @@ public class Hex {
 	}
 	
 	public void GCODisplay() {
-		bbms.GUI_NB.GCO("Hex: (" + x + ", " + y + ") is terrain type: " + tType.displayType() + " (" + tType.displayChar() + ")");
-		bbms.GUI_NB.GCO("Elevation: " + elevation + "   Obs Height: " + obsHeight + "    Density: " + density + "    Obscur: " + obscuration);
+		gui.GUI_NB.GCO("Hex: (" + x + ", " + y + ") is terrain type: " + tType.displayType() + " (" + tType.displayChar() + ")");
+		gui.GUI_NB.GCO("Elevation: " + elevation + "   Obs Height: " + obsHeight + "    Density: " + density + "    Obscur: " + obscuration);
 	}
 	
 	/**

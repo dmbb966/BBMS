@@ -1,6 +1,6 @@
-package bbms;
+package gui;
 
-import javax.swing.JComponent;
+import bbms.GlobalFuncs;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -38,14 +38,6 @@ public class GUI_NB extends javax.swing.JFrame {
         MainDisplay = new GUIMainDisp();
         InformationPanel = new javax.swing.JPanel();
         BasicInfoPane = new GUIBasicInfo();
-        BI_Hex = new javax.swing.JLabel();
-        BI_HexType = new javax.swing.JLabel();
-        BI_HexElev = new javax.swing.JLabel();
-        BI_HexObsc = new javax.swing.JLabel();
-        BI_HexDens = new javax.swing.JLabel();
-        BI_HexOHeight = new javax.swing.JLabel();
-        BI_UpperDisp = new javax.swing.JLabel();
-        BI_LowerDisp = new javax.swing.JLabel();
         DetailedInfoPane = new javax.swing.JPanel();
         MiniMap = new javax.swing.JPanel();
         ConsolePanel = new javax.swing.JPanel();
@@ -108,67 +100,15 @@ public class GUI_NB extends javax.swing.JFrame {
 
         BasicInfoPane.setBorder(javax.swing.BorderFactory.createTitledBorder("Basic Info"));
 
-        BI_Hex.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        BI_Hex.setText("Hex: (xxx, yyy)");
-
-        BI_HexType.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        BI_HexType.setText("Hex Type");
-
-        BI_HexElev.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        BI_HexElev.setText("Elev: xxxm");
-
-        BI_HexObsc.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        BI_HexObsc.setText("Obsc: xxx");
-
-        BI_HexDens.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        BI_HexDens.setText("Density: xxx");
-
-        BI_HexOHeight.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        BI_HexOHeight.setText("Obs H: xxm");
-
-        BI_UpperDisp.setText("Upper Hex Display");
-
-        BI_LowerDisp.setText("Lower Hex Display");
-
         javax.swing.GroupLayout BasicInfoPaneLayout = new javax.swing.GroupLayout(BasicInfoPane);
         BasicInfoPane.setLayout(BasicInfoPaneLayout);
         BasicInfoPaneLayout.setHorizontalGroup(
             BasicInfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, BasicInfoPaneLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(BasicInfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(BI_LowerDisp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(BI_UpperDisp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(BasicInfoPaneLayout.createSequentialGroup()
-                        .addGroup(BasicInfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(BI_Hex)
-                            .addComponent(BI_HexObsc))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(BasicInfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(BI_HexType)
-                            .addComponent(BI_HexDens))
-                        .addGap(18, 18, 18)
-                        .addGroup(BasicInfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(BI_HexElev)
-                            .addComponent(BI_HexOHeight)))))
+            .addGap(0, 228, Short.MAX_VALUE)
         );
         BasicInfoPaneLayout.setVerticalGroup(
             BasicInfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(BasicInfoPaneLayout.createSequentialGroup()
-                .addGroup(BasicInfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(BI_Hex)
-                    .addComponent(BI_HexType)
-                    .addComponent(BI_HexElev))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(BasicInfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(BI_HexObsc)
-                    .addComponent(BI_HexDens)
-                    .addComponent(BI_HexOHeight))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(BI_UpperDisp, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(BI_LowerDisp)
-                .addGap(0, 11, Short.MAX_VALUE))
+            .addGap(0, 85, Short.MAX_VALUE)
         );
 
         DetailedInfoPane.setBorder(javax.swing.BorderFactory.createTitledBorder("Selected Unit Info"));
@@ -190,7 +130,7 @@ public class GUI_NB extends javax.swing.JFrame {
         MiniMap.setLayout(MiniMapLayout);
         MiniMapLayout.setHorizontalGroup(
             MiniMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 240, Short.MAX_VALUE)
         );
         MiniMapLayout.setVerticalGroup(
             MiniMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -300,14 +240,6 @@ public class GUI_NB extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify                     
-    public javax.swing.JLabel BI_Hex;
-    public javax.swing.JLabel BI_HexDens;
-    public javax.swing.JLabel BI_HexElev;
-    public javax.swing.JLabel BI_HexOHeight;
-    public javax.swing.JLabel BI_HexObsc;
-    public javax.swing.JLabel BI_HexType;
-    public javax.swing.JLabel BI_LowerDisp;
-    public javax.swing.JLabel BI_UpperDisp;
     public javax.swing.JPanel BasicInfoPane;
     private javax.swing.JPanel ConsolePanel;
     private javax.swing.JScrollPane ConsoleScroll;

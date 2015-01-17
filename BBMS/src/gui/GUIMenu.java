@@ -1,4 +1,4 @@
-package bbms;
+package gui;
 
 import hex.Hex;
 
@@ -6,6 +6,8 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
+import bbms.GlobalFuncs;
+import clock.Clock;
 import terrain.TerrainEnum;
 import unit.WaypointList;
 

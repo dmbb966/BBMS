@@ -1,5 +1,6 @@
 package bbms;
 
+import gui.GUI_NB;
 import hex.Hex;
 import hex.HexAx;
 import hex.HexCube;

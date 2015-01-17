@@ -4,7 +4,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.LinkedList;
 
-import bbms.FIO;
+import utilities.FIO;
 import hex.HexMap;
 import hex.HexOff;
 
@@ -102,7 +102,7 @@ public class WaypointList {
 			}
 		}
 	
-		bbms.GUI_NB.GCO("Input: >" + wpStr + "<  || Output is: >" + chunk1 + "< and >" + chunk2 + "<");
+		gui.GUI_NB.GCO("Input: >" + wpStr + "<  || Output is: >" + chunk1 + "< and >" + chunk2 + "<");
 		
 		//return new HexOff(0, 0);
 	    return new HexOff(Integer.parseInt(chunk1), Integer.parseInt(chunk2));

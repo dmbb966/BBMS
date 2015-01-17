@@ -1,5 +1,6 @@
-package bbms;
+package clock;
 
+import bbms.GlobalFuncs;
 import unit.Unit;
 
 public class Clock {

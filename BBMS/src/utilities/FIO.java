@@ -1,5 +1,6 @@
-package bbms;
+package utilities;
 
+import gui.GUI_NB;
 import hex.Hex;
 import hex.HexMap;
 import hex.HexOff;
@@ -13,6 +14,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
+import bbms.GlobalFuncs;
+import clock.Clock;
 import terrain.TerrainEnum;
 import unit.SideEnum;
 import unit.Unit;

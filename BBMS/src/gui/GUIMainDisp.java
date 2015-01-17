@@ -1,4 +1,4 @@
-package bbms;
+package gui;
 
 import hex.Hex;
 import hex.HexMap;
@@ -18,6 +18,7 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
+import bbms.GlobalFuncs;
 import unit.Unit;
 
 @SuppressWarnings("serial")
@@ -88,9 +89,10 @@ public class GUIMainDisp extends JPanel {
 			/*
 			hex.Hex h = GlobalFuncs.scenMap.getHex(cursorHexOff.getX(),  cursorHexOff.getY());
 			if (h != null) h.GCODisplay(); */
+						
+			//GlobalFuncs.gui.BasicInfoPane.repaint();
+			// UpdateHexInfo(cursorHexOff.getX(), cursorHexOff.getY());
 			
-			GlobalFuncs.gui.BI_Hex.setText("Curs: " + e.getX() + ", " + e.getY());
-			GUIBasicInfo.UpdateHexInfo(cursorHexOff.getX(), cursorHexOff.getY());
 
 		}
 		
@@ -432,7 +434,8 @@ public class GUIMainDisp extends JPanel {
 		g.drawRect(squareX, squareY, squareW, squareH); */
 		
 		drawHexMapComposite(GlobalFuncs.scenMap, 30, g);
-		drawUnits(g, 30);
+		drawUnits(g, 30);		
+		
 		// drawHexMapComposite(15, 15, defaultHexSize, g);
 	}
 

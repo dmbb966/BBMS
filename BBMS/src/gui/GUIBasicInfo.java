@@ -1,9 +1,16 @@
-package bbms;
+package gui;
+
+import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
+import bbms.GlobalFuncs;
+
 @SuppressWarnings("serial")
 public class GUIBasicInfo extends JPanel {
+	
+	int x = 0;
+	int y = 0;
 	
 	public GUIBasicInfo() {
 		
@@ -12,7 +19,9 @@ public class GUIBasicInfo extends JPanel {
 	/**
 	 * Updates the basic hex info display with info for hex (x, y)
 	 */
-	public static void UpdateHexInfo(int x, int y) {
+	public void UpdateHexInfo(int x, int y) {
+		 
+		
 		hex.Hex h = GlobalFuncs.scenMap.getHex(x, y);
 		if (h != null) {
 			String hexCoords = "Hex: (" + x + ", " + y + ")";
@@ -24,7 +33,9 @@ public class GUIBasicInfo extends JPanel {
 			String elev = "Elev: " + h.elevation + "m";
 			elev = GlobalFuncs.whiteFill(elev, 15);
 			
-			GlobalFuncs.gui.BI_UpperDisp.setText(hexCoords + terrainType + elev);
+			
+						
+			// GlobalFuncs.gui.BI_UpperDisp.setText(hexCoords + terrainType + elev);
 			
 			
 			String obsc = "Obsc: " + h.obscuration;
@@ -36,7 +47,7 @@ public class GUIBasicInfo extends JPanel {
 			String obsH = "ObsH: " + h.obsHeight + "m";
 			obsH = GlobalFuncs.whiteFill(obsH, 15);
 			
-			GlobalFuncs.gui.BI_LowerDisp.setText(obsc + dens + obsH);
+			// GlobalFuncs.gui.BI_LowerDisp.setText(obsc + dens + obsH);
 			
 			// GlobalFuncs.gui.BI_Hex.setText(GlobalFuncs.whiteFill(output, 15));
 			
@@ -52,8 +63,16 @@ public class GUIBasicInfo extends JPanel {
 			// GlobalFuncs.gui.BI_HexOHeight.setText(GlobalFuncs.whiteFill(output, 10));
 			
 			
-			// GlobalFuncs.gui.BI_HexType.setText(h.tType.displayType());
-		}		
+			// GlobalFuncs.gui.BI_HexType.setText(h.tType.displayType());						
+		}			
+	}
+	
+	public void paintComponent(Graphics g) {		
+		super.paintComponent(g);
+		
+		GlobalFuncs.gui.GCO("Clock update: " + clock.Clock.time + " at (" + x + ", " + y + ")");
+		g.drawString("Clock " + clock.Clock.time, 10, 30);		
+		g.drawString("Next", 10, 45);
 	}
 	
 }

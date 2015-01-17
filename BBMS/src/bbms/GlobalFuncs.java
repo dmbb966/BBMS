@@ -10,7 +10,10 @@ import java.util.Vector;
 import javax.swing.JLabel;
 
 import unit.Unit;
-import bbms.MersenneTwister;
+import utilities.FIO;
+import utilities.MersenneTwister;
+import gui.GUIKeyboard;
+import gui.GUI_NB;
 import hex.*;
 
 public class GlobalFuncs {

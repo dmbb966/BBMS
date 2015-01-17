@@ -4,9 +4,9 @@ import java.awt.Color;
 import java.nio.file.Path;
 import java.util.Vector;
 
+import clock.Clock;
 import terrain.TerrainEnum;
-import bbms.Clock;
-import bbms.FIO;
+import utilities.FIO;
 import bbms.GlobalFuncs;
 
 public class HexMap {
@@ -72,9 +72,9 @@ public class HexMap {
 	}
 	
 	public void displayShadedList() {
-		bbms.GUI_NB.GCO("There are " + shadedHexList.size() + " hexes shaded.");
+		gui.GUI_NB.GCO("There are " + shadedHexList.size() + " hexes shaded.");
 		for (int i = 0; i < shadedHexList.size(); i++) {
-			bbms.GUI_NB.GCO("Hex " + i + " at " + shadedHexList.elementAt(i).x + ", " + shadedHexList.elementAt(i).y);
+			gui.GUI_NB.GCO("Hex " + i + " at " + shadedHexList.elementAt(i).x + ", " + shadedHexList.elementAt(i).y);
 		}
 	}
 	

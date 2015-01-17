@@ -1,10 +1,11 @@
 package spotting;
 
+import gui.GUI_NB;
+
 import java.nio.file.Path;
 import java.util.Vector;
 
-import bbms.FIO;
-import bbms.GUI_NB;
+import utilities.FIO;
 
 public class SpotRecords {
 	public Vector<SpotReport> records;

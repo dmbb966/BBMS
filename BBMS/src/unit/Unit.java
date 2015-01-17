@@ -1,5 +1,6 @@
 package unit;
 
+import gui.GUI_NB;
 import hex.Hex;
 import hex.HexAx;
 import hex.HexOff;
@@ -20,9 +21,8 @@ import java.util.Vector;
 
 import javax.imageio.ImageIO;
 
+import clock.Clock;
 import terrain.TerrainEnum;
-import bbms.Clock;
-import bbms.GUI_NB;
 import bbms.GlobalFuncs;
 
 public class Unit {

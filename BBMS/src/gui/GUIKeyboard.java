@@ -1,4 +1,4 @@
-package bbms;
+package gui;
 
 import hex.HexOff;
 
@@ -9,6 +9,10 @@ import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
+
+import bbms.DebugFuncs;
+import bbms.GlobalFuncs;
+import clock.Clock;
 
 public class GUIKeyboard {
 

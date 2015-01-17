@@ -1,10 +1,10 @@
 package testbed;
 
+import gui.GUIMenu;
+
 import java.awt.*;
 
 import javax.swing.*;
-
-import bbms.GUIMenu;
 
 public class GUIMain {
 	
