@@ -4,20 +4,21 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
+import clock.Clock;
 import bbms.GlobalFuncs;
 
 @SuppressWarnings("serial")
 public class GUIBasicInfo extends JPanel {
 	
-	static String hexCoords;
-	static String terrainType;
-	static String elev;
-	static String obsc;
-	static String dens;
-	static String obsH;
+	static String hexCoords = "";
+	static String terrainType = "";
+	static String elev = "";
+	static String obsc = "";
+	static String dens = "";
+	static String obsH = "";
 	
-	static String unitCallsign;
-	static String unitType;	
+	static String unitCallsign = "";
+	static String unitType = ""; 	
 	
 	public static int mouseX = 0;
 	public static int mouseY = 0;
@@ -53,7 +54,7 @@ public class GUIBasicInfo extends JPanel {
 			}
 		}			
 	}
-	
+		
 	public void paintComponent(Graphics g) {		
 		super.paintComponent(g);
 		
@@ -62,7 +63,8 @@ public class GUIBasicInfo extends JPanel {
 				
 		if (GlobalFuncs.mapInitialized) {
 			// First line: time data
-			g.drawString("Clock " + clock.Clock.time, 10, start);
+			//g.drawString("Clock " + clock.Clock.time, 10, start);
+			g.drawString(Clock.DisplayTime(), 10, row);
 			
 			row += spacing;
 			

@@ -9,6 +9,8 @@ import java.util.Vector;
 
 import javax.swing.JLabel;
 
+import clock.Clock;
+import clock.ClockThread;
 import unit.Unit;
 import utilities.FIO;
 import utilities.MersenneTwister;
@@ -70,6 +72,9 @@ public class GlobalFuncs {
 		friendlyUnitList = new Vector<Unit>();
 		enemyUnitList = new Vector<Unit>();
 		GUIKeyboard.initializeKeyCommands();
+		Clock.SetTime(8, 24, 13);
+		Thread GameClock = new Thread(new ClockThread());
+		GameClock.start();
 		GUI_NB.GCO("Generating main map.");				
 	}
 	
