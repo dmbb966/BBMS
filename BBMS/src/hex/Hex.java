@@ -3,23 +3,15 @@ package hex;
 import gui.GUI_NB;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.awt.image.FilteredImageSource;
-import java.awt.image.ImageFilter;
-import java.awt.image.ImageProducer;
 import java.awt.image.IndexColorModel;
-import java.awt.image.RescaleOp;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.JLabel;
 
-import bbms.GlobalFuncs;
 import terrain.*;
 
 

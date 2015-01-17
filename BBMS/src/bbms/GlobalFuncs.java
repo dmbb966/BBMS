@@ -70,7 +70,7 @@ public class GlobalFuncs {
 		highlightedHex = null;
 		unitList = new Vector<Unit>();
 		friendlyUnitList = new Vector<Unit>();
-		enemyUnitList = new Vector<Unit>();
+		enemyUnitList = new Vector<Unit>();		
 		GUIKeyboard.initializeKeyCommands();
 		Clock.SetTime(8, 24, 13);
 		Thread GameClock = new Thread(new ClockThread());

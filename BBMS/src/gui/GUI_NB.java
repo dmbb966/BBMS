@@ -49,7 +49,9 @@ public class GUI_NB extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Bare Bones Military Simulator");
+        setMaximumSize(new java.awt.Dimension(1024, 800));
         setMinimumSize(new java.awt.Dimension(1024, 800));
+        setPreferredSize(new java.awt.Dimension(1024, 800));
         setResizable(false);
 
         DisplayPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 255), 3));
@@ -172,6 +174,7 @@ public class GUI_NB extends javax.swing.JFrame {
         GUIConsole.setEditable(false);
         GUIConsole.setColumns(20);
         GUIConsole.setRows(5);
+        GUIConsole.setFocusable(false);
         ConsoleScroll.setViewportView(GUIConsole);
 
         javax.swing.GroupLayout ConsolePanelLayout = new javax.swing.GroupLayout(ConsolePanel);
@@ -196,7 +199,7 @@ public class GUI_NB extends javax.swing.JFrame {
                     .addComponent(ConsolePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(InformationPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

@@ -17,9 +17,310 @@ import clock.Clock;
 public class GUIKeyboard {
 
 	/**
-	 * Initialize keyboard commands once the map loads
+	 * Keyboard shortcut to scroll the map up
+	 * @author Brian
+	 *
 	 */
-	@SuppressWarnings("serial")
+	public static class ScrollUp extends AbstractAction {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			GlobalFuncs.gui.GMD.mapDisplayY -= 2;
+			GlobalFuncs.gui.repaint();			
+		}		
+	}
+	
+	/**
+	 * Scrolls the map display down and repaints the GUI
+	 * @return
+	 */
+	public static class ScrollDown extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			GlobalFuncs.gui.GMD.mapDisplayY += 2;
+			GlobalFuncs.gui.repaint();			
+		}
+	}
+			
+	/**
+	 * Scrolls the map display left and repaints the GUI
+	 * @return
+	 */
+	public static class ScrollLeft extends AbstractAction {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			GlobalFuncs.gui.GMD.mapDisplayX -= 2;
+			GlobalFuncs.gui.repaint();		
+		}		
+	}
+	
+	/**
+	 * Scrolls the map display left and repaints the GUI
+	 * @return
+	 */
+	public static class ScrollRight extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			GlobalFuncs.gui.GMD.mapDisplayX += 2;
+			GlobalFuncs.gui.repaint();			
+		}
+	}
+	
+	/**
+	 * Displays or hides shaded (highlighted) hexes.
+	 * @author Brian
+	 *
+	 */
+	public static class ToggleVisibility extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			GlobalFuncs.showShaded = !GlobalFuncs.showShaded;
+			GlobalFuncs.gui.repaint();
+			if (GlobalFuncs.showShaded) GUI_NB.GCO("Shaded hexes toggled to ON");
+			else GUI_NB.GCO("Shaded hexes toggled to OFF");	
+		}
+	}
+	
+	/**
+	 * Clears all shading and text on the map
+	 * @author Brian
+	 *
+	 */
+	public static class ClearHexes extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			GUI_NB.GCO("Clearing shaded and texted hexes.");
+			GlobalFuncs.scenMap.unshadeAll();
+			GlobalFuncs.scenMap.clearTextAll();
+		}
+	}
+	
+	/**
+	 * Rotates either the hull or turret of the selected unit to the left by 10 degrees
+	 * Depends on the GlobalFuncs boolean "RotateHull"
+	 * @author Brian
+	 *
+	 */
+	public static class RotateLeft extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (GlobalFuncs.selectedUnit != null) {
+				if (GlobalFuncs.RotateHull) {
+					GlobalFuncs.selectedUnit.hullOrientation = GlobalFuncs.normalizeAngle(GlobalFuncs.selectedUnit.hullOrientation - 10);
+				}
+				else {
+					GlobalFuncs.selectedUnit.turretOrientation = GlobalFuncs.normalizeAngle(GlobalFuncs.selectedUnit.turretOrientation - 10);
+				}
+				// DebugFuncs.rotateDebugDisplay();
+			} else GUI_NB.GCO("No unit selected!");
+			
+			GlobalFuncs.gui.repaint();
+		}			
+	}
+	
+	/**
+	 * Rotates either the hull or turret of the selected unit to the right by 10 degrees
+	 * Depends on the GlobalFuncs boolean "RotateHull"
+	 * @author Brian
+	 *
+	 */
+	public static class RotateRight extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (GlobalFuncs.selectedUnit != null) {
+				if (GlobalFuncs.RotateHull) {
+					GlobalFuncs.selectedUnit.hullOrientation = GlobalFuncs.normalizeAngle(GlobalFuncs.selectedUnit.hullOrientation + 10);
+				}
+				else {
+					GlobalFuncs.selectedUnit.turretOrientation = GlobalFuncs.normalizeAngle(GlobalFuncs.selectedUnit.turretOrientation + 10);
+				}
+				// DebugFuncs.rotateDebugDisplay();
+			} else GUI_NB.GCO("No unit selected!");
+			
+			GlobalFuncs.gui.repaint();
+		}
+	}
+	
+	/**
+	 * Toggles rotation between the turret and the hull.
+	 * @author Brian
+	 *
+	 */
+	public static class ToggleRotation extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			GlobalFuncs.RotateHull = !GlobalFuncs.RotateHull;
+			if (GlobalFuncs.RotateHull) GUI_NB.GCO("Rotating hull");
+			else GUI_NB.GCO("Rotating turret");
+		}
+	}
+	
+	/**
+	 * Takes the selected unit and orients it to its target.
+	 * Whether the hull or turret is oriented to the target depends on the GlobalFuncs boolean "RotateHull"
+	 * @author Brian
+	 *
+	 */
+	public static class OrientUnit extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (GlobalFuncs.selectedUnit != null) {
+				if (GlobalFuncs.selectedUnit.target != null) {
+					if (GlobalFuncs.RotateHull) {
+						GlobalFuncs.selectedUnit.OrientHullTo(GlobalFuncs.selectedUnit.target.location.x, 
+															  GlobalFuncs.selectedUnit.target.location.y);
+					}
+					else {
+						GlobalFuncs.selectedUnit.OrientTurretTo(GlobalFuncs.selectedUnit.target.location.x,  
+																GlobalFuncs.selectedUnit.target.location.y);
+					}
+					GlobalFuncs.gui.repaint();
+					GUI_NB.GCO("Orienting on target");
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Takes the selected unit and displays the LOS to the highlighted hex.
+	 * @author Brian
+	 *
+	 */
+	public static class DisplayLOStoHex extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			GUI_NB.GCO("Find LOS");
+			if (GlobalFuncs.selectedUnit != null && GlobalFuncs.selectedUnit.location != GlobalFuncs.highlightedHex) {
+				GlobalFuncs.selectedUnit.DisplayLOSTo(GlobalFuncs.highlightedHex.x, GlobalFuncs.highlightedHex.y, true);					
+			}
+		}
+	}
+	
+	/**
+	 * Takes the selected unit and displays its LOS in 360 degrees around it out to the XDim of the map
+	 * @author Brian
+	 *
+	 */
+	public static class DisplayCircularLOS extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (GlobalFuncs.selectedUnit != null) {
+				GlobalFuncs.selectedUnit.DisplayLOSToRange(GlobalFuncs.scenMap.getXDim());
+			}
+		}
+	}
+	
+	/**
+	 * Takes the selected unit and displays the LOS to all enemies.
+	 * @author Brian
+	 *
+	 */
+	public static class DisplayLOStoEnemy extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (GlobalFuncs.selectedUnit != null) {
+				GUI_NB.GCO("Displaying LOS to enemies.");
+				GlobalFuncs.selectedUnit.DisplayLOSToEnemies();
+			}
+			else {
+				GUI_NB.GCO("ERROR: No unit selected!");
+			}
+		}
+	}
+	
+	/**
+	 * Takes the selected unit and adds a waypoint at the highlighted hex
+	 * Next waypoint cannot be at the unit's current location or in the same place as its last waypoint
+	 * @author Brian
+	 *
+	 */
+	public static class AddWaypoint extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (GlobalFuncs.selectedUnit != null && GlobalFuncs.highlightedHex != null) {	
+				int x = GlobalFuncs.highlightedHex.x;
+				int y = GlobalFuncs.highlightedHex.y;
+				HexOff lastWP = GlobalFuncs.selectedUnit.waypointList.getLastWaypoint();
+				
+				if (x == GlobalFuncs.selectedUnit.location.x && y == GlobalFuncs.selectedUnit.location.y) {
+					GUI_NB.GCO("Can't add waypoint since highlighted hex is the unit's current location.");
+				}
+				else if (x != lastWP.getX() || y != lastWP.getY()) 
+				{
+					GlobalFuncs.selectedUnit.waypointList.addWaypoint(GlobalFuncs.highlightedHex.x, GlobalFuncs.highlightedHex.y);
+					GUI_NB.GCO("Added waypoint at (" + x + ", " + y + ")");
+					GUI_NB.GCO(GlobalFuncs.selectedUnit.waypointList.displayWaypoints());						
+				}
+				else {
+					GUI_NB.GCO("Can't add waypoint since highlighted hex is the unit's last waypoint.");
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Takes the selected unit and removes its next waypoint 
+	 * @author Brian
+	 *
+	 */
+	public static class RemoveWaypoint extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (GlobalFuncs.selectedUnit != null) {
+				if (GlobalFuncs.selectedUnit.waypointList.waypointList.size() > 0) {
+					GlobalFuncs.selectedUnit.waypointList.removeFirstWaypoint();
+					GUI_NB.GCO("Removed the next waypoint of the unit.");
+					GUI_NB.GCO(GlobalFuncs.selectedUnit.waypointList.displayWaypoints());
+				}
+				else {
+					GUI_NB.GCO("Can't remove waypoint as this unit doesn't have any.");
+				}
+				
+			}
+		}
+	}
+	
+	/**
+	 * Takes the selected unit and displays its waypoints on the map 
+	 * @author Brian
+	 *
+	 */
+	public static class DisplayWaypoints extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (GlobalFuncs.selectedUnit != null) {
+				if (GlobalFuncs.selectedUnit.waypointList.waypointList.size() > 0) {
+					GlobalFuncs.selectedUnit.DisplayWaypoints();
+					GUI_NB.GCO(GlobalFuncs.selectedUnit.waypointList.displayWaypoints());
+				}
+				else {
+					GUI_NB.GCO("This unit has no waypoints.");
+				}
+				
+			}
+		}
+	}
+	
+	/**
+	 * Steps the clock forward one time unit and moves all units 
+	 * @author Brian
+	 *
+	 */
+	public static class ClockStep extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Clock.moveAllUnits();
+			Clock.updateLOSFriendly();
+		}
+	}
+		
+	
+
+
+	/**
+	 * Initialize keyboard commands once the map loads
+	 */	
 	public static void initializeKeyCommands() {
 		
 		GUI_NB.GCO("Keyboard commands initialized.");
@@ -29,283 +330,70 @@ public class GUIKeyboard {
 		imap.clear();
 		amap.clear();
 		
+		// NOTE: In a finalized version, implement input mapping for capital keys too
 		KeyStroke k = KeyStroke.getKeyStroke('w');
-		imap.put(k,  "scroll up");
-		AbstractAction scrollUp = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {				
-				GlobalFuncs.gui.GMD.mapDisplayY -= 2;
-				GlobalFuncs.gui.repaint();
-				// GUI_NB.GCO("Scroll Up, displaying at " + gui.GMD.mapDisplayX + ", " + gui.GMD.mapDisplayY);
-			}
-		};
-		amap.put("scroll up", scrollUp);
 		
-		k = KeyStroke.getKeyStroke('a');
-		imap.put(k, "scroll left");
-		AbstractAction scrollLeft = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				GlobalFuncs.gui.GMD.mapDisplayX -= 2;
-				GlobalFuncs.gui.repaint();
-				// GUI_NB.GCO("Scroll Left, displaying at " + gui.GMD.mapDisplayX + ", " + gui.GMD.mapDisplayY);
-			}
-		};		
-		amap.put("scroll left",  scrollLeft);
-		
-		k = KeyStroke.getKeyStroke('s');
-		imap.put(k, "scroll down");
-		AbstractAction scrollDown = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {				
-				GlobalFuncs.gui.GMD.mapDisplayY += 2;
-				GlobalFuncs.gui.repaint();
-				// GUI_NB.GCO("Scroll Down, displaying at " + gui.GMD.mapDisplayX + ", " + gui.GMD.mapDisplayY);				
-			}
-		};
-		amap.put("scroll down", scrollDown);
-		
-		k = KeyStroke.getKeyStroke('d');
-		imap.put(k, "scroll right");
-		AbstractAction scrollRight = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {				
-				GlobalFuncs.gui.GMD.mapDisplayX += 2;
-				GlobalFuncs.gui.repaint();
-				// GUI_NB.GCO("Scroll Right, displaying at " + gui.GMD.mapDisplayX + ", " + gui.GMD.mapDisplayY);
-			}
-		};
-		amap.put("scroll right", scrollRight);
-		
-		
-		k = KeyStroke.getKeyStroke('v');
-		imap.put(k, "toggle visibility");
-		AbstractAction toggleVisibility = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {				
-				GlobalFuncs.showShaded = !GlobalFuncs.showShaded;
-				GlobalFuncs.gui.repaint();
-				if (GlobalFuncs.showShaded) GUI_NB.GCO("Shaded hexes toggled to ON");
-				else GUI_NB.GCO("Shaded hexes toggled to OFF");
-			}
-		};
-		amap.put("toggle visibility", toggleVisibility);	
-		
-		k = KeyStroke.getKeyStroke('[');
-		imap.put(k, "decrease rotation");
-		AbstractAction debugDecRotate = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				if (GlobalFuncs.selectedUnit != null) {
-					if (GlobalFuncs.RotateHull) GlobalFuncs.selectedUnit.hullOrientation = GlobalFuncs.normalizeAngle(GlobalFuncs.selectedUnit.hullOrientation - 10);
-					else GlobalFuncs.selectedUnit.turretOrientation = GlobalFuncs.normalizeAngle(GlobalFuncs.selectedUnit.turretOrientation - 10);
-					DebugFuncs.rotateDebugDisplay();
-				} else GUI_NB.GCO("No unit selected!");			
-			}
-		};
-		amap.put("decrease rotation", debugDecRotate);
-		
-		k = KeyStroke.getKeyStroke(']');
-		imap.put(k, "increase rotation");
-		AbstractAction debugIncRotate = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				if (GlobalFuncs.selectedUnit != null) {
-					if (GlobalFuncs.RotateHull) GlobalFuncs.selectedUnit.hullOrientation = GlobalFuncs.normalizeAngle(GlobalFuncs.selectedUnit.hullOrientation + 10);
-					else GlobalFuncs.selectedUnit.turretOrientation = GlobalFuncs.normalizeAngle(GlobalFuncs.selectedUnit.turretOrientation + 10);
-					DebugFuncs.rotateDebugDisplay();
-				} else GUI_NB.GCO("No unit selected!");
-			}
-		};
-		amap.put("increase rotation", debugIncRotate);
-		
-		k = KeyStroke.getKeyStroke('4');
-		imap.put(k, "shift rotate left");
-		AbstractAction debugLeftTarget = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {				
-				DebugFuncs.debugRotateX -= 1;
-				DebugFuncs.rotateDebugDisplay();
-			}
-		};
-		amap.put("shift rotate left", debugLeftTarget);
-		
-		k = KeyStroke.getKeyStroke('6');
-		imap.put(k, "shift rotate right");
-		AbstractAction debugRightTarget = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {				
-				DebugFuncs.debugRotateX += 1;
-				DebugFuncs.rotateDebugDisplay();
-			}
-		};
-		amap.put("shift rotate right", debugRightTarget);
-		
-		k = KeyStroke.getKeyStroke('8');
-		imap.put(k, "shift rotate up");
-		AbstractAction debugUpTarget = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {				
-				DebugFuncs.debugRotateY -= 1;
-				DebugFuncs.rotateDebugDisplay();
-			}
-		};
-		amap.put("shift rotate up", debugUpTarget);
-		
-		k = KeyStroke.getKeyStroke('2');
-		imap.put(k, "shift rotate down");
-		AbstractAction debugDownTarget = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {				
-				DebugFuncs.debugRotateY += 1;
-				DebugFuncs.rotateDebugDisplay();
-			}
-		};
-		amap.put("shift rotate down", debugDownTarget);
-		
-		k = KeyStroke.getKeyStroke('t');
-		imap.put(k, "toggle rotation");
-		AbstractAction toggleRotation = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {				
-				GlobalFuncs.RotateHull = !GlobalFuncs.RotateHull;
-				if (GlobalFuncs.RotateHull) GUI_NB.GCO("Rotating hull");
-				else GUI_NB.GCO("Rotating turret");
-			}
-		};
-		amap.put("toggle rotation", toggleRotation);
-		
-		k = KeyStroke.getKeyStroke('f');
-		imap.put(k, "aim unit");
-		AbstractAction aimUnit = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {				
-				if (GlobalFuncs.selectedUnit != null) {
-					if (GlobalFuncs.selectedUnit.target != null) {
-						if (GlobalFuncs.RotateHull) GlobalFuncs.selectedUnit.OrientHullTo(GlobalFuncs.selectedUnit.target.location.x, GlobalFuncs.selectedUnit.target.location.y);
-						else GlobalFuncs.selectedUnit.OrientTurretTo(GlobalFuncs.selectedUnit.target.location.x,  GlobalFuncs.selectedUnit.target.location.y);
-						GlobalFuncs.gui.repaint();
-						GUI_NB.GCO("Orienting on target");
-					}
-				}
-			}
-		};
-		amap.put("aim unit", aimUnit);
-		
-		k = KeyStroke.getKeyStroke('l');
-		imap.put(k, "find LOS");
-		AbstractAction findLOS = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {	
-				GUI_NB.GCO("Find LOS");
-				if (GlobalFuncs.selectedUnit != null && GlobalFuncs.selectedUnit.location != GlobalFuncs.highlightedHex) {
-					GlobalFuncs.selectedUnit.DisplayLOSTo(GlobalFuncs.highlightedHex.x, GlobalFuncs.highlightedHex.y, true);					
-				}
-			}
-		};
-		amap.put("find LOS", findLOS);
-		
-		k = KeyStroke.getKeyStroke('c');
-		imap.put(k, "clear shading");
-		AbstractAction clearShading = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {	
-				GUI_NB.GCO("Clearing shaded and texted hexes.");
-				GlobalFuncs.scenMap.unshadeAll();
-				GlobalFuncs.scenMap.clearTextAll();
+		imap.put(KeyStroke.getKeyStroke('w'),  "scroll up");
+		amap.put("scroll up", new ScrollUp());				
+		imap.put(KeyStroke.getKeyStroke('s'), "scroll down");		
+		amap.put("scroll down", new ScrollDown());
 				
-			}
-		};
-		amap.put("clear shading", clearShading);
+		imap.put(KeyStroke.getKeyStroke('a'), "scroll left");
+		amap.put("scroll left", new ScrollLeft());					
+		imap.put(KeyStroke.getKeyStroke('d'), "scroll right");
+		amap.put("scroll right", new ScrollRight());
 		
-		k = KeyStroke.getKeyStroke('e');
-		imap.put(k, "display LOS to enemies");
-		AbstractAction LOStoEnemies = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				if (GlobalFuncs.selectedUnit != null) {
-					GUI_NB.GCO("Displaying LOS to enemies.");
-					GlobalFuncs.selectedUnit.DisplayLOSToEnemies();
-				}
-				else {
-					GUI_NB.GCO("ERROR: No unit selected!");
-				}											
-			}
-		};
-		amap.put("display LOS to enemies", LOStoEnemies);
-		
-	
-		
-		
-		k = KeyStroke.getKeyStroke(';');
-		imap.put(k, "add waypoint key");
-		AbstractAction addWP = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				if (GlobalFuncs.selectedUnit != null && GlobalFuncs.highlightedHex != null) {	
-					int x = GlobalFuncs.highlightedHex.x;
-					int y = GlobalFuncs.highlightedHex.y;
-					HexOff lastWP = GlobalFuncs.selectedUnit.waypointList.getLastWaypoint();
-					
-					if (x == GlobalFuncs.selectedUnit.location.x && y == GlobalFuncs.selectedUnit.location.y) {
-						GUI_NB.GCO("Can't add waypoint since highlighted hex is the unit's current location.");
-					}
-					else if (x != lastWP.getX() || y != lastWP.getY()) 
-					{
-						GlobalFuncs.selectedUnit.waypointList.addWaypoint(GlobalFuncs.highlightedHex.x, GlobalFuncs.highlightedHex.y);
-						GUI_NB.GCO("Added waypoint at (" + x + ", " + y + ")");
-						GUI_NB.GCO(GlobalFuncs.selectedUnit.waypointList.displayWaypoints());						
-					}
-					else {
-						GUI_NB.GCO("Can't add waypoint since highlighted hex is the unit's last waypoint.");
-					}
-				}
-			}
-		};
-		amap.put("add waypoint key", addWP);
-		
-		k = KeyStroke.getKeyStroke(':');
-		imap.put(k, "remove waypoint key");
-		AbstractAction removeWP = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				if (GlobalFuncs.selectedUnit != null) {
-					if (GlobalFuncs.selectedUnit.waypointList.waypointList.size() > 0) {
-						GlobalFuncs.selectedUnit.waypointList.removeFirstWaypoint();
-						GUI_NB.GCO("Removed the next waypoint of the unit.");
-						GUI_NB.GCO(GlobalFuncs.selectedUnit.waypointList.displayWaypoints());
-					}
-					else {
-						GUI_NB.GCO("Can't remove waypoint as this unit doesn't have any.");
-					}
-					
-				}
-			}
-		};
-		amap.put("remove waypoint key", removeWP);
-		
-		k = KeyStroke.getKeyStroke('p');
-		imap.put(k, "view waypoints");
-		AbstractAction viewWP = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				if (GlobalFuncs.selectedUnit != null) {
-					if (GlobalFuncs.selectedUnit.waypointList.waypointList.size() > 0) {
-						GlobalFuncs.selectedUnit.DisplayWaypoints();
-						GUI_NB.GCO(GlobalFuncs.selectedUnit.waypointList.displayWaypoints());
-					}
-					else {
-						GUI_NB.GCO("This unit has no waypoints.");
-					}
-					
-				}
-			}
-		};
-		amap.put("view waypoints", viewWP);
 				
-		k = KeyStroke.getKeyStroke('L');
-		imap.put(k, "full LOS");
-		AbstractAction fullLOS = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				if (GlobalFuncs.selectedUnit != null) {
-					GlobalFuncs.selectedUnit.DisplayLOSToRange(GlobalFuncs.scenMap.getXDim());
-					// HexOff.HexRing(highlightedHex.x, highlightedHex.y, 3);
-				}
-			}
-		};
-		amap.put("full LOS", fullLOS);
+		imap.put(KeyStroke.getKeyStroke('v'), "toggle visibility");
+		amap.put("toggle visibility", new ToggleVisibility());	
+		imap.put(KeyStroke.getKeyStroke('c'), "clear shading");
+		amap.put("clear shading", new ClearHexes());
 		
 		
-		k = KeyStroke.getKeyStroke('x');
-		imap.put(k, "test key");
-		AbstractAction testX = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {							
-				Clock.moveAllUnits();
-				Clock.updateLOSFriendly();
-			}
-		};
-		amap.put("test key", testX);
+		imap.put(KeyStroke.getKeyStroke('t'), "toggle rotation");
+		amap.put("toggle rotation",  new ToggleRotation());
+		imap.put(KeyStroke.getKeyStroke('['), "decrease rotation");	
+		amap.put("decrease rotation", new RotateLeft());				
+		imap.put(KeyStroke.getKeyStroke(']'), "increase rotation");
+		amap.put("increase rotation", new RotateRight());
+								
+		imap.put(KeyStroke.getKeyStroke('f'), "orient unit");
+		amap.put("orient unit", new OrientUnit());
+		
+		imap.put(KeyStroke.getKeyStroke('l'), "LOS to hex");
+		amap.put("LOS to hex", new DisplayLOStoHex());
+		imap.put(KeyStroke.getKeyStroke('L'), "Circular LOS");
+		amap.put("Circular LOS", new DisplayCircularLOS());
+		imap.put(KeyStroke.getKeyStroke('e'), "LOS to enemy");
+		amap.put("LOS to enemy", new DisplayLOStoEnemy());
+					
+		imap.put(KeyStroke.getKeyStroke(';'), "add waypoint");
+		amap.put("add waypoint", new AddWaypoint());
+		imap.put(KeyStroke.getKeyStroke(':'), "remove waypoint");
+		amap.put("remove waypoint", new RemoveWaypoint());
+		imap.put(KeyStroke.getKeyStroke('\''), "display waypoints");
+		amap.put("display waypoints", new DisplayWaypoints());
+				
+		imap.put(KeyStroke.getKeyStroke('x'), "step the clock");
+		amap.put("step the clock", new ClockStep());
+			
 	}
+	
+	public static void graphicsShifting() {
+		InputMap imap = GlobalFuncs.gui.MainDisplay.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+		ActionMap amap = GlobalFuncs.gui.MainDisplay.getActionMap();
+		
+		// Overwrites existing key bindings for 2/4/6/8 - intended for NumPad, but you can't specify location
+		// when using Action Maps.
+		imap.remove(KeyStroke.getKeyStroke('2'));
+		imap.remove(KeyStroke.getKeyStroke('4'));
+		imap.remove(KeyStroke.getKeyStroke('6'));
+		imap.remove(KeyStroke.getKeyStroke('8'));
+		
+		// Insert replacement key mappings here...
+		
+		// TODO
+	}
+	
 
 }
