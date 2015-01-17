@@ -37,7 +37,9 @@ public class Clock {
 			finger.FindLOSToEnemies();
 		}		
 		
+		
 		GlobalFuncs.gui.repaint();
+		
 	}
 
 }
