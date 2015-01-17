@@ -22,6 +22,9 @@ public class GUIKeyboard {
 		InputMap imap = GlobalFuncs.gui.MainDisplay.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
 		ActionMap amap = GlobalFuncs.gui.MainDisplay.getActionMap();
 		
+		imap.clear();
+		amap.clear();
+		
 		KeyStroke k = KeyStroke.getKeyStroke('w');
 		imap.put(k,  "scroll up");
 		AbstractAction scrollUp = new AbstractAction() {
