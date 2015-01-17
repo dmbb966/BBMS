@@ -15,8 +15,8 @@ public class TreesTerrain extends TerrainType{
 		case AT_WHEEL: return 8;
 		case TRACK: return 6;
 		
-		case BOAT: return -1;
-		default: return -2;
+		case BOAT: return 9999;
+		default: return 9999;
 		
 		}		
 	}

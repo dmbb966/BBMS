@@ -9,13 +9,13 @@ public class InvalidTerrain extends TerrainType{
 		
 		switch (mClass) {
 		
-		case FOOT: return 2;
-		case WHEEL: return 3;
-		case AT_WHEEL: return 2;
-		case TRACK: return 2;
+		case FOOT: return 9999;
+		case WHEEL: return 9999;
+		case AT_WHEEL: return 9999;
+		case TRACK: return 9999;
 		
-		case BOAT: return -1;
-		default: return -2;
+		case BOAT: return 9999;
+		default: return 9999;
 		
 		}		
 	}

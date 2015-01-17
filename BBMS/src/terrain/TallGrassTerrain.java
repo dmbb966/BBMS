@@ -15,8 +15,8 @@ public class TallGrassTerrain extends TerrainType{
 		case AT_WHEEL: return 3;
 		case TRACK: return 2;
 		
-		case BOAT: return -1;
-		default: return -2;
+		case BOAT: return 9999;
+		default: return 9999;
 		
 		}		
 	}
