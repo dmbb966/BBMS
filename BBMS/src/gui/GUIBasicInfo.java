@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 import clock.Clock;
+import clock.ClockControl;
 import bbms.GlobalFuncs;
 
 @SuppressWarnings("serial")
@@ -65,6 +66,7 @@ public class GUIBasicInfo extends JPanel {
 			// First line: time data
 			//g.drawString("Clock " + clock.Clock.time, 10, start);
 			g.drawString(Clock.DisplayTime(), 10, row);
+			g.drawString(ClockControl.PrintTimeScale(), 85, row);
 			
 			row += spacing;
 			

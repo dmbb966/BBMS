@@ -322,6 +322,7 @@ public class GUIKeyboard {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			clock.ClockControl.DecelTime();
+			GlobalFuncs.gui.repaint();
 		}
 	}
 	
@@ -331,6 +332,7 @@ public class GUIKeyboard {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			clock.ClockControl.AccelTime();
+			GlobalFuncs.gui.repaint();
 		}
 	}
 	
@@ -340,6 +342,7 @@ public class GUIKeyboard {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			clock.ClockControl.Pause();
+			GlobalFuncs.gui.repaint();
 		}
 	}
 		
