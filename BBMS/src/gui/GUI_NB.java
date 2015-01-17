@@ -14,6 +14,9 @@ import bbms.GlobalFuncs;
  */
 public class GUI_NB extends javax.swing.JFrame {
     
+    private boolean DEBUG_MOUSECURSOR = true; // Shows mouse cursor coordinates for all panes
+    
+    
     public GUIMainDisp GMD = new GUIMainDisp();
 
     /**
@@ -46,9 +49,7 @@ public class GUI_NB extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Bare Bones Military Simulator");
-        setMaximumSize(new java.awt.Dimension(1024, 800));
         setMinimumSize(new java.awt.Dimension(1024, 800));
-        setPreferredSize(new java.awt.Dimension(1024, 800));
         setResizable(false);
 
         DisplayPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 255), 3));
@@ -99,6 +100,11 @@ public class GUI_NB extends javax.swing.JFrame {
         InformationPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 255, 51), 3));
 
         BasicInfoPane.setBorder(javax.swing.BorderFactory.createTitledBorder("Basic Info"));
+        BasicInfoPane.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                BasicInfoPaneMouseMoved(evt);
+            }
+        });
 
         javax.swing.GroupLayout BasicInfoPaneLayout = new javax.swing.GroupLayout(BasicInfoPane);
         BasicInfoPane.setLayout(BasicInfoPaneLayout);
@@ -112,6 +118,11 @@ public class GUI_NB extends javax.swing.JFrame {
         );
 
         DetailedInfoPane.setBorder(javax.swing.BorderFactory.createTitledBorder("Selected Unit Info"));
+        DetailedInfoPane.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                DetailedInfoPaneMouseMoved(evt);
+            }
+        });
 
         javax.swing.GroupLayout DetailedInfoPaneLayout = new javax.swing.GroupLayout(DetailedInfoPane);
         DetailedInfoPane.setLayout(DetailedInfoPaneLayout);
@@ -210,6 +221,22 @@ public class GUI_NB extends javax.swing.JFrame {
     private void MainDisplayMouseClicked(java.awt.event.MouseEvent evt) {                                         
         GMD.MouseClickedEvents(evt);
     }                                        
+
+    private void BasicInfoPaneMouseMoved(java.awt.event.MouseEvent evt) {                                         
+        if (DEBUG_MOUSECURSOR) {
+            GUIBasicInfo.mouseX = evt.getX();
+            GUIBasicInfo.mouseY = evt.getY();
+            GlobalFuncs.gui.BasicInfoPane.repaint();
+        }
+    }                                        
+
+    private void DetailedInfoPaneMouseMoved(java.awt.event.MouseEvent evt) {                                            
+        if (DEBUG_MOUSECURSOR) {
+            GUIBasicInfo.mouseX = evt.getX();
+            GUIBasicInfo.mouseY = evt.getY();
+            GlobalFuncs.gui.BasicInfoPane.repaint();
+        }
+    }                                           
 
     /**
      * @param args the command line arguments
