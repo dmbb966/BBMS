@@ -85,14 +85,10 @@ public class GUIMainDisp extends JPanel {
 		
 		if (GlobalFuncs.mapInitialized) {			
 			hex.HexOff cursorHexOff = pixelToHexOff(e.getX(), e.getY(), -defaultHexSize, -defaultHexSize);
-			
-			/*
-			hex.Hex h = GlobalFuncs.scenMap.getHex(cursorHexOff.getX(),  cursorHexOff.getY());
-			if (h != null) h.GCODisplay(); */
-						
-			//GlobalFuncs.gui.BasicInfoPane.repaint();
-			// UpdateHexInfo(cursorHexOff.getX(), cursorHexOff.getY());
-			
+			GUIBasicInfo.mouseX = e.getX();
+			GUIBasicInfo.mouseY = e.getY();
+			GUIBasicInfo.UpdateHexInfo(cursorHexOff.getX(), cursorHexOff.getY());
+			GlobalFuncs.gui.BasicInfoPane.repaint();
 
 		}
 		

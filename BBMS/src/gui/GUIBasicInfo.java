@@ -9,8 +9,15 @@ import bbms.GlobalFuncs;
 @SuppressWarnings("serial")
 public class GUIBasicInfo extends JPanel {
 	
-	int x = 0;
-	int y = 0;
+	static String hexCoords;
+	static String terrainType;
+	static String elev;
+	static String obsc;
+	static String dens;
+	static String obsH;
+	
+	public static int mouseX = 0;
+	public static int mouseY = 0;
 	
 	public GUIBasicInfo() {
 		
@@ -19,32 +26,27 @@ public class GUIBasicInfo extends JPanel {
 	/**
 	 * Updates the basic hex info display with info for hex (x, y)
 	 */
-	public void UpdateHexInfo(int x, int y) {
-		 
+	public static void UpdateHexInfo(int x, int y) {
 		
 		hex.Hex h = GlobalFuncs.scenMap.getHex(x, y);
 		if (h != null) {
-			String hexCoords = "Hex: (" + x + ", " + y + ")";
+			hexCoords = "Hex: (" + x + ", " + y + ")";
 			hexCoords = GlobalFuncs.whiteFill(hexCoords,  20);
 			
-			String terrainType = h.tType.displayType();
+			terrainType = h.tType.displayType();
 			terrainType = GlobalFuncs.whiteFill(terrainType, 20);
 			
-			String elev = "Elev: " + h.elevation + "m";
-			elev = GlobalFuncs.whiteFill(elev, 15);
+			elev = "Elev: " + h.elevation + "m";
+			elev = GlobalFuncs.whiteFill(elev, 15);												
+			// GlobalFuncs.gui.BI_UpperDisp.setText(hexCoords + terrainType + elev);			
 			
-			
-						
-			// GlobalFuncs.gui.BI_UpperDisp.setText(hexCoords + terrainType + elev);
-			
-			
-			String obsc = "Obsc: " + h.obscuration;
+			obsc = "Obsc: " + h.obscuration;
 			obsc = GlobalFuncs.whiteFill(obsc, 20);
 			
-			String dens = "Density: " + h.density;
+			dens = "Density: " + h.density;
 			dens = GlobalFuncs.whiteFill(dens, 20);
 			
-			String obsH = "ObsH: " + h.obsHeight + "m";
+			obsH = "ObsH: " + h.obsHeight + "m";
 			obsH = GlobalFuncs.whiteFill(obsH, 15);
 			
 			// GlobalFuncs.gui.BI_LowerDisp.setText(obsc + dens + obsH);
@@ -69,10 +71,13 @@ public class GUIBasicInfo extends JPanel {
 	
 	public void paintComponent(Graphics g) {		
 		super.paintComponent(g);
-		
-		GlobalFuncs.gui.GCO("Clock update: " + clock.Clock.time + " at (" + x + ", " + y + ")");
-		g.drawString("Clock " + clock.Clock.time, 10, 30);		
-		g.drawString("Next", 10, 45);
+				
+		if (GlobalFuncs.mapInitialized) {
+			g.drawString("Clock " + clock.Clock.time, 10, 30);
+			g.drawString(hexCoords + terrainType + elev, 10, 45);
+			g.drawString(obsc + dens + obsH, 10, 60);
+			g.drawString("Mouse at (" + mouseX + ", " + mouseY + ")", 10, 75);
+		}				
 	}
 	
 }
