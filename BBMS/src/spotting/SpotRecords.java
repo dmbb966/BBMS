@@ -90,6 +90,7 @@ public class SpotRecords {
 		for (int i = 0; i < records.size(); i++) {
 			FIO.appendFile(p, records.elementAt(i).saveSPOTREP());
 		}
+		FIO.appendFile(p, ">Last Spot<");
 		
 	}
 

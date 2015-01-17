@@ -71,13 +71,17 @@ public class FIO {
 	
 		int newMapX = 0;
 		int newMapY = 0;
+		int newMapDisplayX = 0;
+		int newMapDisplayY = 0;
 		int loadHexX = 0;
-		int loadHexY = 0;		
+		int loadHexY = 0;	
+		spotting.SpotRecords loadSpots = new spotting.SpotRecords();	
 		// Stage in reading the save game file
 		// 0 = Just started
 		// 1 = Loading map hex information
-		// 2 = Loading unit information
-		// 3 = Loading spotting information
+		// 2 = Loading unit location information
+		// 3 = Loading unit targeting information
+		// 4 = Loading spotting information
 		int mode = 0;
 		
 		try {
@@ -99,9 +103,13 @@ public class FIO {
 						
 						// First chunk is going to be the new map X coordinate
 						newMapX = Integer.parseInt(ReadNextChunk(readL, ','));
-						newMapY = Integer.parseInt(ReadNextChunk(readL, ','));						
+						newMapY = Integer.parseInt(ReadNextChunk(readL, ','));
+						newMapDisplayX = Integer.parseInt(ReadNextChunk(readL, ','));
+						newMapDisplayY = Integer.parseInt(ReadNextChunk(readL, ','));
+						Clock.time = Integer.parseInt(ReadNextChunk(readL, ','));
 						
 						GUI_NB.GCO("Map dimensions are " + newMapX + " by " + newMapY);
+						GUI_NB.GCO("Clock state is: " + Clock.time);
 						
 						GlobalFuncs.initializeMap(newMapX, newMapY, true);			
 						mode = 1;						
@@ -181,16 +189,61 @@ public class FIO {
 
 						
 						break;
-					case 3:
+					case 3:						
+						// Loads unit target information
+						if (readL.equals(">Last Target<"))
+						{
+							GUI_NB.GCO("Last target reached.");
+							mode = 4;
+						}
+						else {
+							int unitID = Integer.parseInt(ReadNextChunk(readL, ','));
+							int targetID = Integer.parseInt(ReadNextChunk(readL, ','));
+							
+							Unit finger = GlobalFuncs.unitList.elementAt(unitID - 1);
+							finger.target = GlobalFuncs.unitList.elementAt(targetID - 1);
+							GUI_NB.GCO("Set unit " + finger.callsign + " to target " + finger.target.callsign);
+						}
+
 						
-						// Now that the map and units have been uploaded, we can repaint the GUI.
-						GlobalFuncs.gui.repaint();
+						break;
 						
-						mode = 4;
+					case 4:
+						// Loads spotting information
+						if (readL.equals(">Last Spot<"))
+						{
+							GUI_NB.GCO("All spotting information read.");
+							mode = 5;
+						}
+						else {
+							// # Format: Time index, spotter unit ID, observed unit ID, observed unit x, observed unit y
+							int spotTime = Integer.parseInt(ReadNextChunk(readL, ','));
+							int spotterID = Integer.parseInt(ReadNextChunk(readL, ','));
+							int observedID = Integer.parseInt(ReadNextChunk(readL, ','));
+							int obsX = Integer.parseInt(ReadNextChunk(readL, ','));
+							int obsY = Integer.parseInt(ReadNextChunk(readL, ','));
+							
+							Unit spotter = GlobalFuncs.unitList.elementAt(spotterID - 1);
+							Unit observed = GlobalFuncs.unitList.elementAt(observedID - 1);
+							HexOff loc = new HexOff(obsX, obsY);
+							
+							spotting.SpotReport readSpot = new spotting.SpotReport(spotTime, spotter, observed, loc);
+							loadSpots.addReport(readSpot);
+						}
+
+						
 						break;
 					default: 
 						GUI_NB.GCO("Mode is " + mode + ", string: " + readL);
 					}
+					
+					GlobalFuncs.allSpots = loadSpots;
+					
+					// Now that everything has been loaded, we can repaint the map at the location it was saved at.
+					GlobalFuncs.gui.GMD.mapDisplayX = newMapDisplayX;
+					GlobalFuncs.gui.GMD.mapDisplayY = newMapDisplayY;
+					GlobalFuncs.gui.repaint();
+					
 				}
 			}
 		} catch (IOException e) {

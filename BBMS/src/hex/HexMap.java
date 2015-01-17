@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.util.Vector;
 
 import terrain.TerrainEnum;
+import bbms.Clock;
 import bbms.FIO;
 import bbms.GlobalFuncs;
 
@@ -164,8 +165,10 @@ public class HexMap {
 	
 	public void saveMap(Path p) {		
 		// Stores map characteristics
-		FIO.overwriteFile(p, "# Map characteristics (x, y)");
-		FIO.appendFile(p, xDim + ", " + yDim + "\n");
+		FIO.overwriteFile(p, "# Map and environment characteristics: x size, y size, map view x, map view y, clock time");
+		FIO.appendFile(p, xDim + ", " + yDim + ", " + 
+						GlobalFuncs.gui.GMD.mapDisplayX + ", " + GlobalFuncs.gui.GMD.mapDisplayY + ", " + 
+						Clock.time + "\n");
 
 		// Stores hex information 
 		FIO.appendFile(p, "# Hex data, stored rows");
