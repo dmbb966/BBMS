@@ -315,6 +315,33 @@ public class GUIKeyboard {
 			Clock.updateLOSFriendly();
 		}
 	}
+	
+	/** Reduces time acceleration by one step
+	 */
+	public static class DecelerateTime extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			clock.ClockControl.DecelTime();
+		}
+	}
+	
+	/** Increases time acceleration by one step
+	 */
+	public static class AccelerateTime extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			clock.ClockControl.AccelTime();
+		}
+	}
+	
+	/** Pauses or unpauses the clock
+	 */
+	public static class PauseTime extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			clock.ClockControl.Pause();
+		}
+	}
 		
 	
 	/** Displays Keyboard Shortcut Info - also accessed from the Help Menu
@@ -403,6 +430,15 @@ public class GUIKeyboard {
 		
 		imap.put(KeyStroke.getKeyStroke("F1"), "keyboard shortcuts");
 		amap.put("keyboard shortcuts", new HelpKeyboardShortcuts());
+		
+		// Clock controls
+		imap.put(KeyStroke.getKeyStroke('-'), "decelerate time");
+		amap.put("decelerate time", new DecelerateTime());
+		imap.put(KeyStroke.getKeyStroke('='), "accelerate time");
+		imap.put(KeyStroke.getKeyStroke('+'), "accelerate time");
+		amap.put("accelerate time", new AccelerateTime());
+		imap.put(KeyStroke.getKeyStroke('p'), "pause");
+		amap.put("pause", new PauseTime());
 			
 	}
 	

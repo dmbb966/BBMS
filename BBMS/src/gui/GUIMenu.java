@@ -125,8 +125,6 @@ public class GUIMenu extends JMenuBar{
 			GUI_NB.GUIConsole.copy();
 			GUI_NB.GUIConsole.select(0, 0);
 			GUI_NB.GCO("Copyied to clipboard.");
-			
-
 		}
 	}
 	

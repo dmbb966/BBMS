@@ -12,6 +12,8 @@ public class ClockControl {
      */
     public static void Pause() {
         paused = !paused;
+        if (paused) GUI_NB.GCO("Time is paused.");
+        else GUI_NB.GCO("Time is unpaused.");
     }
     
     /**
