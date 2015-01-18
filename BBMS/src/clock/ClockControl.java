@@ -5,7 +5,7 @@ import gui.GUI_NB;
 public class ClockControl {
 	
     static byte timescale = 4;					// Enumeration of rate of time
-    public static boolean paused = false;		// Bool to show if the simulation paused or not
+    public static boolean paused = true;		// Bool to show if the simulation paused or not
     
     /**
      * Toggles whether or not the clock is paused

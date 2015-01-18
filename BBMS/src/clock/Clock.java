@@ -94,6 +94,7 @@ public class Clock {
 	
 	public static void ClockLoop() {
 		// GUI_NB.GCO("Clock time is now " + DisplayTimeFull() + " with time rate " + ClockControl.PrintTimeScale());
+		moveAllUnits();
 		GlobalFuncs.gui.BasicInfoPane.repaint();
 		
 	}

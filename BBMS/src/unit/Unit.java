@@ -334,19 +334,24 @@ public class Unit {
 				GUI_NB.GCO("Directions are identical.  Moving.");
 				subHexLocation += CalcMoveRate();				
 				if (subHexLocation > HexMap.SUBHEX_SIZE) {
+					int overshoot = subHexLocation - HexMap.SUBHEX_SIZE;
 					MoveUnit(direction);
 					subHexDirection += 3;
 					if (subHexDirection > 6) subHexDirection -= 6;
-					subHexLocation = HexMap.SUBHEX_SIZE;
+					subHexLocation = HexMap.SUBHEX_SIZE - overshoot;
 				}
 			}
 			else {
 				GUI_NB.GCO("Directions are opposite.  Moving to the center.");
 				subHexLocation -= CalcMoveRate();
-				if (subHexLocation < 0) subHexLocation = 0;
+				if (subHexLocation < 0) {
+					subHexLocation *= -1;
+					subHexDirection += 3;
+					if (subHexDirection > 6) subHexDirection -= 6;
+				}
 			}
 		} else {
-			GUI_NB.GCO("Directions are incompatible.  Continuing move to center.");
+			GUI_NB.GCO("Directions are incompatible.  Continuing move to center and will halt.");
 			subHexLocation -= CalcMoveRate();
 			if (subHexLocation < 0) subHexLocation = 0;
 		}
