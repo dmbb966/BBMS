@@ -71,6 +71,9 @@ public class Clock {
 			if (finger.target != null) finger.OrientTurretToTarget();
 		}
 		
+		if (GlobalFuncs.selectedUnit != null) {
+			GUI_NB.GCODTG(GlobalFuncs.selectedUnit.callsign + "has move rate " + GlobalFuncs.selectedUnit.CalcMoveRate());
+		}
 		time += 1;
 		
 		GlobalFuncs.gui.repaint();

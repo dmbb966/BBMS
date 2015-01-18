@@ -3,6 +3,7 @@ package unit;
 import gui.GUI_NB;
 import hex.Hex;
 import hex.HexAx;
+import hex.HexMap;
 import hex.HexOff;
 
 import java.awt.Color;
@@ -35,6 +36,10 @@ public class Unit {
 	public double hullOrientation;
 	public double turretOrientation;	// Relative to the hull
 	
+	public int movePoints = 0;
+	public int moveRate = 0;	// Scale of 0-100 with 100 = 100% movement speed
+	public MoveClass moveMode = MoveClass.FOOT;
+		
 	public WaypointList waypointList = new WaypointList();
 	
 	public Unit target;
@@ -76,10 +81,16 @@ public class Unit {
 			HullOffset = new hex.HexOff(27, 12);
 			TurretRing = new hex.HexOff(30 - HullOffset.getX(), 12 - HullOffset.getY());
 			TurretOffset = new hex.HexOff(25, 11);
+			movePoints = 22;
+			moveRate = 100;
+			moveMode = MoveClass.TRACK;
 		} else if (type.matches("T-72")) {
 			HullOffset = new hex.HexOff(25, 12);
 			TurretRing = new hex.HexOff(28 - HullOffset.getX(), 11 - HullOffset.getY());
 			TurretOffset = new hex.HexOff(13, 10);
+			movePoints = 20;
+			moveRate = 100;
+			moveMode = MoveClass.TRACK;			
 		}
 		
 		callsign = givenCallsign;		
@@ -364,6 +375,11 @@ public class Unit {
 		String output = unitID + ", " + tgtStr;
 		
 		return output;
+	}
+	
+	public int CalcMoveRate() {
+		int moveCost = location.tType.getMoveCost(moveMode);
+		return (HexMap.SUBHEX_SIZE * movePoints * moveRate) / (100 * 60 * moveCost);
 	}
 	
 	 

@@ -22,6 +22,8 @@ public class HexMap {
 	public static int chanceClear = 60;
 	public static int totalWeight = chanceClear + chanceHighGrass + chanceTrees;
 	
+	public static final int SUBHEX_SIZE = 5000;		// Sub units in one 50m hex
+	
 	public HexMap(int x, int y, boolean cleanMap) {
 		xDim = x;
 		yDim = y;
