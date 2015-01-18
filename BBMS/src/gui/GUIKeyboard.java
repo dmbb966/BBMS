@@ -312,7 +312,7 @@ public class GUIKeyboard {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			Clock.moveAllUnits();
-			Clock.updateLOSFriendly();
+			//Clock.updateLOSFriendly();
 		}
 	}
 	

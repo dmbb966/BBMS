@@ -39,6 +39,9 @@ public class Unit {
 	public int movePoints = 0;
 	public int moveRate = 0;	// Scale of 0-100 with 100 = 100% movement speed
 	public MoveClass moveMode = MoveClass.FOOT;
+	
+	public int subHexDirection = 1;		// Axial direction the unit is traveling in, range is 1-6
+	public int subHexLocation = 0;		// 0 is the center of the hex.  HexMap defines the maximum size.
 		
 	public WaypointList waypointList = new WaypointList();
 	
@@ -104,8 +107,10 @@ public class Unit {
 					location.x + ", " + location.y + " on side " + side + "\n with turret and hull orientation " + 
 				String.format("%.2f", turretOrientation) + " and " + String.format("%.2f", hullOrientation) + 
 				"\n Hull offsets: " + HullOffset.getX() + " and " + HullOffset.getY();
+	}
 	
-		
+	public String DispSubHexMovement() {
+		return subHexDirection + " / " + subHexLocation;
 	}
 	
 	public void DrawUnit(int xi, int yi, Graphics g) {				
@@ -311,6 +316,44 @@ public class Unit {
 	}
 	
 	/**
+	 * Moves the unit according to its move rate and the terrain in the direction specified.
+	 * Direction is an integer with 1 = 30 degrees, 2 = 90 degrees, etc. in a clockwise pattern
+	 * @param direction
+	 */	
+	public void MoveUnitSubHex(int direction) {
+		if (direction < 0 || direction > 5) return;
+		
+		if (subHexLocation == 0) {
+			GUI_NB.GCO("At center of hex.  Orienting to desired direction.");
+			subHexDirection = direction;
+		}
+		
+		// Checks to see if direction is compatible
+		if (direction % 3 == subHexDirection % 3) {			
+			if (direction == subHexDirection) {
+				GUI_NB.GCO("Directions are identical.  Moving.");
+				subHexLocation += CalcMoveRate();				
+				if (subHexLocation > HexMap.SUBHEX_SIZE) {
+					MoveUnit(direction);
+					subHexDirection += 3;
+					if (subHexDirection > 6) subHexDirection -= 6;
+					subHexLocation = HexMap.SUBHEX_SIZE;
+				}
+			}
+			else {
+				GUI_NB.GCO("Directions are opposite.  Moving to the center.");
+				subHexLocation -= CalcMoveRate();
+				if (subHexLocation < 0) subHexLocation = 0;
+			}
+		} else {
+			GUI_NB.GCO("Directions are incompatible.  Continuing move to center.");
+			subHexLocation -= CalcMoveRate();
+			if (subHexLocation < 0) subHexLocation = 0;
+		}
+		
+	}
+	
+	/**
 	 * Moves the unit one hex towards the waypoint
 	 */
 	public void MoveToWaypoint() {
@@ -347,7 +390,10 @@ public class Unit {
 					
 		// GUI_NB.GCO("Move dir: " + moveDirection);
 		if (moveDirection < 0) return;
-		MoveUnit(moveDirection);				
+		
+		// --------------------------------------------------------
+		// MoveUnit(moveDirection);				
+		MoveUnitSubHex(moveDirection);
 		
 		if (location.toHO().ConvertToAx().getX() == nextWP.getX() && location.toHO().ConvertToAx().getY() == nextWP.getY()) {
 			// GUI_NB.GCO("Waypoint reached.");

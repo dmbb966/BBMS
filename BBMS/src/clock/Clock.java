@@ -1,5 +1,6 @@
 package clock;
 
+import gui.GUIBasicInfo;
 import gui.GUI_NB;
 
 import java.text.DecimalFormat;
@@ -76,6 +77,7 @@ public class Clock {
 		}
 		time += 1;
 		
+		GUIBasicInfo.UpdateHexUnit();
 		GlobalFuncs.gui.repaint();
 	}
 

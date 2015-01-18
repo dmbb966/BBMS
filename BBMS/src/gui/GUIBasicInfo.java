@@ -1,5 +1,7 @@
 package gui;
 
+import hex.Hex;
+
 import java.awt.Graphics;
 
 import javax.swing.JPanel;
@@ -20,12 +22,15 @@ public class GUIBasicInfo extends JPanel {
 	
 	static String unitCallsign = "";
 	static String unitType = ""; 	
+	static String unitSubLoc = "";
 	
 	public static int mouseX = 0;
 	public static int mouseY = 0;
 	
 	private final int start = 25;
 	private final int spacing = 15;
+	
+	public static Hex lastHex = null;
 	
 	public GUIBasicInfo() {
 		
@@ -36,24 +41,39 @@ public class GUIBasicInfo extends JPanel {
 	 */
 	public static void UpdateHexInfo(int x, int y) {
 		
-		hex.Hex h = GlobalFuncs.scenMap.getHex(x, y);
-		if (h != null) {
+		lastHex = GlobalFuncs.scenMap.getHex(x, y);
+		if (lastHex != null) {
 			hexCoords = "Hex: (" + x + ", " + y + ")";						
-			terrainType = h.tType.displayType();						
-			elev = "Elev: " + h.elevation + "m";																							
-			obsc = "Obsc: " + h.obscuration;			
-			dens = "Density: " + h.density;						
-			obsH = "ObsH: " + h.obsHeight + "m";	
+			terrainType = lastHex.tType.displayType();						
+			elev = "Elev: " + lastHex.elevation + "m";																							
+			obsc = "Obsc: " + lastHex.obscuration;			
+			dens = "Density: " + lastHex.density;						
+			obsH = "ObsH: " + lastHex.obsHeight + "m";	
 			
-			if (h.HexUnit != null) {
-				unitCallsign = h.HexUnit.callsign;
-				unitType = h.HexUnit.type;
+			if (lastHex.HexUnit != null) {
+				unitCallsign = lastHex.HexUnit.callsign;
+				unitType = lastHex.HexUnit.type;
+				unitSubLoc = lastHex.HexUnit.DispSubHexMovement();
 			}
 			else {
 				unitCallsign = "";
 				unitType = "";
+				unitSubLoc = "";
 			}
 		}			
+	}
+	
+	public static void UpdateHexUnit() {
+		if (lastHex.HexUnit != null) {
+			unitCallsign = lastHex.HexUnit.callsign;
+			unitType = lastHex.HexUnit.type;
+			unitSubLoc = lastHex.HexUnit.DispSubHexMovement();
+		}
+		else {
+			unitCallsign = "";
+			unitType = "";
+			unitSubLoc = "";
+		}		
 	}
 		
 	public void paintComponent(Graphics g) {		
@@ -86,7 +106,8 @@ public class GUIBasicInfo extends JPanel {
 			
 			// Fourth line: Unit info
 			g.drawString(unitCallsign, 10, row);
-			g.drawString(unitType, 100, row);
+			g.drawString(unitType, 85, row);
+			g.drawString(unitSubLoc, 165, row);
 			
 			row += spacing;			
 			// Fourth line: Debug info - mouse cursor location
