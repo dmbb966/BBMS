@@ -57,7 +57,11 @@ public class Clock {
 	
 	public static int time = 0;	
 
-	public static void moveAllUnits() {
+	/**
+	 * Move all units.  Duration is the length of time in milliseconds
+	 * @param duration
+	 */
+	public static void moveAllUnits(int duration) {
 		
 		// Move units first
 		
@@ -92,9 +96,9 @@ public class Clock {
 		GlobalFuncs.gui.repaint();		
 	}
 	
-	public static void ClockLoop() {
+	public static void ClockLoop(int duration) {
 		// GUI_NB.GCO("Clock time is now " + DisplayTimeFull() + " with time rate " + ClockControl.PrintTimeScale());
-		moveAllUnits();
+		moveAllUnits(duration);
 		GlobalFuncs.gui.BasicInfoPane.repaint();
 		
 	}

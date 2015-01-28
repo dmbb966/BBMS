@@ -7,13 +7,16 @@ import gui.GUI_NB;
 public class ClockThread implements Runnable {
   
     private int pausedSleepCheck = 100;
-    private int clockDelay = 1000;
+    
+    long startCycle;
+    long endCycle;
+    long durationCycle;
 	
     // Initialize clock date to the constructed value
     public ClockThread(){
         
     }
-    
+        
     public void run() {       
         
         GUI_NB.GCO("Running clock thread.");
@@ -21,14 +24,17 @@ public class ClockThread implements Runnable {
         	do {
 	            while (ClockControl.paused) Thread.sleep(pausedSleepCheck);
 	            
+	            startCycle = System.currentTimeMillis();
+	            
 	            // Do stuff here
-	            Clock.ClockLoop();      
-	            Clock.IncrementMs((int)(1000 * ClockControl.NumTimeScale()));
+	            Clock.ClockLoop(ClockControl.CLOCK_STEP);      
+	            
+	            durationCycle = System.currentTimeMillis() - startCycle;	 
+	            GUI_NB.GCODTG("Cycle duration is " + durationCycle);
+	            Clock.IncrementMs((int)(ClockControl.CLOCK_STEP)); //  * ClockControl.NumTimeScale()));
 	                                                       
-	            // Waits at the end of a clock cycle - in final version, should
-	            // take the longest of either this, or the time necessary to update
-	            // and display all locations.
-	            Thread.sleep(clockDelay);    
+	            // Waits at the end of a clock cycle
+	            Thread.sleep(Math.max(ClockControl.GetClockDelay() - durationCycle, 0));    
 	            
             } while (1 > 0); // Loops forever
         }         

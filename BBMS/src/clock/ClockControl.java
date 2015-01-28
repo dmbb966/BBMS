@@ -4,8 +4,14 @@ import gui.GUI_NB;
 
 public class ClockControl {
 	
+	public static final int CLOCK_STEP = 100;			// Represents how large each clock step in game time is (ms) 
+	private static int clockDelay = 100;		// Represents how long each step will take in real time (ms)
     static byte timescale = 4;					// Enumeration of rate of time
     public static boolean paused = true;		// Bool to show if the simulation paused or not
+    
+    public static int GetClockDelay() {
+    	return clockDelay;
+    }
     
     /**
      * Toggles whether or not the clock is paused
@@ -17,11 +23,19 @@ public class ClockControl {
     }
     
     /**
+     * Update clock delay stats for changes made by the user.
+     */
+    public static void AdjustDelayScale() {
+    	clockDelay = (int)(100.0 / NumTimeScale());
+    	GUI_NB.GCO("Timescale is now " + timescale + " with delay " + clockDelay);
+    }
+    
+    /**
      * Increases the timescale of the clock by one setting.  Maxes out at x12
      */ 
     public static void AccelTime() {
         if (timescale < 8) timescale++;
-        GUI_NB.GCO("Timescale is now " + timescale);
+        AdjustDelayScale();        
     }
     
     /**
@@ -29,7 +43,7 @@ public class ClockControl {
      */
     public static void DecelTime() {       
         if (timescale > 1) timescale--;
-        GUI_NB.GCO("Timescale is now " + timescale);;                
+        AdjustDelayScale();                        
      }
     
     /**

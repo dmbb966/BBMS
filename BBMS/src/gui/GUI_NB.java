@@ -1,7 +1,7 @@
 package gui;
 
-import clock.Clock;
 import bbms.GlobalFuncs;
+import clock.Clock;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -52,8 +52,12 @@ public class GUI_NB extends javax.swing.JFrame {
         setTitle("Bare Bones Military Simulator");
         setMaximumSize(new java.awt.Dimension(1024, 800));
         setMinimumSize(new java.awt.Dimension(1024, 800));
-        setPreferredSize(new java.awt.Dimension(1024, 800));
         setResizable(false);
+        addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                formMouseMoved(evt);
+            }
+        });
 
         DisplayPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 255), 3));
 
@@ -243,6 +247,12 @@ public class GUI_NB extends javax.swing.JFrame {
         }
     }                                           
 
+    private void formMouseMoved(java.awt.event.MouseEvent evt) {                                
+        GUIBasicInfo.uniMouseX = evt.getX();
+        GUIBasicInfo.uniMouseY = evt.getY();
+        GlobalFuncs.gui.BasicInfoPane.repaint();
+    }                               
+
     /**
      * @param args the command line arguments
      */
@@ -296,8 +306,7 @@ public class GUI_NB extends javax.swing.JFrame {
      * Prints out to the GUI Console output with a timestamp.  Automatically appends newline.
      */
     public static void GCODTG(String str) {    	
-    	GUIConsole.append(Clock.DisplayTime() + "> " + str + "\n");
+    	GUIConsole.append(Clock.DisplayTimeNorm() + "> " + str + "\n");
     	GUIConsole.setCaretPosition(GUIConsole.getDocument().getLength());	    
-	}
-    
+    }
 }

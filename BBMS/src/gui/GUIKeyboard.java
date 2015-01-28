@@ -311,7 +311,7 @@ public class GUIKeyboard {
 	public static class ClockStep extends AbstractAction {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			Clock.moveAllUnits();
+			Clock.moveAllUnits(1000);
 			//Clock.updateLOSFriendly();
 		}
 	}

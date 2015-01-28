@@ -26,6 +26,8 @@ public class GUIBasicInfo extends JPanel {
 	
 	public static int mouseX = 0;
 	public static int mouseY = 0;
+	public static int uniMouseX = 0;
+	public static int uniMouseY = 0;
 	
 	private final int start = 25;
 	private final int spacing = 15;
@@ -111,7 +113,7 @@ public class GUIBasicInfo extends JPanel {
 			
 			row += spacing;			
 			// Fourth line: Debug info - mouse cursor location
-			g.drawString("Mouse at (" + mouseX + ", " + mouseY + ")", 10, row);
+			g.drawString("Mouse at (" + mouseX + ", " + mouseY + "), (" + uniMouseX + ", " + uniMouseY + ")", 10, row);
 		}				
 	}
 	

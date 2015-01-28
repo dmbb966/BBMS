@@ -23,6 +23,8 @@ import java.util.Vector;
 import javax.imageio.ImageIO;
 
 import clock.Clock;
+import clock.ClockControl;
+import clock.ClockThread;
 import terrain.TerrainEnum;
 import bbms.GlobalFuncs;
 
@@ -430,7 +432,7 @@ public class Unit {
 	
 	public int CalcMoveRate() {
 		int moveCost = location.tType.getMoveCost(moveMode);
-		return (HexMap.SUBHEX_SIZE * movePoints * moveRate) / (100 * 60 * moveCost);
+		return (HexMap.SUBHEX_SIZE * movePoints * moveRate * ClockControl.CLOCK_STEP) / (100 * 60 * moveCost * 1000);
 	}
 	
 	 
