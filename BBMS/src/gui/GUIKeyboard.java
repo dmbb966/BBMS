@@ -84,6 +84,21 @@ public class GUIKeyboard {
 	}
 	
 	/**
+	 * Displays or hides gas vapor diffusion information (amount and flow rate)
+	 * @author Brian
+	 *
+	 */
+	public static class ToggleVapor extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			GlobalFuncs.showVapor = !GlobalFuncs.showVapor;
+			GlobalFuncs.gui.repaint();
+			if (GlobalFuncs.showVapor) GUI_NB.GCO("Gas vapor data toggled to ON");
+			else GUI_NB.GCO("Gas vapor data toggled to OFF");	
+		}
+	}
+	
+	/**
 	 * Clears all shading and text on the map
 	 * @author Brian
 	 *
@@ -357,7 +372,7 @@ public class GUIKeyboard {
 		@Override
 		public void actionPerformed(ActionEvent event) {				
 			GUI_NB.GCO("W/A/S/D - Scroll the map");
-			GUI_NB.GCO("V - Toggle shaded hex visibility");								
+			GUI_NB.GCO("V - Toggle shaded hex visibility (CAPS = show gas model)");								
 			GUI_NB.GCO("[] - shift rotation");
 			GUI_NB.GCO("T - switches between rotating turret and hull");
 			GUI_NB.GCO("F - orients the turret to target");
@@ -400,6 +415,8 @@ public class GUIKeyboard {
 				
 		imap.put(KeyStroke.getKeyStroke('v'), "toggle visibility");
 		amap.put("toggle visibility", new ToggleVisibility());	
+		imap.put(KeyStroke.getKeyStroke('V'), "toggle vapor");
+		amap.put("toggle vapor", new ToggleVapor());
 		imap.put(KeyStroke.getKeyStroke('c'), "clear shading");
 		amap.put("clear shading", new ClearHexes());
 		
