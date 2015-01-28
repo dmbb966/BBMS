@@ -326,14 +326,14 @@ public class Unit {
 		if (direction < 0 || direction > 5) return;
 		
 		if (subHexLocation == 0) {
-			GUI_NB.GCO("At center of hex.  Orienting to desired direction.");
+			//GUI_NB.GCO("At center of hex.  Orienting to desired direction.");
 			subHexDirection = direction;
 		}
 		
 		// Checks to see if direction is compatible
 		if (direction % 3 == subHexDirection % 3) {			
 			if (direction == subHexDirection) {
-				GUI_NB.GCO("Directions are identical.  Moving.");
+				//GUI_NB.GCO("Directions are identical.  Moving.");
 				subHexLocation += CalcMoveRate();				
 				if (subHexLocation > HexMap.SUBHEX_SIZE) {
 					int overshoot = subHexLocation - HexMap.SUBHEX_SIZE;
@@ -344,7 +344,7 @@ public class Unit {
 				}
 			}
 			else {
-				GUI_NB.GCO("Directions are opposite.  Moving to the center.");
+				//GUI_NB.GCO("Directions are opposite.  Moving to the center.");
 				subHexLocation -= CalcMoveRate();
 				if (subHexLocation < 0) {
 					subHexLocation *= -1;
@@ -353,7 +353,7 @@ public class Unit {
 				}
 			}
 		} else {
-			GUI_NB.GCO("Directions are incompatible.  Continuing move to center and will halt.");
+			//GUI_NB.GCO("Directions are incompatible.  Continuing move to center and will halt.");
 			subHexLocation -= CalcMoveRate();
 			if (subHexLocation < 0) subHexLocation = 0;
 		}

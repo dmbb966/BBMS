@@ -66,16 +66,19 @@ public class GUIBasicInfo extends JPanel {
 	}
 	
 	public static void UpdateHexUnit() {
-		if (lastHex.HexUnit != null) {
-			unitCallsign = lastHex.HexUnit.callsign;
-			unitType = lastHex.HexUnit.type;
-			unitSubLoc = lastHex.HexUnit.DispSubHexMovement();
+		if (lastHex != null) {
+			if (lastHex.HexUnit != null) {
+				unitCallsign = lastHex.HexUnit.callsign;
+				unitType = lastHex.HexUnit.type;
+				unitSubLoc = lastHex.HexUnit.DispSubHexMovement();
+			}
+			else {
+				unitCallsign = "";
+				unitType = "";
+				unitSubLoc = "";
+			}			
 		}
-		else {
-			unitCallsign = "";
-			unitType = "";
-			unitSubLoc = "";
-		}		
+		
 	}
 		
 	public void paintComponent(Graphics g) {		

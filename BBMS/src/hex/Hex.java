@@ -12,7 +12,9 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import bbms.GlobalFuncs;
 import terrain.*;
+import unit.MoveClass;
 
 
 public class Hex {
@@ -23,7 +25,11 @@ public class Hex {
 	public TerrainEnum tEnum;
 	public int elevation;		// Relative height of the ground (m)
 	public int obsHeight;		// Additional height from buildings/obstacles
-	public int density;		// Obstructs line of sight if cumulative density >30
+	public int density;			// Obstructs line of sight if cumulative density >30
+	public int vapor;			// 0-255, used in the gas diffusion model
+	public int vaporOut;		// How much the vapor level in this hex will change at the next iteration.
+	public int vaporIn;
+	public int deltaVapor;
 	
 	public boolean shaded;		// Will the hex be drawn shaded or not?
 	public Color shadedColor;
@@ -47,11 +53,11 @@ public class Hex {
 				iElev + iTerrain.tType.generateHeight(), 
 				iTerrain.tType.generateObsHeight(),
 				iTerrain.tType.generateDensity(),
-				0);			
+				0, 25500);			
 	}
 	
 	// Constructor with specific height, obsHeight, density, and obscuration
-	public Hex (int xi, int yi, TerrainEnum iTerrain, int iElev, int iObsHeight, int iDensity, int iObsc) {
+	public Hex (int xi, int yi, TerrainEnum iTerrain, int iElev, int iObsHeight, int iDensity, int iObsc, int iVapor) {
 		x = xi;
 		y = yi;		
 				
@@ -70,6 +76,10 @@ public class Hex {
 		density = iDensity;				
 		
 		obscuration = iObsc;		
+		vapor = iVapor;
+		//vapor = GlobalFuncs.randRange(0,  100);
+		vaporIn = 0;
+		vaporOut = 0;
 	}
 	
 	public void DisplayInfo() {
@@ -80,6 +90,62 @@ public class Hex {
 	public void GCODisplay() {
 		gui.GUI_NB.GCO("Hex: (" + x + ", " + y + ") is terrain type: " + tType.displayType() + " (" + tType.displayChar() + ")");
 		gui.GUI_NB.GCO("Elevation: " + elevation + "   Obs Height: " + obsHeight + "    Density: " + density + "    Obscur: " + obscuration);
+	}
+	
+	/**
+	 * Sets the vapor component of this hex, between 0 and 255 inclusive.
+	 * @param vi
+	 */
+	public void SetVapor(int vi) {
+		if (vi >= 0 && vi <= 25500) vapor = vi;							
+	}
+	
+	public void UpdateVapor() {
+		vapor += vaporIn;
+		vapor -= vaporOut;
+		deltaVapor = vaporIn + vaporOut;
+		vaporIn = 0;
+		vaporOut = 0;
+	}
+	
+	/**
+	 * DEFAULTS to MoveClass.TRACK
+	 */
+	public void CalcVapor() {
+
+		
+		for (int direction = 0; direction < 6; direction++) {
+			HexOff target = new HexOff(x, y).findNeighbor(direction);
+			Hex tgtHex = GlobalFuncs.scenMap.getHex(target.x, target.y);
+			if (tgtHex.tEnum != TerrainEnum.INVALID) {
+				int moveCost = Math.max(this.tType.getMoveCost(MoveClass.TRACK), 
+						tgtHex.tType.getMoveCost(MoveClass.TRACK));
+				double vaporXferRate = 0.16 / moveCost;
+				int dVapor = vapor - tgtHex.vapor;				
+
+				
+				// Nothing "sucks" in this universe.  Vapor moves from high pressure to low pressure only.
+				if (dVapor > 0) {
+					int vaporXferAmount = (int)(dVapor * vaporXferRate); //Math.max((int)(dVapor * vaporXferRate), 1);
+					vaporOut += vaporXferAmount;
+					tgtHex.vaporIn += vaporXferAmount;					
+				}		
+				
+				// DEBUG
+				
+				/*
+				if (GlobalFuncs.highlightedHex != null) {					
+					if (GlobalFuncs.highlightedHex.x == x && GlobalFuncs.highlightedHex.y == y) {
+						GUI_NB.GCO("Direction " + direction + " delta Vapor: " + dVapor + " Cumulative: " + vaporOut + " Xfer Rate: " + vaporXferRate);
+					}
+				}
+				
+				*/
+
+			}			
+		}
+		
+
 	}
 	
 	/**
@@ -113,7 +179,19 @@ public class Hex {
 			if (displayText) {
 				Color oldBrush = g.getColor();
 				g.setColor(textColor);
-				g.drawString(hexText, xi - hexText.length() * 3, yi);
+				g.drawString(hexText, xi - hexText.length() * 3, yi + 6);
+				
+				g.setColor(oldBrush);
+			}
+			
+			if (GlobalFuncs.showVapor){
+				Color oldBrush = g.getColor();
+				g.setColor(textColor);
+				String vaporText = String.valueOf(vapor);				
+				g.drawString(vaporText,  xi - vaporText.length() * 3,  yi - 6);
+				
+				vaporText = String.valueOf(deltaVapor);
+				g.drawString(vaporText, xi - vaporText.length() * 3, yi + 6);
 				
 				g.setColor(oldBrush);
 			}
@@ -179,7 +257,7 @@ public class Hex {
 	
 	// NOTE: Does NOT save hex text 
 	public String saveHex() {
-		String output = tEnum.id + ", " + elevation + ", " + obsHeight + ", " + density + ", " + obscuration;
+		String output = tEnum.id + ", " + elevation + ", " + obsHeight + ", " + density + ", " + obscuration + ", " + vapor;
 		
 		return output;
 	}

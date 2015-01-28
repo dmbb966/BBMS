@@ -29,8 +29,11 @@ public class ClockThread implements Runnable {
 	            // Do stuff here
 	            Clock.ClockLoop(ClockControl.CLOCK_STEP);      
 	            
-	            durationCycle = System.currentTimeMillis() - startCycle;	 
-	            GUI_NB.GCODTG("Cycle duration is " + durationCycle);
+	            durationCycle = System.currentTimeMillis() - startCycle;
+	            if (durationCycle > ClockControl.GetClockDelay()) {
+		            GUI_NB.GCODTG("ERROR: Cycle duration of " + durationCycle + " exceeds step delay.");	            	
+	            }
+
 	            Clock.IncrementMs((int)(ClockControl.CLOCK_STEP)); //  * ClockControl.NumTimeScale()));
 	                                                       
 	            // Waits at the end of a clock cycle

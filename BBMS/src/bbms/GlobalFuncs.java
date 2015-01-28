@@ -25,6 +25,7 @@ public class GlobalFuncs {
 	public static boolean mapInitialized = false;
 	public static int placeUnit = 0;
 	public static boolean showShaded = true;	
+	public static boolean showVapor = true;
 	
 	public static boolean RotateHull = true;
 	

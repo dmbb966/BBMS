@@ -127,10 +127,11 @@ public class FIO {
 						int elevation = Integer.parseInt(ReadNextChunk(readL, ','));
 						int obsHeight = Integer.parseInt(ReadNextChunk(readL, ','));
 						int density = Integer.parseInt(ReadNextChunk(readL, ','));
-						int obscuration = Integer.parseInt(ReadNextChunk(readL, ',')); 
+						int obscuration = Integer.parseInt(ReadNextChunk(readL, ','));
+						int vapor = Integer.parseInt(ReadNextChunk(readL, ','));
 						TerrainEnum tEnum = TerrainEnum.loadEnum(TerrainEnumID);
 												
-						GlobalFuncs.scenMap.storeHex(loadHexX, loadHexY, new Hex(loadHexX, loadHexY, tEnum, elevation, obsHeight, density, obscuration));
+						GlobalFuncs.scenMap.storeHex(loadHexX, loadHexY, new Hex(loadHexX, loadHexY, tEnum, elevation, obsHeight, density, obscuration, vapor));
 						
 						loadHexX++;
 						if (loadHexX == newMapX) {

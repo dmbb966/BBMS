@@ -17,8 +17,8 @@ public class HexMap {
 	
 	Vector<hex.Hex> shadedHexList;
 	Vector<hex.Hex> textHexList;	
-	public static int chanceTrees = 10;
-	public static int chanceHighGrass = 30;
+	public static int chanceTrees = 30;
+	public static int chanceHighGrass = 0;
 	public static int chanceClear = 60;
 	public static int totalWeight = chanceClear + chanceHighGrass + chanceTrees;
 	
@@ -35,6 +35,24 @@ public class HexMap {
 	
 	public HexMap(int x, int y) {
 		this(x, y, true);
+	}
+	
+	public void calcAllVapor() {
+		for (int y = 0; y < yDim; y++) {
+			for (int x = 0; x < xDim; x++) {
+				Hex finger = hexArray[x][y];
+				finger.CalcVapor();
+			}
+		}
+	}
+	
+	public void updateAllVapor() {
+		for (int y = 0; y < yDim; y++) {
+			for (int x = 0; x < xDim; x++) {
+				Hex finger = hexArray[x][y];
+				finger.UpdateVapor();
+			}
+		}
 	}
 	
 	public void shadeHex(Hex h, Color c) {
@@ -174,7 +192,7 @@ public class HexMap {
 
 		// Stores hex information 
 		FIO.appendFile(p, "# Hex data, stored rows");
-		FIO.appendFile(p, "# Format is: TerrainEnumID, elevation, obstacle height, density, obscuration");
+		FIO.appendFile(p, "# Format is: TerrainEnumID, elevation, obstacle height, density, obscuration, vapor");
 		
 		for (int y = 0; y < yDim; y++) {
 			FIO.appendFile(p, "\n# Row " + y);

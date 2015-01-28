@@ -99,6 +99,13 @@ public class Clock {
 	public static void ClockLoop(int duration) {
 		// GUI_NB.GCO("Clock time is now " + DisplayTimeFull() + " with time rate " + ClockControl.PrintTimeScale());
 		moveAllUnits(duration);
+		
+		GlobalFuncs.scenMap.calcAllVapor();
+		GlobalFuncs.scenMap.updateAllVapor();
+		
+		GlobalFuncs.scenMap.getHex(0, 0).vapor = 0;
+		GlobalFuncs.scenMap.getHex(10, 10).vapor = 25500;
+		
 		GlobalFuncs.gui.BasicInfoPane.repaint();
 		
 	}
