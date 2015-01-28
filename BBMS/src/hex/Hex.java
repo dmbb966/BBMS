@@ -82,6 +82,24 @@ public class Hex {
 		vaporOut = 0;
 	}
 	
+	/**
+	 * Clones hex data EXCEPT terrain data (e.g. elevation, obs. height, density)
+	 * @param h
+	 */
+	public void CloneHexData(Hex h) {
+		shaded = h.shaded;
+		shadedColor = h.shadedColor;
+		highlighted = h.highlighted;
+		
+		displayText = h.displayText;
+		hexText = h.hexText;
+		textColor = h.textColor;
+		
+		obscuration = h.obscuration;
+		vapor = h.vapor;
+		deltaVapor = h.deltaVapor;
+	}
+	
 	public void DisplayInfo() {
 		System.out.print ("Hex: (" + x + ", " + y + ") is terrain type: " + tType.displayType() + " (" + tType.displayChar() + ")\n");
 		System.out.print ("Elevation: " + elevation + "   Obs Height: " + obsHeight + "    Density: " + density + "    Obscur: " + obscuration + "\n");		

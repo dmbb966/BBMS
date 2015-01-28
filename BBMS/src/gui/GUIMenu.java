@@ -74,6 +74,33 @@ public class GUIMenu extends JMenuBar{
 		}
 	}
 	
+	/** Sets the mode so that clicking will change the given terrain to CLEAR
+	 */
+	public static class ModePaintClear implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			GUI_NB.GCO("Clicking will now set terrain to CLEAR");
+			GlobalFuncs.placeUnit = 10;
+		}
+	}
+	
+	/** Sets the mode so that clicking will change the given terrain to TREES
+	 */
+	public static class ModePaintTrees implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			GUI_NB.GCO("Clicking will now set terrain to TREES");
+			GlobalFuncs.placeUnit = 11;
+		}
+	}
+	
+	/** Sets the mode so that clicking will change the given terrain to TALL GRASS
+	 */
+	public static class ModePaintTallGrass implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			GUI_NB.GCO("Clicking will now set terrain to TALL GRASS");
+			GlobalFuncs.placeUnit = 12;
+		}
+	}
+	
 	/** Outputs all spotting this turn to the GUI console
 	 */
 	public static class DisplaySpotsThisTurn implements ActionListener {
@@ -203,7 +230,19 @@ public class GUIMenu extends JMenuBar{
 		
 		menuItem = new JMenuItem("Mode: Place T-72");		
 		//menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_3, ActionEvent.CTRL_MASK));
-		menuItem.addActionListener(new ModeAddT72());
+		menuItem.addActionListener(new ModeAddT72());				
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Mode: Set Clear Terrain");		
+		menuItem.addActionListener(new ModePaintClear());				
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Mode: Set Tree Terrain");		
+		menuItem.addActionListener(new ModePaintTrees());				
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Mode: Set Tall Grass Terrain");		
+		menuItem.addActionListener(new ModePaintTallGrass());				
 		menu.add(menuItem);
 	}
 	

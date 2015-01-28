@@ -19,6 +19,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 import bbms.GlobalFuncs;
+import terrain.TerrainEnum;
+import unit.SideEnum;
 import unit.Unit;
 
 @SuppressWarnings("serial")
@@ -28,7 +30,7 @@ public class GUIMainDisp extends JPanel {
 	private int squareY = 50;
 	private int squareW = 20;
 	private int squareH = 20;
-	private static int defaultHexSize = 30;		
+	public static int defaultHexSize = 30;		
 	
 	// ULH corner of the display frame is centered on these hexes
 	public int mapDisplayX = 0;
@@ -72,7 +74,7 @@ public class GUIMainDisp extends JPanel {
 		return hex.HexAx.RoundAx(q,  z,  r); //.ConvertToOff();
 	}
 	
-	private static hex.HexOff pixelToHexOff(int x, int y, int offsetX, int offsetY) {
+	public static hex.HexOff pixelToHexOff(int x, int y, int offsetX, int offsetY) {
 		hex.HexAx interim = pixelToHex(x, y, offsetX, offsetY);
 		hex.HexOff result = interim.ConvertToOff();
 		
@@ -156,31 +158,33 @@ public class GUIMainDisp extends JPanel {
 			break;
 		case 1:
 			// Places M1A2 at cursor hex
-			cursorHexOff = pixelToHexOff(e.getX(), e.getY(), -defaultHexSize, -defaultHexSize);
-			h = GlobalFuncs.scenMap.getHex(cursorHexOff.getX(), cursorHexOff.getY());
-			GUI_NB.GCO("Adding M1A2");
-			if (h != null && h.HexUnit == null) {
-				h.HexUnit = new unit.Unit(h, unit.SideEnum.FRIENDLY, "M1A2", "Blue " + (GlobalFuncs.getUnitCount() + 1), 90.0, 0.0, null);	
-				GUI_NB.GCO(h.HexUnit.DispUnitInfo());
-			}			
+			GUIMouse.SetPlaceUnit(e, "M1A2", SideEnum.FRIENDLY);				
 			break;
+			
 		case 2:
 			// Places T-72 at cursor hex
-			GUI_NB.GCO("Adding T-72");
-			cursorHexOff = pixelToHexOff(e.getX(), e.getY(), -defaultHexSize, -defaultHexSize);
-			h = GlobalFuncs.scenMap.getHex(cursorHexOff.getX(), cursorHexOff.getY());
-			if (h != null && h.HexUnit == null) {
-				h.HexUnit = new unit.Unit(h, unit.SideEnum.ENEMY, "T-72", "Red " + (GlobalFuncs.getUnitCount() + 1), 270.0, 0.0, null);
-				GUI_NB.GCO(h.HexUnit.DispUnitInfo());
-				
-			}
+			GUIMouse.SetPlaceUnit(e, "T-72", SideEnum.ENEMY);
 			break;
-		}
 		
+		
+		case 10:
+			// Sets CLEAR terrain			
+			GUIMouse.SetPaintTerrain(e, TerrainEnum.CLEAR);
+			break;
+			
+		case 11:
+			// Sets TREES terrain			
+			GUIMouse.SetPaintTerrain(e,  TerrainEnum.TREES);
+			break;
+			
+		case 12:
+			// Sets TALL GRASS terrain			
+			GUIMouse.SetPaintTerrain(e, TerrainEnum.T_GRASS);
+		}
 		//GlobalFuncs.gui.validate();
 		GlobalFuncs.gui.repaint();
 		
-	}
+	}		
 	
 	public Polygon genHex(int x, int y, int size) {
 		int[] xPoly = new int[6];
