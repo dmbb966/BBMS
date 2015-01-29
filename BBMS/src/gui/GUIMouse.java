@@ -23,8 +23,7 @@ public class GUIMouse {
 			GlobalFuncs.scenMap.hexArray[cursorHexOff.getX()][cursorHexOff.getY()] = replacement;
 			GlobalFuncs.gui.repaint();
 		}
-		
-		GUI_NB.GCO("Paint mode set to " + tE.name() + " terrain.");
+	
 	}
 	
 	/**
