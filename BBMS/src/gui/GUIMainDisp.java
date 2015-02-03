@@ -2,6 +2,7 @@ package gui;
 
 import hex.Hex;
 import hex.HexMap;
+import hex.VaporEnum;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -174,12 +175,27 @@ public class GUIMainDisp extends JPanel {
 			
 		case 11:
 			// Sets TREES terrain			
-			GUIMouse.SetPaintTerrain(e,  TerrainEnum.TREES);
+			GUIMouse.SetPaintTerrain(e, TerrainEnum.TREES);
 			break;
 			
 		case 12:
 			// Sets TALL GRASS terrain			
 			GUIMouse.SetPaintTerrain(e, TerrainEnum.T_GRASS);
+			break;
+		
+		
+		case 20:
+			// Removes vapor source or sink
+			GUIMouse.SetVaporType(e, VaporEnum.NONE);
+			break;
+		case 21:
+			// Sets vapor source
+			GUIMouse.SetVaporType(e, VaporEnum.SOURCE);
+			break;
+		case 22:
+			// Sets vapor sink
+			GUIMouse.SetVaporType(e, VaporEnum.SINK);
+			break;
 		}
 		//GlobalFuncs.gui.validate();
 		GlobalFuncs.gui.repaint();

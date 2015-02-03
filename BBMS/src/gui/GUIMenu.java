@@ -101,6 +101,35 @@ public class GUIMenu extends JMenuBar{
 		}
 	}
 	
+	/** Sets the mode so that clicking will change the given hex to a vapor source
+	 */
+	public static class ModeSetVaporSource implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			GUI_NB.GCO("Clicking will now set hex to VAPOR SOURCE");
+			GlobalFuncs.placeUnit = 21;
+		}
+	}
+	
+	/** Sets the mode so that clicking will change the given hex to a vapor sink
+	 */
+	public static class ModeSetVaporSink implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			GUI_NB.GCO("Clicking will now set hex to VAPOR SINK");
+			GlobalFuncs.placeUnit = 22;
+		}
+	}
+	
+	/** Sets the mode so that clicking will remove a vapor source or sink
+	 */
+	public static class ModeSetVaporNorm implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			GUI_NB.GCO("Clicking will now REMOVE vapor source or sink");
+			GlobalFuncs.placeUnit = 20;
+		}
+	}
+	
+	
+	
 	/** Outputs all spotting this turn to the GUI console
 	 */
 	public static class DisplaySpotsThisTurn implements ActionListener {
@@ -243,6 +272,18 @@ public class GUIMenu extends JMenuBar{
 		
 		menuItem = new JMenuItem("Mode: Set Tall Grass Terrain");		
 		menuItem.addActionListener(new ModePaintTallGrass());				
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Mode: Set Vapor Source");
+		menuItem.addActionListener(new ModeSetVaporSource());
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Mode: Set Vapor Sink");
+		menuItem.addActionListener(new ModeSetVaporSink());
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Mode: Remove Vapor Source/Sink");
+		menuItem.addActionListener(new ModeSetVaporNorm());
 		menu.add(menuItem);
 	}
 	

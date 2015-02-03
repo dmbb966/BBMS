@@ -84,7 +84,17 @@ public class Hex {
 		vaporIn = 0;
 		vaporOut = 0;
 		
-		vaporType = vType;
+		switch (vType) {
+		case NONE:
+			vaporType = vType;
+			break;
+		case SOURCE:
+			SetVaporSource();
+			break;
+		case SINK:
+			SetVaporSink();
+			break;
+		}		
 	}
 	
 	/**

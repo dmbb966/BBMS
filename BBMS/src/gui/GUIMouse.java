@@ -2,6 +2,7 @@ package gui;
 
 import hex.Hex;
 import hex.HexOff;
+import hex.VaporEnum;
 import bbms.GlobalFuncs;
 import terrain.TerrainEnum;
 import unit.SideEnum;
@@ -50,5 +51,22 @@ public class GUIMouse {
 			h.HexUnit = new unit.Unit(h, side, unitType, callsign + (GlobalFuncs.getUnitCount() + 1), heading, 0.0, null, false);	
 			GUI_NB.GCO(h.HexUnit.DispUnitInfo());
 		}			
+	}
+	
+	public static void SetVaporType(java.awt.event.MouseEvent e, VaporEnum vType) {
+		HexOff cursorHexOff = GUIMainDisp.pixelToHexOff(e.getX(), e.getY(), -GlobalFuncs.gui.GMD.defaultHexSize, -GlobalFuncs.gui.GMD.defaultHexSize);
+		Hex h = GlobalFuncs.scenMap.getHex(cursorHexOff.getX(), cursorHexOff.getY());
+		
+		switch (vType) {
+		case NONE:
+			h.SetVaporNormal();
+			break;
+		case SOURCE:
+			h.SetVaporSource();
+			break;
+		case SINK:
+			h.SetVaporSink();
+			break;
+		}
 	}
 }
