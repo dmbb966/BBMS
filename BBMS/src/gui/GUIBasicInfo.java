@@ -90,7 +90,7 @@ public class GUIBasicInfo extends JPanel {
 		if (GlobalFuncs.mapInitialized) {
 			// First line: time data
 			//g.drawString("Clock " + clock.Clock.time, 10, start);
-			g.drawString(Clock.DisplayTime(), 10, row);
+			g.drawString(Clock.DisplayTimeNorm(), 10, row);
 			g.drawString(ClockControl.PrintTimeScale(), 85, row);
 			
 			row += spacing;

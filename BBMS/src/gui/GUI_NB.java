@@ -42,7 +42,7 @@ public class GUI_NB extends javax.swing.JFrame {
         MainDisplay = new GUIMainDisp();
         InformationPanel = new javax.swing.JPanel();
         BasicInfoPane = new GUIBasicInfo();
-        DetailedInfoPane = new javax.swing.JPanel();
+        DetailedInfoPane = new GUIInfoPane();
         MiniMap = new javax.swing.JPanel();
         ConsolePanel = new javax.swing.JPanel();
         ConsoleScroll = new javax.swing.JScrollPane();
@@ -285,7 +285,7 @@ public class GUI_NB extends javax.swing.JFrame {
     public javax.swing.JPanel BasicInfoPane;
     private javax.swing.JPanel ConsolePanel;
     private javax.swing.JScrollPane ConsoleScroll;
-    private javax.swing.JPanel DetailedInfoPane;
+    public javax.swing.JPanel DetailedInfoPane;
     private javax.swing.JPanel DisplayPanel;
     private javax.swing.JTabbedPane DisplayTabs;
     public static javax.swing.JTextArea GUIConsole;

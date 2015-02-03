@@ -162,6 +162,42 @@ public class GUIMenu extends JMenuBar{
 			
 		}
 	}
+	
+	/** Sets the display mode to UNIT in the main display and info panes
+	 */
+	public static class DisplayModeUnit implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			GUI_NB.GCO("Display Mode set to UNIT");
+			GlobalFuncs.showVapor = false;
+			GlobalFuncs.showLOS = false;
+			GlobalFuncs.showFOW = true;
+			GUIInfoPane.changePaneMode(DetailedInfoEnum.UNIT);
+		}
+	}
+	
+	/** Sets the display mode to VAPOR in the main display and info panes
+	 */
+	public static class DisplayModeVapor implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			GUI_NB.GCO("Display Mode set to VAPOR");
+			GlobalFuncs.showVapor = true;
+			GlobalFuncs.showLOS = false;
+			GlobalFuncs.showFOW = false;
+			GUIInfoPane.changePaneMode(DetailedInfoEnum.VAPOR);
+		}
+	}
+	
+	/** Sets the display mode to DEBUG in the main display and info panes
+	 */
+	public static class DisplayModeDebug implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			GUI_NB.GCO("Display Mode set to DEBUG");
+			GlobalFuncs.showVapor = true;
+			GlobalFuncs.showLOS = false;
+			GlobalFuncs.showFOW = false;
+			GUIInfoPane.changePaneMode(DetailedInfoEnum.DEBUG);
+		}
+	}
 
 	
 	/** Displays version info
@@ -186,30 +222,34 @@ public class GUIMenu extends JMenuBar{
 	
 
 	
-	public void HelpMenu() {		
-		JMenu menu = new JMenu("Help");
-		menu.setMnemonic(KeyEvent.VK_H);
-		this.add(menu);
-		
-		JMenuItem menuItem = new JMenuItem("Keyboard Shortcuts", KeyEvent.VK_K);
-		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, ActionEvent.CTRL_MASK));
-		menuItem.setAction(new GUIKeyboard.HelpKeyboardShortcuts());
-		menu.add(menuItem);
-		
-		menu.addSeparator();
-		
-		menuItem = new JMenuItem("About", KeyEvent.VK_A);		
-		menuItem.addActionListener(new HelpAbout());
-		menu.add(menuItem);					
-	}
+
 
 	
 	public GUIMenu() {
 		FileMenu();
+		DisplayMenu();
 		SetupMenu();
 		ActionsMenu();
 		HelpMenu();		
-
+	}
+	
+	public void DisplayMenu() {
+		JMenu menu = new JMenu("Display");
+		menu.setMnemonic(KeyEvent.VK_D);
+		this.add(menu);
+		
+		JMenuItem menuItem = new JMenuItem("Unit Display Mode");
+		menuItem.addActionListener(new DisplayModeUnit());
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Vapor Display Mode");
+		menuItem.addActionListener(new DisplayModeVapor());
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Debug Display Mode");
+		menuItem.addActionListener(new DisplayModeDebug());
+		menu.add(menuItem);
+		
 	}
 
 	
@@ -312,5 +352,22 @@ public class GUIMenu extends JMenuBar{
 		menuItem.addActionListener(new CopyConsole());
 		menu.add(menuItem);
 		
+	}
+	
+	public void HelpMenu() {		
+		JMenu menu = new JMenu("Help");
+		menu.setMnemonic(KeyEvent.VK_H);
+		this.add(menu);
+		
+		JMenuItem menuItem = new JMenuItem("Keyboard Shortcuts", KeyEvent.VK_K);
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, ActionEvent.CTRL_MASK));
+		menuItem.setAction(new GUIKeyboard.HelpKeyboardShortcuts());
+		menu.add(menuItem);
+		
+		menu.addSeparator();
+		
+		menuItem = new JMenuItem("About", KeyEvent.VK_A);		
+		menuItem.addActionListener(new HelpAbout());
+		menu.add(menuItem);					
 	}
 }

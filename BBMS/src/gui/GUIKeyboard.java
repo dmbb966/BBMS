@@ -2,6 +2,7 @@ package gui;
 
 import hex.HexOff;
 
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -14,7 +15,7 @@ import javax.swing.KeyStroke;
 import bbms.DebugFuncs;
 import bbms.GlobalFuncs;
 import clock.Clock;
-
+@SuppressWarnings("serial")
 public class GUIKeyboard {
 
 	/**

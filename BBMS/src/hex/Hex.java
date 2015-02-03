@@ -241,6 +241,8 @@ public class Hex {
 				g.drawImage(img,  x,  y,  null);
 			}
 			
+			if (tEnum == TerrainEnum.INVALID) return;
+			
 			if (displayText) {
 				Color oldBrush = g.getColor();
 				g.setColor(textColor);
