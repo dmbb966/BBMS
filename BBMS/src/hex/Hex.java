@@ -196,6 +196,8 @@ public class Hex {
 					tgtHex.vaporIn += vaporXferAmount;					
 				}		
 				
+				
+				
 				// DEBUG
 				
 				/*

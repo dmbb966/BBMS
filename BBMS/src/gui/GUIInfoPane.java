@@ -75,6 +75,24 @@ public class GUIInfoPane extends JPanel {
 	private void paintVaporMode(Graphics g) {
 		int row = start;
 		
+		g.drawString("Flow rate: " + String.format("%.2f", GlobalFuncs.flowRate), 10, row);
+		row += spacing;
+		
+		g.drawString("Source/Sink Max Delta: " + GlobalFuncs.maxDelta, 10, row);
+		row += spacing;
+		
+		g.drawString("Ticks Stable: " + GlobalFuncs.ticksStable, 10, row);
+		row += 2 * spacing;
+		
+		
+		g.drawString("Total Vapor: " + String.format("%,d", GlobalFuncs.totalVapor), 10, row);
+		row += spacing;
+		
+		g.drawString("Total Vapor Delta: " + GlobalFuncs.totalVaporDelta, 10, row);
+		
+		
+		
+		
 	}
 	
 	/**

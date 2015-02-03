@@ -43,6 +43,21 @@ public class GlobalFuncs {
 	
 	private static int unitCount = 0;
 	
+	// Vapor variables
+	/** Universal modifier to vapor flow rate */	 
+	public static double flowRate = 1.00;	
+	/** Highest flow rate as calculated by sources and sinks*/
+	public static int maxDelta = 0;		
+	/** Number of ticks since the last source or sink was removed.  
+	 * It will reduce the flowRate to 1.00 for 100 ticks to avoid
+	 * overflow issues.   */
+	public static int ticksStable = 0;
+	/** Total amount of vapor on the map */
+	public static long totalVapor = 0;
+	/** Total vapor delta */
+	public static int totalVaporDelta = 0;
+	
+	// Spotting variables
 	public static spotting.SpotRecords allSpots = new spotting.SpotRecords();
 
 	/**
