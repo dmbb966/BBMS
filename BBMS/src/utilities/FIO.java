@@ -4,6 +4,7 @@ import gui.GUI_NB;
 import hex.Hex;
 import hex.HexMap;
 import hex.HexOff;
+import hex.VaporEnum;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -159,9 +160,11 @@ public class FIO {
 						int obscuration = Integer.parseInt(ReadNextChunk(readL, ','));
 						int vapor = Integer.parseInt(ReadNextChunk(readL, ','));
 						int deltaVapor = Integer.parseInt(ReadNextChunk(readL, ','));
+						int vType = Integer.parseInt(ReadNextChunk(readL, ','));
 						TerrainEnum tEnum = TerrainEnum.loadEnum(TerrainEnumID);
+						VaporEnum vEnum = VaporEnum.loadEnum(vType);
 												
-						GlobalFuncs.scenMap.storeHex(loadHexX, loadHexY, new Hex(loadHexX, loadHexY, tEnum, elevation, obsHeight, density, obscuration, vapor, deltaVapor));
+						GlobalFuncs.scenMap.storeHex(loadHexX, loadHexY, new Hex(loadHexX, loadHexY, tEnum, elevation, obsHeight, density, obscuration, vapor, deltaVapor, vEnum));
 						
 						loadHexX++;
 						if (loadHexX == newMapX) {

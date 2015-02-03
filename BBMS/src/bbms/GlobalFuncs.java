@@ -83,6 +83,11 @@ public class GlobalFuncs {
 			GUI_NB.GCO("Starting clock");
 			GameClock.start();
 		}
+		
+		// DEBUG ONLY
+		scenMap.getHex(1, 1).SetVaporSink();
+		scenMap.getHex(8, 8).SetVaporSource();
+		
 		GUI_NB.GCO("Generating main map.");		
 		gui.repaint();
 	}

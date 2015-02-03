@@ -102,10 +102,7 @@ public class Clock {
 		moveAllUnits(duration);
 		
 		GlobalFuncs.scenMap.calcAllVapor();
-		GlobalFuncs.scenMap.updateAllVapor();
-		
-		GlobalFuncs.scenMap.getHex(0, 0).vapor = 0;
-		GlobalFuncs.scenMap.getHex(10, 10).vapor = 25500;
+		GlobalFuncs.scenMap.updateAllVapor();		
 		
 		GlobalFuncs.gui.BasicInfoPane.repaint();
 		

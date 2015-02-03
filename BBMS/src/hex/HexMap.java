@@ -16,7 +16,9 @@ public class HexMap {
 	public Hex[][] hexArray;
 	
 	Vector<hex.Hex> shadedHexList;
-	Vector<hex.Hex> textHexList;	
+	Vector<hex.Hex> textHexList;
+	Vector<hex.Hex> vaporSourceList;
+	Vector<hex.Hex> vaporSinkList; 
 	public static int chanceTrees = 30;
 	public static int chanceHighGrass = 0;
 	public static int chanceClear = 60;
@@ -30,6 +32,8 @@ public class HexMap {
 		hexArray = new Hex[xDim][yDim];
 		shadedHexList = new Vector<Hex>();
 		textHexList = new Vector<Hex>();
+		vaporSourceList = new Vector<Hex>();
+		vaporSinkList = new Vector<Hex>();
 		if (!cleanMap) GenerateMap();
 	}
 	
@@ -53,6 +57,8 @@ public class HexMap {
 				finger.UpdateVapor();
 			}
 		}
+		
+		UpdateSourceSink();
 	}
 	
 	public void shadeHex(Hex h, Color c) {
@@ -192,7 +198,7 @@ public class HexMap {
 
 		// Stores hex information 
 		FIO.appendFile(p, "# Hex data, stored rows");
-		FIO.appendFile(p, "# Format is: TerrainEnumID, elevation, obstacle height, density, obscuration, vapor, deltaVapor");
+		FIO.appendFile(p, "# Format is: TerrainEnumID, elevation, obstacle height, density, obscuration, vapor, deltaVapor, vaporType");
 		
 		for (int y = 0; y < yDim; y++) {
 			FIO.appendFile(p, "\n# Row " + y);
@@ -201,9 +207,21 @@ public class HexMap {
 			}
 		}
 		
-
+	}
+	
+	/** Sets all vapor source hexes to maximum and drains all source sink hexes.
+	 * 
+	 */
+	public void UpdateSourceSink() {
+		for (int i = 0; i < vaporSourceList.size(); i++) {
+			Hex finger = vaporSourceList.elementAt(i);
+			finger.vapor = 25500;
+		}
 		
-		// Stores spotting information
+		for (int i = 0; i < vaporSinkList.size(); i++) {
+			Hex finger = vaporSinkList.elementAt(i);
+			finger.vapor = 0;
+		}
 	}
 
 }

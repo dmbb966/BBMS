@@ -31,6 +31,8 @@ public class Hex {
 	public int vaporIn;
 	public int deltaVapor;
 	
+	public VaporEnum vaporType = VaporEnum.NONE;
+	
 	public boolean shaded;		// Will the hex be drawn shaded or not?
 	public Color shadedColor;
 	
@@ -53,11 +55,11 @@ public class Hex {
 				iElev + iTerrain.tType.generateHeight(), 
 				iTerrain.tType.generateObsHeight(),
 				iTerrain.tType.generateDensity(),
-				0, 25500, 0);			
+				0, 25500, 0, VaporEnum.NONE);		
 	}
 	
 	// Constructor with specific height, obsHeight, density, and obscuration
-	public Hex (int xi, int yi, TerrainEnum iTerrain, int iElev, int iObsHeight, int iDensity, int iObsc, int iVapor, int dV) {
+	public Hex (int xi, int yi, TerrainEnum iTerrain, int iElev, int iObsHeight, int iDensity, int iObsc, int iVapor, int dV, VaporEnum vType) {
 		x = xi;
 		y = yi;		
 				
@@ -81,6 +83,8 @@ public class Hex {
 		deltaVapor = dV;
 		vaporIn = 0;
 		vaporOut = 0;
+		
+		vaporType = vType;
 	}
 	
 	/**
@@ -127,6 +131,38 @@ public class Hex {
 		vaporOut = 0;
 	}
 	
+	/**
+	 * Sets this hex to be a vapor sink
+	 */
+	public void SetVaporSink() {
+		if (vaporType == VaporEnum.SINK) return;
+		else if (vaporType == VaporEnum.SOURCE) GlobalFuncs.scenMap.vaporSourceList.remove(this);
+		
+		GlobalFuncs.scenMap.vaporSinkList.addElement(this);
+		vaporType = VaporEnum.SINK;
+	}
+	
+	/**
+	 * Sets this hex to be a vapor source
+	 */
+	public void SetVaporSource() {
+		if (vaporType == VaporEnum.SINK) GlobalFuncs.scenMap.vaporSinkList.remove(this);
+		else if (vaporType == VaporEnum.SOURCE) return;
+		
+		GlobalFuncs.scenMap.vaporSourceList.addElement(this);
+		vaporType = VaporEnum.SOURCE;		
+	}
+	
+	/**
+	 * Un-sets any source or sink designation in the vapor model
+	 */
+	public void SetVaporNormal() {
+		if (vaporType == VaporEnum.SINK) GlobalFuncs.scenMap.vaporSinkList.remove(this);
+		else if (vaporType == VaporEnum.SOURCE) GlobalFuncs.scenMap.vaporSourceList.remove(this);
+		
+		vaporType = VaporEnum.NONE;
+	}
+		
 	/**
 	 * DEFAULTS to MoveClass.TRACK
 	 */
@@ -206,8 +242,18 @@ public class Hex {
 			if (GlobalFuncs.showVapor){
 				Color oldBrush = g.getColor();
 				g.setColor(textColor);
-				String vaporText = String.valueOf(vapor);				
+				String vaporText = "";
+				if (vaporType == VaporEnum.NONE) {
+					vaporText = String.valueOf(vapor);										
+				} else if (vaporType == VaporEnum.SINK){
+					g.setColor(Color.ORANGE);
+					vaporText = "SINK";					
+				} else if (vaporType == VaporEnum.SOURCE){
+					g.setColor(Color.CYAN);
+					vaporText = "SRC";
+				}
 				g.drawString(vaporText,  xi - vaporText.length() * 3,  yi - 6);
+				
 				
 				vaporText = String.valueOf(deltaVapor);
 				g.drawString(vaporText, xi - vaporText.length() * 3, yi + 6);
@@ -276,7 +322,7 @@ public class Hex {
 	
 	// NOTE: Does NOT save hex text 
 	public String saveHex() {
-		String output = tEnum.id + ", " + elevation + ", " + obsHeight + ", " + density + ", " + obscuration + ", " + vapor + ", " + deltaVapor;
+		String output = tEnum.id + ", " + elevation + ", " + obsHeight + ", " + density + ", " + obscuration + ", " + vapor + ", " + deltaVapor + ", " + vaporType.id;
 		
 		return output;
 	}
