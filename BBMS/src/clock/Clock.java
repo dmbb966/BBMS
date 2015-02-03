@@ -99,7 +99,9 @@ public class Clock {
 	
 	public static void ClockLoop(int duration) {
 		// GUI_NB.GCO("Clock time is now " + DisplayTimeFull() + " with time rate " + ClockControl.PrintTimeScale());
+		GlobalFuncs.ticksStable++;
 		moveAllUnits(duration);
+		
 		
 		GlobalFuncs.scenMap.calcAllVapor();
 		GlobalFuncs.scenMap.updateAllVapor();		
@@ -228,18 +230,4 @@ public class Clock {
 	    return (two_zero.format(hour) + ":" + two_zero.format(minute) + ":" +
 	            two_zero.format(second));
 	}
-	
-    // doSilentCycle does a silent clock cycle - i.e. updates the locations
-    // of all the units for a time delta, but does not display it to the screen.
-    public static void doSilentCycle (int delta) {
-        IncrementMs(delta);
-     
-    }
-    
-    
-    // doFullCycle not only updates the locations in memory, but also their
-    // locations on the screen.
-    public static void doFullCycle (int delta) {
-        doSilentCycle(delta);     
-    }
 }

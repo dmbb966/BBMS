@@ -50,6 +50,16 @@ public class HexMap {
 		}
 	}
 	
+	/** 
+	 * Checks vapor sources and sinks to determine the anticipated change for the next turn.
+	 */
+	public void updateVaporSS() {
+		for (int i = 0; i < vaporSinkList.size(); i++) {
+			Hex finger = vaporSinkList.elementAt(i);
+			finger.UpdateVapor();
+		}
+	}
+	
 	public void updateAllVapor() {
 		for (int y = 0; y < yDim; y++) {
 			for (int x = 0; x < xDim; x++) {

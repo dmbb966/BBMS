@@ -146,7 +146,9 @@ public class Hex {
 	 */
 	public void SetVaporSink() {
 		if (vaporType == VaporEnum.SINK) return;
-		else if (vaporType == VaporEnum.SOURCE) GlobalFuncs.scenMap.vaporSourceList.remove(this);
+		else if (vaporType == VaporEnum.SOURCE) GlobalFuncs.scenMap.vaporSourceList.remove(this);						
+		// We don't need to reset the stability since we already check sources and sinks, and we are
+		// switching from one to another.
 		
 		GlobalFuncs.scenMap.vaporSinkList.addElement(this);
 		vaporType = VaporEnum.SINK;
@@ -156,8 +158,10 @@ public class Hex {
 	 * Sets this hex to be a vapor source
 	 */
 	public void SetVaporSource() {
-		if (vaporType == VaporEnum.SINK) GlobalFuncs.scenMap.vaporSinkList.remove(this);
+		if (vaporType == VaporEnum.SINK) GlobalFuncs.scenMap.vaporSinkList.remove(this);		
 		else if (vaporType == VaporEnum.SOURCE) return;
+		// We don't need to reset the stability since we already check sources and sinks, and we are
+		// switching from one to another.
 		
 		GlobalFuncs.scenMap.vaporSourceList.addElement(this);
 		vaporType = VaporEnum.SOURCE;		
@@ -167,52 +171,72 @@ public class Hex {
 	 * Un-sets any source or sink designation in the vapor model
 	 */
 	public void SetVaporNormal() {
-		if (vaporType == VaporEnum.SINK) GlobalFuncs.scenMap.vaporSinkList.remove(this);
-		else if (vaporType == VaporEnum.SOURCE) GlobalFuncs.scenMap.vaporSourceList.remove(this);
+		if (vaporType == VaporEnum.SINK) {
+			GlobalFuncs.scenMap.vaporSinkList.remove(this);
+			GlobalFuncs.ticksStable = 0;
+		}
+		else if (vaporType == VaporEnum.SOURCE) {
+			GlobalFuncs.scenMap.vaporSourceList.remove(this);
+			GlobalFuncs.ticksStable = 0;			// Removing a source shouldn't lead to a huge DV, but just in case.
+		}
 		
 		vaporType = VaporEnum.NONE;
 	}
 		
 	/**
-	 * DEFAULTS to MoveClass.TRACK
+	 * Goes through the calculations that CalcVapor does, but stores them in temporary variables and returns it
+	 * @return
 	 */
-	public void CalcVapor() {
-
-		
+	public int ReturnVaporCalc() {
+		int vOut = 0;
+				
 		for (int direction = 0; direction < 6; direction++) {
 			HexOff target = new HexOff(x, y).findNeighbor(direction);
 			Hex tgtHex = GlobalFuncs.scenMap.getHex(target.x, target.y);
-			if (tgtHex.tEnum != TerrainEnum.INVALID) {
-				int moveCost = Math.max(this.tType.getMoveCost(MoveClass.TRACK), 
-						tgtHex.tType.getMoveCost(MoveClass.TRACK));
-				double vaporXferRate = 0.16 / moveCost;
-				int dVapor = vapor - tgtHex.vapor;				
-
-				
-				// Nothing "sucks" in this universe.  Vapor moves from high pressure to low pressure only.
-				if (dVapor > 0) {
-					int vaporXferAmount = (int)(dVapor * vaporXferRate); //Math.max((int)(dVapor * vaporXferRate), 1);
-					vaporOut += vaporXferAmount;
-					tgtHex.vaporIn += vaporXferAmount;					
-				}		
-				
-				
-				
-				// DEBUG
-				
-				/*
-				if (GlobalFuncs.highlightedHex != null) {					
-					if (GlobalFuncs.highlightedHex.x == x && GlobalFuncs.highlightedHex.y == y) {
-						GUI_NB.GCO("Direction " + direction + " delta Vapor: " + dVapor + " Cumulative: " + vaporOut + " Xfer Rate: " + vaporXferRate);
-					}
-				}
-				
-				*/
-
-			}			
-		}
+			
+			int vaporXferAmount = CalcVaporOneHex(this, tgtHex);
+			
+			vOut += vaporXferAmount;							
+		}		
+		return vOut;
+	}
+	
+	/**
+	 * Calculates the vapor transfer out of the origin hex to the target
+	 * @param origin
+	 * @param target
+	 * @return
+	 */
+	public int CalcVaporOneHex(Hex origin, Hex tgtHex) {
+		int vOut = 0;
 		
-
+		if (tgtHex.tEnum != TerrainEnum.INVALID) {
+			int moveCost = Math.max(this.tType.getMoveCost(MoveClass.TRACK), 
+					tgtHex.tType.getMoveCost(MoveClass.TRACK));
+			double vaporXferRate = (0.16 * GlobalFuncs.flowRate) / moveCost;
+			int dVapor = origin.vapor - tgtHex.vapor;				
+			
+			vOut = (int)(dVapor * vaporXferRate); 
+		}
+		return vOut;
+	}
+	
+	/**
+	 * DEFAULTS to MoveClass.TRACK
+	 */
+	public void CalcVapor() {
+		for (int direction = 0; direction < 6; direction++) {
+			HexOff target = new HexOff(x, y).findNeighbor(direction);
+			Hex tgtHex = GlobalFuncs.scenMap.getHex(target.x, target.y);
+			
+			int vaporXferAmount = CalcVaporOneHex(this, tgtHex);
+			
+			if (vaporXferAmount > 0) {
+				vaporOut += vaporXferAmount;
+				tgtHex.vaporIn += vaporXferAmount;
+			}
+								
+		}
 	}
 	
 	/**
