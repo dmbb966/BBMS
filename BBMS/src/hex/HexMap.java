@@ -86,12 +86,18 @@ public class HexMap {
 	}
 	
 	public void updateAllVapor() {
+		
+		long oldTV = GlobalFuncs.totalVapor;
+		GlobalFuncs.totalVapor = 0;
+		
 		for (int y = 0; y < yDim; y++) {
 			for (int x = 0; x < xDim; x++) {
 				Hex finger = hexArray[x][y];
 				finger.UpdateVapor();
 			}
 		}
+		
+		GlobalFuncs.totalVaporDelta = (int)(oldTV - GlobalFuncs.totalVapor);		
 		
 		UpdateSourceSink();
 	}
