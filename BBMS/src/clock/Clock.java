@@ -102,7 +102,8 @@ public class Clock {
 		GlobalFuncs.ticksStable++;
 		moveAllUnits(duration);
 		
-		
+		GlobalFuncs.maxDelta = 0;
+		GlobalFuncs.scenMap.updateVaporSS();		// Calculates maximum DV at sources and sinks
 		GlobalFuncs.scenMap.calcAllVapor();
 		GlobalFuncs.scenMap.updateAllVapor();		
 		

@@ -192,13 +192,16 @@ public class Hex {
 				
 		for (int direction = 0; direction < 6; direction++) {
 			HexOff target = new HexOff(x, y).findNeighbor(direction);
-			Hex tgtHex = GlobalFuncs.scenMap.getHex(target.x, target.y);
+			Hex tgtHex = GlobalFuncs.scenMap.getHex(target.x, target.y);			
+			int vaporXferAmount = CalcVaporOneHex(this, tgtHex);			
 			
-			int vaporXferAmount = CalcVaporOneHex(this, tgtHex);
-			
-			vOut += vaporXferAmount;							
+			// We don't need to worry about restricting updates to positive responses since we are only looking
+			// at a single hex in isolation (whereas when doing a map update, the surrounding hexes will
+			// add equal and opposite flows.  You know - skew symmetry, or something like that.
+			vOut += vaporXferAmount;		 							
 		}		
-		return vOut;
+		
+		return Math.abs(vOut);
 	}
 	
 	/**

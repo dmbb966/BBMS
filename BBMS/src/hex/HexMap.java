@@ -1,5 +1,7 @@
 package hex;
 
+import gui.GUI_NB;
+
 import java.awt.Color;
 import java.nio.file.Path;
 import java.util.Vector;
@@ -56,7 +58,14 @@ public class HexMap {
 	public void updateVaporSS() {
 		for (int i = 0; i < vaporSinkList.size(); i++) {
 			Hex finger = vaporSinkList.elementAt(i);
-			finger.UpdateVapor();
+			int DV = finger.ReturnVaporCalc();
+			if (DV > GlobalFuncs.maxDelta) GlobalFuncs.maxDelta = DV; 					
+		}
+		
+		for (int i = 0; i < vaporSourceList.size(); i++) {
+			Hex finger = vaporSourceList.elementAt(i);
+			int DV = finger.ReturnVaporCalc();			
+			if (DV > GlobalFuncs.maxDelta) GlobalFuncs.maxDelta = DV;
 		}
 	}
 	
