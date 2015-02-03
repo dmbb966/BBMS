@@ -70,6 +70,35 @@ public class FIO {
 		return output;
 	}
 	
+	public static boolean SaveFile(Path p) {
+		GlobalFuncs.scenMap.saveMap(p);
+		
+		// Stores unit information
+		FIO.appendFile(p, "\n# Unit information");
+		FIO.appendFile(p, "# Format is: unitID, callsign, x, y, hullOrientation, turretOrientation, type, side, spotted, waypoints\n");
+		
+		for (int i = 0; i < GlobalFuncs.unitList.size(); i++) {
+			FIO.appendFile(p, GlobalFuncs.unitList.elementAt(i).SaveUnit());
+		}
+		FIO.appendFile(p, ">Last Unit<\n");
+		
+		FIO.appendFile(p, "# Unit target information");
+		FIO.appendFile(p, "# Format is: unitID, targetID");
+		
+		for (int i = 0; i < GlobalFuncs.unitList.size(); i++) {
+			Unit finger = GlobalFuncs.unitList.elementAt(i);
+			if (finger.target != null) {
+				FIO.appendFile(p,  finger.SaveTarget());
+			}
+		}
+		
+		FIO.appendFile(p, ">Last Target<\n");
+			
+		GlobalFuncs.allSpots.SaveSpots(p);
+		
+		return true;
+	}
+	
 	public static boolean LoadFile(Path p) {
 	
 		int newMapX = 0;

@@ -1,5 +1,6 @@
 package clock;
 
+import bbms.GlobalFuncs;
 import gui.GUI_NB;
 
 // ClockThread version 3.0 - automatically updates the clock IAW
@@ -14,11 +15,11 @@ public class ClockThread implements Runnable {
 	
     // Initialize clock date to the constructed value
     public ClockThread(){
-        
+    	
     }
         
     public void run() {       
-        
+    	GlobalFuncs.clockInitialized = true;
         GUI_NB.GCO("Running clock thread.");
         try {
         	do {

@@ -23,6 +23,7 @@ public class GlobalFuncs {
 	public static GUI_NB gui;
 	public static HexMap scenMap;
 	public static boolean mapInitialized = false;
+	public static boolean clockInitialized = false;
 	public static int placeUnit = 0;
 	public static boolean showShaded = true;	
 	public static boolean showVapor = true;
@@ -35,6 +36,8 @@ public class GlobalFuncs {
 	public static Hex highlightedHex = null; 
 	public static Unit selectedUnit = null;
 	public static Hex selectedHex = null;
+	
+	public static Thread GameClock = new Thread(new ClockThread());
 	
 	private static int unitCount = 0;
 	
@@ -74,8 +77,10 @@ public class GlobalFuncs {
 		enemyUnitList = new Vector<Unit>();		
 		GUIKeyboard.initializeKeyCommands();
 		Clock.SetTime(8, 24, 13);
-		Thread GameClock = new Thread(new ClockThread());
-		GameClock.start();
+		if (!clockInitialized) {
+			GUI_NB.GCO("Starting clock");
+			GameClock.start();
+		}
 		GUI_NB.GCO("Generating main map.");		
 		gui.repaint();
 	}
@@ -137,35 +142,9 @@ public class GlobalFuncs {
 		
 		Path p = f.toPath();
 		
-		GlobalFuncs.scenMap.saveMap(p);
-		GlobalFuncs.saveUnits(p);
-		GlobalFuncs.allSpots.SaveSpots(p);
-		
+		FIO.SaveFile(p);				
 			
 		return true;
-	}
-	
-	public static void saveUnits(Path p) {
-		// Stores unit information
-		FIO.appendFile(p, "\n# Unit information");
-		FIO.appendFile(p, "# Format is: unitID, callsign, x, y, hullOrientation, turretOrientation, type, side, spotted, waypoints\n");
-		
-		for (int i = 0; i < GlobalFuncs.unitList.size(); i++) {
-			FIO.appendFile(p, GlobalFuncs.unitList.elementAt(i).SaveUnit());
-		}
-		FIO.appendFile(p, ">Last Unit<\n");
-		
-		FIO.appendFile(p, "# Unit target information");
-		FIO.appendFile(p, "# Format is: unitID, targetID");
-		
-		for (int i = 0; i < GlobalFuncs.unitList.size(); i++) {
-			Unit finger = GlobalFuncs.unitList.elementAt(i);
-			if (finger.target != null) {
-				FIO.appendFile(p,  finger.SaveTarget());
-			}
-		}
-		
-		FIO.appendFile(p, ">Last Target<\n");
 	}
 	
 	public static boolean loadState() {
