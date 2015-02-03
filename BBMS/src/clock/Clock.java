@@ -104,6 +104,9 @@ public class Clock {
 		
 		GlobalFuncs.maxDelta = 0;
 		GlobalFuncs.scenMap.updateVaporSS();		// Calculates maximum DV at sources and sinks
+		
+		GlobalFuncs.flowRate = GlobalFuncs.scenMap.recalcFlowRate();
+		
 		GlobalFuncs.scenMap.calcAllVapor();
 		GlobalFuncs.scenMap.updateAllVapor();		
 		

@@ -51,7 +51,7 @@ public class GlobalFuncs {
 	/** Number of ticks since the last source or sink was removed.  
 	 * It will reduce the flowRate to 1.00 for 100 ticks to avoid
 	 * overflow issues.   */
-	public static int ticksStable = 0;
+	public static int ticksStable = 90;
 	/** Total amount of vapor on the map */
 	public static long totalVapor = 0;
 	/** Total vapor delta */

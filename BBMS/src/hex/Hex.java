@@ -137,6 +137,15 @@ public class Hex {
 		vapor += vaporIn;
 		vapor -= vaporOut;
 		deltaVapor = vaporIn + vaporOut;
+		if (deltaVapor > GlobalFuncs.maxDelta && vaporType != VaporEnum.SINK){
+			if (!clock.ClockControl.paused) clock.ClockControl.Pause();
+			GUI_NB.GCODTG("WARNING!!  Hex (" + x + ", " + y + ") has greater DV than the sink!");
+			GlobalFuncs.ticksStable = 0;
+		}
+		if (vapor < 0) {
+			if (!clock.ClockControl.paused) clock.ClockControl.Pause();
+			GUI_NB.GCODTG("ERROR!!  Hex (" + x + ", " + y + ") has negative vapor!");
+		}
 		vaporIn = 0;
 		vaporOut = 0;
 	}
