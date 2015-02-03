@@ -138,13 +138,17 @@ public class Hex {
 		vapor -= vaporOut;
 		deltaVapor = vaporIn + vaporOut;
 		if (deltaVapor > GlobalFuncs.maxDelta && vaporType != VaporEnum.SINK){
-			if (!clock.ClockControl.paused) clock.ClockControl.Pause();
-			GUI_NB.GCODTG("WARNING!!  Hex (" + x + ", " + y + ") has greater DV than the sink!");
-			// GlobalFuncs.ticksStable = 0;
+			// if (!clock.ClockControl.paused) clock.ClockControl.Pause();
+			GUI_NB.GCODTG("WARNING!!  Hex (" + x + ", " + y + ") has greater DV than the sink!  Reducing flow rate this tick.");
+			GlobalFuncs.ticksStable = 0;
+			GlobalFuncs.reduceRate = true;
+			GlobalFuncs.flowRateCap = Math.max(2.95, GlobalFuncs.flowRate - GlobalFuncs.flowStep);
+			//GlobalFuncs.flowRate -= GlobalFuncs.flowStep;
 		}
-		if (vapor < 0) {
+		if (vapor < 0 && vaporType != VaporEnum.SINK) {
 			if (!clock.ClockControl.paused) clock.ClockControl.Pause();
-			GUI_NB.GCODTG("ERROR!!  Hex (" + x + ", " + y + ") has negative vapor!");
+			GUI_NB.GCODTG("ERROR!!  Hex (" + x + ", " + y + ") has negative vapor!  Flow rate set to 1.");
+			GlobalFuncs.flowRate = 1.00;
 		}
 		
 		GlobalFuncs.totalVapor += vapor;

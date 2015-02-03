@@ -34,7 +34,7 @@ public class ClockControl {
      * Increases the timescale of the clock by one setting.  Maxes out at x12
      */ 
     public static void AccelTime() {
-        if (timescale < 8) timescale++;
+        if (timescale < 10) timescale++;
         AdjustDelayScale();        
     }
     
@@ -63,6 +63,8 @@ public class ClockControl {
         	case 6: return "x4";
         	case 7: return "x8";
         	case 8: return "x12";
+        	case 9: return "x24";
+        	case 10: return "x48";
         	default: return "ERROR";
         }
     }
@@ -83,6 +85,8 @@ public class ClockControl {
         	case 6: return 4.000;
         	case 7: return 8.000;
         	case 8: return 12.000;
+        	case 9: return 24.000;
+        	case 10: return 48.000;
         	default: return -1.000;
         }
     }

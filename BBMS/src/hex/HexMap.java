@@ -74,15 +74,14 @@ public class HexMap {
 	 * Intended to speed up the gas diffusion process.  Max acceleration is capped at x3
 	 * @return
 	 */
-	public double recalcFlowRate() {
-		
-		if (GlobalFuncs.ticksStable < 100) return 1.00;		// Stabilizes after a source or sink is removed
-		if (GlobalFuncs.maxDelta < 100) return 3.00;		// May occur after all sinks are removed
-		
-		double maxRate = 12800.0 / (double)GlobalFuncs.maxDelta;
-		
-		return Math.min(3.00, maxRate * GlobalFuncs.flowRate);
-		
+	public void recalcFlowRate() {
+		if (GlobalFuncs.reduceRate) {
+			GlobalFuncs.reduceRate = false;
+			GlobalFuncs.flowRate -= GlobalFuncs.flowStep * 5.0;
+		}
+		else if (GlobalFuncs.ticksStable % GlobalFuncs.flowCheck == GlobalFuncs.flowCheck - 1) {
+			if (GlobalFuncs.flowRate < GlobalFuncs.flowRateCap) GlobalFuncs.flowRate += GlobalFuncs.flowStep;						
+		}
 	}
 	
 	public void updateAllVapor() {
