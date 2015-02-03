@@ -26,7 +26,7 @@ public class GlobalFuncs {
 	public static boolean clockInitialized = false;
 	public static int placeUnit = 0;
 	public static boolean showShaded = true;	
-	public static boolean showVapor = true;
+	public static boolean showVapor = false;
 	public static boolean showLOS = true;
 	public static boolean showFOW = false;	// Toggles fog of war
 	
