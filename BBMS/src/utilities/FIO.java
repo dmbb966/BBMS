@@ -153,7 +153,7 @@ public class FIO {
 						}
 						else {													
 							//# Unit information
-							//# Format is: unitID, callsign, x, y, hullOrientation, turretOrientation, type, side, waypoints
+							//# Format is: unitID, callsign, x, y, hullOrientation, turretOrientation, type, side, spotted, waypoints
 							int unitID = Integer.parseInt(ReadNextChunk(readL, ','));
 							String callsign = ReadNextChunk(readL, ',');
 							int x = Integer.parseInt(ReadNextChunk(readL, ','));
@@ -162,6 +162,10 @@ public class FIO {
 							double turretOrientation = Double.parseDouble(ReadNextChunk(readL, ','));
 							String type = ReadNextChunk(readL, ',');
 							String side = ReadNextChunk(readL, ',');
+							int spotnum = Integer.parseInt(ReadNextChunk(readL, ','));
+							boolean spotted = false;
+							if (spotnum == 1) spotted = true;
+							
 							
 							String wpStr = ReadNextChunk(readL, ')');
 							WaypointList wpList =new WaypointList();						
@@ -189,7 +193,7 @@ public class FIO {
 								break;
 							}
 							
-							locn.HexUnit = new Unit(locn, sideE, type, callsign, hullOrientation, turretOrientation, wpList);
+							locn.HexUnit = new Unit(locn, sideE, type, callsign, hullOrientation, turretOrientation, wpList, spotted);
 						}
 
 						

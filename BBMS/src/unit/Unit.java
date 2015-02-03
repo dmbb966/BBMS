@@ -44,6 +44,8 @@ public class Unit {
 	
 	public int subHexDirection = 1;		// Axial direction the unit is traveling in, range is 1-6
 	public int subHexLocation = 0;		// 0 is the center of the hex.  HexMap defines the maximum size.
+	
+	public boolean spotted = false;		// Has the unit been seen by the enemy?
 		
 	public WaypointList waypointList = new WaypointList();
 	
@@ -60,12 +62,14 @@ public class Unit {
 	// What side its on
 	public SideEnum side;
 	
-	public Unit (hex.Hex locn, SideEnum s, String givenType, String givenCallsign, double hullOrient, double turretOrient, WaypointList wpL) {
+	public Unit (hex.Hex locn, SideEnum s, String givenType, String givenCallsign, double hullOrient, double turretOrient, WaypointList wpL, boolean spot) {
 		location = locn;
 		side = s;
 		type = givenType;
 		target = null;
 		// trackTarget = true;
+		
+		spotted = spot;
 		
 		hullOrientation = hullOrient;
 		turretOrientation = turretOrient;
@@ -409,6 +413,8 @@ public class Unit {
 	}
 	
 	public String SaveUnit() {				
+		int spot = 0;
+		if (spotted) spot = 1;
 		String output = unitID + ", " +
 						callsign + ", " +
 						location.x + ", " + location.y + ", " +
@@ -416,6 +422,7 @@ public class Unit {
 						String.format("%.2f", turretOrientation) + ", " + 
 						type + ", " + 
 						side + ", " +
+						spot + ", " + 
 						waypointList.saveWaypoints();				
 		
 		return output;

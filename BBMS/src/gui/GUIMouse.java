@@ -47,7 +47,7 @@ public class GUIMouse {
 				callsign = "Red ";
 				heading = 270.0;
 			}
-			h.HexUnit = new unit.Unit(h, side, unitType, callsign + (GlobalFuncs.getUnitCount() + 1), heading, 0.0, null);	
+			h.HexUnit = new unit.Unit(h, side, unitType, callsign + (GlobalFuncs.getUnitCount() + 1), heading, 0.0, null, false);	
 			GUI_NB.GCO(h.HexUnit.DispUnitInfo());
 		}			
 	}
