@@ -77,10 +77,11 @@ public class Unit {
 		
 		switch (s) {
 			case ENEMY:
-				GlobalFuncs.enemyUnitList.addElement(this);
+				GlobalFuncs.enemyUnitList.addElement(this);				
 				break;
 			case FRIENDLY:
 				GlobalFuncs.friendlyUnitList.addElement(this);
+				spotted = true;
 				break;								
 		}
 		
@@ -119,7 +120,9 @@ public class Unit {
 		return subHexDirection + " / " + subHexLocation;
 	}
 	
-	public void DrawUnit(int xi, int yi, Graphics g) {				
+	public void DrawUnit(int xi, int yi, Graphics g) {
+		if (GlobalFuncs.showFOW && !spotted) return;
+		
 		// Loads the appropriate hex icon
 		String hullPath = "src/unit/graphics/" + type + "_H.png";
 		String turretPath = "src/unit/graphics/" + type + "_T.png";
@@ -267,10 +270,11 @@ public class Unit {
 				if (HasLOSTo(selected.location.x, selected.location.y)) {
 					spotting.SpotReport SPOTREP = new spotting.SpotReport(Clock.time, this, selected, selected.location.toHO());
 					GlobalFuncs.allSpots.addReport(SPOTREP);
+					selected.spotted = true;
 					// GUI_NB.GCO("Added spot record: " + SPOTREP.displaySPOTREP());
 					// GUI_NB.GCO("Checking record: " + GlobalFuncs.allSpots.getReport(GlobalFuncs.allSpots.records.size() - 1).displaySPOTREP());
 					
-					DisplayLOSTo(selected.location.x, selected.location.y, false);
+					if (GlobalFuncs.showLOS) DisplayLOSTo(selected.location.x, selected.location.y, false);
 					// GUI_NB.GCO(callsign + " has LOS to " + selected.callsign + " at time " + Clock.time);										
 				}				
 			}
@@ -323,11 +327,13 @@ public class Unit {
 	
 	/**
 	 * Moves the unit according to its move rate and the terrain in the direction specified.
-	 * Direction is an integer with 1 = 30 degrees, 2 = 90 degrees, etc. in a clockwise pattern
+	 * Direction is an integer with 1 = 30 degrees, 2 = 90 degrees, etc. in a clockwise pattern.
+	 * Automatically resets unit to undetected state.
 	 * @param direction
 	 */	
 	public void MoveUnitSubHex(int direction) {
 		if (direction < 0 || direction > 5) return;
+
 		
 		if (subHexLocation == 0) {
 			//GUI_NB.GCO("At center of hex.  Orienting to desired direction.");
@@ -368,6 +374,7 @@ public class Unit {
 	 * Moves the unit one hex towards the waypoint
 	 */
 	public void MoveToWaypoint() {
+		if (side != SideEnum.FRIENDLY) spotted = false;
 		if (waypointList.getFirstWaypoint().getX() < 0) return;		// Invalid waypoint or no waypoint set
 		
 		HexAx nextWP = waypointList.getFirstWaypoint().ConvertToAx();		

@@ -99,6 +99,21 @@ public class GUIKeyboard {
 	}
 	
 	/**
+	 * Displays or hides unspotted units
+	 * @author Brian
+	 *
+	 */
+	public static class ToggleFogofWar extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			GlobalFuncs.showFOW = !GlobalFuncs.showFOW;
+			GlobalFuncs.gui.repaint();
+			if (GlobalFuncs.showFOW) GUI_NB.GCO("Fog of war toggled to ON");
+			else GUI_NB.GCO("Fog of war toggled to OFF");	
+		}
+	}
+	
+	/**
 	 * Clears all shading and text on the map
 	 * @author Brian
 	 *
@@ -417,6 +432,8 @@ public class GUIKeyboard {
 		amap.put("toggle visibility", new ToggleVisibility());	
 		imap.put(KeyStroke.getKeyStroke('V'), "toggle vapor");
 		amap.put("toggle vapor", new ToggleVapor());
+		imap.put(KeyStroke.getKeyStroke('W'), "toggle fog");
+		amap.put("toggle fog", new ToggleFogofWar());
 		imap.put(KeyStroke.getKeyStroke('c'), "clear shading");
 		amap.put("clear shading", new ClearHexes());
 		

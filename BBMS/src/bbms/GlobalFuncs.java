@@ -27,6 +27,8 @@ public class GlobalFuncs {
 	public static int placeUnit = 0;
 	public static boolean showShaded = true;	
 	public static boolean showVapor = true;
+	public static boolean showLOS = true;
+	public static boolean showFOW = false;	// Toggles fog of war
 	
 	public static boolean RotateHull = true;
 	

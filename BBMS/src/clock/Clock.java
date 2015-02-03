@@ -63,12 +63,13 @@ public class Clock {
 	 */
 	public static void moveAllUnits(int duration) {
 		
-		// Move units first
-		
+		// Move units first.  This will make all enemy forces un-spotted.  All friendly forces will be considered spotted.
 		for (int i = 0; i < GlobalFuncs.unitList.size(); i++) {
 			Unit finger = GlobalFuncs.unitList.elementAt(i);
 			finger.MoveToWaypoint();
 		}
+		
+		updateLOSFriendly();	// We don't care about enemy spotting right now.  Will set units it can see to spotted.
 				
 		// Now update turret orientations appropriately
 		for (int i = 0; i < GlobalFuncs.unitList.size(); i++) {
