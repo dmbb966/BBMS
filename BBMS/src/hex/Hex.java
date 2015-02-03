@@ -53,11 +53,11 @@ public class Hex {
 				iElev + iTerrain.tType.generateHeight(), 
 				iTerrain.tType.generateObsHeight(),
 				iTerrain.tType.generateDensity(),
-				0, 25500);			
+				0, 25500, 0);			
 	}
 	
 	// Constructor with specific height, obsHeight, density, and obscuration
-	public Hex (int xi, int yi, TerrainEnum iTerrain, int iElev, int iObsHeight, int iDensity, int iObsc, int iVapor) {
+	public Hex (int xi, int yi, TerrainEnum iTerrain, int iElev, int iObsHeight, int iDensity, int iObsc, int iVapor, int dV) {
 		x = xi;
 		y = yi;		
 				
@@ -78,6 +78,7 @@ public class Hex {
 		obscuration = iObsc;		
 		vapor = iVapor;
 		//vapor = GlobalFuncs.randRange(0,  100);
+		deltaVapor = dV;
 		vaporIn = 0;
 		vaporOut = 0;
 	}
@@ -275,7 +276,7 @@ public class Hex {
 	
 	// NOTE: Does NOT save hex text 
 	public String saveHex() {
-		String output = tEnum.id + ", " + elevation + ", " + obsHeight + ", " + density + ", " + obscuration + ", " + vapor;
+		String output = tEnum.id + ", " + elevation + ", " + obsHeight + ", " + density + ", " + obscuration + ", " + vapor + ", " + deltaVapor;
 		
 		return output;
 	}

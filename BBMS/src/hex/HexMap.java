@@ -192,7 +192,7 @@ public class HexMap {
 
 		// Stores hex information 
 		FIO.appendFile(p, "# Hex data, stored rows");
-		FIO.appendFile(p, "# Format is: TerrainEnumID, elevation, obstacle height, density, obscuration, vapor");
+		FIO.appendFile(p, "# Format is: TerrainEnumID, elevation, obstacle height, density, obscuration, vapor, deltaVapor");
 		
 		for (int y = 0; y < yDim; y++) {
 			FIO.appendFile(p, "\n# Row " + y);
