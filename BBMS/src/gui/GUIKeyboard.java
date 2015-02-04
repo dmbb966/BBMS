@@ -70,6 +70,28 @@ public class GUIKeyboard {
 	}
 	
 	/**
+	 * Toggles whether or not there is a throttled, accelerated gas flow model.
+	 * If toggled off, flow rates are the default x1.00
+	 * Otherwise the program scales the rate up to x3.00
+	 * @author Brian
+	 *
+	 */
+	public static class ToggleThrottle extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (GlobalFuncs.flowRateCap != 0.95) {
+				GlobalFuncs.flowRateCap = 0.95;
+				GlobalFuncs.flowRate = 1.00;
+				GUI_NB.GCO("Variable flow rate turned OFF - max flow will now be x1.00");
+			}
+			else {
+				GlobalFuncs.flowRateCap = 2.95;
+				GUI_NB.GCO("Variable flow rate turned ON - max flow will now be x3.00");
+			}
+		}
+	}
+	
+	/**
 	 * Displays or hides shaded (highlighted) hexes.
 	 * @author Brian
 	 *
@@ -388,7 +410,8 @@ public class GUIKeyboard {
 		@Override
 		public void actionPerformed(ActionEvent event) {				
 			GUI_NB.GCO("W/A/S/D - Scroll the map");
-			GUI_NB.GCO("V - Toggle shaded hex visibility (CAPS = show gas model)");								
+			GUI_NB.GCO("V - Toggle shaded hex visibility (CAPS = show gas model)");
+			GUI_NB.GCO("A (CAPS) - Toggle auto-throttling of gas model");
 			GUI_NB.GCO("[] - shift rotation");
 			GUI_NB.GCO("T - switches between rotating turret and hull");
 			GUI_NB.GCO("F - orients the turret to target");
@@ -433,6 +456,8 @@ public class GUIKeyboard {
 		amap.put("toggle visibility", new ToggleVisibility());	
 		imap.put(KeyStroke.getKeyStroke('V'), "toggle vapor");
 		amap.put("toggle vapor", new ToggleVapor());
+		imap.put(KeyStroke.getKeyStroke('A'), "toggle throttle");
+		amap.put("toggle throttle", new ToggleThrottle());
 		imap.put(KeyStroke.getKeyStroke('W'), "toggle fog");
 		amap.put("toggle fog", new ToggleFogofWar());
 		imap.put(KeyStroke.getKeyStroke('c'), "clear shading");
