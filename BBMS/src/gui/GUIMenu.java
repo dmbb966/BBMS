@@ -25,6 +25,13 @@ public class GUIMenu extends JMenuBar{
 		}
 	}
 	
+	public static class NewBlankMap implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			GUI_NB.GCO("Initializing a blank 30x30 map");
+			GlobalFuncs.initializeMap(30, 30, true);	
+		}
+	}
+	
 	public static class SaveGame implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 			if (GlobalFuncs.saveState()) GUI_NB.GCO("Save successful.");
@@ -275,9 +282,13 @@ public class GUIMenu extends JMenuBar{
 		menu.setMnemonic(KeyEvent.VK_F);
 		this.add(menu);
 		
-		JMenuItem menuItem = new JMenuItem("New", KeyEvent.VK_N);
+		JMenuItem menuItem = new JMenuItem("New Rand Map", KeyEvent.VK_N);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(new NewMap());
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("New Blank Map", KeyEvent.VK_B);
+		menuItem.addActionListener(new NewBlankMap());
 		menu.add(menuItem);
 		
 		menuItem = new JMenuItem("Save", KeyEvent.VK_S);

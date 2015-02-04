@@ -37,6 +37,7 @@ public class HexMap {
 		vaporSourceList = new Vector<Hex>();
 		vaporSinkList = new Vector<Hex>();
 		if (!cleanMap) GenerateMap();
+		else GenerateBlankMap();
 	}
 	
 	public HexMap(int x, int y) {
@@ -225,6 +226,18 @@ public class HexMap {
 				TerrainEnum tType = chooseTerrain(GlobalFuncs.randRange(1, HexMap.totalWeight));
 				hexArray[x][y] = new Hex(x, y, tType, 0);
 				// hexArray[x][y].GCODisplay();
+			}
+		}
+	}
+	
+	/**
+	 * Generates a map of clear terrain tiles
+	 */
+	public void GenerateBlankMap() {
+		for (int y = 0; y < yDim; y++) {
+			for (int x = 0; x < xDim; x++) {
+				TerrainEnum tType = TerrainEnum.CLEAR;
+				hexArray[x][y] = new Hex(x, y, tType, 0);
 			}
 		}
 	}

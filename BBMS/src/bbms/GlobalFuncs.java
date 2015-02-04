@@ -102,6 +102,7 @@ public class GlobalFuncs {
 		enemyUnitList = new Vector<Unit>();		
 		GUIKeyboard.initializeKeyCommands();
 		Clock.SetTime(8, 24, 13);
+		GlobalFuncs.ticksStable = 0;
 		if (!clockInitialized) {
 			GUI_NB.GCO("Starting clock");
 			GameClock.start();
