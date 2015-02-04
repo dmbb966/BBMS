@@ -21,7 +21,7 @@ public class HexMap {
 	Vector<hex.Hex> textHexList;
 	Vector<hex.Hex> vaporSourceList;
 	Vector<hex.Hex> vaporSinkList; 
-	public static int chanceTrees = 30;
+	public static int chanceTrees = 0;
 	public static int chanceHighGrass = 0;
 	public static int chanceClear = 60;
 	public static int totalWeight = chanceClear + chanceHighGrass + chanceTrees;
