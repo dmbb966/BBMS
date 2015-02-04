@@ -198,6 +198,23 @@ public class GUIMenu extends JMenuBar{
 			GUIInfoPane.changePaneMode(DetailedInfoEnum.DEBUG);
 		}
 	}
+	
+	/** Predicts vapor equilibrium based on linear interpolation between source and sink
+	 */
+	public static class PredictVapor implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			GUI_NB.GCO("Predicting vapor equilibrium.");
+			GlobalFuncs.scenMap.predictVaporMap();
+		}
+	}
+	
+	/** Resets vapor levels in all hexes to starting amounts (full density)
+	 */
+	public static class ResetVapor implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			GlobalFuncs.scenMap.StandardVaporMap();
+		}
+	}
 
 	
 	/** Displays version info
@@ -343,6 +360,16 @@ public class GUIMenu extends JMenuBar{
 		
 		menuItem = new JMenuItem("Display spots for selected unit");		
 		menuItem.addActionListener(new DisplayAllSpotsForUnit());
+		menu.add(menuItem);
+		
+		menu.addSeparator();
+		
+		menuItem = new JMenuItem("Predict vapor equilibrium");
+		menuItem.addActionListener(new PredictVapor());
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Reset vapor density to default");
+		menuItem.addActionListener(new ResetVapor());
 		menu.add(menuItem);
 		
 		menu.addSeparator();

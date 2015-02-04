@@ -21,7 +21,7 @@ public class HexMap {
 	Vector<hex.Hex> textHexList;
 	Vector<hex.Hex> vaporSourceList;
 	Vector<hex.Hex> vaporSinkList; 
-	public static int chanceTrees = 0;
+	public static int chanceTrees = 20;
 	public static int chanceHighGrass = 0;
 	public static int chanceClear = 60;
 	public static int totalWeight = chanceClear + chanceHighGrass + chanceTrees;
@@ -67,6 +67,41 @@ public class HexMap {
 			int DV = finger.ReturnVaporCalc();			
 			if (DV > GlobalFuncs.maxDelta) GlobalFuncs.maxDelta = DV;
 		}
+	}
+	
+	/**
+	 * Predicts a vapor equilibirum for the map (linear interpolation between source and sink)
+	 */
+	public void predictVaporMap() {
+	    long startCycle = System.currentTimeMillis();
+	    long endCycle;
+	    long durationCycle;
+	    
+	    for (int y = 0; y < yDim; y++) {
+	    	for (int x = 0; x < xDim; x++) {
+	    		Hex finger = hexArray[x][y];
+	    		finger.PredictVaporLevel();
+	    	}
+	    }
+	    
+	    endCycle = System.currentTimeMillis();
+	    durationCycle = endCycle - startCycle;
+	    GUI_NB.GCO("Vapor prediction complete in " + durationCycle + "ms");
+	}
+	
+	/**
+	 * Initializes a standard vapor map with all cells starting with maximum density
+	 */
+	public void StandardVaporMap() {
+	    for (int y = 0; y < yDim; y++) {
+	    	for (int x = 0; x < xDim; x++) {
+	    		Hex finger = hexArray[x][y];
+	    		finger.vapor = 25500;
+	    		finger.deltaVapor = 0;
+	    	}
+	    }
+	    
+	    GUI_NB.GCO("Vapor levels in all map hexes reset to full density.");
 	}
 	
 	/**

@@ -259,6 +259,42 @@ public class Hex {
 	}
 	
 	/**
+	 * Predicts the equilibrium vapor level of this hex using a heuristic
+	 * (linear interpolation between the nearest source and sink).
+	 * Must have both a source and a sink on the map; otherwise it does nothing.
+	 */
+	public void PredictVaporLevel() {
+		if (GlobalFuncs.scenMap.vaporSourceList.size() == 0 || GlobalFuncs.scenMap.vaporSinkList.size() == 0) return;
+		if (vaporType != VaporEnum.NONE) return;
+		
+		int sourceDist = 9999;
+		int sinkDist = 9999;
+		HexOff myLoc = new HexOff(this.x, this.y);
+		
+		// Find the nearest source
+		for (int i = 0; i < GlobalFuncs.scenMap.vaporSourceList.size(); i++) {
+			Hex finger = GlobalFuncs.scenMap.vaporSourceList.elementAt(i);
+			HexOff locSrc = new HexOff(finger.x, finger.y);
+			int distance = myLoc.DistFrom(locSrc);
+			
+			if (distance < sourceDist) sourceDist = distance;
+		}
+		
+		// Find the nearest sink
+		for (int i = 0; i < GlobalFuncs.scenMap.vaporSinkList.size(); i++) {
+			Hex finger = GlobalFuncs.scenMap.vaporSinkList.elementAt(i);
+			HexOff locSink = new HexOff(finger.x, finger.y);
+			int distance = myLoc.DistFrom(locSink);
+			
+			if (distance < sinkDist) sinkDist = distance;
+		}
+		
+		int prediction = (25500 * sinkDist) / (sinkDist + sourceDist);
+		vapor = prediction;
+		
+	}
+	
+	/**
 	 * Draws this hex (to include terrain and any units in the hex) to the GUI Main Display.
 	 * Size is the size of the hex in pixels
 	 */
