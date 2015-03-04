@@ -78,7 +78,7 @@ public class Clock {
 		}
 		
 		if (GlobalFuncs.selectedUnit != null) {
-			GUI_NB.GCODTG(GlobalFuncs.selectedUnit.callsign + "has move rate " + GlobalFuncs.selectedUnit.CalcMoveRate());
+			// GUI_NB.GCODTG(GlobalFuncs.selectedUnit.callsign + "has move rate " + GlobalFuncs.selectedUnit.CalcMoveRate());
 		}
 		time += 1;
 		

@@ -176,7 +176,7 @@ public class GUIMenu extends JMenuBar{
 		public void actionPerformed(ActionEvent event) {
 			GUI_NB.GCO("Display Mode set to UNIT");
 			GlobalFuncs.showVapor = false;
-			GlobalFuncs.showLOS = false;
+			GlobalFuncs.showLOS = true;
 			GlobalFuncs.showFOW = true;
 			GUIInfoPane.changePaneMode(DetailedInfoEnum.UNIT);
 		}
