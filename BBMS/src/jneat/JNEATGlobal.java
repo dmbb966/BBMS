@@ -5,6 +5,16 @@ public class JNEATGlobal {
 	static int numNetworks = 0;
 	static int numNodes = 0;
 	static int numLinks = 0;
+	static int numTraits = 0;
+	
+	/** Number of parameters in a trait */
+	static int numTraitParams = 8;
+	
+	/** Probability of mutating a single trait parameter*/
+	static double traitParamMutProb = 0.05;
+	
+	/** Severity of trait mutations (by default -1 to +1) */
+	static double traitMutationPower = 1.00;
 	
 	/** Max number of activation cycles a network will go through before declaring a disconnection error */
 	static int maxActivationCycles = 30;
@@ -22,6 +32,11 @@ public class JNEATGlobal {
 	/** Returns the ID of the next available link ID.  Increments the global counter. */
 	public static int NewLinkID() {
 		return numLinks++;
+	}
+	
+	/** Returns the ID of the next available trait ID.  Increments the global counter. */
+	public static int NewTraitID() {
+		return numTraits++;
 	}
 	
 	/** Sigmoid function for the given parameters. 

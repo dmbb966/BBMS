@@ -15,16 +15,24 @@ public class Link {
 	NNode in_node;
 	NNode out_node;
 	
+	/** Points to the trait of parameters for genetic creation.  */
+	Trait linkTrait;
+	
 	boolean recurrent;
 	boolean time_delay;
 	
 	public Link(double w, NNode inode, NNode onode, boolean recur) {
+		this(null, w, inode, onode, recur);
+	}
+	
+	public Link (Trait t, double w, NNode inode, NNode onode, boolean recur) {
 		weight = w;
 		in_node = inode;
 		out_node = onode;
 		recurrent = recur;
 		time_delay = false;
 		id = JNEATGlobal.NewLinkID();
+		linkTrait = t;
 	}
 	
 	public String PrintLink() {

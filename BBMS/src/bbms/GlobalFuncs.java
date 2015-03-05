@@ -83,13 +83,30 @@ public class GlobalFuncs {
 	}
 	
 	/**
-	 * Uses the Mersenne TWister to generate a random number given a mean and variance.  
+	 * Uses the Mersenne Twister to generate a random number given a mean and variance.  
 	 * Only uses integers.
 	 */
 	public static int randMean (int mean, int var) {
 		int min = mean - var;
 		return min + randGen.nextInt(var * 2);
 	}
+	
+	/** 
+	 * Uses the Mersenne Twister to generate a random double between 0.0 and 1.0
+	 */
+	public static float randFloat() {
+		return randGen.nextFloat();
+	}
+	
+	/**
+	 * Uses the Mersene Twister to return +1 or -1
+	 */
+    public static int randPosNeg() 
+	{  
+		 int n = randGen.nextInt();
+		 if ((n % 2) == 0) return -1;
+		 else return 1;
+	}      
 	
 	public static void initializeMap (int x, int y, boolean loadMap) {
 		scenMap = new HexMap(x, y, loadMap);
