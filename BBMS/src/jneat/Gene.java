@@ -9,7 +9,7 @@ public class Gene {
 	Link lnk;
 	
 	int innovation_num;
-	int mutation_num;
+	double mutation_num;	// Based on pre-mutation link weight
 
 	/** TRUE if the gene is enabled, FALSE otherwise */
 	boolean enabled;
@@ -19,6 +19,21 @@ public class Gene {
 		innovation_num = g.innovation_num;
 		mutation_num = g.mutation_num;
 		enabled = g.enabled;
+	}
+	
+	public Gene(Trait tp, NNode inode, NNode onode, double w, boolean recur, double mnum) {
+		lnk = new Link(tp, w, inode, onode, recur);
+		innovation_num = JNEATGlobal.NewGeneID();
+		mutation_num = mnum;
+		enabled = true;
+	}
+	
+	public Gene (NNode inode, NNode onode, double w) {
+		this(new Trait(),  inode, onode, w, false, 0.0);
+	}
+	
+	public Gene (Trait tp, NNode inode, NNode onode, double w) {
+		this(tp, inode, onode, w, false, 0.0);
 	}
 	
 	public String PrintGene() {

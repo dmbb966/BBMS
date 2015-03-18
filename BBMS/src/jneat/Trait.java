@@ -66,4 +66,14 @@ public class Trait {
 			}
 		}
 	}
+	
+	public String PrintTrait() {
+		String ret = "Trait #" + id + ": \t";
+		
+		for (int i = 0; i < JNEATGlobal.numTraitParams; i++) {
+			ret = ret + params[i] + " | ";
+		}
+				
+		return ret;
+	}
 }

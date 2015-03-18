@@ -2,12 +2,14 @@ package jneat;
 
 import java.util.Vector;
 
+// aka Phenotype
 public class Network {
 	
 	Vector<NNode> inputs;
 	Vector<NNode> outputs;
 	Vector<NNode> allNodes;
 	
+	Genome genotype;		// The genotype that created this phenotype
 	int net_id;	
 	
 	public Network(Vector<NNode> in, Vector<NNode> out) {
@@ -18,8 +20,23 @@ public class Network {
 		else outputs = new Vector<NNode>();
 		
 		allNodes = new Vector<NNode>();
+		genotype = null;
 		
 		net_id = JNEATGlobal.NewNetworkID();		
+	}
+	
+	public Network() {
+		this(new Vector<NNode>(), new Vector<NNode>());
+	}
+	
+	/** Attaches a hidden node to this neural network.
+	 * 
+	 * @param n
+	 */
+	public void attachHidden(NNode n) {
+		allNodes.addElement(n);
+		
+		System.out.println("Added node " + n.id + " as a hidden node of network " + net_id);
 	}
 	
 	/** Adds node 'n' to this neural network's input nodes

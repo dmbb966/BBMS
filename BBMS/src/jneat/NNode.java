@@ -25,9 +25,13 @@ public class NNode {
 	
 	boolean active_flag;
 	
+	boolean is_traversed;
+	
 	int id;
 	
 	int activation_count;
+	
+	int inner_level;
 	
 	/** Activation value of the node at time t-1.*/
 	double last_activation;
@@ -39,26 +43,56 @@ public class NNode {
 	Vector<Link> incoming;
 	/** Links from this node to other nodes. */
 	Vector<Link> outgoing;
+
+	/** Trait parameters associated with this node */
+	Trait nodeTrait;
 	
+	/** Temporary reference to a node.  Used to generate a new genome in Genome.duplicate()*/
+	NNode dup;
+	
+	/** A reference to a Node.  Used to generate and point from a genetic node (genotype) 
+	 * to a real node (phenotype) during the 'genesis' process.  Just don't use protomatter
+	 * in the genesis matrix. */
+	NNode analogue;
 
 	
-	public NNode(NodeTypeEnum nType, GeneLabelEnum placement) {
+	public NNode(NodeTypeEnum nType, GeneLabelEnum placement, Trait t, int id) {
 		fType = NodeFuncEnum.SIGMOID;
 		this.nType = nType;
 		gNodeLabel = GeneLabelEnum.HIDDEN;
 		activesum = 0;
 		activation = 0;
 		active_flag = false;
-		id = JNEATGlobal.NewNodeID();
+		this.id = id;
 		activation_count = 0;
 		last_activation = 0;
 		prior_activation = 0;
 		incoming = new Vector<Link>();
 		outgoing = new Vector<Link>();
+		nodeTrait = t;
+		is_traversed = false;
+		inner_level = 0;
+		dup = null;
+		analogue = null;
+	}
+	
+	public NNode(NodeTypeEnum nType, GeneLabelEnum placement, Trait t) {
+		this(nType, placement, t, JNEATGlobal.NewNodeID());
+	}
+	
+	public NNode(NodeTypeEnum nType, GeneLabelEnum placement)
+	{
+		this(nType, placement, null);
 	}
 	
 	public NNode(NodeTypeEnum nType) {
-		this(nType, GeneLabelEnum.HIDDEN);
+		this(nType, GeneLabelEnum.HIDDEN, null);
+	}
+	
+	
+	public NNode(NNode n, Trait t) {
+		this(n.nType, n.gNodeLabel, t);
+		this.id = n.id;	
 	}
 	
 	/** Adds link l to the incoming links of this node. */
@@ -112,9 +146,27 @@ public class NNode {
 		if (activation_count > 0) return activation;
 		else return 0.0;
 	}
+
 	
 	public String PrintNode() {
-		String ret = "Node " + id + " ";
+		String ret = "";
+		
+		switch (gNodeLabel) {
+		case BIAS:
+			ret = "Bias ";
+			break;
+		case INPUT:
+			ret = "Input ";
+			break;
+		case OUTPUT: 
+			ret = "Output ";
+			break;
+		case HIDDEN:
+			ret = "Hidden ";
+			break;					
+		}
+		
+		ret += "Node " + id + " ";
 		if (active_flag) ret += " active ";
 		else ret += " inactive ";
 		
