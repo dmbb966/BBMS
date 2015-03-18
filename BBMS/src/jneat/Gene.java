@@ -20,5 +20,13 @@ public class Gene {
 		mutation_num = g.mutation_num;
 		enabled = g.enabled;
 	}
+	
+	public String PrintGene() {
+		String ret = "Gene innovation #" + innovation_num + " and mutation #" + mutation_num + ":\n";
+		ret = ret + lnk.PrintLink();
+		if (!enabled) ret = ret + "\n--- GENE DISABLED ---";
+		
+		return ret;
+	}
 
 }

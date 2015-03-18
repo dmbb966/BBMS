@@ -2,6 +2,7 @@ package jneat;
 
 public class JNEATGlobal {
 	
+	static int numGenomes = 0;
 	static int numNetworks = 0;
 	static int numNodes = 0;
 	static int numLinks = 0;
@@ -18,6 +19,11 @@ public class JNEATGlobal {
 	
 	/** Max number of activation cycles a network will go through before declaring a disconnection error */
 	static int maxActivationCycles = 30;
+	
+	/** Returns the ID of the next available genome ID.  Increments the global counter. */
+	public static int NewGenomeID() {
+		return numGenomes++;
+	}	
 	
 	/** Returns the ID of the next available network ID.  Increments the global counter. */
 	public static int NewNetworkID() {
