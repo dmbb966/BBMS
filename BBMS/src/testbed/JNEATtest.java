@@ -1,5 +1,7 @@
 package testbed;
 
+import java.util.Vector;
+
 import bbms.GlobalFuncs;
 import jneat.*;
 
@@ -57,11 +59,29 @@ public class JNEATtest {
 		
 	}
 	
-	public static void main(String[] args) {		
-        test3();
+	public static void main(String[] args) {
+		Vector<NNode> newNodes = new Vector<NNode>();
+		
+		NNode a = new NNode(NodeTypeEnum.NEURON);
+		newNodes.add(a);
+		
+		System.out.println("Before size: " + newNodes.size());
+		
+        testX(newNodes);
+        
+        System.out.println("After size: " + newNodes.size());
+        
+        testX(newNodes);
+        
+        System.out.println("After size: " + newNodes.size());
 	} 
 	
-
+	public static void testX(Vector<NNode> newNodes) {
+		NNode b = new NNode(NodeTypeEnum.SENSOR);
+		newNodes.add(b);
+		
+		return;
+	}
 	
 
 }

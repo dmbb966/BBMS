@@ -5,12 +5,19 @@ public class JNEATGlobal {
 	// NOTE: Due to constructors, there may be some gaps, i.e. 
 	// a new ID number is guaranteed to NOT duplicate an existing one,
 	// but it is not necessarily sequential.
+	
+	// The Gene and Node ID numbers are NOT unique depending on how genomes are updated. 
 	static int numGenes = 0;
 	static int numGenomes = 0;
 	static int numNetworks = 0;
 	static int numNodes = 0;
 	static int numLinks = 0;
 	static int numTraits = 0;
+	
+	// Coefficeints for evaluating the compatibility of two genomes
+	static double p_disjoint_coeff = 0.1;		// Disjoint genes
+	static double p_excess_coeff = 0.1;			// Excess genes
+	static double p_mutdiff_coeff = 0.1;		// Weight difference between genes
 	
 	/** Number of parameters in a trait */
 	static int numTraitParams = 8;

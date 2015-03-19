@@ -216,6 +216,404 @@ public class Genome {
 		return newNet;
 	}
 	
+	/** Measures the compatibility between this Genome and the one supplied in the argument.
+	 * Measures by computing a linear combination of three characteristics:
+	 * - Percent disjoint genes
+	 * - Percent excess genes
+	 * - Mutational difference within matching genes
+	 * 
+	 * Formula is: Disjoint_coef * pdg + excess_coef * peg + mutdiff_coef * mdmg
+	 * The three coefficients are global parameters
+	 */
+	public double Compatibility(Genome g) {
+		int max_genome_size = Math.max(genes.size(), g.genes.size());
+		int j1 = 0;
+		int j2 = 0;
+		int excess_genes = 0;	
+		int matching_genes = 0;	
+		int disjoint_genes = 0;	
+		
+		double mut_diff = 0.0;
+		
+		for (int j = 0; j < max_genome_size; j++) {
+			if (j1 >= genes.size()) {
+				excess_genes ++;
+				j2 ++;
+			} else if (j2 >= g.genes.size()) {
+				excess_genes ++;
+				j1 ++;
+			} else {
+				Gene _gene1 = genes.elementAt(j1);
+				Gene _gene2 = g.genes.elementAt(j2);
+				
+				// Extract current innovation numbers
+				int p1innov = _gene1.innovation_num;
+				int p2innov = _gene2.innovation_num;
+				
+				if (p1innov == p2innov) {
+					matching_genes++;
+					mut_diff += Math.abs(_gene1.mutation_num - _gene2.mutation_num);
+					j1++;
+					j2++;
+				} else if (p1innov < p2innov) {
+					j1++;
+					disjoint_genes++;
+				} else if (p2innov < p1innov) {
+					j2++;
+					disjoint_genes++;
+				}
+			}
+		}
+		
+		// NOTE: (mut_diff_total / num_matching) gives the AVERAGE difference between mutation_nums for any two matching Genes
+		
+		return (JNEATGlobal.p_disjoint_coeff * disjoint_genes +
+				JNEATGlobal.p_excess_coeff * excess_genes +
+				JNEATGlobal.p_mutdiff_coeff * (mut_diff / matching_genes));				
+	}
+	
+	/** For use in mating functions.
+	 * Averages the traits from this Genome and the one passed to it.
+	 */
+	public Vector<Trait> AverageTraits(Genome g) {
+		Vector<Trait> newTraits = new Vector<Trait>();
+		
+		// First, average the traits from the two parents to form the child trait
+		// If one trait vector is larger, it will take those additional traits
+		// unmodified into the child trait vector.
+		for (int j = 0; j < Math.max(traits.size(), g.traits.size()); j++) {
+			Trait _trait1 = null; 
+			Trait _trait2 = null;
+			if (j < traits.size()) _trait1 = traits.elementAt(j);
+			if (j < g.traits.size()) _trait2 = g.traits.elementAt(j);
+			
+			Trait newTrait = new Trait(_trait1, _trait2);
+			newTraits.add(newTrait);
+		}
+		
+		return newTraits;		
+	}
+	
+	/** Checks the chosenGene versus the newGene vector and returns if it is duplicate, i.e. should skip
+	 * 
+	 * @param newGenes
+	 * @param chosenGene
+	 * @return
+	 */
+	public boolean CheckGeneConflict(Vector<Gene> newGenes, Gene chosenGene) {
+		boolean skipGene = false;
+		
+		// Check to see if the chosenGene conflicts with one already chosen
+		// i.e. do they represent the same link?
+		
+		Iterator<Gene> itr_newGenes = newGenes.iterator();
+		while (itr_newGenes.hasNext()) {
+			Gene _curGene = itr_newGenes.next();
+			
+			if (_curGene.lnk.in_node.id == chosenGene.lnk.in_node.id &&
+				_curGene.lnk.out_node.id == chosenGene.lnk.out_node.id &&
+				_curGene.lnk.recurrent == chosenGene.lnk.recurrent) {
+				skipGene = true;
+				break;
+			}
+			if (_curGene.lnk.in_node.id == chosenGene.lnk.out_node.id &&
+				_curGene.lnk.out_node.id == chosenGene.lnk.in_node.id &&
+				!_curGene.lnk.recurrent && !chosenGene.lnk.recurrent) {
+				skipGene = true;
+				break;
+			}
+		}		
+		
+		return skipGene;
+	}
+	
+	/** Adds chosenGene and associated nodes and traits 
+	 */
+	public void AddGene(Vector<NNode> newNodes, Vector<Trait> newTraits, Vector<Gene> newGenes, Gene chosenGene, boolean disableGene) {
+		int traitNum = 0;
+		
+		// Add chosenGene to the child
+		if (chosenGene.lnk.linkTrait == null) traitNum = traits.firstElement().id;
+		else traitNum = chosenGene.lnk.linkTrait.id - traits.firstElement().id; 
+		
+		NNode inode = chosenGene.lnk.in_node;
+		NNode onode = chosenGene.lnk.out_node;
+		NNode newinode = null;
+		NNode newonode = null;
+		
+		boolean foundiNode = false;
+		boolean foundoNode = false;
+		
+		// For ordering, and stuff.
+		if (inode.id >= onode.id){
+			NNode temp = inode;
+			inode = onode;
+			onode = temp;
+		}
+						
+		// Search the inode and onode
+		for (int i = 0; i < newNodes.size(); i++) {
+			NNode curNode = newNodes.elementAt(i);
+			if (curNode.id == inode.id){
+				foundiNode = true;
+				newinode = curNode;							
+			}
+			if (curNode.id == onode.id) {
+				foundoNode = true;
+				newonode = curNode;
+			}
+		}
+		
+		// Insert inode if needed
+		if (!foundiNode) {
+			int nodeTraitNum = 0;
+			
+			if (inode.nodeTrait != null) nodeTraitNum = inode.nodeTrait.id - traits.firstElement().id;						
+			
+			Trait newTrait = newTraits.elementAt(nodeTraitNum);
+			newinode = new NNode(inode, newTrait);
+			node_insert(newNodes, newinode);						
+		}				
+							
+		// Insert onode if needed
+		if (!foundoNode) {
+			int nodeTraitNum = 0;
+			
+			if (onode.nodeTrait != null) nodeTraitNum = onode.nodeTrait.id - traits.firstElement().id;
+			
+			Trait newTrait = newTraits.elementAt(nodeTraitNum);
+			newonode = new NNode(onode, newTrait);
+			node_insert(newNodes, newonode);
+		}
+		
+		
+		// Add the gene
+		Trait newTrait = newTraits.elementAt(traitNum);
+		Gene newGene = new Gene(chosenGene, newTrait, newinode, newonode);
+		if (disableGene) {
+			newGene.enabled = false;
+			disableGene = false;
+		}
+		
+		newGenes.add(newGene);				
+	}
+	
+	public Genome MateMultipoint(Genome g, double fitness1, double fitness2) {
+		
+		// First, average traits
+		Vector<Trait> newTraits = AverageTraits(g);		
+		
+		// Second, determine which genome is better.
+		// The "worse" genome shouldn't be allowed to add extra structural baggage.
+		// If they are equally fit, then the smaller one's disjoint and excess genes will be used.
+
+		boolean p1better = false;
+		int size1 = genes.size();
+		int size2 = g.genes.size();
+		
+		if (fitness1 > fitness2) p1better = true;
+		else if (fitness1 == fitness2 && size1 < size2) p1better = true;
+				
+		Vector<Gene> newGenes = new Vector<Gene>();
+		Vector<NNode> newNodes = new Vector<NNode>();
+		
+		int j1 = 0;
+		int j2 = 0;
+		boolean skipGene = false;
+		boolean disableGene = false;
+		Gene chosenGene = null;
+		
+		while (j1 < size1 || j2 < size2) {
+			skipGene = false;		// Defaults to not skipping a chosen gene
+			disableGene = false;	
+			if (j1 >= size1) {
+				chosenGene = g.genes.elementAt(j2);
+				j2++;
+				if (p1better) skipGene = true;		// Skip excess from the worse genome
+			} else if (j2 >= size2) {
+				chosenGene = genes.elementAt(j1);
+				j1++;
+				if (!p1better) skipGene = true;		// Skip excess from the worse genome
+			} else {
+				Gene _p1Gene = genes.elementAt(j1);
+				Gene _p2Gene = g.genes.elementAt(j2);
+				
+				if (_p1Gene.innovation_num == _p2Gene.innovation_num) {
+					if (GlobalFuncs.randFloat() < 0.5) chosenGene = _p1Gene;
+					else chosenGene = _p2Gene;
+					
+					// If one of the genes is disabled, the corresponding gene in the offspring
+					// has a high chance of being disabled as well
+					if (!_p1Gene.enabled || !_p2Gene.enabled) {
+						if (GlobalFuncs.randFloat() < 0.75) disableGene = true;
+					}		
+					j1++;
+					j2++;	
+				} else if (_p1Gene.innovation_num < _p2Gene.innovation_num) {
+					chosenGene = _p1Gene;
+					j1++;
+					if (!p1better) skipGene = true;												
+				} else if (_p2Gene.innovation_num < _p1Gene.innovation_num) {
+					chosenGene = _p2Gene;
+					j2++;
+					if (p1better) skipGene = true;
+				}
+			}
+			
+			
+			if (!skipGene) skipGene = CheckGeneConflict(newGenes, chosenGene);			
+			
+			// Add gene if not skipped
+			if (!skipGene) {
+				AddGene(newNodes, newTraits, newGenes, chosenGene, disableGene);
+			} 
+		} // End while loop
+		
+		Genome newGenome = new Genome(newGenes, newTraits, newNodes);
+		
+		boolean outputPresent = false;
+		
+		// Verify to ensure there are outputs
+		for (int i = 0; i < newNodes.size(); i++) {
+			NNode curNode = newNodes.elementAt(i);
+			if (curNode.gNodeLabel == GeneLabelEnum.OUTPUT) {
+				outputPresent = true;
+				break;
+			}
+		}
+		
+		if (!outputPresent) {
+			System.out.println("WARNING!  When conducting MateMultipoint, no output nodes found.");
+			System.out.println("Genome A:\n" + this.PrintGenome());
+			System.out.println("\nGenome B:\n" + g.PrintGenome());
+			System.out.println("\nResulting Genome:\n" + newGenome.PrintGenome());			
+		}
+		return newGenome;
+	}
+	
+	public Genome MateMultiAverage(Genome g, double fitness1, double fitness2) {
+		
+		// First, average traits
+		Vector<Trait> newTraits = AverageTraits(g);		
+		
+		// Second, determine which genome is better.
+		// The "worse" genome shouldn't be allowed to add extra structural baggage.
+		// If they are equally fit, then the smaller one's disjoint and excess genes will be used.
+
+		boolean p1better = false;
+		int size1 = genes.size();
+		int size2 = g.genes.size();
+		
+		if (fitness1 > fitness2) p1better = true;
+		else if (fitness1 == fitness2 && size1 < size2) p1better = true;
+				
+		Vector<Gene> newGenes = new Vector<Gene>();
+		Vector<NNode> newNodes = new Vector<NNode>();
+		
+		int j1 = 0;
+		int j2 = 0;
+		boolean skipGene = false;
+		boolean disableGene = false;
+		Gene chosenGene = null;
+		
+		while (j1 < size1 || j2 < size2) {
+			skipGene = false;		// Defaults to not skipping a chosen gene
+			disableGene = false;	
+			if (j1 >= size1) {
+				chosenGene = g.genes.elementAt(j2);
+				j2++;
+				if (p1better) skipGene = true;		// Skip excess from the worse genome
+			} else if (j2 >= size2) {
+				chosenGene = genes.elementAt(j1);
+				j1++;
+				if (!p1better) skipGene = true;		// Skip excess from the worse genome
+			} else {
+				Gene _p1Gene = genes.elementAt(j1);
+				Gene _p2Gene = g.genes.elementAt(j2);
+				
+				if (_p1Gene.innovation_num == _p2Gene.innovation_num) {
+					if (GlobalFuncs.randFloat() < 0.5) chosenGene = _p1Gene;
+					else chosenGene = _p2Gene;
+					
+					// NOTE: In original JNEAT, only the link traits are copied in this part to a newly constructed
+					// average gene.  
+					
+					// Average weights
+					chosenGene.lnk.weight = (_p1Gene.lnk.weight + _p2Gene.lnk.weight)/ 2.0;
+					
+					// Randomly takes the in and out nodes from its parent genes
+					if (GlobalFuncs.randFloat() > 0.5) chosenGene.lnk.in_node = _p1Gene.lnk.in_node;
+					else chosenGene.lnk.in_node = _p2Gene.lnk.in_node;
+					
+					if (GlobalFuncs.randFloat() > 0.5) chosenGene.lnk.out_node = _p1Gene.lnk.out_node;
+					else chosenGene.lnk.out_node = _p2Gene.lnk.out_node;
+					
+					if (GlobalFuncs.randFloat() > 0.5) chosenGene.lnk.recurrent = _p1Gene.lnk.recurrent;
+					else chosenGene.lnk.recurrent = _p2Gene.lnk.recurrent;
+					
+					chosenGene.innovation_num = _p1Gene.innovation_num;
+					chosenGene.mutation_num = (_p1Gene.mutation_num + _p2Gene.mutation_num) / 2.0;
+					
+					
+					// If one of the genes is disabled, the corresponding gene in the offspring
+					// has a high chance of being disabled as well
+					if (!_p1Gene.enabled || !_p2Gene.enabled) {
+						if (GlobalFuncs.randFloat() < 0.75) disableGene = true;
+					}		
+					j1++;
+					j2++;	
+				} else if (_p1Gene.innovation_num < _p2Gene.innovation_num) {
+					chosenGene = _p1Gene;
+					j1++;
+					if (!p1better) skipGene = true;												
+				} else if (_p2Gene.innovation_num < _p1Gene.innovation_num) {
+					chosenGene = _p2Gene;
+					j2++;
+					if (p1better) skipGene = true;
+				}
+			}			
+			
+			if (!skipGene) skipGene = CheckGeneConflict(newGenes, chosenGene);		
+			
+			// Add gene if not skipped
+			if (!skipGene) {
+				AddGene(newNodes, newTraits, newGenes, chosenGene, disableGene);
+			} 
+		} // End while loop
+		
+		Genome newGenome = new Genome(newGenes, newTraits, newNodes);
+		
+		boolean outputPresent = false;
+		
+		// Verify to ensure there are outputs
+		for (int i = 0; i < newNodes.size(); i++) {
+			NNode curNode = newNodes.elementAt(i);
+			if (curNode.gNodeLabel == GeneLabelEnum.OUTPUT) {
+				outputPresent = true;
+				break;
+			}
+		}
+		
+		if (!outputPresent) {
+			System.out.println("WARNING!  When conducting MateMultipointAvg, no output nodes found.");
+			System.out.println("Genome A:\n" + this.PrintGenome());
+			System.out.println("\nGenome B:\n" + g.PrintGenome());
+			System.out.println("\nResulting Genome:\n" + newGenome.PrintGenome());			
+		}
+		return newGenome;
+	}
+	
+	
+	/** Inserts a NNode into a NNode vector such that it remains sorted by node ID (ascending)
+	 */
+	public void node_insert(Vector<NNode> nlist, NNode n) {
+		for (int i = 0; i < nlist.size(); i++) {
+			if (nlist.elementAt(i).id >= n.id) {
+				nlist.insertElementAt(n, i);
+				break;
+			}
+		}
+	}
 	
 	public String PrintGenome() {
 		String ret = "---GENOME #" + genome_id + " START---\n";

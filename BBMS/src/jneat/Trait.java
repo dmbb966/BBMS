@@ -30,14 +30,18 @@ public class Trait {
 		}
 	}
 	
-	/** Averages the two parent traits into a new trait*/
+	/** Averages the two parent traits into a new trait.  If one trait passed in is a null,
+	 * will simply take the other one whole. */
 	public Trait(Trait t1, Trait t2) {
 		id = t1.id;
+		
+		if (t1 == null) t1 = t2;
+		else if (t2 == null) t2 = t1;
 		
 		this.params = new double[JNEATGlobal.numTraitParams];
 		for (int j = 0; j < JNEATGlobal.numTraitParams; j++) {
 			params[j] = (t1.params[j] + t2.params[j]) / 2.0;			
-		}
+		}		
 	}
 	
 	/** Sets a parameter of this trait to the specified value.
