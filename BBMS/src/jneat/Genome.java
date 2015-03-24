@@ -22,7 +22,7 @@ public class Genome {
 	public Vector<NNode> nodes;
 	
 	/** Duplicates and returns the existing Genome with the next ID in sequence */
-	public Genome duplicate() {
+	public Genome duplicate(int newID) {
 		
 		// Duplicate traits		
 		Iterator<Trait> itr_trait = traits.iterator();
@@ -90,11 +90,11 @@ public class Genome {
 		}
 		
 		// Now generates the new genome
-		return new Genome(genes_dup, traits_dup, nodes_dup);						
+		return new Genome(genes_dup, traits_dup, nodes_dup, newID);						
 	}
 	
 	
-	public void Mutate_LinkWeight(double power, double rate, MutationTypeEnum mutation_type) {
+	public void MutateLinkWeight(double power, double rate, MutationTypeEnum mutation_type) {
 		int num = 0;					// Counts gene placement
 		int gene_total = genes.size();
 		double powerMod = 1.0;			// (Supposedly) Modified power by gene number
@@ -210,7 +210,90 @@ public class Genome {
 	}
 	
 	public boolean MutateAddLink(Population pop, int tries) {
+		boolean do_recurrent = false;
+		boolean found = false;
+		int first_nonsensor = 0;
+		int trycount = 0;
+		int nodeNum1 = 0;
+		int nodeNum2 = 0;
 		
+		if (GlobalFuncs.randFloat() < JNEATGlobal.p_recur_only_prob) do_recurrent = true; 
+		
+		// Find the first non-sensor so the to-node won't look at sensors as possible destinations
+		Iterator<NNode> itr_node = nodes.iterator();
+		while (itr_node.hasNext()) {
+			NNode finger = itr_node.next();
+			if (finger.nType != NodeTypeEnum.SENSOR) break;
+			
+			first_nonsensor++;
+		}
+		
+		while (trycount < tries) {
+			if (do_recurrent) {
+				// 50% probability to decide a loop recurrency, i.e. node X to node X
+				// 50% probability to normal recurrency, i.e. node X to node Y
+				if (GlobalFuncs.randFloat() > 0.5) {
+					nodeNum1 = GlobalFuncs.randRange(first_nonsensor,  nodes.size() - 1);
+					nodeNum2 = nodeNum1;
+				} else {
+					nodeNum1 = GlobalFuncs.randRange(0, nodes.size() - 1);
+					nodeNum2 = GlobalFuncs.randRange(first_nonsensor,  nodes.size() - 1);
+				}
+			} 
+			
+			// If not recurrent
+			else {
+				nodeNum1 = GlobalFuncs.randRange(0,  nodes.size() - 1);
+				nodeNum2 = GlobalFuncs.randRange(first_nonsensor,  nodes.size() - 1);
+			}
+			
+			
+			// Point to the object's nodes
+			NNode nodeA = nodes.elementAt(nodeNum1);
+			NNode nodeB = nodes.elementAt(nodeNum2);
+			
+			// Verify if the possible new gene already exists
+			boolean bypass = false;
+			for (int j = 0; j < genes.size(); j++) {
+				Gene _gene = genes.elementAt(j);
+				if (nodeB.nType == NodeTypeEnum.SENSOR) {
+					bypass = true;
+					break;
+				}
+				
+				if (_gene.lnk.in_node == nodeA && _gene.lnk.out_node == nodeB) {
+					if ((_gene.lnk.recurrent && do_recurrent) || 
+						(!_gene.lnk.recurrent && !do_recurrent)) {
+						bypass = true;
+						break;
+					}						
+				}
+			}
+			
+				
+			if (!bypass) {
+				phenotype.status = NetworkStatusEnum.NORMAL;
+				boolean recurflag = phenotype.HasPath(nodeA.analogue, nodeB.analogue, 0, nodes.size() * nodes.size());
+				
+				if (phenotype.status == NetworkStatusEnum.HAS_LOOP) {
+					System.out.println("\n LOOP DETECTED IN NETWORK #" + phenotype.net_id + " DURING RECURRENCY CHECK.");
+					return false;
+				}
+				
+				if ((!recurflag && do_recurrent) || (recurflag && !do_recurrent)) trycount++;
+				else {
+					trycount = tries;
+					found = true;
+				}
+			} 
+			else trycount++;	// If bypassed, this gene is not good - skip to the next cycle													
+			
+		} // End trycount block
+		
+		if (found) {
+			// Check to see if this innovation already occurred in the population
+			Iterator<>
+		}
 	}
 	
 	/** Reenables one gene in the genome (the first sequentially encountered) */
@@ -895,8 +978,9 @@ public class Genome {
 		return ret;
 	}
 	
-	public Genome(Vector<Gene> g, Vector<Trait> t, Vector<NNode> n) {
-		genome_id = JNEATGlobal.NewGenomeID();
+	public Genome(Vector<Gene> g, Vector<Trait> t, Vector<NNode> n, int newID) {
+		genome_id = newID;
+		if (newID > JNEATGlobal.numGenomes) JNEATGlobal.numGenomes = newID;
 		traits = t;
 		nodes = n;
 		genes = g;
@@ -904,7 +988,11 @@ public class Genome {
 	}
 	
 	public Genome() {
-		this(new Vector<Gene>(), new Vector<Trait>(), new Vector<NNode>());		
+		this(new Vector<Gene>(), new Vector<Trait>(), new Vector<NNode>(), JNEATGlobal.NewGenomeID());		
+	}
+	
+	public Genome(Vector<Gene> g, Vector<Trait> t, Vector<NNode> n) {
+		this(g, t, n, JNEATGlobal.NewGenomeID());		
 	}
 
 }

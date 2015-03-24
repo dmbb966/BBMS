@@ -5,6 +5,8 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Vector;
 
+import bbms.GlobalFuncs;
+
 public class Species {
 	int id;
 	int age;
@@ -25,21 +27,29 @@ public class Species {
 	/** All organisms in the species */
 	Vector<Organism> organisms;
 	
-	public Species() {
+	public Species(boolean novel) {
 		id = JNEATGlobal.NewSpeciesID();
 		age = 1;
 		avg_fitness = 0.0;
 		expected_offspring = 0;
-		newSpecies = false;
+		newSpecies = novel;
 		age_lastimprovement = 0;
 		max_fitness = 0.0;
 		max_fitness_ever = 0.0;
+	}
+
+	public Species() {
+		this(false);
+	}
+	
+	public int TimeSinceImprovement() {
+		return (age - age_lastimprovement);
 	}
 	
 	/** Change the fitness of the organisms in the species to higher values for very new species
 	 * (to protect them from premature pruning).  */
 	public void AdjustFitness() {
-		int age_debt = (age - age_lastimprovement + 1) - JNEATGlobal.p_dropoff_age;
+		int age_debt = (TimeSinceImprovement() + 1) - JNEATGlobal.p_dropoff_age;
 		
 		for (int i = 0; i < organisms.size(); i++) {
 			Organism _organism = organisms.elementAt(i);
@@ -127,6 +137,79 @@ public class Species {
 		}
 		
 		expected_offspring = total;
+	}
+	
+	public boolean reproduce(int generation, Population pop) {
+		
+		if (expected_offspring > 0 && organisms.size() == 0) {
+			System.out.println("ERROR!  Attempted to reproduce an empty species!");
+			return false;
+		}
+		
+		Organism thechamp = organisms.firstElement();
+		Organism mother = null;
+		Organism baby = null;
+		Genome newGenome = null;
+		Network net_analogue = null;
+		
+		boolean champ_done = false;
+		boolean mut_struct_baby = false;	// Indicates if we change the structure of the baby
+		
+		// Create the designated number of offspring for the species one by one
+		for (int i = 0; i < expected_offspring; i++) {
+			
+			if (expected_offspring > JNEATGlobal.p_pop_size) System.out.println("ALERT: Expected offspring exceeds parameters");
+			
+			// If there is a super champion (population champion) finish off some special clones
+			if (thechamp.super_champ_offspring > 0) {
+				mother = thechamp;
+				baby = new Organism(0.0, newGenome, generation);
+				newGenome = mother.genome.duplicate(i);
+				
+				if (thechamp.super_champ_offspring > 1) {
+					if (GlobalFuncs.randFloat() < 0.8 || JNEATGlobal.p_mutate_add_link_prob == 0.0) {
+						newGenome.MutateLinkWeight(JNEATGlobal.p_mutate_weight_power, 1.0, MutationTypeEnum.GAUSSIAN);						
+					} else {
+						// Occasionally add a link to a superchamp
+						net_analogue = newGenome.Genesis(generation);
+						newGenome.MutateAddLink(pop, JNEATGlobal.p_newlink_tries);
+						mut_struct_baby = true;
+					}
+				} 
+				else if (thechamp.super_champ_offspring == 1) {
+					if (thechamp.pop_champ){
+						baby.pop_champ_child = true;
+						baby.high_fit = mother.orig_fitness;
+					}
+				}
+				
+				thechamp.super_champ_offspring--;				
+			}
+			
+			// If we have a Species champion, just clone it
+			else if (!champ_done && expected_offspring > 5) {
+				mother = thechamp;
+				newGenome = mother.genome.duplicate(i);		
+				baby = new Organism(0.0, newGenome, generation);	// The baby takes after its mother
+				champ_done = true;
+			}
+			
+			else if (GlobalFuncs.randFloat() < JNEATGlobal.p_mutate_only_prob || (organisms.size() - 1) == 1) {
+				// Choose the random parent
+				mother = organisms.elementAt(GlobalFuncs.randRange(0,  organisms.size() - 1));
+				newGenome = mother.genome.duplicate(i);
+				
+				// Mutate according to probabilities
+				if (GlobalFuncs.randFloat() < JNEATGlobal.p_mutate_add_node_prob) {
+					newGenome.
+				}
+				
+			}
+			
+		}
+	
+		
+		return false;
 	}
 	
 	public String PrintSpecies() {

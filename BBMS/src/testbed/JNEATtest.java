@@ -51,7 +51,7 @@ public class JNEATtest {
 		x.traits.add(t2);
 		x.genes.add(l1);
 		
-		Genome x2 = x.duplicate();
+		Genome x2 = x.duplicate(1);
 		x.traits.get(1).setTraitParam(1, -5);
 		
 		System.out.println(x.PrintGenome());

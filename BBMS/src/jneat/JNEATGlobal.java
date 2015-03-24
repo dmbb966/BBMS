@@ -37,6 +37,22 @@ public class JNEATGlobal {
 	static double p_survival_threshold = 0.5;
 	
 	
+	/** Size of the population */
+	static int p_pop_size = 500;
+	
+	
+	// Mutation probabilities
+	static double p_mutate_add_link_prob = 0.0;
+	static double p_mutate_add_node_prob = 0.2;
+	static double p_mutate_only_prob = 0.0;
+	static double p_mutate_weight_power = 1.0;
+	static int p_newlink_tries = 1;
+	
+	/** Probability of forcing the selection of ONLY link that are naturally recurrent */
+	static double p_recur_only_prob = 0.0;
+	
+	
+	
 	/** Number of parameters in a trait */
 	static int numTraitParams = 8;
 	
