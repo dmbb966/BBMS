@@ -48,6 +48,9 @@ public class JNEATGlobal {
 	static double p_mutate_weight_power = 1.0;
 	static int p_newlink_tries = 1;
 	
+	/** Number of babies siphoned off to the champion */
+	static int p_babies_stolen = 0;
+	
 	/** Probability of forcing the selection of ONLY link that are naturally recurrent */
 	static double p_recur_only_prob = 0.0;
 	

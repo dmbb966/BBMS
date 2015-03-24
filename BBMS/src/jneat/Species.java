@@ -124,22 +124,38 @@ public class Species {
 		}
 	}
 	
-	/** Computes the collective offspring of the entire species (sum of all organisms' offspring).
-	 * Differs from original JNEAT version in that this does NOT accumulate fractional offspring */
-	public void CountOffspring() {
-		Iterator<Organism> itr_organism = organisms.iterator();
-		int total = 0;
+	/** Computes the collective offspring of the entire species (sum of all organisms' offspring). */
+	public double CountOffspring(double skim) {
+		Iterator<Organism> itr_organism = organisms.iterator();		
 		
-		while (itr_organism.hasNext()) {
+		double x1 = 0.0;
+		double y1 = 1.0;
+		double r1 = 0.0;
+		double r2 = skim;
+		int n1 = 0;
+		int n2 = 0;
+		
+		while (itr_organism.hasNext()) {			
 			Organism _organism = itr_organism.next();		
-			
-			total += _organism.expected_offspring;					
+			x1 = _organism.expected_offspring;
+			 
+			n1 = (int) (x1 / y1);
+			r1 = x1 - ((int) (x1 / y1) * y1);
+			n2 = n2 + n1;
+			r2 = r2 + r1;
+		 
+			if (r2 >= 1.0) 
+			{
+			   n2 = n2 + 1;
+			   r2 = r2 - 1.0;
+			}
 		}
 		
-		expected_offspring = total;
+		expected_offspring = n2;
+		return r2;
 	}
 	
-	public boolean reproduce(int generation, Population pop) {
+	public boolean reproduce(int generation, Population pop, Vector<Species> sorted_species) {
 		
 		if (expected_offspring > 0 && organisms.size() == 0) {
 			System.out.println("ERROR!  Attempted to reproduce an empty species!");
@@ -210,6 +226,11 @@ public class Species {
 	
 		
 		return false;
+	}
+	
+	public void RemoveOrganism(Organism org) {
+		boolean rOrg= organisms.removeElement(org);
+		if (!rOrg) System.out.println("ALERT: Attempted to remove a nonexistant Organism from a Species");
 	}
 	
 	public String PrintSpecies() {

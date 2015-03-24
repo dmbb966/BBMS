@@ -945,6 +945,14 @@ public class Genome {
 		}
 	}
 	
+	public int get_next_gene_innovnum() {
+		return genes.lastElement().innovation_num + 1;
+	}
+	
+	public int get_next_nodeID() {
+		return nodes.lastElement().id + 1;
+	}
+	
 	public String PrintGenome() {
 		String ret = "---GENOME #" + genome_id + " START---\n";
 		ret = ret + "Has " + genes.size() + " genes, " +  nodes.size() + " nodes, and " + traits.size() + " traits.\n";

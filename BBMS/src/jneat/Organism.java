@@ -35,8 +35,8 @@ public class Organism {
 	Genome genome;		// Genotype
 	Species species;
 	
-	/** Number of expected children */
-	int expected_offspring;
+	/** Number of expected children.  Fractional because this is alloted based off its proportional fitness in the population. */
+	double expected_offspring;
 	
 	/** Number of reserved offspring for a population leader */
 	int super_champ_offspring;
