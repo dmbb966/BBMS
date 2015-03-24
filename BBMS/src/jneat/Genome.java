@@ -294,6 +294,33 @@ public class Genome {
 		return newTraits;		
 	}
 	
+	
+	/** Takes two genes and returns the averaged gene */
+	public Gene AverageGenes (Gene geneA, Gene geneB){
+		Gene avgGene = new Gene(null, null, 0.0);
+		
+		if (GlobalFuncs.randFloat() > 0.5) avgGene.lnk.linkTrait = geneA.lnk.linkTrait;
+		else avgGene.lnk.linkTrait = geneB.lnk.linkTrait;
+				
+		// Average weights
+		avgGene.lnk.weight = (geneA.lnk.weight + geneB.lnk.weight)/ 2.0;
+		
+		// Randomly takes the in and out nodes from its parent genes
+		if (GlobalFuncs.randFloat() > 0.5) avgGene.lnk.in_node = geneA.lnk.in_node;
+		else avgGene.lnk.in_node = geneB.lnk.in_node;
+		
+		if (GlobalFuncs.randFloat() > 0.5) avgGene.lnk.out_node = geneA.lnk.out_node;
+		else avgGene.lnk.out_node = geneB.lnk.out_node;
+		
+		if (GlobalFuncs.randFloat() > 0.5) avgGene.lnk.recurrent = geneA.lnk.recurrent;
+		else avgGene.lnk.recurrent = geneB.lnk.recurrent;
+		
+		avgGene.innovation_num = geneA.innovation_num;
+		avgGene.mutation_num = (geneA.mutation_num + geneB.mutation_num) / 2.0;
+
+		return avgGene;
+	}
+	
 	/** Checks the chosenGene versus the newGene vector and returns if it is duplicate, i.e. should skip
 	 * 
 	 * @param newGenes
@@ -313,12 +340,6 @@ public class Genome {
 			if (_curGene.lnk.in_node.id == chosenGene.lnk.in_node.id &&
 				_curGene.lnk.out_node.id == chosenGene.lnk.out_node.id &&
 				_curGene.lnk.recurrent == chosenGene.lnk.recurrent) {
-				skipGene = true;
-				break;
-			}
-			if (_curGene.lnk.in_node.id == chosenGene.lnk.out_node.id &&
-				_curGene.lnk.out_node.id == chosenGene.lnk.in_node.id &&
-				!_curGene.lnk.recurrent && !chosenGene.lnk.recurrent) {
 				skipGene = true;
 				break;
 			}
@@ -532,34 +553,15 @@ public class Genome {
 				Gene _p2Gene = g.genes.elementAt(j2);
 				
 				if (_p1Gene.innovation_num == _p2Gene.innovation_num) {
-					if (GlobalFuncs.randFloat() < 0.5) chosenGene = _p1Gene;
-					else chosenGene = _p2Gene;
 					
-					// NOTE: In original JNEAT, only the link traits are copied in this part to a newly constructed
-					// average gene.  
-					
-					// Average weights
-					chosenGene.lnk.weight = (_p1Gene.lnk.weight + _p2Gene.lnk.weight)/ 2.0;
-					
-					// Randomly takes the in and out nodes from its parent genes
-					if (GlobalFuncs.randFloat() > 0.5) chosenGene.lnk.in_node = _p1Gene.lnk.in_node;
-					else chosenGene.lnk.in_node = _p2Gene.lnk.in_node;
-					
-					if (GlobalFuncs.randFloat() > 0.5) chosenGene.lnk.out_node = _p1Gene.lnk.out_node;
-					else chosenGene.lnk.out_node = _p2Gene.lnk.out_node;
-					
-					if (GlobalFuncs.randFloat() > 0.5) chosenGene.lnk.recurrent = _p1Gene.lnk.recurrent;
-					else chosenGene.lnk.recurrent = _p2Gene.lnk.recurrent;
-					
-					chosenGene.innovation_num = _p1Gene.innovation_num;
-					chosenGene.mutation_num = (_p1Gene.mutation_num + _p2Gene.mutation_num) / 2.0;
-					
+					chosenGene = AverageGenes(_p1Gene, _p2Gene);
 					
 					// If one of the genes is disabled, the corresponding gene in the offspring
 					// has a high chance of being disabled as well
 					if (!_p1Gene.enabled || !_p2Gene.enabled) {
 						if (GlobalFuncs.randFloat() < 0.75) disableGene = true;
 					}		
+					
 					j1++;
 					j2++;	
 				} else if (_p1Gene.innovation_num < _p2Gene.innovation_num) {
@@ -601,6 +603,172 @@ public class Genome {
 			System.out.println("\nResulting Genome:\n" + newGenome.PrintGenome());			
 		}
 		return newGenome;
+	}
+	
+	public Genome MateSinglePoint(Genome g) {
+		Vector<Trait> newTraits = AverageTraits(g);
+		Vector<Gene> newGenes = new Vector<Gene>();
+		Vector<NNode> newNodes = new Vector<NNode>();
+		
+		int genecounter = 0;
+		int crosspoint = 0;
+		int stopA = 0;
+		int stopB = 0;
+		int len_genome = 0;
+		
+		Gene avgGene = new Gene(null, null, 0.0);	// Will be filled out later in the code
+		
+		int size1 = genes.size();
+		int size2 = g.genes.size();
+		Vector<Gene> genomeA = null;
+		Vector<Gene> genomeB = null;
+		
+		if (size1 < size2) {
+			crosspoint = GlobalFuncs.randRange(0, size1 - 1);
+			stopA = size1;
+			stopB = size2;
+			len_genome = size2;
+			genomeA = genes;
+			genomeB = g.genes;			
+		} else {
+			crosspoint = GlobalFuncs.randRange(0, size2 - 1);
+			stopA = size2;
+			stopB = size1;
+			len_genome = size1;
+			genomeA = g.genes;
+			genomeB = genes;
+		}
+		
+		// Compute the height innovation
+		int last_innovB = genomeB.elementAt(stopB - 1).innovation_num;
+		double cross_innov = 0.0;
+		boolean done = false;
+		int j1 = 0;
+		int j2 = 0;
+		Gene geneA = null;
+		Gene geneB = null;
+		Gene chosenGene = null;
+		int v1 = 0;
+		int v2 = 0;
+		int cellA = 0;
+		int cellB = 0;	
+		
+		while (!done) {
+			boolean doneA = false;
+			boolean doneB = false;
+			boolean skipGene = false;
+					
+			if (j1 < stopA) {
+				geneA = genomeA.elementAt(j1);
+				v1 = geneA.innovation_num;
+				doneA = true;
+			}
+			
+			if (j2 < stopB) {
+				geneB = genomeB.elementAt(j2);
+				v2 = geneB.innovation_num;
+				doneB = true;
+			}
+			
+			if (doneA && doneB) {
+				if (v1 < v2) {
+					cellA = v1;
+					cellB = 0;
+					j1++;
+				} else if (v1 == v2) {
+					cellA = v1;
+					cellB = v1;
+					j1++;
+					j2++;
+				} else {
+					cellA = 0;
+					cellB = v2;
+					j2++;
+				}
+			}
+			
+			else {
+				if (doneA && !doneB) {
+					cellA = v1;
+					cellB = 0;
+					j1++;
+				} 
+				else if (!doneA && doneB) {
+					cellA = 0;
+					cellB = v2;
+					j2++;
+				} else {
+					done = true;
+				}
+			}
+			
+			if (!done) {
+				
+				
+				// innovA = innovB
+				if (cellA == cellB) {
+					if (genecounter < crosspoint) {
+						chosenGene = geneA;
+						genecounter++;
+					} else if (genecounter == crosspoint) {
+						avgGene = AverageGenes(geneA, geneB);
+						
+						// If one gene is disabled, the corresponding gene in the offspring is likely disabled
+						if (!geneA.enabled || !geneB.enabled) avgGene.enabled = false;
+						
+						chosenGene = avgGene;
+						genecounter++;
+						cross_innov = cellA;
+					} else if (genecounter > crosspoint) {
+						chosenGene = geneB;
+						genecounter++;
+					}
+				}
+				
+				// innovA < innovB
+				else if (cellA != 0 && cellB == 0) {
+					if (genecounter < crosspoint) {
+						chosenGene = geneA;
+						genecounter++;
+					} else if (genecounter == crosspoint) {
+						chosenGene = geneA;
+						genecounter++;
+						cross_innov = cellA;
+					} else if (genecounter > crosspoint) {
+						if (cross_innov > last_innovB) {
+							chosenGene = geneA;
+							genecounter++;
+						} else skipGene = true;
+					}
+				}
+				
+				// innovA > innovB 
+				else {
+					if (cellA == 0 && cellB != 0) {
+						if (genecounter < crosspoint) skipGene = true; 			// skip geneB
+						else if (genecounter == crosspoint) skipGene = true;	// skip such a highly illogical case
+						else if (genecounter > crosspoint) {
+							if (cross_innov > last_innovB) {
+								chosenGene = geneA;
+								genecounter++;
+							} else {
+								chosenGene = geneB;	// This is a pure case of single crossing
+								genecounter++;
+							}
+						}
+					}
+				}
+				
+				skipGene = CheckGeneConflict(newGenes, chosenGene);
+				
+				// Add gene if not skipped
+				if (!skipGene) {
+					AddGene(newNodes, newTraits, newGenes, chosenGene, false);	
+				} 
+			}
+		}
+				
+		return new Genome(newGenes, newTraits, newNodes);
 	}
 	
 	
