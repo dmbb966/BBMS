@@ -23,6 +23,19 @@ public class JNEATGlobal {
 	/** Age at which the Species starts to be penalized */
 	static int p_dropoff_age = 0;
 	
+	/** Fitness multiplier if age exceeds dropoff_age*/
+	static double p_dropoff_coeff = 0.5;	
+	
+	/** Organisms are considered "young" (and thus entitled to fitness multipliers) up until this age */
+	static int p_age_youngOrganism = 10;
+	
+	/** Fitness multiplier for young organisms */
+	static double p_age_significance = 1.0;
+	
+	
+	/** Percentage of organisms that will be allowed to reproduce */
+	static double p_survival_threshold = 0.5;
+	
 	
 	/** Number of parameters in a trait */
 	static int numTraitParams = 8;
