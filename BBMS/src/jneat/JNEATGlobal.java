@@ -12,12 +12,17 @@ public class JNEATGlobal {
 	static int numNetworks = 0;
 	static int numNodes = 0;
 	static int numLinks = 0;
+	static int numSpecies = 0;
 	static int numTraits = 0;
 	
 	// Coefficeints for evaluating the compatibility of two genomes
 	static double p_disjoint_coeff = 0.1;		// Disjoint genes
 	static double p_excess_coeff = 0.1;			// Excess genes
 	static double p_mutdiff_coeff = 0.1;		// Weight difference between genes
+	
+	/** Age at which the Species starts to be penalized */
+	static int p_dropoff_age = 0;
+	
 	
 	/** Number of parameters in a trait */
 	static int numTraitParams = 8;
@@ -30,6 +35,11 @@ public class JNEATGlobal {
 	
 	/** Max number of activation cycles a network will go through before declaring a disconnection error */
 	static int maxActivationCycles = 30;
+
+	/** Returns the ID of the next available species ID.  Increments the global counter. */
+	public static int NewSpeciesID() {
+		return numSpecies++;
+	}
 	
 	/** Returns the ID of the next available gene ID.  Synomyous with innovation number.  Increments global counter. */
 	public static int NewGeneID() {

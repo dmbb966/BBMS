@@ -148,12 +148,91 @@ public class Genome {
 		}
 	}
 	
+	/** Chooses a random gene, extracts the link from it, and repoints the link to a random trait.
+	 * Specify the number of times you want this to be done */
+	public void MutateLinkTrait(int times) {
+		for (int i = 0; i < times; i++) {
+			int traitNum = GlobalFuncs.randRange(0, traits.size() - 1);
+			int geneNum = GlobalFuncs.randRange(0,  genes.size() - 1);
+			
+			// Set the link to point to the new trait
+			Gene _gene = genes.elementAt(geneNum);
+			_gene.lnk.linkTrait = traits.elementAt(traitNum);
+		}		
+	}
+	
+	/** Chooses a random node and repoints the node to a random trait.
+	 * Specify the number of times you want this to be done */
+	public void MutateNodeTrait(int times) {
+		for (int i = 0; i < times; i++) {
+			int traitNum = GlobalFuncs.randRange(0, traits.size() - 1);
+			int nodeNum = GlobalFuncs.randRange(0, nodes.size() - 1);
+			
+			// Set the link to point to the new trait
+			NNode _node = nodes.elementAt(nodeNum);
+			_node.nodeTrait = traits.elementAt(traitNum);
+		}		
+	}
+	
+	/** Selects a random trait in this genome and mutates it. */
+	public void MutateRandomTrait() {
+		int traitNum = GlobalFuncs.randRange(0,  traits.size() - 1);
+		Trait _trait = traits.elementAt(traitNum);
+		_trait.Mutate();
+	}
+	
+	/** Toggles a random gene between enabled or disabled.
+	 * If disabling a gene will isolate part of the network, this will not do anything.
+	 *  Repeats the specified number of times. */
+	public void MutateToggleEnable(int times) {
+		for (int i = 0; i < times; i++) {
+			int geneNum = GlobalFuncs.randRange(0,  genes.size() - 1);
+			Gene _gene = genes.elementAt(geneNum);
+			boolean done = false;
+			
+			// Need to ensure that another gene connects out of the in-node, if not this will break off
+			// and isolate a section of the network
+			if (_gene.enabled) {
+				for (int j = 0; j < genes.size(); j++) {
+					Gene _jGene = genes.elementAt(j);
+					if ((_gene.lnk.in_node == _jGene.lnk.in_node) && _jGene.enabled 
+							&& (_jGene.innovation_num != _gene.innovation_num)) {
+						done = true;
+						break;
+					}						
+				}
+				
+				if (done) _gene.enabled = false;
+			} else {
+				_gene.enabled = true;
+			}
+		}
+	}
+	
+	public boolean MutateAddLink(Population pop, int tries) {
+		
+	}
+	
+	/** Reenables one gene in the genome (the first sequentially encountered) */
+	public void MutateGene_Reenable() {
+		Iterator<Gene> itr_gene = genes.iterator();
+		
+		while (itr_gene.hasNext()) {
+			Gene _gene = itr_gene.next();
+			if (!_gene.enabled) {
+				_gene.enabled = true;
+				break;
+			}
+		}
+	}
+	
 	
 	/** 
 	 * Generates and returns a new Network based on this genome.
+	 * "Genesis!  You have it - I want it!"
 	 */
-	public Network Genesis() {
-		Network newNet = new Network();
+	public Network Genesis(int NetworkID) {
+		Network newNet = new Network(NetworkID);
 		Iterator<NNode> itr_node = nodes.iterator();
 		
 		while (itr_node.hasNext()) {
