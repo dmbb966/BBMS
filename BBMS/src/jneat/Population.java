@@ -373,6 +373,68 @@ public class Population {
 		if (!best_OK) System.out.println("ERROR!  The best species died!");					
 	}
 	
+	public void speciate() {
+		int counter = 0;	// For number of species
+		Species newSpecies = null;
+		
+		Iterator<Organism> itr_organism = organisms.iterator();
+		while (itr_organism.hasNext()) {
+			Organism _organism = itr_organism.next();
+			// If the list species is empty, create the first
+			if (species.isEmpty()) {
+				newSpecies = new Species(++counter);
+				species.add(newSpecies);
+				newSpecies.organisms.add(_organism);
+				_organism.species = newSpecies;				
+			}
+			else {
+				Iterator<Species> itr_species = species.iterator();
+				boolean done = false;
+				
+				while (!done && itr_species.hasNext()) {
+					Species _species = itr_species.next();
+					Organism compare_org = _species.organisms.firstElement();
+					double curr_compat = _organism.genome.Compatibility(compare_org.genome);
+					
+					if (curr_compat < JNEATGlobal.p_compat_threshold) {
+						// Found compatible species - add this organism
+						_species.organisms.add(_organism);
+						_organism.species = _species;
+						done = true;
+					}
+				}
+				
+				// If no compatible species found, create a new one
+				if (!done) {
+					newSpecies = new Species(++counter);
+					species.add(newSpecies);
+					newSpecies.organisms.add(_organism);
+					_organism.species = newSpecies;
+				}
+			}
+		}
+		
+		last_species = counter; // Keep track of the highest species
+	}
+	
+	public void Verify() {
+		Iterator<Organism> itr_organism = organisms.iterator();
+		while (itr_organism.hasNext()) {
+			itr_organism.next().genome.verify();
+		}
+	}
+	
+	/** Returns the current node ID and increments it.*/
+	public int getCurNodeID_Inc() {
+		return cur_node_id++;
+	}
+	
+	
+	/** Returns the current innovation number and increments it.*/
+	public int getCurInnov_Inc() {
+		return cur_innov_num++;
+	}
+	
 	public String PrintPopulation() {
 		String ret = "";
 		

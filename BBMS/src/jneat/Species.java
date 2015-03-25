@@ -27,8 +27,8 @@ public class Species {
 	/** All organisms in the species */
 	Vector<Organism> organisms;
 	
-	public Species(boolean novel) {
-		id = JNEATGlobal.NewSpeciesID();
+	public Species(int newID, boolean novel) {
+		id = newID;
 		age = 1;
 		avg_fitness = 0.0;
 		expected_offspring = 0;
@@ -39,7 +39,11 @@ public class Species {
 	}
 
 	public Species() {
-		this(false);
+		this(JNEATGlobal.NewSpeciesID(), false);
+	}
+	
+	public Species(int id) {
+		this(id, false);
 	}
 	
 	public int TimeSinceImprovement() {

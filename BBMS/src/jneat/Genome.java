@@ -216,6 +216,9 @@ public class Genome {
 		int trycount = 0;
 		int nodeNum1 = 0;
 		int nodeNum2 = 0;
+		NNode nodeA = null;
+		NNode nodeB = null;
+		Gene newGene = null;
 		
 		if (GlobalFuncs.randFloat() < JNEATGlobal.p_recur_only_prob) do_recurrent = true; 
 		
@@ -249,8 +252,8 @@ public class Genome {
 			
 			
 			// Point to the object's nodes
-			NNode nodeA = nodes.elementAt(nodeNum1);
-			NNode nodeB = nodes.elementAt(nodeNum2);
+			nodeA = nodes.elementAt(nodeNum1);
+			nodeB = nodes.elementAt(nodeNum2);
 			
 			// Verify if the possible new gene already exists
 			boolean bypass = false;
@@ -292,8 +295,153 @@ public class Genome {
 		
 		if (found) {
 			// Check to see if this innovation already occurred in the population
-			Iterator<>
+			Iterator<Innovation> itr_innovation = pop.innovations.iterator();
+			boolean done = false;
+			
+			while (!done) {
+				if (!itr_innovation.hasNext()) {
+					// If the phenotype doesn't exist, exit on false.
+					// This should never happen
+					if (phenotype == null) {
+						System.out.println("ERROR!  Attempted to add link to genome with no phenotype.");
+						return false;
+					}
+					
+					// Choose a random trait
+					Trait chosenTrait = traits.elementAt(GlobalFuncs.randRange(0, traits.size() - 1));
+					
+					// Choose the new weight
+					double newWeight = GlobalFuncs.randPosNeg() * GlobalFuncs.randFloat() * 10.0;
+					
+					int curr_innov = pop.getCurNodeID_Inc();
+					newGene = new Gene(chosenTrait, newWeight, nodeA, nodeB, do_recurrent, curr_innov, newWeight);
+					
+					// Add the innvation
+					pop.innovations.add(new Innovation(nodeA, nodeB, curr_innov, newWeight, chosenTrait));
+					done = true;
+				}
+				
+				// If there are more innovations, match from the list
+				else {
+					Innovation _innov = itr_innovation.next();
+					if (_innov.innovation_type == InnovationTypeEnum.NEW_LINK &&
+							_innov.inNode.id == nodeA.id &&
+							_innov.outNode.id == nodeB.id &&
+							_innov.recurrent == do_recurrent) {
+						
+						newGene = new Gene(_innov.newTrait, _innov.new_weight, nodeA, nodeB, do_recurrent, _innov.innovation_num1, 0);
+						done = true;						
+					}
+				}
+			}
+			
+			genes.add(newGene);
+			return true;			
 		}
+		
+		return false;
+	}
+	
+	public boolean MutateAddNode(Population pop) {
+		int j;
+		boolean found = false;
+		boolean step1 = true;
+		boolean step2 = false;
+		
+		NNode newNode = null;
+		Gene newGene1 = null;
+		Gene newGene2 = null;
+		
+		Gene _gene = null;
+		
+		if (genes.size() < 15) {
+			step2 = false;
+			for (j = 0; j < genes.size(); j++) {
+				_gene = genes.elementAt(j);
+				if (_gene.enabled && _gene.lnk.in_node.gNodeLabel != GeneLabelEnum.BIAS) break;
+			}
+			
+			for (; j < genes.size(); j++) {
+				_gene = genes.elementAt(j);
+				if (GlobalFuncs.randFloat() >= 0.3 && _gene.lnk.in_node.gNodeLabel != GeneLabelEnum.BIAS) {
+					step2 = true;
+					break;
+				}
+			}
+			
+			if (step2 && _gene.enabled) found = true;
+		}
+		
+		// For genes of large size
+		else {
+			int trycount = 0;
+			
+			while (trycount < 20 && !found) {
+				// Pure random splitting
+				_gene = genes.elementAt(GlobalFuncs.randRange(0, genes.size() - 1));
+				if (_gene.enabled && _gene.lnk.in_node.gNodeLabel != GeneLabelEnum.BIAS) found = true;
+				
+				++trycount;
+			}
+		}
+		if (!found) return false;
+		
+		_gene.enabled = false;
+		
+		// Extraction phase
+		Link oldLink = _gene.lnk;
+		double oldWeight = oldLink.weight;
+		Trait oldTrait = oldLink.linkTrait;
+		
+		NNode in_node = oldLink.in_node;
+		NNode out_node = oldLink.out_node;
+		boolean done = false;
+		Iterator<Innovation> itr_innovation = pop.innovations.iterator();
+		
+		while (!done) {
+			if (!itr_innovation.hasNext()) {
+				// This innvation has not occured in the population so needs to be created
+				// By convention it will point to the first trait in the genome.
+				
+				int curnode_id = pop.getCurNodeID_Inc();
+				newNode = new NNode(NodeTypeEnum.NEURON, curnode_id, GeneLabelEnum.HIDDEN);
+				newNode.nodeTrait = traits.firstElement();
+				
+				int gene_innov1 = pop.getCurInnov_Inc();
+				newGene1 = new Gene(oldTrait, 1.0, in_node, newNode, oldLink.recurrent, gene_innov1, 0);
+				
+				// Re-read the current innovation with increment
+				int gene_innov2 = pop.getCurInnov_Inc();
+				newGene2 = new Gene(oldTrait, oldWeight, newNode, out_node, false, gene_innov2, 0);
+				
+				pop.innovations.add(new Innovation(in_node, out_node, gene_innov1, gene_innov2, newNode, _gene.innovation_num));
+				done = true;
+			}
+			
+			else {
+				Innovation _innov = itr_innovation.next();
+				if ((_innov.innovation_type == InnovationTypeEnum.NEW_NODE) &&
+						(_innov.inNode.id == in_node.id) &&
+						(_innov.outNode.id == out_node.id) &&
+						(_innov.old_innovation_num == _gene.innovation_num)) {
+					
+					// Create the new genes and pass current nodeID to new node
+					newNode = new NNode(NodeTypeEnum.NEURON, _innov.newNode.id, GeneLabelEnum.HIDDEN);
+					newNode.nodeTrait = traits.firstElement();
+					
+					newGene1 = new Gene(oldTrait, 1.0, in_node, newNode, oldLink.recurrent, _innov.innovation_num1, 0);
+					newGene2 = new Gene(oldTrait, oldWeight, newNode, out_node, false, _innov.innovation_num2, 0);
+					done = true;
+				}
+			}
+		}
+		
+		// Add the new NNode and Genes to the Genome
+		genes.add(newGene1);
+		genes.add(newGene2);
+		node_insert(nodes, newNode);
+		
+		return true;
 	}
 	
 	/** Reenables one gene in the genome (the first sequentially encountered) */

@@ -59,7 +59,7 @@ public class NNode {
 	public NNode(NodeTypeEnum nType, GeneLabelEnum placement, Trait t, int id) {
 		fType = NodeFuncEnum.SIGMOID;
 		this.nType = nType;
-		gNodeLabel = GeneLabelEnum.HIDDEN;
+		gNodeLabel = placement;
 		activesum = 0;
 		activation = 0;
 		active_flag = false;
@@ -74,6 +74,10 @@ public class NNode {
 		inner_level = 0;
 		dup = null;
 		analogue = null;
+	}
+	
+	public NNode(NodeTypeEnum nType, int id, GeneLabelEnum placement) {
+		this(nType, placement, null, id);
 	}
 	
 	public NNode(NodeTypeEnum nType, GeneLabelEnum placement, Trait t) {

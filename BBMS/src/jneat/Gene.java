@@ -28,6 +28,13 @@ public class Gene {
 		enabled = true;
 	}
 	
+	public Gene(Trait tp, double weight, NNode inode, NNode onode, boolean recur, int innov, double mut_num) {
+		lnk = new Link(tp, weight, inode, onode, recur);
+		innovation_num = innov;
+		mutation_num = mut_num;
+		enabled = true;
+	}
+	
 	public Gene (NNode inode, NNode onode, double w) {
 		this(new Trait(),  inode, onode, w, false, 0.0);
 	}
