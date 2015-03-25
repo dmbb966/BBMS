@@ -729,7 +729,7 @@ public class Genome {
 		newGenes.add(newGene);				
 	}
 	
-	public Genome MateMultipoint(Genome g, double fitness1, double fitness2) {
+	public Genome MateMultipoint(int gID, Genome g, double fitness1, double fitness2) {
 		
 		// First, average traits
 		Vector<Trait> newTraits = AverageTraits(g);		
@@ -800,7 +800,7 @@ public class Genome {
 			} 
 		} // End while loop
 		
-		Genome newGenome = new Genome(newGenes, newTraits, newNodes);
+		Genome newGenome = new Genome(newGenes, newTraits, newNodes, gID);
 		
 		boolean outputPresent = false;
 		
@@ -822,7 +822,7 @@ public class Genome {
 		return newGenome;
 	}
 	
-	public Genome MateMultiAverage(Genome g, double fitness1, double fitness2) {
+	public Genome MateMultiAverage(Genome g, int gID, double fitness1, double fitness2) {
 		
 		// First, average traits
 		Vector<Trait> newTraits = AverageTraits(g);		
@@ -893,7 +893,7 @@ public class Genome {
 			} 
 		} // End while loop
 		
-		Genome newGenome = new Genome(newGenes, newTraits, newNodes);
+		Genome newGenome = new Genome(newGenes, newTraits, newNodes, gID);
 		
 		boolean outputPresent = false;
 		
@@ -915,7 +915,7 @@ public class Genome {
 		return newGenome;
 	}
 	
-	public Genome MateSinglePoint(Genome g) {
+	public Genome MateSinglePoint(Genome g, int gID) {
 		Vector<Trait> newTraits = AverageTraits(g);
 		Vector<Gene> newGenes = new Vector<Gene>();
 		Vector<NNode> newNodes = new Vector<NNode>();
@@ -1078,7 +1078,7 @@ public class Genome {
 			}
 		}
 				
-		return new Genome(newGenes, newTraits, newNodes);
+		return new Genome(newGenes, newTraits, newNodes, gID);
 	}
 	
 	
@@ -1099,6 +1099,83 @@ public class Genome {
 	
 	public int get_next_nodeID() {
 		return nodes.lastElement().id + 1;
+	}
+	
+	public boolean verify() {
+		if (genes.size() == 0) return false;
+		if (nodes.size() == 0) return false;
+		if (traits.size() == 0) return false;
+		
+		Iterator<Gene> itr_gene = genes.iterator();
+		while (itr_gene.hasNext()) {
+			Gene _gene = itr_gene.next();
+			NNode inode = _gene.lnk.in_node;
+			NNode onode = _gene.lnk.out_node;
+			
+			if (inode == null) {
+				System.out.println(" ERROR: inode = null in genome #" + genome_id);
+				return false;
+			}
+			if (onode == null) {
+				System.out.println (" ERROR: onode = null in genome #" + genome_id);
+				return false;
+			}
+			if (!nodes.contains(inode)) {
+				System.out.println(" ERROR: inode #" + inode.id + " missing.  Defined in gene but not in vector nodes of genome #" + genome_id);
+				return false;
+			}
+			if (!nodes.contains(onode)) {
+				System.out.println(" ERROR: onode #" + onode.id + " missing.  Defined in gene but not in vectro nodes of genome #" + genome_id);
+				return false;
+			}
+		}
+		
+		Iterator<NNode> itr_node = nodes.iterator();
+		int last_id = 0;
+		while (itr_node.hasNext()) {
+			NNode _node = itr_node.next();
+			if (_node.id < last_id) {
+				System.out.println(" ALERT: Nodes out of order! Last node_id = " + last_id + " vs current id - " + _node.id);
+				return false;				
+			}
+			last_id = _node.id;
+		}
+		
+		itr_gene = genes.iterator();
+		while (itr_gene.hasNext()) {
+			Gene _gene = itr_gene.next();
+			int iID = _gene.lnk.in_node.id;
+			int oID = _gene.lnk.out_node.id;
+			boolean rec = _gene.lnk.recurrent;
+			
+			Iterator<Gene> iGene = itr_gene;
+			while (iGene.hasNext()) {
+				Gene _gene1 = iGene.next();
+				if (_gene1.lnk.in_node.id == iID && _gene1.lnk.out_node.id == oID && _gene1.lnk.recurrent == rec) {
+					System.out.println(" ALERT: DUPLICATE GENES in Genome #" + genome_id + " with:");
+					System.out.println("   Gene1: " + _gene.PrintGene());
+					System.out.println("   Gene2: " + _gene1.PrintGene());
+					return false;					
+				}
+			}				
+		}
+		
+		if (nodes.size() >= 500) {
+			boolean disab = false;
+			itr_gene = genes.iterator();
+			while (itr_gene.hasNext()) {
+				Gene _gene = itr_gene.next();
+				
+				if (!_gene.enabled && disab) {
+					System.out.println(" ALERT: 2 DISABLED GENES IN A ROW in Genome #" + genome_id + " with:");
+					System.out.println("   2nd disable: " + _gene.PrintGene());
+				}
+				
+				disab = !_gene.enabled;
+			}
+		}
+		
+		return true;
 	}
 	
 	public String PrintGenome() {

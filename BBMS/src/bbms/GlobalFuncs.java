@@ -107,6 +107,14 @@ public class GlobalFuncs {
 		 if ((n % 2) == 0) return -1;
 		 else return 1;
 	}      
+    
+    /** 
+     * Uses the Mersene Twister to return a random number with a Gaussian distribution
+     */
+    
+    public static double randGauss() {
+    	return randGen.nextGaussian();
+    }
 	
 	public static void initializeMap (int x, int y, boolean loadMap) {
 		scenMap = new HexMap(x, y, loadMap);

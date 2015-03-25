@@ -417,6 +417,14 @@ public class Population {
 		last_species = counter; // Keep track of the highest species
 	}
 	
+	/** Adds a new species to this population along with the first organism in this new species*/
+	public void AddSpecies(Species newSpecies, Organism baby) {
+		last_species++;
+		species.add(newSpecies);
+		newSpecies.organisms.add(baby);
+		baby.species = newSpecies;
+	}
+	
 	public void Verify() {
 		Iterator<Organism> itr_organism = organisms.iterator();
 		while (itr_organism.hasNext()) {

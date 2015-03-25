@@ -174,9 +174,12 @@ public class Species {
 		
 		boolean champ_done = false;
 		boolean mut_struct_baby = false;	// Indicates if we change the structure of the baby
+		boolean mate_baby = false;
 		
 		// Create the designated number of offspring for the species one by one
 		for (int i = 0; i < expected_offspring; i++) {
+			mut_struct_baby = false;
+			mate_baby = false;
 			
 			if (expected_offspring > JNEATGlobal.p_pop_size) System.out.println("ALERT: Expected offspring exceeds parameters");
 			
@@ -221,16 +224,180 @@ public class Species {
 				
 				// Mutate according to probabilities
 				if (GlobalFuncs.randFloat() < JNEATGlobal.p_mutate_add_node_prob) {
-					newGenome.
+					newGenome.MutateAddNode(pop);
+					mut_struct_baby = true;
+				}
+				else if (GlobalFuncs.randFloat() < JNEATGlobal.p_mutate_add_link_prob) {
+					net_analogue = newGenome.Genesis(generation);
+					newGenome.MutateAddLink(pop,  JNEATGlobal.p_newlink_tries);
+					mut_struct_baby = true;
+				}
+				else {
+					// If no structural mutation, then there are other kinds:
+					if (GlobalFuncs.randFloat() < JNEATGlobal.p_mutate_random_trait_prob) {
+						newGenome.MutateRandomTrait();
+					}
+					
+					if (GlobalFuncs.randFloat() < JNEATGlobal.p_mutate_link_trait_prob) {
+						newGenome.MutateLinkTrait(1);
+					}
+					
+					if (GlobalFuncs.randFloat() < JNEATGlobal.p_mutate_node_trait_prob) {
+						newGenome.MutateNodeTrait(1);
+					}
+					
+					if (GlobalFuncs.randFloat() < JNEATGlobal.p_mutate_link_weights_prob) {
+						newGenome.MutateLinkWeight(JNEATGlobal.p_mutate_weight_power,  1.0,  MutationTypeEnum.GAUSSIAN);						
+					}
+					
+					if (GlobalFuncs.randFloat() < JNEATGlobal.p_mutate_toggle_enable_prob) {
+						newGenome.MutateToggleEnable(1);
+					}
+					
+					if (GlobalFuncs.randFloat() < JNEATGlobal.p_mutate_toggle_enable_prob) {
+						newGenome.MutateGene_Reenable();
+					}
 				}
 				
+				baby = new Organism(0.0, newGenome, generation);				
 			}
 			
+			// Otherwise we should mate
+			else {
+				// Choose random mother
+				mother = organisms.elementAt(GlobalFuncs.randRange(0, organisms.size() - 1));
+				Organism father = null;
+				
+				// Choose random father - mate within species
+				if (GlobalFuncs.randFloat()> JNEATGlobal.p_interspecies_mate_rate) {
+					father = organisms.elementAt(GlobalFuncs.randRange(0, organisms.size() - 1));
+				}
+				else {
+					// Mate outside of species
+					Species randSpecies = this;		// Save current species
+					// Select random species
+					int numTries = 0;
+					int sp_ext = 0;
+					
+					// Tries several times to find a different species
+					while ((randSpecies == this) && numTries < 5) {
+						// Choose a random species tending towards better species
+						double randmult = GlobalFuncs.randGauss() / 4;
+						if (randmult > 1.0) randmult = 1.0;
+						
+						int randSpeciesNum = (int) Math.floor((randmult * (sorted_species.size() - 1.0)) + 0.5);
+						for (sp_ext = 0; sp_ext < randSpeciesNum; sp_ext++) {}
+						randSpecies = sorted_species.elementAt(sp_ext);
+						++numTries;						
+					}
+					
+					father = randSpecies.organisms.firstElement();
+				}
+				
+				if (GlobalFuncs.randFloat() < JNEATGlobal.p_mate_multipoint_prob) {
+					newGenome = mother.genome.MateMultipoint(i, father.genome, mother.orig_fitness, father.orig_fitness);
+				}
+				else if (GlobalFuncs.randFloat() < JNEATGlobal.p_mate_multipoint_avg_prob / (JNEATGlobal.p_mate_multipoint_avg_prob + JNEATGlobal.p_mate_singlepoint_prob)) {
+					newGenome = mother.genome.MateMultiAverage(father.genome, i, mother.orig_fitness, father.orig_fitness);
+				}
+				else {
+					newGenome = mother.genome.MateSinglePoint(father.genome, i);
+				}
+				
+				mate_baby = true;
+				
+				// Determine whether to mutate the baby's genome - done randomly or if the mom/dad are the same organism
+				if ((GlobalFuncs.randFloat() > JNEATGlobal.p_mate_only_prob) || 
+						(father.genome.genome_id == mother.genome.genome_id) ||
+						(father.genome.Compatibility(mother.genome) == 0.0)) {
+					
+					
+					// Mutate according to probabilities
+					if (GlobalFuncs.randFloat() < JNEATGlobal.p_mutate_add_node_prob) {
+						newGenome.MutateAddNode(pop);
+						mut_struct_baby = true;
+					}
+					else if (GlobalFuncs.randFloat() < JNEATGlobal.p_mutate_add_link_prob) {
+						net_analogue = newGenome.Genesis(generation);
+						newGenome.MutateAddLink(pop,  JNEATGlobal.p_newlink_tries);
+						mut_struct_baby = true;
+					}
+					else {
+						// If no structural mutation, then there are other kinds:
+						if (GlobalFuncs.randFloat() < JNEATGlobal.p_mutate_random_trait_prob) {
+							newGenome.MutateRandomTrait();
+						}
+						
+						if (GlobalFuncs.randFloat() < JNEATGlobal.p_mutate_link_trait_prob) {
+							newGenome.MutateLinkTrait(1);
+						}
+						
+						if (GlobalFuncs.randFloat() < JNEATGlobal.p_mutate_node_trait_prob) {
+							newGenome.MutateNodeTrait(1);
+						}
+						
+						if (GlobalFuncs.randFloat() < JNEATGlobal.p_mutate_link_weights_prob) {
+							newGenome.MutateLinkWeight(JNEATGlobal.p_mutate_weight_power,  1.0,  MutationTypeEnum.GAUSSIAN);						
+						}
+						
+						if (GlobalFuncs.randFloat() < JNEATGlobal.p_mutate_toggle_enable_prob) {
+							newGenome.MutateToggleEnable(1);
+						}
+						
+						if (GlobalFuncs.randFloat() < JNEATGlobal.p_mutate_toggle_enable_prob) {
+							newGenome.MutateGene_Reenable();
+						}
+					}
+					
+					baby = new Organism(0.0, newGenome, generation);
+				}
+				
+				// Create the baby without mutating first
+				else {
+					baby = new Organism(0.0, newGenome, generation);
+				}
+						
+			}
+			
+			// Add the baby to its proper species
+			// If it doesn't fit in one, create a new one
+			
+			baby.mut_struct_baby = mut_struct_baby;
+			baby.mate_baby = mate_baby;
+			Species newSpecies = null;
+			
+			// If list species is empty, create one
+			if (pop.species.isEmpty()) {
+				newSpecies = new Species(pop.last_species, true);
+				pop.AddSpecies(newSpecies, baby);
+			} else {
+				// Looooooooop in all species 
+				Iterator<Species> itr_species = pop.species.iterator();
+				boolean done = false;
+				
+				while (!done && itr_species.hasNext()) {
+					Species _species = itr_species.next();
+					Organism comp_org = _species.organisms.firstElement();
+					double curr_compat = baby.genome.Compatibility(comp_org.genome);
+					
+					// If compatible enough, adds baby to the species
+					if (curr_compat < JNEATGlobal.p_compat_threshold) {
+						_species.organisms.add(baby);
+						baby.species = _species;
+						done = true;
+					}
+				}
+				
+				if (!done) {
+					newSpecies = new Species(pop.last_species, true);
+					pop.AddSpecies(newSpecies, baby);
+				}
+			}			
 		}
-	
-		
-		return false;
+			
+		return true;
 	}
+	
 	
 	public void RemoveOrganism(Organism org) {
 		boolean rOrg= organisms.removeElement(org);

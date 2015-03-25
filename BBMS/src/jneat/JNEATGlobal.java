@@ -44,20 +44,28 @@ public class JNEATGlobal {
 	// Mutation probabilities
 	static double p_mutate_add_link_prob = 0.0;
 	static double p_mutate_add_node_prob = 0.2;
+	static double p_mutate_gene_reenable_prob = 0.0;
+	static double p_mutate_link_trait_prob = 0.0;
+	static double p_mutate_link_weights_prob = 0.0;
+	static double p_mutate_node_trait_prob = 0.0;
 	static double p_mutate_only_prob = 0.0;
+	static double p_mutate_random_trait_prob = 0.0; 
+	static double p_mutate_toggle_enable_prob = 0.0;
 	static double p_mutate_weight_power = 1.0;
 	static int p_newlink_tries = 1;
+	
+	static double p_interspecies_mate_rate = 0.0;
+	static double p_mate_multipoint_prob = 0.0;
+	static double p_mate_multipoint_avg_prob = 0.0;
+	static double p_mate_singlepoint_prob = 0.0;
+	static double p_mate_only_prob = 0.0;	
+	static double p_recur_only_prob = 0.0;
 	
 	/** Number of babies siphoned off to the champion */
 	static int p_babies_stolen = 0;
 	
 	/** Threshold of compatibility in which two genomes are considered of the same species */
-	static double p_compat_threshold = 0.1;
-	
-	/** Probability of forcing the selection of ONLY link that are naturally recurrent */
-	static double p_recur_only_prob = 0.0;
-	
-	
+	static double p_compat_threshold = 0.1;		
 	
 	/** Number of parameters in a trait */
 	static int numTraitParams = 8;
