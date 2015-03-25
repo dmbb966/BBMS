@@ -69,7 +69,7 @@ public class JNEATtest {
 		NNode hidden1 = new NNode(NodeTypeEnum.NEURON);
 		NNode hidden2 = new NNode(NodeTypeEnum.NEURON);
 		
-		NNode output1 = new NNode(NodeTypeEnum.NEURON, GeneLabelEnum.OUTPUT);
+		NNode output1 = new NNode(NodeTypeEnum.NEURON, NodeLabelEnum.OUTPUT);
 		
 		testGenome.nodes.add(sensor1);
 		testGenome.nodes.add(sensor2);

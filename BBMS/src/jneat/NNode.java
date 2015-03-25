@@ -16,7 +16,7 @@ public class NNode {
 	NodeTypeEnum nType;
 	
 	/** Used for genetic marking of nodes.  Can be INPUT, BIAS, HIDDEN, or OUTPUT*/
-	GeneLabelEnum gNodeLabel;
+	NodeLabelEnum gNodeLabel;
 	
 	/** Incoming activation sum prior to processing */
 	double activesum;
@@ -60,7 +60,7 @@ public class NNode {
 	double[] params = new double[JNEATGlobal.numTraitParams];
 
 	
-	public NNode(NodeTypeEnum nType, GeneLabelEnum placement, Trait t, int id) {
+	public NNode(NodeTypeEnum nType, NodeLabelEnum placement, Trait t, int id) {
 		fType = NodeFuncEnum.SIGMOID;
 		this.nType = nType;
 		gNodeLabel = placement;
@@ -80,23 +80,23 @@ public class NNode {
 		analogue = null;
 	}
 	
-	public NNode(NodeTypeEnum nType, int id, GeneLabelEnum placement) {
+	public NNode(NodeTypeEnum nType, int id, NodeLabelEnum placement) {
 		this(nType, placement, null, id);
 	}
 	
-	public NNode(NodeTypeEnum nType, GeneLabelEnum placement, Trait t) {
+	public NNode(NodeTypeEnum nType, NodeLabelEnum placement, Trait t) {
 		this(nType, placement, t, JNEATGlobal.NewNodeID());
 	}
 	
-	public NNode(NodeTypeEnum nType, GeneLabelEnum placement)
+	public NNode(NodeTypeEnum nType, NodeLabelEnum placement)
 	{
 		this(nType, placement, null);
 	}
 	
 	public NNode(NodeTypeEnum nType) {				
-		this(nType, GeneLabelEnum.HIDDEN, null);
+		this(nType, NodeLabelEnum.HIDDEN, null);
 		
-		if (nType == NodeTypeEnum.SENSOR) gNodeLabel = GeneLabelEnum.INPUT; 
+		if (nType == NodeTypeEnum.SENSOR) gNodeLabel = NodeLabelEnum.INPUT; 
 	}
 	
 	

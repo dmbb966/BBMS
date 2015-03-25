@@ -358,12 +358,12 @@ public class Genome {
 			step2 = false;
 			for (j = 0; j < genes.size(); j++) {
 				_gene = genes.elementAt(j);
-				if (_gene.enabled && _gene.lnk.in_node.gNodeLabel != GeneLabelEnum.BIAS) break;
+				if (_gene.enabled && _gene.lnk.in_node.gNodeLabel != NodeLabelEnum.BIAS) break;
 			}
 			
 			for (; j < genes.size(); j++) {
 				_gene = genes.elementAt(j);
-				if (GlobalFuncs.randFloat() >= 0.3 && _gene.lnk.in_node.gNodeLabel != GeneLabelEnum.BIAS) {
+				if (GlobalFuncs.randFloat() >= 0.3 && _gene.lnk.in_node.gNodeLabel != NodeLabelEnum.BIAS) {
 					step2 = true;
 					break;
 				}
@@ -379,7 +379,7 @@ public class Genome {
 			while (trycount < 20 && !found) {
 				// Pure random splitting
 				_gene = genes.elementAt(GlobalFuncs.randRange(0, genes.size() - 1));
-				if (_gene.enabled && _gene.lnk.in_node.gNodeLabel != GeneLabelEnum.BIAS) found = true;
+				if (_gene.enabled && _gene.lnk.in_node.gNodeLabel != NodeLabelEnum.BIAS) found = true;
 				
 				++trycount;
 			}
@@ -404,7 +404,7 @@ public class Genome {
 				// By convention it will point to the first trait in the genome.
 				
 				int curnode_id = pop.getCurNodeID_Inc();
-				newNode = new NNode(NodeTypeEnum.NEURON, curnode_id, GeneLabelEnum.HIDDEN);
+				newNode = new NNode(NodeTypeEnum.NEURON, curnode_id, NodeLabelEnum.HIDDEN);
 				newNode.nodeTrait = traits.firstElement();
 				
 				int gene_innov1 = pop.getCurInnov_Inc();
@@ -426,7 +426,7 @@ public class Genome {
 						(_innov.old_innovation_num == _gene.innovation_num)) {
 					
 					// Create the new genes and pass current nodeID to new node
-					newNode = new NNode(NodeTypeEnum.NEURON, _innov.newNode.id, GeneLabelEnum.HIDDEN);
+					newNode = new NNode(NodeTypeEnum.NEURON, _innov.newNode.id, NodeLabelEnum.HIDDEN);
 					newNode.nodeTrait = traits.firstElement();
 					
 					newGene1 = new Gene(oldTrait, 1.0, in_node, newNode, oldLink.recurrent, _innov.innovation_num1, 0);
@@ -476,9 +476,9 @@ public class Genome {
 			Trait curTrait = _node.nodeTrait;
 			newNode.nodeTrait = JNEATGlobal.derive_trait(curTrait);
 			
-			if (_node.gNodeLabel == GeneLabelEnum.BIAS || _node.gNodeLabel == GeneLabelEnum.INPUT) {
+			if (_node.gNodeLabel == NodeLabelEnum.BIAS || _node.gNodeLabel == NodeLabelEnum.INPUT) {
 				newNet.attachInput(newNode);
-			} else if (_node.gNodeLabel == GeneLabelEnum.OUTPUT) {
+			} else if (_node.gNodeLabel == NodeLabelEnum.OUTPUT) {
 				newNet.attachOutput(newNode);
 			} else {
 				newNet.attachHidden(newNode);
@@ -812,7 +812,7 @@ public class Genome {
 		// Verify to ensure there are outputs
 		for (int i = 0; i < newNodes.size(); i++) {
 			NNode curNode = newNodes.elementAt(i);
-			if (curNode.gNodeLabel == GeneLabelEnum.OUTPUT) {
+			if (curNode.gNodeLabel == NodeLabelEnum.OUTPUT) {
 				outputPresent = true;
 				break;
 			}
@@ -905,7 +905,7 @@ public class Genome {
 		// Verify to ensure there are outputs
 		for (int i = 0; i < newNodes.size(); i++) {
 			NNode curNode = newNodes.elementAt(i);
-			if (curNode.gNodeLabel == GeneLabelEnum.OUTPUT) {
+			if (curNode.gNodeLabel == NodeLabelEnum.OUTPUT) {
 				outputPresent = true;
 				break;
 			}
@@ -1256,8 +1256,8 @@ public class Genome {
 		// Build the input nodes
 		for (int i = 1; i <= inNodes; i++) {
 			NNode newNode = null;
-			if (i < inNodes) newNode = new NNode(NodeTypeEnum.SENSOR, i, GeneLabelEnum.INPUT);
-			else newNode = new NNode(NodeTypeEnum.SENSOR, i, GeneLabelEnum.BIAS);
+			if (i < inNodes) newNode = new NNode(NodeTypeEnum.SENSOR, i, NodeLabelEnum.INPUT);
+			else newNode = new NNode(NodeTypeEnum.SENSOR, i, NodeLabelEnum.BIAS);
 			
 			newNode.nodeTrait = newTrait;
 			nodes.add(newNode);
@@ -1265,14 +1265,14 @@ public class Genome {
 		
 		// Build the hidden nodes
 		for (int i = inNodes + 1; i <= inNodes + outNodes; i++) {
-			NNode newNode = new NNode(NodeTypeEnum.NEURON, i, GeneLabelEnum.HIDDEN);
+			NNode newNode = new NNode(NodeTypeEnum.NEURON, i, NodeLabelEnum.HIDDEN);
 			newNode.nodeTrait = newTrait;
 			nodes.add(newNode);
 		}
 		
 		// Build the output nodes
 		for (int i = nodeMax; i <= totalNodes; i++) {
-			NNode newNode = new NNode(NodeTypeEnum.NEURON, i, GeneLabelEnum.OUTPUT);
+			NNode newNode = new NNode(NodeTypeEnum.NEURON, i, NodeLabelEnum.OUTPUT);
 		}
 		
 
