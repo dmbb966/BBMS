@@ -460,7 +460,7 @@ public class Genome {
 	
 	/** 
 	 * Generates and returns a new Network based on this genome.
-	 * "Genesis!  You have it - I want it!"
+	 * "Genesis!  I want it!"
 	 */
 	public Network Genesis(int NetworkID) {
 		Network newNet = new Network(NetworkID);
@@ -477,11 +477,11 @@ public class Genome {
 			newNode.nodeTrait = JNEATGlobal.derive_trait(curTrait);
 			
 			if (_node.gNodeLabel == GeneLabelEnum.BIAS || _node.gNodeLabel == GeneLabelEnum.INPUT) {
-				newNet.attachInput(_node);
+				newNet.attachInput(newNode);
 			} else if (_node.gNodeLabel == GeneLabelEnum.OUTPUT) {
-				newNet.attachOutput(_node);
+				newNet.attachOutput(newNode);
 			} else {
-				newNet.attachHidden(_node);
+				newNet.attachHidden(newNode);
 			}
 			
 			_node.analogue = newNode;	
@@ -499,19 +499,24 @@ public class Genome {
 		
 		while (itr_gene.hasNext()) {
 			Gene _gene = itr_gene.next();
-			
+									
 			// Only creates the link if the gene is enabled
 			if (_gene.enabled){
 				Link curLink = _gene.lnk;
 				NNode iNode = curLink.in_node.analogue;
 				NNode oNode = curLink.out_node.analogue;
-				
+											
 				// NOTE: This line could be run through a recurrency check if desired.
 				// There is no need to do this with the current implementation of NEAT.
 				
 				Link newLink = new Link(curLink.weight, iNode, oNode, curLink.recurrent);
+				
+				System.out.println(" NEW LINK: " + newLink.PrintLink());
+				
 				oNode.incoming.add(newLink);
 				iNode.outgoing.add(newLink);
+				
+				System.out.println(" Outgoing Node: " + oNode.PrintNode());
 				
 				// Derive the link's parameters from its trait pointer
 				Trait curTrait = curLink.linkTrait;
@@ -1209,6 +1214,68 @@ public class Genome {
 		ret = ret + "\n ---GENOME END---";
 		
 		return ret;
+	}
+	
+	/** Generates a random genome 
+	 * 
+	 * @param newID
+	 * @param inNodes - input nodes
+	 * @param outNodes - output nodes
+	 * @param hidNodes
+	 * @param maxNodes - maximum number of nodes in the genome
+	 * @param recur
+	 * @param linkprob
+	 */
+	public Genome(int newID, int inNodes, int outNodes, int hidNodes, int nodeMax, boolean recur, double linkprob) {
+		
+		//    i i i n n n n n n n n n n n n n n n n . . . . . . . . o o o o
+		//    |                                   |                 ^     |
+		//    |<----------- maxnode ------------->|                 |     | 
+		//    |                                                     |     |
+		//    |<-----------------------total nodes -----------------|---->|
+		//                                                          |
+		//                                                          |
+		//     first output ----------------------------------------+
+
+		// Ensures totalNodes is an index beyond the first output (see Figure A, above)
+		int totalNodes = inNodes + outNodes + nodeMax;
+		
+		traits = new Vector<Trait>();
+		nodes = new Vector<NNode>();
+		genes = new Vector<Gene>();
+		
+		boolean[] connectionMatrix = new boolean[totalNodes * totalNodes];
+		
+		genome_id = newID;
+		
+		// Creates a dummy trait - for future expansion of the system.
+		Trait newTrait = new Trait();
+		newTrait.setTraitParam(0, 1.0);
+		traits.add(newTrait);
+		
+		// Build the input nodes
+		for (int i = 1; i <= inNodes; i++) {
+			NNode newNode = null;
+			if (i < inNodes) newNode = new NNode(NodeTypeEnum.SENSOR, i, GeneLabelEnum.INPUT);
+			else newNode = new NNode(NodeTypeEnum.SENSOR, i, GeneLabelEnum.BIAS);
+			
+			newNode.nodeTrait = newTrait;
+			nodes.add(newNode);
+		}
+		
+		// Build the hidden nodes
+		for (int i = inNodes + 1; i <= inNodes + outNodes; i++) {
+			NNode newNode = new NNode(NodeTypeEnum.NEURON, i, GeneLabelEnum.HIDDEN);
+			newNode.nodeTrait = newTrait;
+			nodes.add(newNode);
+		}
+		
+		// Build the output nodes
+		for (int i = nodeMax; i <= totalNodes; i++) {
+			NNode newNode = new NNode(NodeTypeEnum.NEURON, i, GeneLabelEnum.OUTPUT);
+		}
+		
+
 	}
 	
 	public Genome(Vector<Gene> g, Vector<Trait> t, Vector<NNode> n, int newID) {

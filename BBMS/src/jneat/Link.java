@@ -53,8 +53,8 @@ public class Link {
 	}
 	
 	public String PrintLink() {
-		String ret = "LINK #" + id + " is from Node #" + in_node.id + " to Node #" + out_node.id + "\n" + 
-				"with weight " + weight + " and bias " + bias + ".";
+		String ret = "LINK #" + id + " is from Node #" + in_node.id + " to Node #" + out_node.id + 
+				" with weight " + weight + " and bias " + bias;
 		if (recurrent) ret = ret + " RECURRENT";
 		if (time_delay) ret = ret + " DELAYED";
 		

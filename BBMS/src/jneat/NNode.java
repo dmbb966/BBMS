@@ -93,8 +93,10 @@ public class NNode {
 		this(nType, placement, null);
 	}
 	
-	public NNode(NodeTypeEnum nType) {
+	public NNode(NodeTypeEnum nType) {				
 		this(nType, GeneLabelEnum.HIDDEN, null);
+		
+		if (nType == NodeTypeEnum.SENSOR) gNodeLabel = GeneLabelEnum.INPUT; 
 	}
 	
 	
@@ -260,9 +262,13 @@ public class NNode {
 		
 		return xmax_level;
 	}
-
 	
 	public String PrintNode() {
+		return PrintNode(false);
+	}
+
+	
+	public String PrintNode(boolean showLinks) {
 		String ret = "";
 		
 		switch (gNodeLabel) {
@@ -281,11 +287,23 @@ public class NNode {
 		}
 		
 		ret += "Node " + id + " ";
-		if (active_flag) ret += " active ";
-		else ret += " inactive ";
+		if (active_flag) ret += " ACTIVE ";
+		else ret += " INACTIVE ";
 		
-		ret += "with " + activation_count + " activations.\n";
-		ret += "Current: " + activation + " || Past: " + last_activation + " || Prior: " + prior_activation;
+		ret += "with " + activation_count + " activations.  ";
+		ret += ">> Current: " + activation + " || Past: " + last_activation + " || Prior: " + prior_activation + " <<";
+		
+		if (!showLinks) return ret;
+		
+		Iterator<Link> itr_link = incoming.iterator();
+		while (itr_link.hasNext()) {
+			ret += "\n  >> " + itr_link.next().PrintLink();
+		}
+		
+		itr_link = outgoing.iterator();
+		while (itr_link.hasNext()) {
+			ret += "\n  << " + itr_link.next().PrintLink();
+		}
 		
 				
 		return ret;

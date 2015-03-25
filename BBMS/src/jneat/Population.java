@@ -10,9 +10,9 @@ import bbms.GlobalFuncs;
 /** A Population is a group of Organisms including their species */
 public class Population {
 	
-	public Vector<Organism> organisms;
-	public Vector<Species> species;
-	public Vector<Innovation> innovations;
+	public Vector<Organism> organisms = new Vector<Organism>();
+	public Vector<Species> species = new Vector<Species>();
+	public Vector<Innovation> innovations = new Vector<Innovation>();
 	
 	/** Current label number available for nodes*/
 	private int cur_node_id;
@@ -45,6 +45,21 @@ public class Population {
 		highest_fitness = 0.0;
 		highest_last_changed = 0;
 		spawn(g, size);
+	}
+	
+	/** Creates a population of random topologies.
+	 * 
+	 * @param size
+	 * @param numInputs
+	 * @param numOutputs
+	 * @param maxNodes - maximum number of nodes in the initially generated topology
+	 * @param recur
+	 * @param linkprob
+	 */
+	public Population (int size, int numInputs, int numOutputs, int maxNodes, boolean recur, double linkprob) {
+		for (int i = 0; i < size; i++) {
+			Genome newGenome = new Genome(i, numInputs, numOutputs, GlobalFuncs.randRange(0,  maxNodes), maxNodes, recur, linkprob);
+		}
 	}
 	
 	public void spawn(Genome g, int size) {

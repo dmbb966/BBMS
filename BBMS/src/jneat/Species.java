@@ -15,7 +15,7 @@ public class Species {
 	double max_fitness;
 	double max_fitness_ever;
 	
-	/** Length of time since hte last update; if too old3, species will go extinct */
+	/** Length of time since the last update; if too old3, species will go extinct */
 	int age_lastimprovement;
 	
 	/** Number of expected children */

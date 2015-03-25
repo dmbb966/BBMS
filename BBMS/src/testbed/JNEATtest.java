@@ -60,8 +60,65 @@ public class JNEATtest {
 		
 	}
 	
+	public static void test4() {
+		Genome testGenome = new Genome();
+		
+		NNode sensor1 = new NNode(NodeTypeEnum.SENSOR);
+		NNode sensor2 = new NNode(NodeTypeEnum.SENSOR);
+		
+		NNode hidden1 = new NNode(NodeTypeEnum.NEURON);
+		NNode hidden2 = new NNode(NodeTypeEnum.NEURON);
+		
+		NNode output1 = new NNode(NodeTypeEnum.NEURON, GeneLabelEnum.OUTPUT);
+		
+		testGenome.nodes.add(sensor1);
+		testGenome.nodes.add(sensor2);
+		testGenome.nodes.add(hidden1);
+		testGenome.nodes.add(hidden2);
+		testGenome.nodes.add(output1);
+				
+		testGenome.genes.add(new Gene(sensor1, hidden1, GlobalFuncs.randFloat()));
+		testGenome.genes.add(new Gene(sensor2, hidden1, GlobalFuncs.randFloat()));
+		//testGenome.genes.add(new Gene(hidden1, hidden2, GlobalFuncs.randFloat()));
+		testGenome.genes.add(new Gene(hidden2, output1, GlobalFuncs.randFloat()));
+		testGenome.genes.add(new Gene(hidden1, output1, GlobalFuncs.randFloat()));
+		
+		Population y = new Population(testGenome, 1);
+		
+		
+		Network x = testGenome.Genesis(1);
+		
+		System.out.println(testGenome.PrintGenome());
+
+		
+	
+		
+		x.inputs.get(0).SensorInput(0.75);
+		x.inputs.get(1).SensorInput(0.25);
+		
+		System.out.println("Minimal Test: " + x.IsMinimal());
+		// System.out.println("Stabilizes in: " + x.IsStabilized(0));
+		System.out.println("Max depth: " + x.max_depth());
+						
+		System.out.println(x.PrintNetwork(true));
+		
+		
+		 
+		x.ActivateNetwork();		
+		System.out.println(x.PrintNetwork());
+		
+		x.ActivateNetwork();		
+		System.out.println(x.PrintNetwork());
+		
+		x.ActivateNetwork();		
+		System.out.println(x.PrintNetwork());
+		
+		
+		System.out.println("\n\n" + y.PrintPopulation());
+	}
+	
 	public static void main(String[] args) {
-		testX();
+		test4();
 	} 
 	
 	public static void testX() {

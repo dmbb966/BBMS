@@ -6,9 +6,9 @@ import java.util.Vector;
 // aka Phenotype
 public class Network {
 	
-	Vector<NNode> inputs;
-	Vector<NNode> outputs;
-	Vector<NNode> allNodes;
+	public Vector<NNode> inputs;
+	public Vector<NNode> outputs;
+	public Vector<NNode> allNodes;
 	
 	Genome genotype;		// The genotype that created this phenotype
 	int net_id;
@@ -53,7 +53,7 @@ public class Network {
 	public void attachHidden(NNode n) {
 		allNodes.addElement(n);
 		
-		System.out.println("Added node " + n.id + " as a hidden node of network " + net_id);
+		//System.out.println("Added node " + n.id + " as a hidden node of network " + net_id);
 	}
 	
 	/** Adds node 'n' to this neural network's input nodes
@@ -64,7 +64,7 @@ public class Network {
 		inputs.addElement(n);
 		allNodes.addElement(n);
 		
-		System.out.println("Added node " + n.id + " to inputs of network " + net_id);
+		//System.out.println("Added node " + n.id + " to inputs of network " + net_id);
 	}
 	
 	/** Adds node 'n' to this neural network's output nodes
@@ -75,7 +75,7 @@ public class Network {
 		outputs.addElement(n);
 		allNodes.addElement(n);
 		
-		System.out.println("Added node " + n.id + " to outputs of network " + net_id);
+		//System.out.println("Added node " + n.id + " to outputs of network " + net_id);
 	}
 	
 	public void linkNodes(NNode parent, NNode child, double weight) {
@@ -346,6 +346,21 @@ public class Network {
 		}
 		
 		return IsRecurrent(pIn, pOut, level, threshold);
+	}
+	
+	public String PrintNetwork() {
+		return PrintNetwork(false);
+	}
+	
+	public String PrintNetwork(boolean showLinks) {
+		String ret = "\n\nNETWORK #" + net_id + " has " + allNodes.size() + " nodes.\n";		
+		
+		Iterator<NNode> itr_node = allNodes.iterator();
+		while (itr_node.hasNext()) {
+			ret += " * " + itr_node.next().PrintNode(showLinks) + "\n";
+		}
+		
+		return ret;
 	}
 	
 	/** Resets all nodes in the network */
