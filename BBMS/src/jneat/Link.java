@@ -20,6 +20,10 @@ public class Link {
 	
 	boolean recurrent;
 	boolean time_delay;
+	boolean is_traversed;
+	
+	/** Link-related parameters that change during Hebbian-type learning */
+	double[] params;
 	
 	public Link(double w, NNode inode, NNode onode, boolean recur) {
 		this(null, w, inode, onode, recur);
@@ -31,8 +35,21 @@ public class Link {
 		out_node = onode;
 		recurrent = recur;
 		time_delay = false;
+		is_traversed = false;
 		id = JNEATGlobal.NewLinkID();
 		linkTrait = t;
+	}
+	
+	public void DeriveTrait(Trait t) {
+		if (t != null) {
+			for (int i = 0; i < JNEATGlobal.numTraitParams; i++) {
+				params[i] = t.params[i];
+			}
+		} else {
+			for (int i = 0; i < JNEATGlobal.numTraitParams; i++) {
+				params[i] = 0.0;
+			}
+		}
 	}
 	
 	public String PrintLink() {

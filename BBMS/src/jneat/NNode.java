@@ -1,5 +1,6 @@
 package jneat;
 
+import java.util.Iterator;
 import java.util.Vector;
 
 /** a NODE is either a NEURON or a SENSOR.
@@ -54,6 +55,9 @@ public class NNode {
 	 * to a real node (phenotype) during the 'genesis' process.  Just don't use protomatter
 	 * in the genesis matrix. */
 	NNode analogue;
+	
+	/** Vector of real values for Hebbian or other advanced function - future work */
+	double[] params = new double[JNEATGlobal.numTraitParams];
 
 	
 	public NNode(NodeTypeEnum nType, GeneLabelEnum placement, Trait t, int id) {
@@ -139,6 +143,29 @@ public class NNode {
 		return;		
 	}
 	
+	public void resetNode() {
+		activation_count = 0;
+		activation = 0.0;
+		last_activation = 0.0;
+		prior_activation = 0.0;
+		
+		// Flush back link
+		Iterator<Link> itr_link = incoming.iterator();
+		while (itr_link.hasNext()) {
+			Link _link = itr_link.next();
+			_link.bias = 0.0;
+			_link.is_traversed = false;
+		}
+		
+		// Flush forward link
+		itr_link = outgoing.iterator();
+		while (itr_link.hasNext()) {
+			Link _link = itr_link.next();
+			_link.bias = 0.0;
+			_link.is_traversed = false;
+		}		
+	}
+	
 	/** Returns the activation from the previous (T-1) step, or 0.0 if there was none */
 	public double getTimeDelayActivation() {
 		if (activation_count > 1) return last_activation;
@@ -149,6 +176,89 @@ public class NNode {
 	public double getActivation() {
 		if (activation_count > 0) return activation;
 		else return 0.0;
+	}
+	
+	/** Takes a trait's parameters and uses it for this node's parameters (distinct from the node trait)*/
+	public void derive_trait(Trait t) {
+		Trait x = JNEATGlobal.derive_trait(t);
+		params = x.params;
+	}
+	
+	/** Recursively traverses and marks nodes in the network
+	 * Works from the outputs to the inputs and terminates upon reaching sensor.*/
+	public boolean mark(int xlevel) {
+		if (xlevel > 100) return false;		// Depth too deep
+		
+		// Base case
+		if (this.nType == NodeTypeEnum.SENSOR) {
+			this.is_traversed = true;
+			return true;
+		}
+		
+		// Recurrent case
+		Iterator<Link> itr_link = this.incoming.iterator();
+		boolean rc = false;
+		
+		while (itr_link.hasNext()) {
+			Link _link = itr_link.next();
+			if (!_link.in_node.is_traversed) {
+				_link.in_node.is_traversed = true;
+				rc = _link.in_node.mark(xlevel + 1);
+				if (!rc) return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	/** Loads the sensor with a particular value, moving existing values down the history of last and prior activations.
+	 * Returns false if this is not a sensor node. */
+	public boolean LoadSensor(double value) {
+		if (nType == NodeTypeEnum.SENSOR) {
+			// Time-delayed memory
+			prior_activation = last_activation;
+			last_activation = activation;
+			activation = value;
+			activation_count++;
+			
+			return true;
+		}
+		else return false;
+	}
+	
+	/** Recursively explores the network from outputs to inputs and returns the greatest separation between the two */
+	public int depth(int xlevel, int xmax_level) {
+		if (xlevel > 100) {
+			System.out.println(" *** DEPTH NOT DETERMINED FOR NETWORK WITH LOOP *** ");
+			return 100;
+		}
+		
+		// Base case
+		if (this.nType == NodeTypeEnum.SENSOR) return xlevel;
+					
+		// Recurrent case
+		xlevel++;
+		
+		Iterator<Link> itr_link = this.incoming.iterator();
+		int cur_depth = 0;		// Depth of the current node
+		
+		while (itr_link.hasNext()) {
+			Link _link = itr_link.next();
+			NNode _ynode = _link.in_node;
+			
+			if (!_ynode.is_traversed) {
+				_ynode.is_traversed = true;
+				cur_depth = _ynode.depth(xlevel, xmax_level);
+				_ynode.inner_level = cur_depth - xlevel;
+			}
+			else {
+				cur_depth = xlevel + _ynode.inner_level;
+			}
+			
+			if (cur_depth > xmax_level) xmax_level = cur_depth;
+		}
+		
+		return xmax_level;
 	}
 
 	

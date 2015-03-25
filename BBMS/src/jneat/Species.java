@@ -398,6 +398,10 @@ public class Species {
 		return true;
 	}
 	
+	/** Return the number of generations since the last improvement */
+	public int last_improved() {
+		return (age - age_lastimprovement);
+	}
 	
 	public void RemoveOrganism(Organism org) {
 		boolean rOrg= organisms.removeElement(org);

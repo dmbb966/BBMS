@@ -187,6 +187,157 @@ public class Network {
 		}
 	}
 	
+	/** Checks to see that the outputs are connected to the inputs and returns true/false accordingly */
+	public boolean IsMinimal() {
+		boolean ret_code = true;
+		
+		// Reset all nodes pending evaluation
+		Iterator<NNode> itr_node = allNodes.iterator();
+		while (itr_node.hasNext()) {
+			itr_node.next().is_traversed = false;
+		}
+		
+		// Traces path backwards from outputs to sensors
+		itr_node = outputs.iterator();
+		while (itr_node.hasNext()) {
+			boolean rc = itr_node.next().mark(0);
+			
+			// Wil be false if the network has a loop or disconnected output
+			if (!rc) return false;
+		}
+		
+		// Now that the virtaul signal has flowed from output to inputs, see if the sensors have been touched
+		itr_node = inputs.iterator();
+		while (itr_node.hasNext()) {
+			if (!itr_node.next().is_traversed) ret_code = false;
+		}
+		
+		return ret_code;
+	}
+	
+	/** Period is the length of time you want the network to be stable for.  Default is 30.
+	 * Gives the network 90 turns plus the period the network must be stable for.
+	 * Result is the time it took for the network to stabilize. */
+	public int IsStabilized(int period) {
+		int level = 0;
+		
+		if (period == 0) period = 30;
+		
+		// First activates the sensor nodes
+		Iterator<NNode> itr_node = inputs.iterator();
+		while (itr_node.hasNext()) {
+			NNode _node = itr_node.next();
+			if (_node.nType == NodeTypeEnum.SENSOR) {
+				_node.prior_activation = _node.last_activation;
+				_node.last_activation = _node.activation;
+				_node.activation_count++;
+				_node.activation = 1.0;
+			}
+		}
+		
+		// Activation of the network
+		boolean done = false;
+		int time_passed = 0;
+		int time_limit = period + 90;
+		int turns_stable = 0;
+		
+		while (!done) {
+			if (time_passed >= time_limit) return 0; 	// Network has not stabilized
+			
+			// For each node, calculate the sum of its incoming activation
+			itr_node = allNodes.iterator();
+			while (itr_node.hasNext()) {
+				NNode _node = itr_node.next();
+				if (_node.nType != NodeTypeEnum.SENSOR) {
+					_node.activesum = 0.0;
+					_node.active_flag = false;
+					
+					Iterator<Link> itr_link = _node.incoming.iterator();
+					while (itr_link.hasNext()) {
+						Link _link = itr_link.next();
+						if (!_link.time_delay) {
+							_node.activesum += _link.in_node.getActivation();
+							if (_link.in_node.active_flag || _link.in_node.nType == NodeTypeEnum.SENSOR) _node.active_flag = true; 
+						} 
+						// If time delayed
+						else {								
+							_node.activesum += _link.in_node.getTimeDelayActivation();
+						}
+					}
+				}
+			}
+			
+			// Now activates all non-sensor nodes based on their incoming activation
+			itr_node = allNodes.iterator();
+			while (itr_node.hasNext()) {
+				NNode _node = itr_node.next();
+				if (_node.nType != NodeTypeEnum.SENSOR) {
+					// Only activate if some active input came in
+					if (_node.active_flag) {
+						_node.prior_activation = _node.last_activation;
+						_node.last_activation = _node.activation;
+						_node.activation = _node.activesum;
+						_node.activation_count++;
+					}
+				}				
+			}
+			
+			if (!OutputsOff()) {
+				// Verify there is a change in any output
+				boolean has_changed = false;
+				itr_node = outputs.iterator();
+				while (itr_node.hasNext()) {
+					NNode _node = itr_node.next();
+					if (_node.last_activation != _node.activation) {
+						has_changed = true;
+						break;
+					}
+				}
+				
+				if (!has_changed) {
+					// If no change, increase the stability counter
+					turns_stable++;
+					
+					if (turns_stable >= period) {
+						done = true;
+						level = time_passed;
+						break;
+					}
+				}
+				
+				// Change, meaning stability counter is reset
+				else {
+					turns_stable = 0;
+				}							
+			}
+			
+			time_passed++;		
+		}		
+		
+		// Returns 
+		return (level - period + 1);
+	}
+	
+	/** Finds the maximum number of neurons between an output and input*/
+	public int max_depth() {
+		int max = 0;
+		
+		for (int j = 0; j < allNodes.size(); j++) {
+			NNode _node = allNodes.elementAt(j);
+			_node.inner_level = 0;
+			_node.is_traversed = false;
+		}
+		
+		Iterator<NNode> itr_node = outputs.iterator();
+		while (itr_node.hasNext()) {
+			NNode _node = itr_node.next();
+			int cur_depth = _node.depth(0, max);
+			if (cur_depth > max) max = cur_depth;
+		}
+		
+		return max;
+	}
+	
 	public boolean HasPath(NNode pIn, NNode pOut, int level, int threshold) {
 		
 		// Reset all links to a state of none being traversed
@@ -195,5 +346,13 @@ public class Network {
 		}
 		
 		return IsRecurrent(pIn, pOut, level, threshold);
+	}
+	
+	/** Resets all nodes in the network */
+	public void flush() {
+		Iterator<NNode> itr_node = allNodes.iterator();
+		while (itr_node.hasNext()) {
+			itr_node.next().resetNode();
+		}
 	}
 }
