@@ -114,11 +114,15 @@ public class Population {
 		
 		double overall_average = totalFitness / organisms.size();
 		
+		System.out.println(">>> Average fitness for this population: " + overall_average);
+		
 		// Compute the number of expected offspring for each individual organism
 		itr_organism = organisms.iterator();
 		while (itr_organism.hasNext()) {
 			Organism _organism = itr_organism.next();
 			_organism.expected_offspring = _organism.fitness / overall_average;  
+			
+			// System.out.println(">>> Organism " + _organism.genome.genome_id + " is allotted " + _organism.expected_offspring + " babies.");
 		}
 		
 		// Add offspring up within each species to get the number of offspring per species
@@ -173,7 +177,7 @@ public class Population {
 		Vector<Species> sorted_species = new Vector<Species>();
 		itr_species = species.iterator();
 		while (itr_species.hasNext()) {
-			sorted_species.add(itr_species.next());
+			sorted_species.add(itr_species.next());						
 		}
 		
 		// Sort the population and mark for death

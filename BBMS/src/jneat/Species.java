@@ -62,8 +62,8 @@ public class Species {
 		for (int i = 0; i < organisms.size(); i++) {
 			Organism _organism = organisms.elementAt(i);
 		
-			
-			// Multiply fitness by size of species - will be normalized later
+			// Remember original, unmodified fitness.
+			_organism.orig_fitness = _organism.fitness;
 			
 			// Fitness decreases after a stagnation point (dropoff_age)
 			if (age_debt >= 1) _organism.fitness *= JNEATGlobal.p_dropoff_coeff;
