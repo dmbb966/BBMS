@@ -52,7 +52,10 @@ public class Species {
 	}
 	
 	/** Change the fitness of the organisms in the species to higher values for very new species
-	 * (to protect them from premature pruning).  */
+	 * (to protect them from premature pruning).  
+	 * 
+	 * Automatically computes the average and maximum fitness for this species.
+	 * */
 	public void AdjustFitness() {
 		int age_debt = (TimeSinceImprovement() + 1) - JNEATGlobal.p_dropoff_age;
 		
@@ -78,6 +81,8 @@ public class Species {
 		
 		// Sorts the population and marks for death those after the survival_thresh * pop_size		
 		Collections.sort(organisms, new OrganismComparator());
+		
+		
 		
 		// Update age of last improvement if applicable
 		if (organisms.firstElement().orig_fitness > max_fitness_ever) {
@@ -105,6 +110,11 @@ public class Species {
 		while (itr_organism.hasNext()) {
 			itr_organism.next().eliminate = true;
 		}
+		
+		ComputeAvgFitness();
+		ComputeMaxFitness();
+		
+		System.out.println("\n\n--- Sorted by fitness and end of adjust fitness ---\n" + this.PrintSpecies());
 	}
 	
 	/** Determines the average fitness of the species and updates its attributes accordingly */
@@ -127,6 +137,8 @@ public class Species {
 			Organism _organism = itr_organism.next();
 			if (_organism.fitness > max_fitness) max_fitness = _organism.fitness;
 		}
+		
+		if (max_fitness > max_fitness_ever) max_fitness_ever = max_fitness;
 	}
 	
 	/** Computes the collective offspring of the entire species (sum of all organisms' offspring). */
