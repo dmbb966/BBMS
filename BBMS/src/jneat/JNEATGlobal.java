@@ -117,11 +117,10 @@ public class JNEATGlobal {
 	/** Sigmoid function for the given parameters. 
 	 * 
 	 * @param activesum
-	 * @param slope
-	 * @param constant
+	 * @param slope	 * 
 	 * @return
 	 */
-   public static double fsigmoid(double activesum,double slope,double constant) 
+   public static double fsigmoid(double activesum,double slope) 
     {
 		 return (1/(1+(Math.exp(-(slope*activesum))))); //Compressed
     }

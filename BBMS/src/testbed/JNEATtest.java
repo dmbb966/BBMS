@@ -18,7 +18,7 @@ public class JNEATtest {
 		testNet.attachOutput(node2);
 		
 		testNet.linkNodes(node1, node2, 0.3);
-		node1.SensorInput(0.7);
+		node1.LoadSensor(0.7);
 		
 		System.out.println("\n" + node1.PrintNode());
 		System.out.println("\n" + node2.PrintNode());
@@ -93,8 +93,8 @@ public class JNEATtest {
 		
 	
 		
-		x.inputs.get(0).SensorInput(0.75);
-		x.inputs.get(1).SensorInput(0.25);
+		x.inputs.get(0).LoadSensor(0.75);
+		x.inputs.get(1).LoadSensor(0.25);
 		
 		System.out.println("Minimal Test: " + x.IsMinimal());
 		// System.out.println("Stabilizes in: " + x.IsStabilized(0));
@@ -118,9 +118,26 @@ public class JNEATtest {
 	}
 	
 	public static void test5() {
-		Population pop = new Population(1, 2, 1, 1, false, 0.01);
+		Population pop = new Population(5, 1, 1, 1, false, 0.01);
+		
+		// System.out.println(pop.PrintPopulation());
+		
+		for (int i = 0; i < 1; i++) {
+			System.out.println("Iteration #" + i);
+			double sensorInp = 0.5;			
+			System.out.println("Input sensor is: " + sensorInp);
+			
+			for (int j = 0; j < pop.organisms.size(); j++) {
+				Organism finger = pop.organisms.elementAt(j);
+				finger.net.inputs.firstElement().LoadSensor(sensorInp);
+				finger.net.ActivateNetwork();
+				
+				System.out.println("Organism #" + j + " outputs: " + finger.net.outputs.firstElement().getActivation());
+			}
+		}
 		
 		System.out.println(pop.PrintPopulation());
+		
 	}
 	
 	public static void main(String[] args) {

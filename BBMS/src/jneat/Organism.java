@@ -4,7 +4,7 @@ package jneat;
  */
 public class Organism {
 	int generation;
-	double fitness;
+	public double fitness;
 	
 	/** A DEBUG variable - high fitness of champ */
 	double high_fit;			
@@ -31,9 +31,9 @@ public class Organism {
 	/** Marker for the destruction of inferior Organisms */
 	boolean eliminate;	
 	
-	Network net;		// Phenotype
-	Genome genome;		// Genotype
-	Species species;
+	public Network net;		// Phenotype
+	public Genome genome;		// Genotype
+	public Species species;
 	
 	/** Number of expected children.  Fractional because this is alloted based off its proportional fitness in the population. */
 	double expected_offspring;
@@ -66,11 +66,13 @@ public class Organism {
 		String ret = "";
 		
 		ret = ret + "ORGANISM -[Genome ID: " + genome.genome_id + "] ";
+		if (species != null) ret = ret + "Species #" + species.id + " ";
+		else ret = ret + "NO SPECIES ASSIGNED ";
 		if (champion) ret = ret + "(CHAMPION) ";
 		ret = ret + " Fitness: " + fitness + " with offspring = " + expected_offspring + " ";
 		if (eliminate) ret = ret + ">ELIMINATE< ";
 		
-		if (net != null) ret += "\n ***" + net.PrintNetwork(true); 
+		if (net != null) ret += net.PrintNetwork(true); 
 		
 		return ret;
 	}

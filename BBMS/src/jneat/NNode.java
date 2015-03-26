@@ -127,24 +127,6 @@ public class NNode {
 		System.out.println("Added outgoing link to Node " + id);
 	}
 	
-	/** Load a sensor neuron with the value that it senses */
-	public void SensorInput(double sense) {
-		if (nType == NodeTypeEnum.SENSOR) {
-			// Time delay memory
-			prior_activation = last_activation;
-			last_activation=activation;
-			
-			activation_count++;
-			activation = sense;
-			
-			System.out.println("Sensor " + id + " loaded with value " + sense);
-			return;
-		}
-		
-		System.out.println("ERROR!  Neuron " + id + " is not a sensor!");
-		return;		
-	}
-	
 	public void resetNode() {
 		activation_count = 0;
 		activation = 0.0;

@@ -135,7 +135,7 @@ public class Network {
 						finger.last_activation = finger.activation;
 						
 						if (finger.fType == NodeFuncEnum.SIGMOID) {
-							finger.activation = JNEATGlobal.fsigmoid(finger.activesum,  4.924273,  2.4621365);
+							finger.activation = JNEATGlobal.fsigmoid(finger.activesum,  4.924273);
 						}
 						finger.activation_count += 1.0;
 					}
@@ -353,7 +353,7 @@ public class Network {
 	}
 	
 	public String PrintNetwork(boolean showLinks) {
-		String ret = "\n\nNETWORK #" + net_id + " has " + allNodes.size() + " nodes.\n";		
+		String ret = "\nNETWORK #" + net_id + " has " + allNodes.size() + " nodes.\n";		
 		
 		Iterator<NNode> itr_node = allNodes.iterator();
 		while (itr_node.hasNext()) {
