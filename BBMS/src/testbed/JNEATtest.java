@@ -117,14 +117,27 @@ public class JNEATtest {
 		System.out.println("\n\n" + y.PrintPopulation());
 	}
 	
+	public static double test5fitness(double sensVal, boolean netOutput) {
+		if (sensVal > 0.75) {
+			if (netOutput) return 1.0;
+			else return 0.0;
+		}
+		else {
+			if (!netOutput) return 1.0;
+			else return 0.0;
+		}
+	}
+	
 	public static void test5() {
-		Population pop = new Population(5, 1, 1, 1, false, 0.01);
+		Population pop = new Population(5, 1, 1, 5, false, 0.01);
 		
 		// System.out.println(pop.PrintPopulation());
 		
-		for (int i = 0; i < 1; i++) {
+		for (int i = 0; i < 20; i++) {
 			System.out.println("Iteration #" + i);
-			double sensorInp = 0.5;			
+			
+			// Input range [-1, +1]
+			double sensorInp = GlobalFuncs.randFloat() * GlobalFuncs.randPosNeg();			
 			System.out.println("Input sensor is: " + sensorInp);
 			
 			for (int j = 0; j < pop.organisms.size(); j++) {
@@ -132,11 +145,33 @@ public class JNEATtest {
 				finger.net.inputs.firstElement().LoadSensor(sensorInp);
 				finger.net.ActivateNetwork();
 				
-				System.out.println("Organism #" + j + " outputs: " + finger.net.outputs.firstElement().getActivation());
+				double result = finger.net.outputs.firstElement().getActivation();
+				
+				System.out.println("Organism #" + j + " outputs: " + result);				
+				boolean stayHere;
+				if (result > 0.5) stayHere = true;
+				else stayHere = false;
+				
+				// Maintains average fitness over i tests
+				double fitness = test5fitness(sensorInp, stayHere);
+				finger.fitness = (finger.fitness * i) + fitness;
+				finger.fitness /= (i + 1);
+				
+				if (stayHere) {
+					System.out.print("   >>> Agent will STAY.  ");
+				}
+				else {
+					System.out.print("   >>> Agent will NOT.  ");
+				}
+				System.out.println("Output val: " + result + " with fitness " + fitness + " and avg: " + finger.fitness);
 			}
 		}
 		
 		System.out.println(pop.PrintPopulation());
+		
+		System.out.println("\n\n---- Epoch ----\n\n");
+		pop.epoch();
+		
 		
 	}
 	

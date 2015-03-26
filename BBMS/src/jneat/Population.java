@@ -91,13 +91,14 @@ public class Population {
 	}
 	
 	/** Epoch turns over a population to the next generation based on fitness */
-	public void epoch(int generation) {
+	public void epoch() {
 		// Use species' age to modify the objective fitness of organisms
 		// That is, give younger species an advantage so they can take hold
 		// Also penalizes stagnant species
 		// Adjust the fitness using species size to share fitness within a species
 		// Finally, if any are below the survival threshold, mark for death
 		Species bestSpecies = null;
+		int generation = final_gen + 1;
 		
 		Iterator<Species> itr_species = species.iterator();
 		while (itr_species.hasNext()) {
