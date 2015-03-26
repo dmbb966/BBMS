@@ -4,6 +4,8 @@ package jneat;
  */
 public class Organism {
 	int generation;
+	
+	/** The adjusted fitness value (adjusted by Species.AdjustFitness())*/
 	public double fitness;
 	
 	/** A DEBUG variable - high fitness of champ */

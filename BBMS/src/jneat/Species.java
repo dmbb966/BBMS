@@ -77,6 +77,8 @@ public class Species {
 			// Shares fitness within the species <DISABLED since organism fitness doesn't represent the species fitness
 			// _organism.fitness /= organisms.size();
 			
+			System.out.println("*Adjusted fitness of organism " + _organism.genome.genome_id + ": " + _organism.orig_fitness + " --> " + _organism.fitness);
+			
 		}
 		
 		// Sorts the population and marks for death those after the survival_thresh * pop_size		
@@ -126,6 +128,8 @@ public class Species {
 			total += itr_organism.next().fitness;
 		}
 		
+		System.out.println("Avg fitness calc: " + total + " / " + organisms.size());
+		
 		avg_fitness = total / (double) organisms.size();
 	}
 	
@@ -138,7 +142,7 @@ public class Species {
 			if (_organism.fitness > max_fitness) max_fitness = _organism.fitness;
 		}
 		
-		if (max_fitness > max_fitness_ever) max_fitness_ever = max_fitness;
+		// if (max_fitness > max_fitness_ever) max_fitness_ever = max_fitness;
 	}
 	
 	/** Computes the collective offspring of the entire species (sum of all organisms' offspring). */

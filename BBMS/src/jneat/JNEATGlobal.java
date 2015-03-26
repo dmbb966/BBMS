@@ -21,7 +21,7 @@ public class JNEATGlobal {
 	static double p_mutdiff_coeff = 0.1;		// Weight difference between genes
 	
 	/** Age at which the Species starts to be penalized */
-	static int p_dropoff_age = 0;
+	static int p_dropoff_age = 5;
 	
 	/** Fitness multiplier if age exceeds dropoff_age*/
 	static double p_dropoff_coeff = 0.5;	
@@ -43,7 +43,7 @@ public class JNEATGlobal {
 	
 	// Mutation probabilities
 	static double p_mutate_add_link_prob = 0.0;
-	static double p_mutate_add_node_prob = 0.2;
+	static double p_mutate_add_node_prob = 0.0;	// 0.2
 	static double p_mutate_gene_reenable_prob = 0.0;
 	static double p_mutate_link_trait_prob = 0.0;
 	static double p_mutate_link_weights_prob = 0.0;
@@ -71,7 +71,7 @@ public class JNEATGlobal {
 	static int numTraitParams = 8;
 	
 	/** Probability of mutating a single trait parameter*/
-	static double traitParamMutProb = 0.05;
+	static double traitParamMutProb = 0.00; // 0.05
 	
 	/** Severity of trait mutations (by default -1 to +1) */
 	static double traitMutationPower = 1.00;

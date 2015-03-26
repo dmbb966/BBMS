@@ -499,12 +499,25 @@ public class Genome {
 		
 		while (itr_gene.hasNext()) {
 			Gene _gene = itr_gene.next();
+			
+			// System.out.println("GENE INFO: " + _gene.PrintGene());
 									
 			// Only creates the link if the gene is enabled
 			if (_gene.enabled){
 				Link curLink = _gene.lnk;
+				
+				// System.out.println("LINK INFO: " + curLink.PrintLink());
+
+				if (_gene.lnk == null) System.out.println ("Gene link null");
+				if (curLink.in_node == null) System.out.println("ONode - oh no!");
+				if (curLink.out_node == null) System.out.println("INode - oh ni!");
+												
 				NNode iNode = curLink.in_node.analogue;
 				NNode oNode = curLink.out_node.analogue;
+				
+				// During population epochs, the analogues are null pointers, so we includle this as a backup				
+				if (curLink.in_node.analogue == null) iNode = curLink.in_node;
+				if (curLink.out_node.analogue == null) oNode = curLink.out_node;
 											
 				// NOTE: This line could be run through a recurrency check if desired.
 				// There is no need to do this with the current implementation of NEAT.
@@ -512,6 +525,9 @@ public class Genome {
 				Link newLink = new Link(curLink.weight, iNode, oNode, curLink.recurrent);
 				
 				// System.out.println(" NEW LINK: " + newLink.PrintLink());
+				
+
+
 				
 				oNode.incoming.add(newLink);
 				iNode.outgoing.add(newLink);
@@ -666,11 +682,13 @@ public class Genome {
 	/** Adds chosenGene and associated nodes and traits 
 	 */
 	public void AddGene(Vector<NNode> newNodes, Vector<Trait> newTraits, Vector<Gene> newGenes, Gene chosenGene, boolean disableGene) {
-		int traitNum = 0;
+		
+		// IF traits are going to be implemented (which they aren't yet) fix this code:
+		// int traitNum = 0;
 		
 		// Add chosenGene to the child
-		if (chosenGene.lnk.linkTrait == null) traitNum = traits.firstElement().id;
-		else traitNum = chosenGene.lnk.linkTrait.id - traits.firstElement().id; 
+		// if (chosenGene.lnk.linkTrait == null) traitNum = traits.firstElement().id;
+		// else traitNum = chosenGene.lnk.linkTrait.id - traits.firstElement().id; 
 		
 		NNode inode = chosenGene.lnk.in_node;
 		NNode onode = chosenGene.lnk.out_node;
@@ -706,7 +724,8 @@ public class Genome {
 			
 			if (inode.nodeTrait != null) nodeTraitNum = inode.nodeTrait.id - traits.firstElement().id;						
 			
-			Trait newTrait = newTraits.elementAt(nodeTraitNum);
+			//Trait newTrait = newTraits.elementAt(nodeTraitNum);
+			Trait newTrait = new Trait();
 			newinode = new NNode(inode, newTrait);
 			node_insert(newNodes, newinode);						
 		}				
@@ -717,14 +736,16 @@ public class Genome {
 			
 			if (onode.nodeTrait != null) nodeTraitNum = onode.nodeTrait.id - traits.firstElement().id;
 			
-			Trait newTrait = newTraits.elementAt(nodeTraitNum);
+			//Trait newTrait = newTraits.elementAt(nodeTraitNum);
+			Trait newTrait = new Trait();
+			
 			newonode = new NNode(onode, newTrait);
 			node_insert(newNodes, newonode);
 		}
 		
 		
 		// Add the gene
-		Trait newTrait = newTraits.elementAt(traitNum);
+		Trait newTrait = new Trait();
 		Gene newGene = new Gene(chosenGene, newTrait, newinode, newonode);
 		if (disableGene) {
 			newGene.enabled = false;

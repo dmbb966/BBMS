@@ -172,6 +172,9 @@ public class JNEATtest {
 		System.out.println("\n\n---- Epoch ----\n\n");
 		pop.epoch();
 		
+		System.out.println("\n\n Epoch completed.");
+		
+		System.out.println(pop.PrintPopulation());
 		
 	}
 	

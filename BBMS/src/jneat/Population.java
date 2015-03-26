@@ -122,7 +122,7 @@ public class Population {
 			Organism _organism = itr_organism.next();
 			_organism.expected_offspring = _organism.fitness / overall_average;  
 			
-			// System.out.println(">>> Organism " + _organism.genome.genome_id + " is allotted " + _organism.expected_offspring + " babies.");
+			System.out.println(">>> Organism " + _organism.genome.genome_id + " is allotted " + _organism.expected_offspring + " babies.");
 		}
 		
 		// Add offspring up within each species to get the number of offspring per species
@@ -317,6 +317,8 @@ public class Population {
 			}
 		}
 		
+		System.out.println(">>><<<\n" + this.PrintPopulation());
+		
 		// Eliminating organisms flagged for elimination
 		itr_organism = organisms.iterator();
 		Vector<Organism> vDel = new Vector<Organism>();
@@ -383,6 +385,8 @@ public class Population {
 		
 		// Eliminate species marked for deletion
 		for (int i = 0; i < sDel.size(); i++) {
+			System.out.println("--- Removing species " + sDel.elementAt(i).id);
+			
 			species.removeElement(sDel.elementAt(i));
 		}
 		
