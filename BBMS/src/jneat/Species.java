@@ -36,6 +36,7 @@ public class Species {
 		age_lastimprovement = 0;
 		max_fitness = 0.0;
 		max_fitness_ever = 0.0;
+		organisms = new Vector<Organism>();
 	}
 
 	public Species() {

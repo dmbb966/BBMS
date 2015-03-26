@@ -295,15 +295,20 @@ public class NNode {
 		
 		if (!showLinks) return ret;
 		
-		Iterator<Link> itr_link = incoming.iterator();
+		
+		Iterator<Link> itr_link = outgoing.iterator();
 		while (itr_link.hasNext()) {
 			ret += "\n  >> " + itr_link.next().PrintLink();
 		}
 		
+		/*
+		
+		// Since links involve two nodes, showing this would be redundant
 		itr_link = outgoing.iterator();
 		while (itr_link.hasNext()) {
 			ret += "\n  << " + itr_link.next().PrintLink();
 		}
+		*/
 		
 				
 		return ret;

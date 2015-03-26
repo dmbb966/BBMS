@@ -49,17 +49,27 @@ public class Population {
 	
 	/** Creates a population of random topologies.
 	 * 
-	 * @param size
+	 * @param popSize - number of organisms
 	 * @param numInputs
 	 * @param numOutputs
-	 * @param maxNodes - maximum number of nodes in the initially generated topology
+	 * @param maxNodes - maximum number of hidden nodes in the initially generated topology
 	 * @param recur
 	 * @param linkprob
 	 */
-	public Population (int size, int numInputs, int numOutputs, int maxNodes, boolean recur, double linkprob) {
-		for (int i = 0; i < size; i++) {
+	public Population (int popSize, int numInputs, int numOutputs, int maxNodes, boolean recur, double linkprob) {
+		for (int i = 0; i < popSize; i++) {
+			// System.out.println("Creating organism #" + i);
+			
 			Genome newGenome = new Genome(i, numInputs, numOutputs, GlobalFuncs.randRange(0,  maxNodes), maxNodes, recur, linkprob);
+			organisms.add(new Organism(0, newGenome, 1));			
 		}
+		
+		cur_node_id = numInputs + numOutputs + maxNodes + 1;
+		cur_innov_num = (numInputs + numOutputs + maxNodes) * (numInputs + numOutputs + maxNodes) + 1;
+		
+		// System.out.println("\n\n" + this.PrintPopulation());
+		
+		speciate();
 	}
 	
 	public void spawn(Genome g, int size) {
@@ -397,10 +407,11 @@ public class Population {
 			Organism _organism = itr_organism.next();
 			// If the list species is empty, create the first
 			if (species.isEmpty()) {
-				newSpecies = new Species(++counter);
-				species.add(newSpecies);
+				newSpecies = new Species(++counter);				
 				newSpecies.organisms.add(_organism);
-				_organism.species = newSpecies;				
+				
+				species.add(newSpecies);
+				_organism.species = newSpecies;		
 			}
 			else {
 				Iterator<Species> itr_species = species.iterator();

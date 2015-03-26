@@ -511,12 +511,12 @@ public class Genome {
 				
 				Link newLink = new Link(curLink.weight, iNode, oNode, curLink.recurrent);
 				
-				System.out.println(" NEW LINK: " + newLink.PrintLink());
+				// System.out.println(" NEW LINK: " + newLink.PrintLink());
 				
 				oNode.incoming.add(newLink);
 				iNode.outgoing.add(newLink);
 				
-				System.out.println(" Outgoing Node: " + oNode.PrintNode());
+				// System.out.println(" Outgoing Node: " + oNode.PrintNode());
 				
 				// Derive the link's parameters from its trait pointer
 				Trait curTrait = curLink.linkTrait;
@@ -1106,7 +1106,12 @@ public class Genome {
 		return nodes.lastElement().id + 1;
 	}
 	
+	
 	public boolean verify() {
+		return verify(false);
+	}
+	
+	public boolean verify(boolean showErr) {
 		if (genes.size() == 0) return false;
 		if (nodes.size() == 0) return false;
 		if (traits.size() == 0) return false;
@@ -1118,19 +1123,19 @@ public class Genome {
 			NNode onode = _gene.lnk.out_node;
 			
 			if (inode == null) {
-				System.out.println(" ERROR: inode = null in genome #" + genome_id);
+				if (showErr) System.out.println(" ERROR: inode = null in genome #" + genome_id);
 				return false;
 			}
 			if (onode == null) {
-				System.out.println (" ERROR: onode = null in genome #" + genome_id);
+				if (showErr) System.out.println (" ERROR: onode = null in genome #" + genome_id);
 				return false;
 			}
 			if (!nodes.contains(inode)) {
-				System.out.println(" ERROR: inode #" + inode.id + " missing.  Defined in gene but not in vector nodes of genome #" + genome_id);
+				if (showErr) System.out.println(" ERROR: inode #" + inode.id + " missing.  Defined in gene but not in vector nodes of genome #" + genome_id);
 				return false;
 			}
 			if (!nodes.contains(onode)) {
-				System.out.println(" ERROR: onode #" + onode.id + " missing.  Defined in gene but not in vectro nodes of genome #" + genome_id);
+				if (showErr) System.out.println(" ERROR: onode #" + onode.id + " missing.  Defined in gene but not in vectro nodes of genome #" + genome_id);
 				return false;
 			}
 		}
@@ -1140,7 +1145,7 @@ public class Genome {
 		while (itr_node.hasNext()) {
 			NNode _node = itr_node.next();
 			if (_node.id < last_id) {
-				System.out.println(" ALERT: Nodes out of order! Last node_id = " + last_id + " vs current id - " + _node.id);
+				if (showErr) System.out.println(" ALERT: Nodes out of order! Last node_id = " + last_id + " vs current id - " + _node.id);
 				return false;				
 			}
 			last_id = _node.id;
@@ -1157,9 +1162,11 @@ public class Genome {
 			while (iGene.hasNext()) {
 				Gene _gene1 = iGene.next();
 				if (_gene1.lnk.in_node.id == iID && _gene1.lnk.out_node.id == oID && _gene1.lnk.recurrent == rec) {
-					System.out.println(" ALERT: DUPLICATE GENES in Genome #" + genome_id + " with:");
-					System.out.println("   Gene1: " + _gene.PrintGene());
-					System.out.println("   Gene2: " + _gene1.PrintGene());
+					if (showErr) {				
+						System.out.println(" ALERT: DUPLICATE GENES in Genome #" + genome_id + " with:");
+						System.out.println("   Gene1: " + _gene.PrintGene());
+						System.out.println("   Gene2: " + _gene1.PrintGene());
+					}
 					return false;					
 				}
 			}				
@@ -1172,8 +1179,10 @@ public class Genome {
 				Gene _gene = itr_gene.next();
 				
 				if (!_gene.enabled && disab) {
-					System.out.println(" ALERT: 2 DISABLED GENES IN A ROW in Genome #" + genome_id + " with:");
-					System.out.println("   2nd disable: " + _gene.PrintGene());
+					if (showErr) {
+						System.out.println(" ALERT: 2 DISABLED GENES IN A ROW in Genome #" + genome_id + " with:");
+						System.out.println("   2nd disable: " + _gene.PrintGene());
+					}					
 				}
 				
 				disab = !_gene.enabled;
@@ -1244,14 +1253,13 @@ public class Genome {
 		nodes = new Vector<NNode>();
 		genes = new Vector<Gene>();
 		
-		boolean[] connectionMatrix = new boolean[totalNodes * totalNodes];
-		
 		genome_id = newID;
 		
 		// Creates a dummy trait - for future expansion of the system.
 		Trait newTrait = new Trait();
 		newTrait.setTraitParam(0, 1.0);
 		traits.add(newTrait);
+		int firstOutput = totalNodes - outNodes + 1;
 		
 		// Build the input nodes
 		for (int i = 1; i <= inNodes; i++) {
@@ -1260,22 +1268,145 @@ public class Genome {
 			else newNode = new NNode(NodeTypeEnum.SENSOR, i, NodeLabelEnum.BIAS);
 			
 			newNode.nodeTrait = newTrait;
+			
+			//System.out.println("Adding new node: " + newNode.PrintNode());
+			
 			nodes.add(newNode);
 		}
 		
 		// Build the hidden nodes
-		for (int i = inNodes + 1; i <= inNodes + outNodes; i++) {
+		for (int i = inNodes + 1; i <= inNodes + hidNodes; i++) {
 			NNode newNode = new NNode(NodeTypeEnum.NEURON, i, NodeLabelEnum.HIDDEN);
 			newNode.nodeTrait = newTrait;
+			
+			// System.out.println("Adding new node: " + newNode.PrintNode());
+			
 			nodes.add(newNode);
 		}
 		
+		// System.out.println(" FACT CHECK: i: " + inNodes + ", o: " + outNodes + ", n: " + hidNodes + ", max: " + nodeMax + ", firstO: " + firstOutput);
+		
 		// Build the output nodes
-		for (int i = nodeMax; i <= totalNodes; i++) {
+		for (int i = firstOutput; i <= totalNodes; i++) {
 			NNode newNode = new NNode(NodeTypeEnum.NEURON, i, NodeLabelEnum.OUTPUT);
+			newNode.nodeTrait = newTrait;
+			
+			// System.out.println("Adding new node: " + newNode.PrintNode());
+			
+			nodes.add(newNode);
 		}
 		
+		
+		// Create links
+		boolean done = false;
+		int abortCount = 0;
+		int matrixDim = totalNodes * totalNodes;
+		boolean[] connectionMatrix = new boolean[matrixDim];		
+		
+		/** If the network takes too long to form, it will switch to this higher rate and increase it steadily */
+		double forcedProbability = 0.5;
+		
+		while (!done) {
+			abortCount++;
+			if (abortCount >= 20) {
+				 linkprob = forcedProbability;
+				 forcedProbability += 0.01;
+			}
+			
+			if (abortCount >= 700) {
+				System.out.println("\nSEVERE ERROR in genome random creation constructor.  Exiting.");
+				System.exit(12);
+			}
+			
+			// Determine which connections to make
+			for (int i = 0; i < matrixDim; i++) {
+				if (GlobalFuncs.randFloat() < linkprob) connectionMatrix[i] = true;
+				else connectionMatrix[i] = false;
+			}
+			
+			// Build the connections
+			int innov_num = 0;
+			int gene_num = 0;
+			int maxNode = inNodes + outNodes;
 
+			NNode new_inNode = null;
+			NNode new_outNode = null;
+			
+			
+			/*
+			for (int i = 0; i < totalNodes; i++) {
+				for (int j = 0; j < totalNodes; j++) {
+					if (connectionMatrix[(i * totalNodes) + j]) System.out.print("1");
+					else System.out.print("0");
+				}
+				System.out.print("\n");
+			}
+			System.out.print("\n");
+			*/
+			
+			
+			// Step through the connection matrix, creating connection genes
+			for (int col = 1; col <= totalNodes; col++) {
+				for (int row = 1; row <= totalNodes; row++) {
+					// Ensures that this connection is valid
+					if ((connectionMatrix[innov_num] && (col > inNodes))
+						 && (col <= maxNode || col >= firstOutput)
+						 && (row <= maxNode || row >= firstOutput)) {
+						
+						boolean create_gene = true;		// Defaults to true
+						boolean flag_recurrent;
+						if (col > row) flag_recurrent = false;
+						else {
+							if (!recur) create_gene = false;		// If recurrent links are banned
+							flag_recurrent = true;
+						}
+						
+						if (create_gene) {
+							Iterator<NNode> itr_node = nodes.iterator();
+							int found = 0;
+							
+							while (itr_node.hasNext() && found < 2) {
+								NNode _node = itr_node.next();
+								if (_node.id == row) {
+									found++;
+									new_inNode = _node;
+								}
+								if (_node.id == col) {
+									found++;
+									new_outNode = _node;
+								}
+							}
+							
+							// Creates the gene and link
+							double new_weight = GlobalFuncs.randPosNeg() * GlobalFuncs.randFloat();
+							Gene newGene = new Gene(newTrait, new_weight, new_inNode, new_outNode, flag_recurrent, innov_num, new_weight);
+							
+							genes.add(newGene);
+						}						
+					}						 					
+					innov_num++;	
+				}
+			}
+			
+			boolean rcheck1 = verify();
+			if (rcheck1) {
+				Network net = this.Genesis(genome_id);
+				
+				boolean rcheck2 = net.IsMinimal();
+				
+				if (rcheck2) {
+					int lx = net.max_depth();
+					int dx = net.IsStabilized(lx);
+					
+					if ((dx == lx && !recur) || (lx > 0 && recur && dx == 0)) done = true;
+				}
+				
+				net.genotype = null;
+				this.phenotype = null;
+			}
+			
+			if (!done) genes.clear();		// For whatever reason, this gene isn't valid - try again.
+		}		
 	}
 	
 	public Genome(Vector<Gene> g, Vector<Trait> t, Vector<NNode> n, int newID) {

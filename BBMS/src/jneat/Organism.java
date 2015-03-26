@@ -70,6 +70,8 @@ public class Organism {
 		ret = ret + " Fitness: " + fitness + " with offspring = " + expected_offspring + " ";
 		if (eliminate) ret = ret + ">ELIMINATE< ";
 		
+		if (net != null) ret += "\n ***" + net.PrintNetwork(true); 
+		
 		return ret;
 	}
 }

@@ -117,8 +117,14 @@ public class JNEATtest {
 		System.out.println("\n\n" + y.PrintPopulation());
 	}
 	
+	public static void test5() {
+		Population pop = new Population(1, 2, 1, 1, false, 0.01);
+		
+		System.out.println(pop.PrintPopulation());
+	}
+	
 	public static void main(String[] args) {
-		test4();
+		test5();
 	} 
 	
 	public static void testX() {
