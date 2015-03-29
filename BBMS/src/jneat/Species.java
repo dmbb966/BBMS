@@ -145,6 +145,19 @@ public class Species {
 		// if (max_fitness > max_fitness_ever) max_fitness_ever = max_fitness;
 	}
 	
+	public double CountOffspringFloat() {
+		Iterator<Organism> itr_organism = organisms.iterator();
+		
+		double sum = 0.0;
+		
+		while (itr_organism.hasNext()) {
+			Organism _org = itr_organism.next();
+			sum += _org.expected_offspring;			
+		}
+		
+		return sum;
+	}
+	
 	/** Computes the collective offspring of the entire species (sum of all organisms' offspring). */
 	public double CountOffspring(double skim) {
 		Iterator<Organism> itr_organism = organisms.iterator();		

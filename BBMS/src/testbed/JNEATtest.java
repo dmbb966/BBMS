@@ -115,6 +115,7 @@ public class JNEATtest {
 		
 		
 		System.out.println("\n\n" + y.PrintPopulation());
+				
 	}
 	
 	public static double test5fitness(double sensVal, boolean netOutput) {
@@ -129,7 +130,7 @@ public class JNEATtest {
 	}
 	
 	public static void test5() {
-		Population pop = new Population(5, 1, 1, 5, false, 0.01);
+		Population pop = new Population(JNEATGlobal.p_pop_size, 1, 1, 5, false, 0.01);
 		
 		// System.out.println(pop.PrintPopulation());
 		
@@ -175,6 +176,8 @@ public class JNEATtest {
 		System.out.println("\n\n Epoch completed.");
 		
 		System.out.println(pop.PrintPopulation());
+		
+		System.out.println("Program complete.");
 		
 	}
 	

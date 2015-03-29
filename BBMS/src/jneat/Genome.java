@@ -1246,6 +1246,19 @@ public class Genome {
 		return ret;
 	}
 	
+	public String Debug_DisplayConnectionMatrix(boolean[] connectionMatrix, int totalNodes) {
+		String ret = "";
+		for (int i = 0; i < totalNodes; i++) {
+			for (int j = 0; j < totalNodes; j++) {
+				if (connectionMatrix[(i * totalNodes) + j]) ret += "1";
+				else ret += "0";
+			}
+			ret += "\n";
+		}
+		ret += "\n";		
+		return ret;
+	}
+	
 	/** Generates a random genome 
 	 * 
 	 * @param newID
@@ -1331,7 +1344,7 @@ public class Genome {
 			abortCount++;
 			if (abortCount >= 20) {
 				 linkprob = forcedProbability;
-				 forcedProbability += 0.01;
+				 //forcedProbability += 0.01;		// Cannot do this - a fully connected network in all regards is invalid.
 			}
 			
 			if (abortCount >= 700) {
@@ -1354,16 +1367,7 @@ public class Genome {
 			NNode new_outNode = null;
 			
 			
-			/*
-			for (int i = 0; i < totalNodes; i++) {
-				for (int j = 0; j < totalNodes; j++) {
-					if (connectionMatrix[(i * totalNodes) + j]) System.out.print("1");
-					else System.out.print("0");
-				}
-				System.out.print("\n");
-			}
-			System.out.print("\n");
-			*/
+			System.out.println(Debug_DisplayConnectionMatrix(connectionMatrix, totalNodes));
 			
 			
 			// Step through the connection matrix, creating connection genes

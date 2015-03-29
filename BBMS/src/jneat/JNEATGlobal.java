@@ -38,7 +38,7 @@ public class JNEATGlobal {
 	
 	
 	/** Size of the population */
-	static int p_pop_size = 500;
+	public static int p_pop_size = 500;
 	
 	
 	// Mutation probabilities

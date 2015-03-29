@@ -102,8 +102,13 @@ public class Population {
 		
 		Iterator<Species> itr_species = species.iterator();
 		while (itr_species.hasNext()) {
-			itr_species.next().AdjustFitness();
+			Species _species = itr_species.next();
+			System.out.println("Prior fitness: " + _species.PrintSpecies());
+			_species.AdjustFitness();
+			System.out.println("Adjusted fitness: " + _species.PrintSpecies());
 		}
+		
+		
 		
 		// Compute average fitness over all organisms
 		Iterator<Organism> itr_organism = organisms.iterator();
@@ -128,10 +133,13 @@ public class Population {
 		// Add offspring up within each species to get the number of offspring per species
 		itr_species = species.iterator();
 		double skim = 0.0;					// Used to track partial expected offspring
+		double simplesum = 0.0;
 		int total_expected = 0;				// Total number of offspring expected
 		while (itr_species.hasNext()) {
 			Species _species = itr_species.next();
 			skim = _species.CountOffspring(skim);
+			simplesum = _species.CountOffspringFloat();
+			System.out.println(">> Species count: Float: " + simplesum + " and int " + _species.expected_offspring);
 			total_expected += _species.expected_offspring;
 		}
 		
