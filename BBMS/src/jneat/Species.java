@@ -116,7 +116,7 @@ public class Species {
 		ComputeAvgFitness();
 		ComputeMaxFitness();
 		
-		System.out.println("\n\n--- Sorted by fitness and end of adjust fitness ---\n" + this.PrintSpecies());
+		// System.out.println("\n\n--- Sorted by fitness and end of adjust fitness ---\n" + this.PrintSpecies());
 	}
 	
 	/** Determines the average fitness of the species and updates its attributes accordingly */
@@ -155,6 +155,7 @@ public class Species {
 			sum += _org.expected_offspring;			
 		}
 		
+		expected_offspring = (int) Math.round(sum);
 		return sum;
 	}
 	
@@ -442,7 +443,12 @@ public class Species {
 		ret += "SPECIES # " + id + " with age " + age + "| avg_fit=" + avg_fitness + ", max_fit = " + max_fitness;
 		ret += ", max_fit_ever = " + max_fitness_ever + ", eOffspring = " + expected_offspring;
 		ret += ", last improved " + age_lastimprovement + "\n";
-		ret += "  This species has " + organisms.size() + " organisms."; 
+		ret += "  This species has " + organisms.size() + " organisms.\n"; 
+		ret += "  Organisms #: ";
+		
+		for (int i = 0; i < organisms.size(); i++) {
+			ret += organisms.elementAt(i).genome.genome_id + ", ";
+		}
 		
 		return ret;
 	}

@@ -37,8 +37,8 @@ public class JNEATGlobal {
 	static double p_survival_threshold = 0.5;
 	
 	
-	/** Size of the population */
-	public static int p_pop_size = 500;
+	// /** Size of the population is locally defined in the Population class */
+	// public static int p_pop_size = 500;
 	
 	
 	// Mutation probabilities

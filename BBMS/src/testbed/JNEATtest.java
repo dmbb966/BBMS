@@ -182,17 +182,15 @@ public class JNEATtest {
 	}
 	
 	public static void main(String[] args) {
+		
+		
+		
 		test5();
 	} 
 	
 	public static void testX() {
 		
-		for (int i = 0; i < 10; i++) {
-			if (i > 2) {
-				System.out.println("Break");
-				break;
-			}
-		}
+		System.out.println("104.4: " + Math.round(104.4) + " and 104.5: " + Math.round(104.5));
 		
 		return;
 	}

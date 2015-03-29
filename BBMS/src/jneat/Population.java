@@ -135,6 +135,9 @@ public class Population {
 			System.out.println(">>> Organism " + _organism.genome.genome_id + " is allotted " + _organism.expected_offspring + " babies.");
 		}
 		
+		/*
+		 * Old method below
+		 * 
 		// Add offspring up within each species to get the number of offspring per species
 		itr_species = species.iterator();
 		double skim = 0.0;					// Used to track partial expected offspring
@@ -146,45 +149,56 @@ public class Population {
 			simplesum = _species.CountOffspringFloat();
 			System.out.println(">> Species count: Float: " + simplesum + " and int " + _species.expected_offspring);
 			total_expected += _species.expected_offspring;
+		} */
+		
+		itr_species = species.iterator();
+		int total_expected = 0;				// Total number of offspring expected
+		while (itr_species.hasNext()) {
+			Species _species = itr_species.next();
+			total_expected += Math.round(_species.CountOffspringFloat());
 		}
 		
-		int final_expected = 0;
-		// Due to lost floating point precision in offspring assignment,
-		// we will give an extra baby to the best species.  Babies everywhere!
-		if (total_expected < organisms.size()) {
-			// Find the species with the most number of expected offspring
-			
+		// Since we are rounding floating point numbers, we may need to adjust the population size.
+		// If we have more babies than previously, we'll simply increase the population_size variable
+		// and assume that this won't cause a massive population explosion
+		if (total_expected > population_size) population_size = total_expected;
+		
+		// If we have fewer babies than expected, we'll add babies to the most fit organism
+		if (total_expected < population_size) {
+			int delta = total_expected - population_size;
 			itr_species = species.iterator();
-			int max_expected = 0;			
+			int max_expected = 0;
 			
-			
-			while (itr_species.hasNext()) {
-				Species _species = itr_species.next();
-				if (_species.expected_offspring >= max_expected) {
-					max_expected = _species.expected_offspring;
-					bestSpecies = _species;
+			// If there is not a huge discrepancy, simply give the most fit species additional offspring to compensate
+			if (delta < population_size * 0.5) {
+				while (itr_species.hasNext()) {
+					Species _species = itr_species.next();
+					if (_species.expected_offspring >= max_expected) {
+						max_expected = _species.expected_offspring;
+						bestSpecies = _species;
+					}					
 				}
-				final_expected += _species.expected_offspring;
+				
+				bestSpecies.expected_offspring += delta;
 			}
 			
-			// Give the extra offspring to the best species
-			bestSpecies.expected_offspring++;
-			final_expected++;		
-		
-			// If we still aren't at the total, then there's a problem.
+			// If there is a significant difference, then there's a problem.
 			// This happens if a stagnant species dominates the population and then gets killed off by age
-			// The whole population plummets in fitness.  Thus, we repopulate from the best existing one.
-			if (final_expected < organisms.size()) {
-				System.out.println("WARNING: Population has died.  Repopulating with the best offspring \n\n");
-				
-				itr_species = species.iterator();
-				
+			// The whole population plummets in fitness.  Thus, we repopulate from the best existing one.			
+			else {
+				System.out.println("WARNING: The population has died.  Repopulating with the best offspring.\n\n");								
 				while (itr_species.hasNext()) {
-					itr_species.next().expected_offspring = 0;
+					Species _species = itr_species.next();
+					if (_species.expected_offspring >= max_expected) {
+						max_expected = _species.expected_offspring;
+						bestSpecies = _species;
+						_species.expected_offspring = 0;
+					}
 				}
-				bestSpecies.expected_offspring = organisms.size();
+				bestSpecies.expected_offspring = population_size;
 			}
 		}
+				
 		
 		// Copy the Species pointers into a new Species list for sorting
 		Vector<Species> sorted_species = new Vector<Species>();
