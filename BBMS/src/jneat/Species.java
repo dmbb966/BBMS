@@ -209,9 +209,7 @@ public class Species {
 		// Create the designated number of offspring for the species one by one
 		for (int i = 0; i < expected_offspring; i++) {
 			mut_struct_baby = false;
-			mate_baby = false;
-			
-			if (expected_offspring > JNEATGlobal.p_pop_size) System.out.println("ALERT: Expected offspring exceeds parameters");
+			mate_baby = false;						
 			
 			// If there is a super champion (population champion) finish off some special clones
 			if (thechamp.super_champ_offspring > 0) {

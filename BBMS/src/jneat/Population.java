@@ -19,6 +19,9 @@ public class Population {
 	/** Current innovation number available for genes */
 	private int cur_innov_num;
 	
+	/** Intended size of this population */
+	int population_size;
+	
 	/** Highest species number */
 	int last_species;
 	
@@ -63,6 +66,8 @@ public class Population {
 			Genome newGenome = new Genome(i, numInputs, numOutputs, GlobalFuncs.randRange(0,  maxNodes), maxNodes, recur, linkprob);
 			organisms.add(new Organism(0, newGenome, 1));			
 		}
+		
+		population_size = popSize;
 		
 		cur_node_id = numInputs + numOutputs + maxNodes + 1;
 		cur_innov_num = (numInputs + numOutputs + maxNodes) * (numInputs + numOutputs + maxNodes) + 1;
@@ -222,7 +227,7 @@ public class Population {
 		// Check for stagnation - if so, perform delta-coding
 		if (highest_last_changed >= JNEATGlobal.p_dropoff_age + 5) {
 			highest_last_changed = 0;
-			int half_pop =JNEATGlobal.p_pop_size / 2;
+			int half_pop = population_size / 2;
 			
 			itr_species = sorted_species.iterator();
 			Species _species = itr_species.next();
@@ -244,8 +249,8 @@ public class Population {
 				}
 			}
 			else {
-				_species.organisms.firstElement().super_champ_offspring += JNEATGlobal.p_pop_size - half_pop;
-				_species.expected_offspring += JNEATGlobal.p_pop_size - half_pop;
+				_species.organisms.firstElement().super_champ_offspring += population_size - half_pop;
+				_species.expected_offspring += population_size - half_pop;
 			}
 		}
 		
@@ -491,7 +496,7 @@ public class Population {
 		
 		ret += "\n\n\n\t\t >>>POPULATION<<<";
 		ret += "\n\n\t This population has " + organisms.size() + " organisms, ";
-		ret += species.size() + " species :\n";
+		ret += species.size() + " speciesm, with a population size: of " + population_size + "\n";
 		
 		Iterator<Organism> itr_organism = organisms.iterator();
 		while (itr_organism.hasNext()) {
