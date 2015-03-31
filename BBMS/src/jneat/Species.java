@@ -336,14 +336,20 @@ public class Species {
 				}
 				
 				if (GlobalFuncs.randFloat() < JNEATGlobal.p_mate_multipoint_prob) {
+					System.out.println("DEBUG: Mating multipoint");
 					newGenome = mother.genome.MateMultipoint(i, father.genome, mother.orig_fitness, father.orig_fitness);
 				}
 				else if (GlobalFuncs.randFloat() < JNEATGlobal.p_mate_multipoint_avg_prob / (JNEATGlobal.p_mate_multipoint_avg_prob + JNEATGlobal.p_mate_singlepoint_prob)) {
+					System.out.println("DEBUG: Mating multipoint average");
 					newGenome = mother.genome.MateMultiAverage(father.genome, i, mother.orig_fitness, father.orig_fitness);
 				}
 				else {
+					System.out.println("DEBUG: Mating singlepoint");
 					newGenome = mother.genome.MateSinglePoint(father.genome, i);
 				}
+				
+				System.out.println("DEBUG: Genome produced is: " + newGenome.PrintGenome());
+				
 				
 				mate_baby = true;
 				

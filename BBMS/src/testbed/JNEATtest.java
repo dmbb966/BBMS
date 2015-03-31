@@ -130,7 +130,7 @@ public class JNEATtest {
 	}
 	
 	public static void test5() {
-		Population pop = new Population(5, 1, 1, 5, false, 0.01);
+		Population pop = new Population(50, 1, 1, 5, false, 0.01);
 		
 		// System.out.println(pop.PrintPopulation());
 		

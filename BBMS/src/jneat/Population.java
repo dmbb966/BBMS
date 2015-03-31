@@ -520,7 +520,7 @@ public class Population {
 		
 		ret += "\n\n\n\t\t >>>POPULATION<<<";
 		ret += "\n\n\t This population has " + organisms.size() + " organisms, ";
-		ret += species.size() + " speciesm, with a population size: of " + population_size + "\n";
+		ret += species.size() + " species, with a population size: of " + population_size + "\n";
 		
 		Iterator<Organism> itr_organism = organisms.iterator();
 		while (itr_organism.hasNext()) {

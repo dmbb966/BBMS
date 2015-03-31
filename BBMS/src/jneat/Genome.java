@@ -720,6 +720,8 @@ public class Genome {
 		
 		// Insert inode if needed
 		if (!foundiNode) {
+			System.out.println("DEBUG: Inserting iNode");
+			
 			int nodeTraitNum = 0;
 			
 			if (inode.nodeTrait != null) nodeTraitNum = inode.nodeTrait.id - traits.firstElement().id;						
@@ -727,11 +729,13 @@ public class Genome {
 			//Trait newTrait = newTraits.elementAt(nodeTraitNum);
 			Trait newTrait = new Trait();
 			newinode = new NNode(inode, newTrait);
+			System.out.println("DEBUG: Inserted node is: " + newinode.PrintNode());
 			node_insert(newNodes, newinode);						
 		}				
 							
 		// Insert onode if needed
 		if (!foundoNode) {
+			System.out.println("DEBUG: Inserting oNode");
 			int nodeTraitNum = 0;
 			
 			if (onode.nodeTrait != null) nodeTraitNum = onode.nodeTrait.id - traits.firstElement().id;
@@ -740,9 +744,11 @@ public class Genome {
 			Trait newTrait = new Trait();
 			
 			newonode = new NNode(onode, newTrait);
+			System.out.println("DEBUG: Inserted node is: " + newonode.PrintNode());
 			node_insert(newNodes, newonode);
 		}
 		
+		System.out.println("DEBUG: Number of nodes in newNodes: " + newNodes.size());
 		
 		// Add the gene
 		Trait newTrait = new Trait();
@@ -1097,6 +1103,12 @@ public class Genome {
 				
 				skipGene = CheckGeneConflict(newGenes, chosenGene);
 				
+				System.out.println("DEBUG: New nodes are: ");
+				for (int x = 0; x < newNodes.size(); x++) {
+					System.out.println("--DEBUG: Node " + x + " of " + newNodes.size());
+					System.out.println(newNodes.elementAt(x).PrintNode());
+				}
+				
 				// Add gene if not skipped
 				if (!skipGene) {
 					AddGene(newNodes, newTraits, newGenes, chosenGene, false);	
@@ -1111,12 +1123,15 @@ public class Genome {
 	/** Inserts a NNode into a NNode vector such that it remains sorted by node ID (ascending)
 	 */
 	public void node_insert(Vector<NNode> nlist, NNode n) {
-		for (int i = 0; i < nlist.size(); i++) {
+		int i = 0;
+		
+		for (i = 0; i < nlist.size(); i++) {
 			if (nlist.elementAt(i).id >= n.id) {
-				nlist.insertElementAt(n, i);
 				break;
 			}
 		}
+		
+		nlist.insertElementAt(n, i);
 	}
 	
 	public int get_next_gene_innovnum() {
