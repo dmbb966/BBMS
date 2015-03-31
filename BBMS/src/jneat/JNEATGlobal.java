@@ -51,10 +51,11 @@ public class JNEATGlobal {
 	static double p_mutate_only_prob = 0.0;
 	static double p_mutate_random_trait_prob = 0.0; 
 	static double p_mutate_toggle_enable_prob = 0.0;
+	static double p_mutate_toggle_reenable_prob = 0.0;	// Probability of reenabling one gene in the genome during mutation
 	static double p_mutate_weight_power = 1.0;
 	static int p_newlink_tries = 1;
 	
-	static double p_interspecies_mate_rate = 0.0;
+	static double p_interspecies_mate_rate = 1.0;
 	static double p_mate_multipoint_prob = 0.0;
 	static double p_mate_multipoint_avg_prob = 0.0;
 	static double p_mate_singlepoint_prob = 0.0;

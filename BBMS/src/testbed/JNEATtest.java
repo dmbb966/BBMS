@@ -222,10 +222,10 @@ public class JNEATtest {
 	}
 	
 	public static void test6() {
-		Population pop = new Population(5, 1, 1, 5, false, 0.5);
+		Population pop = new Population(50, 1, 1, 5, false, 0.5);				
+		test5sensors(pop, 20);				
 		testSave("src/saves/pop2.txt", pop);
 		
-		test5sensors(pop, 20);				
 		pop.epoch();
 		testSave("src/saves/pop1.txt", pop);
 	}

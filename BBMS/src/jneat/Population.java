@@ -362,7 +362,7 @@ public class Population {
 			}
 		}
 		
-		System.out.println(">>> NEXT PHASE <<<\n" + this.PrintPopulation());
+		// System.out.println(">>> NEXT PHASE <<<\n" + this.PrintPopulation());
 		
 		// Eliminating organisms flagged for elimination
 		itr_organism = organisms.iterator();
@@ -390,11 +390,11 @@ public class Population {
 		while (itr_species.hasNext()) {
 			Species _species = itr_species.next();
 			
-			System.out.println(">>> Species prior to reproduction: \n" + _species.PrintSpecies());
+			//System.out.println(">>> Species prior to reproduction: \n" + _species.PrintSpecies());
 			
 			_species.reproduce(generation, this, sorted_species);
 			
-			System.out.println(">>> Species after reproduction: \n" + _species.PrintSpecies());
+			//System.out.println(">>> Species after reproduction: \n" + _species.PrintSpecies());
 		}
 		
 		itr_organism = organisms.iterator();
@@ -455,7 +455,7 @@ public class Population {
 			}
 		}
 		
-		if (!best_OK) System.out.println("ERROR!  The best species died!");					
+		if (!best_OK) System.out.println("WARNING!  The best species died!");					
 	}
 	
 	public void speciate() {

@@ -210,7 +210,7 @@ public class Species {
 		// Create the designated number of offspring for the species one by one
 		for (int i = 0; i < expected_offspring; i++) {
 			
-			System.out.println("DEBUG: Species #" + id + " is reproducing expected offspring #" + i + " of " + expected_offspring);
+			System.out.println("DEBUG: Species #" + id + " is reproducing expected offspring #" + (i + 1) + " of " + expected_offspring);
 			
 			mut_struct_baby = false;
 			mate_baby = false;						
@@ -263,41 +263,50 @@ public class Species {
 				// Mutate according to probabilities
 				if (GlobalFuncs.randFloat() < JNEATGlobal.p_mutate_add_node_prob) {
 					newGenome.MutateAddNode(pop);
+					System.out.println("DEBUG: Add node mutation performed.");
 					mut_struct_baby = true;
 				}
 				else if (GlobalFuncs.randFloat() < JNEATGlobal.p_mutate_add_link_prob) {
 					net_analogue = newGenome.Genesis(generation);
 					newGenome.MutateAddLink(pop,  JNEATGlobal.p_newlink_tries);
+					System.out.println("DEBUG: Add link mutation performed.");
 					mut_struct_baby = true;
 				}
 				else {
 					// If no structural mutation, then there are other kinds:
 					if (GlobalFuncs.randFloat() < JNEATGlobal.p_mutate_random_trait_prob) {
 						newGenome.MutateRandomTrait();
+						System.out.println("DEBUG: Trait mutation performed.");
 					}
 					
 					if (GlobalFuncs.randFloat() < JNEATGlobal.p_mutate_link_trait_prob) {
 						newGenome.MutateLinkTrait(1);
+						System.out.println("DEBUG: Link trait mutation performed.");
 					}
 					
 					if (GlobalFuncs.randFloat() < JNEATGlobal.p_mutate_node_trait_prob) {
 						newGenome.MutateNodeTrait(1);
+						System.out.println("DEBUG: node trait mutation performed.");
 					}
 					
 					if (GlobalFuncs.randFloat() < JNEATGlobal.p_mutate_link_weights_prob) {
-						newGenome.MutateLinkWeight(JNEATGlobal.p_mutate_weight_power,  1.0,  MutationTypeEnum.GAUSSIAN);						
+						newGenome.MutateLinkWeight(JNEATGlobal.p_mutate_weight_power,  1.0,  MutationTypeEnum.GAUSSIAN);
+						System.out.println("DEBUG: Link weight mutation performed.");
 					}
 					
 					if (GlobalFuncs.randFloat() < JNEATGlobal.p_mutate_toggle_enable_prob) {
 						newGenome.MutateToggleEnable(1);
+						System.out.println("DEBUG: Gene enabling performed.");
 					}
 					
-					if (GlobalFuncs.randFloat() < JNEATGlobal.p_mutate_toggle_enable_prob) {
+					if (GlobalFuncs.randFloat() < JNEATGlobal.p_mutate_toggle_reenable_prob) {
 						newGenome.MutateGene_Reenable();
+						System.out.println("DEBUG: Gene disabling performed.");
 					}
 				}
 				
-				baby = new Organism(0.0, newGenome, generation);				
+				baby = new Organism(0.0, newGenome, generation);	
+				System.out.println("DEBUG: Newly formed organism is now #" + baby.genome.genome_id);
 			}
 			
 			// Otherwise we should mate
@@ -347,8 +356,6 @@ public class Species {
 					System.out.println("DEBUG: Mating singlepoint");
 					newGenome = mother.genome.MateSinglePoint(father.genome, i);
 				}
-				
-				System.out.println("DEBUG: Genome produced is: " + newGenome.PrintGenome());
 				
 				
 				mate_baby = true;
@@ -407,9 +414,9 @@ public class Species {
 				}
 				
 				System.out.println("DEBUG: Baby creation complete.");
-				System.out.println("    >: Mother is: " + mother.PrintOrganism());
-				System.out.println("    >: Father is: " + father.PrintOrganism());
-				System.out.println("    >: Baby is: " + baby.PrintOrganism());
+				System.out.println("    >: Mother is: " + mother.genome.genome_id); //PrintOrganism());
+				System.out.println("    >: Father is: " + father.genome.genome_id); //PrintOrganism());
+				System.out.println("    >: Baby is: " + baby.genome.genome_id); //PrintOrganism());
 						
 			}
 			
@@ -448,6 +455,7 @@ public class Species {
 				}
 			}			
 		}
+			
 			
 		return true;
 	}

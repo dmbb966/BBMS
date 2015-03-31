@@ -203,6 +203,12 @@ public class Genome {
 				}
 				
 				if (done) _gene.enabled = false;
+				else System.out.println("DEBUG: Toggling gene will disconnect network.  Reenabling.");
+				
+				if (!verify()) {
+					System.out.println("DEBUG: Toggling gene will disconnect network - reenabling.");
+					_gene.enabled = true;
+				}
 			} else {
 				_gene.enabled = true;
 			}
@@ -1049,6 +1055,7 @@ public class Genome {
 				
 				// innovA = innovB
 				if (cellA == cellB) {
+					System.out.println("DEBUG: cellA==cellB");
 					if (genecounter < crosspoint) {
 						chosenGene = geneA;
 						genecounter++;
@@ -1069,6 +1076,7 @@ public class Genome {
 				
 				// innovA < innovB
 				else if (cellA != 0 && cellB == 0) {
+					System.out.println("DEBUG: innoA<innovB");
 					if (genecounter < crosspoint) {
 						chosenGene = geneA;
 						genecounter++;
@@ -1100,17 +1108,34 @@ public class Genome {
 						}
 					}
 				}
+								
+				skipGene = CheckGeneConflict(newGenes, chosenGene) || skipGene;				
 				
-				skipGene = CheckGeneConflict(newGenes, chosenGene);
-				
-				System.out.println("DEBUG: New nodes are: ");
-				for (int x = 0; x < newNodes.size(); x++) {
-					System.out.println("--DEBUG: Node " + x + " of " + newNodes.size());
-					System.out.println(newNodes.elementAt(x).PrintNode());
-				}
 				
 				// Add gene if not skipped
 				if (!skipGene) {
+					/*
+					System.out.println("DEBUG: New nodes are: ");
+					for (int x = 0; x < newNodes.size(); x++) {
+						System.out.println("--DEBUG: Node " + x + " of " + newNodes.size());
+						System.out.println(newNodes.elementAt(x).PrintNode());
+					}
+					
+					System.out.println("DEBUG: New Genes are: ");
+					for (int x = 0; x < newGenes.size(); x++) {
+						System.out.println("--DEBUG: Gene " + x + " of " + newGenes.size());
+						System.out.println(newGenes.elementAt(x).PrintGene());
+					}
+					
+					if (geneA == null) System.out.println("DEBUG: GeneA null");
+					
+					if (geneB == null) System.out.println("DEBUG: GeneB null");
+					
+					if (chosenGene == null) System.out.println("DEBUG: ChosenGene null");
+					*/
+					System.out.println("DEBUG: Chosen Gene is: " + chosenGene.PrintGene());
+					
+					
 					AddGene(newNodes, newTraits, newGenes, chosenGene, false);	
 				} 
 			}
