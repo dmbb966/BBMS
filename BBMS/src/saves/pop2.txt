@@ -12,57 +12,53 @@
 
 Organism, 0, false, false, 0.0, 0.0, 0.0, 1, 0.0, false, false, 0.0, false, false, 0, false
 Node, 1, SIGMOID, SENSOR, BIAS
+Node, 7, SIGMOID, NEURON, OUTPUT
+Gene, 42, 0.404416024684906, true, Link, 0, 0.0, false, false, 0.404416024684906, 1, 7
+
+Organism, 1, false, false, 0.0, 0.0, 0.0, 1, 0.0, false, false, 0.0, false, false, 0, false
+Node, 1, SIGMOID, SENSOR, BIAS
+Node, 2, SIGMOID, NEURON, HIDDEN
+Node, 7, SIGMOID, NEURON, OUTPUT
+Gene, 7, -0.6712830662727356, true, Link, 5, 0.0, false, false, -0.6712830662727356, 1, 2
+Gene, 43, 0.8076637387275696, true, Link, 6, 0.0, false, false, 0.8076637387275696, 2, 7
+
+Organism, 2, false, false, 0.0, 0.0, 0.0, 1, 0.0, false, false, 0.0, false, false, 0, false
+Node, 1, SIGMOID, SENSOR, BIAS
+Node, 2, SIGMOID, NEURON, HIDDEN
+Node, 3, SIGMOID, NEURON, HIDDEN
+Node, 4, SIGMOID, NEURON, HIDDEN
+Node, 5, SIGMOID, NEURON, HIDDEN
+Node, 7, SIGMOID, NEURON, OUTPUT
+Gene, 7, -0.09012973308563232, true, Link, 11, 0.0, false, false, -0.09012973308563232, 1, 2
+Gene, 14, 0.209558367729187, true, Link, 12, 0.0, false, false, 0.209558367729187, 1, 3
+Gene, 30, 0.262657105922699, true, Link, 13, 0.0, false, false, 0.262657105922699, 3, 5
+Gene, 42, 0.5880755186080933, true, Link, 14, 0.0, false, false, 0.5880755186080933, 1, 7
+Gene, 46, -0.6781561970710754, true, Link, 15, 0.0, false, false, -0.6781561970710754, 5, 7
+
+Organism, 3, false, false, 0.0, 0.0, 0.0, 1, 0.0, false, false, 0.0, false, false, 0, false
+Node, 1, SIGMOID, SENSOR, BIAS
 Node, 2, SIGMOID, NEURON, HIDDEN
 Node, 3, SIGMOID, NEURON, HIDDEN
 Node, 4, SIGMOID, NEURON, HIDDEN
 Node, 5, SIGMOID, NEURON, HIDDEN
 Node, 6, SIGMOID, NEURON, HIDDEN
 Node, 7, SIGMOID, NEURON, OUTPUT
-Gene, 15, 0.13871467113494873, true, Link, 0, 0.0, false, false, 0.13871467113494873, 2, 3
-Gene, 21, 0.7912269830703735, true, Link, 1, 0.0, false, false, 0.7912269830703735, 1, 4
-Gene, 28, -0.8641461133956909, true, Link, 2, 0.0, false, false, -0.8641461133956909, 1, 5
-Gene, 35, -0.04496264457702637, true, Link, 3, 0.0, false, false, -0.04496264457702637, 1, 6
-Gene, 36, -0.6540741920471191, true, Link, 4, 0.0, false, false, -0.6540741920471191, 2, 6
-Gene, 38, -0.32382094860076904, true, Link, 5, 0.0, false, false, -0.32382094860076904, 4, 6
-Gene, 39, -0.22124648094177246, true, Link, 6, 0.0, false, false, -0.22124648094177246, 5, 6
-Gene, 42, -0.3731929063796997, true, Link, 7, 0.0, false, false, -0.3731929063796997, 1, 7
-Gene, 43, 0.32632386684417725, true, Link, 8, 0.0, false, false, 0.32632386684417725, 2, 7
-Gene, 46, 0.09019690752029419, true, Link, 9, 0.0, false, false, 0.09019690752029419, 5, 7
-
-Organism, 1, false, false, 0.0, 0.0, 0.0, 1, 0.0, false, false, 0.0, false, false, 0, false
-Node, 1, SIGMOID, SENSOR, BIAS
-Node, 2, SIGMOID, NEURON, HIDDEN
-Node, 3, SIGMOID, NEURON, HIDDEN
-Node, 7, SIGMOID, NEURON, OUTPUT
-Gene, 14, -0.20703518390655518, true, Link, 30, 0.0, false, false, -0.20703518390655518, 1, 3
-Gene, 15, 0.146109938621521, true, Link, 31, 0.0, false, false, 0.146109938621521, 2, 3
-Gene, 44, 0.3460397720336914, true, Link, 32, 0.0, false, false, 0.3460397720336914, 3, 7
-
-Organism, 2, false, false, 0.0, 0.0, 0.0, 1, 0.0, false, false, 0.0, false, false, 0, false
-Node, 1, SIGMOID, SENSOR, BIAS
-Node, 2, SIGMOID, NEURON, HIDDEN
-Node, 7, SIGMOID, NEURON, OUTPUT
-Gene, 7, 0.3940070867538452, true, Link, 39, 0.0, false, false, 0.3940070867538452, 1, 2
-Gene, 42, 0.32615888118743896, true, Link, 40, 0.0, false, false, 0.32615888118743896, 1, 7
-
-Organism, 3, false, false, 0.0, 0.0, 0.0, 1, 0.0, false, false, 0.0, false, false, 0, false
-Node, 1, SIGMOID, SENSOR, BIAS
-Node, 2, SIGMOID, NEURON, HIDDEN
-Node, 3, SIGMOID, NEURON, HIDDEN
-Node, 7, SIGMOID, NEURON, OUTPUT
-Gene, 7, -0.6915965676307678, true, Link, 45, 0.0, false, false, -0.6915965676307678, 1, 2
-Gene, 14, 0.9266985058784485, true, Link, 46, 0.0, false, false, 0.9266985058784485, 1, 3
-Gene, 15, 0.25709104537963867, true, Link, 47, 0.0, false, false, 0.25709104537963867, 2, 3
-Gene, 43, 0.2443077564239502, true, Link, 48, 0.0, false, false, 0.2443077564239502, 2, 7
-Gene, 44, 0.17869049310684204, true, Link, 49, 0.0, false, false, 0.17869049310684204, 3, 7
+Gene, 7, -0.3872619867324829, true, Link, 26, 0.0, false, false, -0.3872619867324829, 1, 2
+Gene, 15, -0.7500251531600952, true, Link, 27, 0.0, false, false, -0.7500251531600952, 2, 3
+Gene, 21, -0.6780240535736084, true, Link, 28, 0.0, false, false, -0.6780240535736084, 1, 4
+Gene, 22, -0.34089696407318115, true, Link, 29, 0.0, false, false, -0.34089696407318115, 2, 4
+Gene, 28, 0.47169750928878784, true, Link, 30, 0.0, false, false, 0.47169750928878784, 1, 5
+Gene, 35, -0.7251414656639099, true, Link, 31, 0.0, false, false, -0.7251414656639099, 1, 6
+Gene, 37, -0.742032527923584, true, Link, 32, 0.0, false, false, -0.742032527923584, 3, 6
+Gene, 45, 0.8175691962242126, true, Link, 33, 0.0, false, false, 0.8175691962242126, 4, 7
 
 Organism, 4, false, false, 0.0, 0.0, 0.0, 1, 0.0, false, false, 0.0, false, false, 0, false
 Node, 1, SIGMOID, SENSOR, BIAS
 Node, 2, SIGMOID, NEURON, HIDDEN
+Node, 3, SIGMOID, NEURON, HIDDEN
 Node, 7, SIGMOID, NEURON, OUTPUT
-Gene, 7, -0.8520758152008057, true, Link, 60, 0.0, false, false, -0.8520758152008057, 1, 2
-Gene, 42, -0.7045469284057617, true, Link, 61, 0.0, false, false, -0.7045469284057617, 1, 7
-Gene, 43, -0.25788503885269165, true, Link, 62, 0.0, false, false, -0.25788503885269165, 2, 7
+Gene, 14, 0.5524158477783203, true, Link, 50, 0.0, false, false, 0.5524158477783203, 1, 3
+Gene, 44, 0.5969753265380859, true, Link, 51, 0.0, false, false, 0.5969753265380859, 3, 7
 
 >END ORGANISMS<
 
@@ -80,5 +76,11 @@ Species, 4, 1, 0, 0.0, 0.0, false
 
 Species, 5, 1, 0, 0.0, 0.0, false
 <Species Orgs>, 4
+
+
+>END SPECIES<
+
+
+>END INNOVATIONS<
 
 

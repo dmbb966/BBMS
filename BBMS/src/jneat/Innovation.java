@@ -62,4 +62,28 @@ public class Innovation {
 		newTrait = null;
 		recurrent = false;
 	}
+	
+	public String SaveInnovHeader() {
+		StringBuffer buf = new StringBuffer("");
+		
+		buf.append("# Innovation data format follows:\n");
+		buf.append("# 'Innovation', innovation_type, innov_num1, innov_num2, new_weight, recurrent, inNode ID, outNode ID, newNode ID\n");		
+		
+		return buf.toString();
+	}
+	
+	public String SaveInnov() {
+		StringBuffer buf = new StringBuffer("");
+		
+		buf.append("Innovation, " + innovation_type + ", ");
+		buf.append(innovation_num1 + ", " + innovation_num2 + ", ");
+		buf.append(new_weight + ", ");
+		buf.append(recurrent + ", ");		
+		buf.append(inNode.id + ", ");
+		buf.append(outNode.id + ", ");
+		if (newNode != null) buf.append(newNode.id + "\n");
+		else buf.append("null\n");				
+		
+		return buf.toString();
+	}
 }

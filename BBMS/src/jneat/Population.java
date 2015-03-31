@@ -168,13 +168,20 @@ public class Population {
 		// Since we are rounding floating point numbers, we may need to adjust the population size.
 		// If we have more babies than previously, we'll simply increase the population_size variable
 		// and assume that this won't cause a massive population explosion
-		if (total_expected > population_size) population_size = total_expected;
+		if (total_expected > population_size) {
+			System.out.println("DEBUG: Due to rounding, target population increasing from " + population_size + " to " + total_expected);
+			population_size = total_expected;
+		}
 		
 		// If we have fewer babies than expected, we'll add babies to the most fit organism
 		if (total_expected < population_size) {
-			int delta = total_expected - population_size;
+			
+			
+			int delta = population_size - total_expected;
 			itr_species = species.iterator();
 			int max_expected = 0;
+			
+			System.out.println("DEBUG: Expected population below target population size.  Adding " + delta + " organisms.");
 			
 			// If there is not a huge discrepancy, simply give the most fit species additional offspring to compensate
 			if (delta < population_size * 0.5) {
@@ -648,6 +655,14 @@ public class Population {
 		while (itr_species.hasNext()) {
 			buf.append(itr_species.next().SaveSpecies() + "\n");
 		}
+		
+		buf.append("\n>END SPECIES<\n\n");
+		
+		Iterator<Innovation> itr_innov = innovations.iterator();
+		while (itr_innov.hasNext()) {
+			buf.append(itr_innov.next().SaveInnov() + "\n");
+		}
+		buf.append("\n>END INNOVATIONS<\n\n");
 		
 		return buf.toString();
 	}

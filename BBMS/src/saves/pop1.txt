@@ -1,8 +1,50 @@
-# Population data format follows:# cur_innov_num, cur_node_id, final_gen, highest_fitness, highest_last_changed, last_species, mean_fitness, population_size, standard_deviation, variance, winnergen
+# Population data format follows:
+# cur_innov_num, cur_node_id, final_gen, highest_fitness, highest_last_changed, last_species, mean_fitness, population_size, standard_deviation, variance, winnergen
 #    + All Organisms
 #    + All Species
 #    + All Innovations
-# Population information follows:
-50, 8, 0, 0.0, 0, 7, 0.0, 50, 0.0, 0.0, 0
 
-# Population organisms follow
+# Population information follows:
+50, 8, 0, 1.0, 0, 5, 0.0, 5, 0.0, 0.0, 0
+# Organism data format follows:
+# 'Organism', ID, champion, eliminate, error, expected_offspring, fitness, generation, high_fit, mate_baby, mut_struct_baby, orig_fitness, pop_champ, pop_champ_child, super_champ_offspring, winner
+#    + Genome
+
+Organism, 0, false, false, 0.0, 0.0, 0.0, 1, 0.0, false, false, 0.0, false, false, 0, false
+Node, 1, SIGMOID, SENSOR, BIAS
+Node, 7, SIGMOID, NEURON, OUTPUT
+Gene, 42, 0.404416024684906, true, Link, 66, 0.0, false, false, 0.404416024684906, 1, 7
+
+Organism, 1, false, false, 0.0, 0.0, 0.0, 1, 0.0, false, false, 0.0, false, false, 0, false
+Node, 1, SIGMOID, SENSOR, BIAS
+Node, 7, SIGMOID, NEURON, OUTPUT
+Gene, 42, 0.404416024684906, true, Link, 68, 0.0, false, false, 0.404416024684906, 1, 7
+
+Organism, 2, false, false, 0.0, 0.0, 0.0, 1, 0.0, false, false, 0.0, false, false, 0, false
+Node, 1, SIGMOID, SENSOR, BIAS
+Node, 2, SIGMOID, NEURON, HIDDEN
+Node, 3, SIGMOID, NEURON, HIDDEN
+Node, 4, SIGMOID, NEURON, HIDDEN
+Node, 5, SIGMOID, NEURON, HIDDEN
+Node, 7, SIGMOID, NEURON, OUTPUT
+Gene, 7, -0.09012973308563232, true, Link, 56, 0.0, false, false, -0.09012973308563232, 1, 2
+Gene, 14, 0.209558367729187, true, Link, 57, 0.0, false, false, 0.209558367729187, 1, 3
+Gene, 30, 0.262657105922699, true, Link, 58, 0.0, false, false, 0.262657105922699, 3, 5
+Gene, 42, 0.5880755186080933, true, Link, 59, 0.0, false, false, 0.5880755186080933, 1, 7
+Gene, 46, -0.6781561970710754, true, Link, 60, 0.0, false, false, -0.6781561970710754, 5, 7
+
+>END ORGANISMS<
+
+Species, 1, 2, 1, 0.75, 0.75, false
+<Species Orgs>, 0, 1
+
+Species, 3, 2, 1, 1.0, 1.0, false
+<Species Orgs>, 2
+
+
+>END SPECIES<
+
+
+>END INNOVATIONS<
+
+

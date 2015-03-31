@@ -201,27 +201,38 @@ public class JNEATtest {
 		
 	}
 	
-	public static void testLoad(String loadFile) {		
+	public static Population testLoad(String loadFile) {		
 		File f = new File(loadFile);
-		if (!f.exists()) return;
+		if (!f.exists()) return null;
 		
 		Path p = f.toPath();
 		Population pop = new Population(p);
+		
+		return pop;
 	}
 	
-	public static void testSave(String saveFile) {
+	public static void testSave(String saveFile, Population pop) {
 		File f = new File(saveFile);
 		if (!f.exists()) FIO.newFile(saveFile);
 		
 		Path p = f.toPath();
 		
-		Population pop = new Population(5, 1, 1, 5, false, 0.5);
+		
 		pop.SavePopulationToFile(p);
 	}
 	
-	public static void main(String[] args) {
+	public static void test6() {
+		Population pop = new Population(5, 1, 1, 5, false, 0.5);
+		testSave("src/saves/pop2.txt", pop);
 		
-		testSave("src/saves/pop2.txt");
+		test5sensors(pop, 20);				
+		pop.epoch();
+		testSave("src/saves/pop1.txt", pop);
+	}
+	
+	public static void main(String[] args) {
+		test6();
+		
 		//testLoad("src/saves/pop1.txt");
 		
 	} 
