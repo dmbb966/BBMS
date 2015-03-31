@@ -478,4 +478,33 @@ public class Species {
 		return ret;
 	}
 	
+	public String SaveSpeciesHeader() {
+		StringBuffer buf = new StringBuffer("");
+		
+		buf.append("# Species data format follows:\n");
+		buf.append("# 'Species', id, age, age_lastimprovement, max_fitness, max_fitness_ever, newSpecies\n");
+		buf.append("# <Species Org>, <species organism numbers>\n");
+		
+		return buf.toString();
+	}
+	
+	public String SaveSpecies() {
+		StringBuffer buf = new StringBuffer("");
+		
+		buf.append("Species, " + id + ", ");
+		buf.append(age + ", ");
+		buf.append(age_lastimprovement + ", ");
+		buf.append(max_fitness + ", ");
+		buf.append(max_fitness_ever + ", ");
+		buf.append(newSpecies + "\n");
+		
+		buf.append("<Species Orgs>");
+		Iterator<Organism> itr_org = organisms.iterator();
+		while (itr_org.hasNext()) {
+			buf.append(", " + itr_org.next().genome.genome_id);
+		}
+		buf.append("\n");
+				
+		return buf.toString();
+	}
 }

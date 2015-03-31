@@ -1,10 +1,17 @@
 package jneat;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Vector;
 
+import utilities.FIO;
 import bbms.GlobalFuncs;
 
 /** A Population is a group of Organisms including their species */
@@ -533,5 +540,120 @@ public class Population {
 		}
 		
 		return ret;
+	}
+	
+	
+	
+	/* Loads a population from a file at the designated path
+	 */
+	public Population(Path p) {
+		Charset cSet = Charset.forName("US-ASCII");
+		
+		try {
+			BufferedReader reader = Files.newBufferedReader(p,  cSet);
+			String readL;
+			
+			while ((readL = reader.readLine()) != null) {
+
+				if (readL.startsWith("#")) {} 			//GUI_NB.GCO("Comment follows: " + readL);
+				else if (readL.contentEquals("")) {} 	//GUI_NB.GCO("Blank line: " + readL);
+				else {
+					// Read specific information and then pass off to organism reader
+					String[] result = readL.split(", ");
+					cur_innov_num = Integer.parseInt(result[0]);
+					cur_node_id = Integer.parseInt(result[1]);
+					final_gen = Integer.parseInt(result[2]);
+					highest_fitness = Double.parseDouble(result[3]);
+					highest_last_changed = Integer.parseInt(result[4]);
+					last_species = Integer.parseInt(result[5]);
+					mean_fitness = Double.parseDouble(result[6]);
+					population_size = Integer.parseInt(result[7]);
+					standard_deviation = Double.parseDouble(result[8]);
+					variance = Double.parseDouble(result[9]);
+					winnergen = Integer.parseInt(result[10]);
+					
+					if (result.length > 11) System.out.println("ERROR: Line longer than it should be!");
+					else System.out.println("DEBUG: Population header data loaded correctly.");
+					
+					// Pass the bufferedreader to load Organism data
+				}
+			}			
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}		
+	}
+	
+	/** Loads organisms from a file
+	 */
+	public boolean LoadOrganisms(BufferedReader reader) {
+		String readL;
+		
+		try {
+			while ((readL = reader.readLine()) != null) {
+
+				if (readL.startsWith("#")) {} 			//GUI_NB.GCO("Comment follows: " + readL);
+				else if (readL.contentEquals("")) {} 	//GUI_NB.GCO("Blank line: " + readL);
+				else {
+
+				}
+			}
+		} catch (IOException e) { 
+			e.printStackTrace();
+		}			
+		
+		return true;		
+	}
+	
+	public String SavePopHeader() {
+		StringBuffer buf = new StringBuffer("");
+		
+		buf.append("# Population data format follows:\n");
+		buf.append("# cur_innov_num, cur_node_id, final_gen, highest_fitness, highest_last_changed, last_species, mean_fitness, population_size, standard_deviation, variance, winnergen\n");
+		buf.append("#    + All Organisms\n");
+		buf.append("#    + All Species\n");
+		buf.append("#    + All Innovations\n");
+		
+		return buf.toString();
+	}
+	
+	/** Saves this population and all subordinate elements to a file */
+	public String SavePopulation() {
+		StringBuffer buf = new StringBuffer("");
+		
+		buf.append("# Population information follows:\n");
+		buf.append(cur_innov_num + ", ");
+		buf.append(cur_node_id + ", ");
+		buf.append(final_gen + ", ");
+		buf.append(highest_fitness + ", ");
+		buf.append(highest_last_changed + ", ");
+		buf.append(last_species + ", ");
+		buf.append(mean_fitness + ", ");
+		buf.append(population_size + ", ");
+		buf.append(standard_deviation + ", ");
+		buf.append(variance + ", ");
+		buf.append(winnergen + "\n");
+				
+		buf.append(organisms.firstElement().SaveOrgHeader() + "\n");
+		
+		Iterator<Organism> itr_org = organisms.iterator();
+		while (itr_org.hasNext()) {
+			buf.append(itr_org.next().SaveOrganism() + "\n");
+		}
+		
+		buf.append(">END ORGANISMS<\n\n");
+		
+		Iterator<Species> itr_species = species.iterator();
+		while (itr_species.hasNext()) {
+			buf.append(itr_species.next().SaveSpecies() + "\n");
+		}
+		
+		return buf.toString();
+	}
+	
+	public void SavePopulationToFile(Path p) {
+		FIO.overwriteFile(p, SavePopHeader());
+		FIO.appendFile(p, SavePopulation());
 	}
 }

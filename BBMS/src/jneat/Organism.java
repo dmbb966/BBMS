@@ -1,5 +1,7 @@
 package jneat;
 
+import java.io.BufferedReader;
+
 /** Organisms are Genomes and Networks with fitness information (i.e. genotype and phenotype together)
  */
 public class Organism {
@@ -78,5 +80,46 @@ public class Organism {
 		if (net != null) ret += net.PrintNetwork(true); 
 		
 		return ret;
+	}
+	
+	Organism(BufferedReader reader) {
+		
+		
+	}
+	
+	public String SaveOrgHeader() {
+		StringBuffer buf = new StringBuffer("");
+		
+		buf.append("# Organism data format follows:\n");
+		buf.append("# 'Organism', ID, champion, eliminate, error, expected_offspring, fitness, generation, high_fit, mate_baby, mut_struct_baby, orig_fitness, pop_champ, pop_champ_child, super_champ_offspring, winner\n");		
+		buf.append("#    + Genome\n");
+		
+		
+		return buf.toString();
+	}
+	
+	public String SaveOrganism() {
+		StringBuffer buf = new StringBuffer("");
+		
+		buf.append("Organism, " + genome.genome_id + ", ");
+		buf.append(champion + ", ");
+		buf.append(eliminate + ", ");
+		buf.append(error + ", ");
+		buf.append(expected_offspring + ", ");
+		buf.append(fitness + ", ");
+		buf.append(generation + ", ");
+		buf.append(high_fit + ", ");
+		buf.append(mate_baby + ", ");
+		buf.append(mut_struct_baby + ", ");
+		buf.append(orig_fitness + ", ");
+		buf.append(pop_champ + ", ");
+		buf.append(pop_champ_child + ", ");
+		buf.append(super_champ_offspring + ", ");
+		buf.append(winner + "\n");
+		
+		// Genome
+		buf.append(genome.SaveGenome());
+		
+		return buf.toString();
 	}
 }

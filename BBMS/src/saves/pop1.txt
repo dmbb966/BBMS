@@ -1,0 +1,8 @@
+# Population data format follows:# cur_innov_num, cur_node_id, final_gen, highest_fitness, highest_last_changed, last_species, mean_fitness, population_size, standard_deviation, variance, winnergen
+#    + All Organisms
+#    + All Species
+#    + All Innovations
+# Population information follows:
+50, 8, 0, 0.0, 0, 7, 0.0, 50, 0.0, 0.0, 0
+
+# Population organisms follow

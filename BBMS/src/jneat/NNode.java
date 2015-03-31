@@ -293,8 +293,27 @@ public class NNode {
 		*/
 		
 				
-		return ret;
-			
+		return ret;				
+	}
+	
+	public String SaveNodeHeader() {
+		StringBuffer buf = new StringBuffer("");
+		
+		buf.append("# Node data format follows:\n");
+		buf.append("# 'Node', id, fType, nType, gNodeLabel\n");		
+		
+		return buf.toString();
+	}
+	
+	public String SaveNode() {
+		StringBuffer buf = new StringBuffer("");
+		
+		buf.append("Node, " + id + ", ");
+		buf.append(fType + ", ");
+		buf.append(nType + ", ");
+		buf.append(gNodeLabel + "\n");						
+		
+		return buf.toString();
 	}
 	
 }

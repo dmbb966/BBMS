@@ -1,8 +1,11 @@
 package testbed;
 
+import java.io.File;
+import java.nio.file.Path;
 import java.util.Iterator;
 import java.util.Vector;
 
+import utilities.FIO;
 import bbms.GlobalFuncs;
 import jneat.*;
 
@@ -129,12 +132,8 @@ public class JNEATtest {
 		}
 	}
 	
-	public static void test5() {
-		Population pop = new Population(50, 1, 1, 5, false, 0.01);
-		
-		// System.out.println(pop.PrintPopulation());
-		
-		for (int i = 0; i < 20; i++) {
+	public static void test5sensors(Population pop, int iterations) {
+		for (int i = 0; i < iterations; i++) {
 			System.out.println("Iteration #" + i);
 			
 			// Input range [-1, +1]
@@ -165,27 +164,66 @@ public class JNEATtest {
 					System.out.print("   >>> Agent will NOT.  ");
 				}
 				System.out.println("Output val: " + result + " with fitness " + fitness + " and avg: " + finger.fitness);
-			}
+			}			
 		}
+	}
+	
+	public static void test5() {
+		Population pop = new Population(50, 1, 1, 5, false, 0.01);
+		
+		// System.out.println(pop.PrintPopulation());
+		
+		test5sensors(pop, 20);				
 		
 		System.out.println(pop.PrintPopulation());
 		
 		System.out.println("\n\n---- Epoch ----\n\n");
 		pop.epoch();
 		
-		System.out.println("\n\n Epoch completed.");
+		System.out.println("\n\n First Epoch completed.");
 		
 		System.out.println(pop.PrintPopulation());
+		
+		test5sensors(pop, 20);
+		
+		System.out.println("SECOND RUN");
+		System.out.println(pop.PrintPopulation());
+		
+		System.out.println("\n\n---- Epoch ----\n\n");
+		pop.epoch();
+		
+		System.out.println("\n\n Second Epoch completed.");
+		
+		System.out.println(pop.PrintPopulation());
+
 		
 		System.out.println("Program complete.");
 		
 	}
 	
+	public static void testLoad(String loadFile) {		
+		File f = new File(loadFile);
+		if (!f.exists()) return;
+		
+		Path p = f.toPath();
+		Population pop = new Population(p);
+	}
+	
+	public static void testSave(String saveFile) {
+		File f = new File(saveFile);
+		if (!f.exists()) FIO.newFile(saveFile);
+		
+		Path p = f.toPath();
+		
+		Population pop = new Population(5, 1, 1, 5, false, 0.5);
+		pop.SavePopulationToFile(p);
+	}
+	
 	public static void main(String[] args) {
 		
+		testSave("src/saves/pop2.txt");
+		//testLoad("src/saves/pop1.txt");
 		
-		
-		test5();
 	} 
 	
 	public static void testX() {

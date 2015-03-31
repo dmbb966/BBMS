@@ -50,5 +50,26 @@ public class Gene {
 		
 		return ret;
 	}
+	
+	public String SaveGeneHeader() {
+		StringBuffer buf = new StringBuffer("");
+		
+		buf.append("# Gene data format follows:\n");
+		buf.append("# 'Gene', innovation_num, mutation_num, enabled\n");
+		buf.append("#   + Link\n");
+						
+		return buf.toString();
+	}
+	
+	public String SaveGene() {
+		StringBuffer buf = new StringBuffer("");
+		
+		buf.append("Gene, " + innovation_num + ", ");
+		buf.append(mutation_num + ", ");
+		buf.append(enabled + ", ");
+		buf.append(lnk.SaveLink());
+		
+		return buf.toString();
+	}
 
 }

@@ -1,5 +1,7 @@
 package jneat;
 
+import java.util.Iterator;
+
 
 /** The connection from one node to another with an associated weight.
  *  Can be marked as recurrent.
@@ -59,5 +61,28 @@ public class Link {
 		if (time_delay) ret = ret + " DELAYED";
 		
 		return ret;
+	}
+	
+	public String SaveLinkHeader() {
+		StringBuffer buf = new StringBuffer("");
+		
+		buf.append("# Link data format follows:\n");
+		buf.append("# 'Link', id, bias, recurrent, time_delay, weight, in_node ID, out_node ID\n");		
+		
+		return buf.toString();
+	}
+	
+	public String SaveLink() {
+		StringBuffer buf = new StringBuffer("");
+		
+		buf.append("Link, " + id + ", ");
+		buf.append(bias + ", ");
+		buf.append(recurrent + ", ");
+		buf.append(time_delay + ", ");
+		buf.append(weight + ", ");
+		buf.append(in_node.id + ", ");
+		buf.append(out_node.id + "\n");
+		
+		return buf.toString();
 	}
 }

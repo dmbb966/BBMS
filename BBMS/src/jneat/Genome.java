@@ -1376,7 +1376,7 @@ public class Genome {
 			// Build the connections
 			int innov_num = 0;
 			int gene_num = 0;
-			int maxNode = inNodes + outNodes;
+			int maxNode = inNodes + hidNodes;
 
 			NNode new_inNode = null;
 			NNode new_outNode = null;
@@ -1464,6 +1464,37 @@ public class Genome {
 	
 	public Genome(Vector<Gene> g, Vector<Trait> t, Vector<NNode> n) {
 		this(g, t, n, JNEATGlobal.NewGenomeID());		
+	}
+	
+	public String SaveGenomeHeader() {
+		StringBuffer buf = new StringBuffer("");
+		
+		buf.append("# Genome data format follows:\n");		
+		buf.append("#    + Nodes\n");
+		
+		
+		return buf.toString();
+	}
+	
+	public String SaveGenome() {
+		StringBuffer buf = new StringBuffer("");
+		
+		// Nodes
+		Iterator<NNode> itr_node = nodes.iterator();
+		while (itr_node.hasNext()) {
+			buf.append(itr_node.next().SaveNode());
+		}			
+		
+		// Genes
+		Iterator<Gene> itr_gene = genes.iterator();
+		while (itr_gene.hasNext()) {
+			buf.append(itr_gene.next().SaveGene());
+		}
+		
+		// Does NOT save traits
+				
+		
+		return buf.toString();
 	}
 
 }
