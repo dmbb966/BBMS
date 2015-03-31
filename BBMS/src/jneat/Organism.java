@@ -1,6 +1,10 @@
 package jneat;
 
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.util.Iterator;
 
 /** Organisms are Genomes and Networks with fitness information (i.e. genotype and phenotype together)
  */
@@ -82,8 +86,86 @@ public class Organism {
 		return ret;
 	}
 	
-	Organism(BufferedReader reader) {
+	/** Builds this from a save file, parent function that calls this is Population
+	 */
+	Organism(BufferedReader reader, String[] result) {	
+		try {
+			System.out.println("Loading new organism from file.");
+			genome = new Genome();
+			
+			genome.genome_id = Integer.parseInt(result[1]);
+			champion = Boolean.parseBoolean(result[2]);
+			eliminate = Boolean.parseBoolean(result[3]);
+			error = Double.parseDouble(result[4]);
+			expected_offspring = Double.parseDouble(result[5]);
+			fitness = Double.parseDouble(result[6]);
+			generation = Integer.parseInt(result[7]);
+			high_fit = Double.parseDouble(result[8]);
+			mate_baby = Boolean.parseBoolean(result[9]);
+			mut_struct_baby = Boolean.parseBoolean(result[10]);
+			orig_fitness = Double.parseDouble(result[11]);
+			pop_champ = Boolean.parseBoolean(result[12]);
+			pop_champ_child = Boolean.parseBoolean(result[13]);
+			super_champ_offspring = Integer.parseInt(result[14]);
+			winner = Boolean.parseBoolean(result[15]);
+			
+			if (result.length > 16) System.out.println("ERROR: Line longer than it should be!");
 		
+			String readL;
+									
+			while ((readL = reader.readLine()) != null) {
+
+				if (readL.startsWith("#")) {} 					
+				else if (readL.contentEquals("")) {
+					System.out.println("Finishing constructor and attempting to complete organism creation.");
+					
+					net = genome.Genesis(genome.genome_id);
+					species = null;						
+					break;
+				} 			
+				
+				// Reading header data for organism
+				else {
+					// Read specific information and then pass off to organism reader
+					String[] tokenizer = readL.split(", ");
+					
+					if (tokenizer[0].equals("Node")) {
+						genome.nodes.add(new NNode(tokenizer));
+					}
+					
+					else if (tokenizer[0].equals("Gene")) {
+						// We need to look ahead on this line and pass these down to the Gene/Link
+						int inodeID = Integer.parseInt(tokenizer[10]);
+						int onodeID = Integer.parseInt(tokenizer[11]);
+						NNode inode = null;
+						NNode onode = null;
+						
+						Iterator<NNode> itr_node = genome.nodes.iterator();						
+						while (itr_node.hasNext()) {
+							NNode finger = itr_node.next();
+							if (finger.id == inodeID) {
+								inode = finger;
+								break;
+							}
+						}
+						
+						for (int j = genome.nodes.size() - 1; j >= 0; j--) {
+							NNode finger = genome.nodes.elementAt(j);
+							if (finger.id == onodeID) {
+								onode = finger;
+								break;
+							}
+						}
+						
+						genome.genes.add(new Gene(tokenizer, inode, onode));
+					}
+				}
+			}			
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}		
 		
 	}
 	

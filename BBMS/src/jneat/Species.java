@@ -515,4 +515,15 @@ public class Species {
 				
 		return buf.toString();
 	}
+	
+	/** Constructs from a saved file.  Parent function is in Population. */
+	public Species(String[] tokenized) {
+		this(Integer.parseInt(tokenized[1]));
+				
+		age = Integer.parseInt(tokenized[2]);
+		age_lastimprovement = Integer.parseInt(tokenized[3]);
+		max_fitness = Double.parseDouble(tokenized[4]);
+		max_fitness_ever = Double.parseDouble(tokenized[5]);
+		newSpecies = Boolean.parseBoolean(tokenized[6]);				
+	}
 }

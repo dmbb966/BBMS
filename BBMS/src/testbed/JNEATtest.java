@@ -222,7 +222,7 @@ public class JNEATtest {
 	}
 	
 	public static void test6() {
-		Population pop = new Population(50, 1, 1, 5, false, 0.5);				
+		Population pop = new Population(50, 1, 1, 5, false, 0.1);				
 		test5sensors(pop, 20);				
 		testSave("src/saves/pop2.txt", pop);
 		
@@ -230,8 +230,16 @@ public class JNEATtest {
 		testSave("src/saves/pop1.txt", pop);
 	}
 	
+	public static void test7() {
+		Population pop = new Population(50, 1, 1, 5, false, 0.1);						
+		testSave("src/saves/pop2.txt", pop);
+				
+		Population comp = testLoad("src/saves/pop2.txt");
+		testSave("src/saves/pop1.txt", comp);
+	}
+	
 	public static void main(String[] args) {
-		test6();
+		test7();
 		
 		//testLoad("src/saves/pop1.txt");
 		
@@ -239,7 +247,9 @@ public class JNEATtest {
 	
 	public static void testX() {
 		
-		System.out.println("104.4: " + Math.round(104.4) + " and 104.5: " + Math.round(104.5));
+		NodeFuncEnum x = NodeFuncEnum.valueOf("SIGMOID");
+		
+		System.out.println("This should be Sigmoid: " + x);
 		
 		return;
 	}

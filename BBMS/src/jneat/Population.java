@@ -583,6 +583,9 @@ public class Population {
 					else System.out.println("DEBUG: Population header data loaded correctly.");
 					
 					// Pass the bufferedreader to load Organism data
+					LoadOrganisms(reader);
+					LoadSpecies(reader);
+					return;
 				}
 			}			
 		}
@@ -592,6 +595,48 @@ public class Population {
 		}		
 	}
 	
+	public boolean LoadSpecies(BufferedReader reader) {
+		String readL;
+		Species newSpecies = null;
+		
+		try {
+			while ((readL = reader.readLine()) != null) {
+								
+				if (readL.startsWith("Species")) {
+					System.out.println("Adding species");
+					String[] result = readL.split(", ");
+					newSpecies = new Species(result);
+					
+					// Now need to load attached organisms, which is on the next line
+					readL = reader.readLine();
+					String[] attachments = readL.split(", ");
+					
+					// First item is a label, following ones are organisms to attach
+					for (int i = 1; i < attachments.length; i++) {
+						Iterator<Organism> itr_org = organisms.iterator();
+						while (itr_org.hasNext()) {
+							Organism finger = itr_org.next();
+							if (finger.genome.genome_id == Integer.parseInt(attachments[i])) {
+								System.out.println("Attaching organism #" + Integer.parseInt(attachments[i]));
+								newSpecies.organisms.add(finger);
+								finger.species = newSpecies;								
+							}
+						}
+					}
+					
+					species.add(newSpecies);
+				}
+				else if (readL.contentEquals(">END SPECIES<")) {
+					return true;					
+				}								
+			}
+		} catch (IOException e) { 
+			e.printStackTrace();
+		}			
+		
+		return true;		
+	}
+	
 	/** Loads organisms from a file
 	 */
 	public boolean LoadOrganisms(BufferedReader reader) {
@@ -599,12 +644,17 @@ public class Population {
 		
 		try {
 			while ((readL = reader.readLine()) != null) {
-
-				if (readL.startsWith("#")) {} 			//GUI_NB.GCO("Comment follows: " + readL);
-				else if (readL.contentEquals("")) {} 	//GUI_NB.GCO("Blank line: " + readL);
-				else {
-
+				
+				
+				if (readL.startsWith("Organism")) {
+					String[] result = readL.split(", ");
+					organisms.add(new Organism(reader, result));
 				}
+				else if (readL.contentEquals(">END ORGANISMS<")) {
+					return true;					
+				}
+				
+				System.out.println("Organisms reading completed.");
 			}
 		} catch (IOException e) { 
 			e.printStackTrace();

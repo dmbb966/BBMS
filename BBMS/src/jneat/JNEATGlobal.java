@@ -55,7 +55,7 @@ public class JNEATGlobal {
 	static double p_mutate_weight_power = 1.0;
 	static int p_newlink_tries = 1;
 	
-	static double p_interspecies_mate_rate = 1.0;
+	static double p_interspecies_mate_rate = 0.0;
 	static double p_mate_multipoint_prob = 0.0;
 	static double p_mate_multipoint_avg_prob = 0.0;
 	static double p_mate_singlepoint_prob = 0.0;

@@ -85,4 +85,21 @@ public class Link {
 		
 		return buf.toString();
 	}
+	
+	/** Builds this link from a tokenized string, parent function is Gene 
+	 */
+	Link(String[] tokenized, NNode inode, NNode oNode) {
+		// NOTE: Earlier tokenized items are taken up by gene
+		if (!tokenized[4].equals("Link")) System.out.println("ERROR!  Save file corrupt when reading link information.");
+		else {
+			id = Integer.parseInt(tokenized[5]);
+			bias = Double.parseDouble(tokenized[6]);
+			recurrent = Boolean.parseBoolean(tokenized[7]);
+			time_delay = Boolean.parseBoolean(tokenized[8]);
+			weight = Double.parseDouble(tokenized[9]);
+			
+			in_node = inode;
+			out_node = oNode;
+		}
+	}
 }

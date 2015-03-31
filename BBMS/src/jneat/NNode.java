@@ -316,4 +316,14 @@ public class NNode {
 		return buf.toString();
 	}
 	
+	/** Takes a tokenized string to form this Node.  See Organism for parent function.
+	 * 
+	 * @param tokenized
+	 */
+	NNode(String[] tokenized) {
+		this(NodeTypeEnum.valueOf(tokenized[3]), Integer.parseInt(tokenized[1]), NodeLabelEnum.valueOf(tokenized[4]));		
+		fType = NodeFuncEnum.valueOf(tokenized[2]);
+		if (tokenized.length > 5) System.out.println("ERROR: Too many segments on reading node from file.");
+	}
+	
 }

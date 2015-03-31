@@ -71,5 +71,18 @@ public class Gene {
 		
 		return buf.toString();
 	}
+	
+	/** Generates from a save file.  Parent function that calls this is Organism.
+	 * 
+	 * @param tokenized
+	 */
+	Gene(String[] tokenized, NNode inode, NNode onode) {
+		innovation_num = Integer.parseInt(tokenized[1]);
+		mutation_num = Double.parseDouble(tokenized[2]);
+		enabled = Boolean.parseBoolean(tokenized[3]);
+		
+		lnk = new Link(tokenized, inode, onode);
+		
+	}
 
 }
