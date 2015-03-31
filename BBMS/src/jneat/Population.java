@@ -240,6 +240,8 @@ public class Population {
 		
 		// Check for stagnation - if so, perform delta-coding
 		if (highest_last_changed >= JNEATGlobal.p_dropoff_age + 5) {
+			System.out.println(">>>>> Population is stagnant!  Performing delta coding.");
+			
 			highest_last_changed = 0;
 			int half_pop = population_size / 2;
 			
@@ -270,7 +272,9 @@ public class Population {
 		
 		// If there is no stagnation, performs baby stealing
 		else {
+			System.out.println(">>>>> No stagnation.");
 			if (JNEATGlobal.p_babies_stolen > 0) {
+				System.out.println(">>>>> Baby stealing in progress.");
 				// Take away a constant number of expected offspring from the worst species
 				int stolen_babies = 0;
 				for (int j = sorted_species.size() - 1; (j >= 0) && (stolen_babies < JNEATGlobal.p_babies_stolen); j--) {
@@ -344,7 +348,7 @@ public class Population {
 			}
 		}
 		
-		System.out.println(">>><<<\n" + this.PrintPopulation());
+		System.out.println(">>> NEXT PHASE <<<\n" + this.PrintPopulation());
 		
 		// Eliminating organisms flagged for elimination
 		itr_organism = organisms.iterator();
@@ -354,6 +358,7 @@ public class Population {
 			Organism _organism = itr_organism.next();
 			if (_organism.eliminate) {
 				// Remove organism from species
+				System.out.println(">>> >>> Eliminating organism " + _organism.genome.genome_id);
 				_organism.species.RemoveOrganism(_organism);
 				vDel.add(_organism);
 			}
@@ -370,7 +375,12 @@ public class Population {
 		itr_species = sorted_species.iterator();
 		while (itr_species.hasNext()) {
 			Species _species = itr_species.next();
+			
+			System.out.println(">>> Species prior to reproduction: \n" + _species.PrintSpecies());
+			
 			_species.reproduce(generation, this, sorted_species);
+			
+			System.out.println(">>> Species after reproduction: \n" + _species.PrintSpecies());
 		}
 		
 		itr_organism = organisms.iterator();

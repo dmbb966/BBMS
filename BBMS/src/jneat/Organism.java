@@ -70,7 +70,8 @@ public class Organism {
 		ret = ret + "ORGANISM -[Genome ID: " + genome.genome_id + "] ";
 		if (species != null) ret = ret + "Species #" + species.id + " ";
 		else ret = ret + "NO SPECIES ASSIGNED ";
-		if (champion) ret = ret + "(CHAMPION) ";
+		if (pop_champ) ret = ret + "(POP CHAMP) ";
+		else if (champion) ret = ret + "(CHAMPION) ";
 		ret = ret + " Fitness: " + fitness + " with offspring = " + expected_offspring + " ";
 		if (eliminate) ret = ret + ">ELIMINATE< ";
 		

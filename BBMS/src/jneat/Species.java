@@ -209,11 +209,15 @@ public class Species {
 		
 		// Create the designated number of offspring for the species one by one
 		for (int i = 0; i < expected_offspring; i++) {
+			
+			System.out.println("DEBUG: Species #" + id + " is reproducing expected offspring #" + i + " of " + expected_offspring);
+			
 			mut_struct_baby = false;
 			mate_baby = false;						
 			
 			// If there is a super champion (population champion) finish off some special clones
 			if (thechamp.super_champ_offspring > 0) {
+				System.out.println("DEBUG: Super champ present in Species #" + id);
 				mother = thechamp;
 				baby = new Organism(0.0, newGenome, generation);
 				newGenome = mother.genome.duplicate(i);
@@ -240,13 +244,18 @@ public class Species {
 			
 			// If we have a Species champion, just clone it
 			else if (!champ_done && expected_offspring > 5) {
+				System.out.println("DEBUG: Cloning species champion.");
+				
 				mother = thechamp;
 				newGenome = mother.genome.duplicate(i);		
 				baby = new Organism(0.0, newGenome, generation);	// The baby takes after its mother
 				champ_done = true;
 			}
 			
-			else if (GlobalFuncs.randFloat() < JNEATGlobal.p_mutate_only_prob || (organisms.size() - 1) == 1) {
+			// Performs mutation only if there is only one organism in the species, else random probability
+			else if (GlobalFuncs.randFloat() < JNEATGlobal.p_mutate_only_prob || (organisms.size() - 1) <= 1) {
+				System.out.println("DEBUG: Performing mutation.");
+				
 				// Choose the random parent
 				mother = organisms.elementAt(GlobalFuncs.randRange(0,  organisms.size() - 1));
 				newGenome = mother.genome.duplicate(i);
@@ -293,15 +302,18 @@ public class Species {
 			
 			// Otherwise we should mate
 			else {
+				System.out.println("DEBUG: Performing regular mating.");
 				// Choose random mother
 				mother = organisms.elementAt(GlobalFuncs.randRange(0, organisms.size() - 1));
 				Organism father = null;
 				
 				// Choose random father - mate within species
 				if (GlobalFuncs.randFloat()> JNEATGlobal.p_interspecies_mate_rate) {
+					System.out.println("DEBUG: Mating within the species.");
 					father = organisms.elementAt(GlobalFuncs.randRange(0, organisms.size() - 1));
 				}
 				else {
+					System.out.println("DEBUG: Mating outside the species.");
 					// Mate outside of species
 					Species randSpecies = this;		// Save current species
 					// Select random species
@@ -339,6 +351,8 @@ public class Species {
 				if ((GlobalFuncs.randFloat() > JNEATGlobal.p_mate_only_prob) || 
 						(father.genome.genome_id == mother.genome.genome_id) ||
 						(father.genome.Compatibility(mother.genome) == 0.0)) {
+					
+					System.out.println("DEBUG: Mutating the baby's genome.");
 					
 					
 					// Mutate according to probabilities
@@ -385,6 +399,11 @@ public class Species {
 				else {
 					baby = new Organism(0.0, newGenome, generation);
 				}
+				
+				System.out.println("DEBUG: Baby creation complete.");
+				System.out.println("    >: Mother is: " + mother.PrintOrganism());
+				System.out.println("    >: Father is: " + father.PrintOrganism());
+				System.out.println("    >: Baby is: " + baby.PrintOrganism());
 						
 			}
 			
