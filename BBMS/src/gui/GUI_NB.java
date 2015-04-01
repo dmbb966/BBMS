@@ -221,6 +221,7 @@ public class GUI_NB extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>                        
 
     private void MainDisplayMouseMoved(java.awt.event.MouseEvent evt) {                                       

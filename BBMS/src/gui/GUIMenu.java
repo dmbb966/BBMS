@@ -8,13 +8,17 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
+import java.io.File;
+import java.nio.file.Path;
 
 import javax.swing.*;
 
+import jneat.Population;
 import bbms.GlobalFuncs;
 import clock.Clock;
 import terrain.TerrainEnum;
 import unit.WaypointList;
+import utilities.FIO;
 import gui.DialogNewPop;
 
 @SuppressWarnings("serial")
@@ -50,13 +54,41 @@ public class GUIMenu extends JMenuBar{
 	
 	public static class SavePopulation implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
-			GUI_NB.GCO("Placeholder: Save population.");
+			if (GlobalFuncs.currentPop == null) {
+				GUI_NB.GCO("ERROR: There is no population to save!");
+				return;
+			}
+			
+			DialogFileName d = new DialogFileName(GlobalFuncs.gui, true, "Save Population");
+			d.setVisible(true);
+			
+			String fullPath = "src/saves/" + GlobalFuncs.tempStr;
+			File f = new File(fullPath);
+			if (!f.exists()) FIO.newFile(fullPath);
+			Path p = f.toPath();
+			
+			GUI_NB.GCO("Saving JNEAT population to: " + fullPath);
+			GlobalFuncs.currentPop.SavePopulationToFile(p);
 		}
 	}
 	
 	public static class LoadPopulation implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 			GUI_NB.GCO("Placeholder: Load population.");
+			DialogFileName d = new DialogFileName(GlobalFuncs.gui, true, "Load Population");
+			d.setVisible(true);
+			
+			String fullPath = "src/saves/" + GlobalFuncs.tempStr;
+			
+			File f = new File(fullPath);
+			if (!f.exists()) {
+				GUI_NB.GCO("ERROR: " + fullPath + " does not exist!");
+			} else {
+				GUI_NB.GCO("Loading JNEAT population from: " + fullPath);
+				Path p = f.toPath();
+				
+				GlobalFuncs.currentPop = new Population(p);
+			}			
 		}
 	}
 	

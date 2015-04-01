@@ -1407,7 +1407,7 @@ public class Genome {
 			NNode new_outNode = null;
 			
 			
-			System.out.println(Debug_DisplayConnectionMatrix(connectionMatrix, totalNodes));
+			// System.out.println(Debug_DisplayConnectionMatrix(connectionMatrix, totalNodes));
 			
 			
 			// Step through the connection matrix, creating connection genes

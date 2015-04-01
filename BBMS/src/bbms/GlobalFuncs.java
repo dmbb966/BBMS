@@ -44,6 +44,7 @@ public class GlobalFuncs {
 	public static Hex selectedHex = null;
 	
 	public static Population currentPop = null;	
+	public static String tempStr = "";				// Used for some dialog box results
 	
 	public static Thread GameClock = new Thread(new ClockThread());
 	
