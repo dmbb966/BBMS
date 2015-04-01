@@ -48,6 +48,18 @@ public class GUIMenu extends JMenuBar{
 		}
 	}
 	
+	public static class SavePopulation implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			GUI_NB.GCO("Placeholder: Save population.");
+		}
+	}
+	
+	public static class LoadPopulation implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			GUI_NB.GCO("Placeholder: Load population.");
+		}
+	}
+	
 	public static class ExitGame implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 			System.out.println("File - Exit");
@@ -262,11 +274,19 @@ public class GUIMenu extends JMenuBar{
 
 	
 	public GUIMenu() {
+		GenerateMenu();		
+	}
+	
+	public void GenerateMenu() {
 		FileMenu();
-		DisplayMenu();
-		SetupMenu();
-		ActionsMenu();
-		HelpMenu();		
+		
+		if (GlobalFuncs.mapInitialized) {
+			DisplayMenu();
+			SetupMenu();
+			ActionsMenu();
+		}
+		
+		HelpMenu();
 	}
 	
 	public void DisplayMenu() {
@@ -303,15 +323,29 @@ public class GUIMenu extends JMenuBar{
 		menuItem.addActionListener(new NewBlankMap());
 		menu.add(menuItem);
 		
-		menuItem = new JMenuItem("Save", KeyEvent.VK_S);
-		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
-		menuItem.addActionListener(new SaveGame());
-		menu.add(menuItem);	
+		if (bbms.GlobalFuncs.mapInitialized) {
+			menuItem = new JMenuItem("Save", KeyEvent.VK_S);
+			menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
+			menuItem.addActionListener(new SaveGame());
+			menu.add(menuItem);	
+		}
 
 		menuItem = new JMenuItem("Load", KeyEvent.VK_L);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(new LoadGame());
 		menu.add(menuItem);	
+		
+		if (bbms.GlobalFuncs.mapInitialized) {
+			menu.addSeparator();
+			
+			menuItem = new JMenuItem("Save JNEAT Population");
+			menuItem.addActionListener(new SavePopulation()); 
+			menu.add(menuItem);
+			
+			menuItem = new JMenuItem("Load JNEAT Population");
+			menuItem.addActionListener(new LoadPopulation());
+			menu.add(menuItem);
+		}
 		
 		menu.addSeparator();
 		

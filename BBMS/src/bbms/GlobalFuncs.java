@@ -1,6 +1,7 @@
 package bbms;
 
 import java.awt.Color;
+import java.awt.MenuBar;
 import java.lang.Enum;
 import java.awt.Desktop.Action;
 import java.io.File;
@@ -8,6 +9,7 @@ import java.nio.file.Path;
 import java.util.Vector;
 
 import javax.swing.JLabel;
+import javax.swing.JMenuBar;
 
 import jneat.Population;
 import clock.Clock;
@@ -16,6 +18,7 @@ import unit.Unit;
 import utilities.FIO;
 import utilities.MersenneTwister;
 import gui.GUIKeyboard;
+import gui.GUIMenu;
 import gui.GUI_NB;
 import hex.*;
 
@@ -136,8 +139,14 @@ public class GlobalFuncs {
 			GameClock.start();
 		}
 				
-		GUI_NB.GCO("Generating main map.");		
-		gui.repaint();
+		GUI_NB.GCO("Generating main map.");
+		
+		// Update menu to reflect added functionality that comes with a generated map
+		GUIMenu menu = (GUIMenu) gui.getJMenuBar();
+		menu.removeAll();		
+		menu.GenerateMenu();						
+		gui.setJMenuBar(menu); 
+		
 	}
 	
 	public static void initializeMap (int x, int y) {
