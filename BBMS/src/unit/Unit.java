@@ -202,6 +202,8 @@ public class Unit {
 		HexOff currentHex = new HexOff(location.x, location.y);
 		HexOff targetHex = new HexOff(x, y);
 		Vector<hex.Hex> hexList = HexOff.HexesBetween(currentHex, targetHex);
+		if (hexList.size() > GlobalFuncs.visibility + 1) return;
+		
 		if (clear) GlobalFuncs.scenMap.unshadeAll();
 				
 		int visibility = 0;
@@ -223,6 +225,9 @@ public class Unit {
 		HexOff currentHex = new HexOff(location.x, location.y);
 		HexOff targetHex = new HexOff(x, y);
 		Vector<hex.Hex> hexList = HexOff.HexesBetween(currentHex, targetHex);
+		
+		// Exceeds maximum viewing distance
+		if (hexList.size() > GlobalFuncs.visibility + 1) return false;
 		
 		int visibility = 0;
 		// Does not count the hex the unit itself is in, hence, i starts at 1
