@@ -169,20 +169,34 @@ public class GUIMainDisp extends JPanel {
 		
 		
 		case 10:
-			// Sets CLEAR terrain			
-			GUIMouse.SetPaintTerrain(e, TerrainEnum.CLEAR);
+			// Sets CLEAR terrain		
+			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK) {
+				GUIMouse.SetPaintTerrain(e, TerrainEnum.CLEAR);
+			}
+			if ((e.getModifiers() & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK) {
+				GUIMouse.SetPaintTerrainBlob(e, TerrainEnum.CLEAR);
+			}			
 			break;
 			
 		case 11:
-			// Sets TREES terrain			
-			GUIMouse.SetPaintTerrain(e, TerrainEnum.TREES);
+			// Sets TREES terrain
+			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK) {
+				GUIMouse.SetPaintTerrain(e, TerrainEnum.TREES);
+			}
+			if ((e.getModifiers() & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK) {
+				GUIMouse.SetPaintTerrainBlob(e, TerrainEnum.TREES);
+			}			
 			break;
 			
 		case 12:
-			// Sets TALL GRASS terrain			
-			GUIMouse.SetPaintTerrain(e, TerrainEnum.T_GRASS);
-			break;
-		
+			// Sets TALL GRASS terrain	
+			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK) {
+				GUIMouse.SetPaintTerrain(e, TerrainEnum.T_GRASS);
+			}
+			if ((e.getModifiers() & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK) {
+				GUIMouse.SetPaintTerrainBlob(e, TerrainEnum.T_GRASS);
+			}			
+			break;					
 		
 		case 20:
 			// Removes vapor source or sink

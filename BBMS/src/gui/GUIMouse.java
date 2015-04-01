@@ -17,15 +17,44 @@ public class GUIMouse {
 	public static void SetPaintTerrain(java.awt.event.MouseEvent e, TerrainEnum tE) {
 		HexOff cursorHexOff = GUIMainDisp.pixelToHexOff(e.getX(), e.getY(), -GlobalFuncs.gui.GMD.defaultHexSize, -GlobalFuncs.gui.GMD.defaultHexSize);
 		Hex h = GlobalFuncs.scenMap.getHex(cursorHexOff.getX(), cursorHexOff.getY());		
-		if (h != null) {
-			Hex replacement = new Hex(cursorHexOff.getX(), cursorHexOff.getY(), tE, 0);
-			replacement.CloneHexData(h);
-			
-			GlobalFuncs.scenMap.hexArray[cursorHexOff.getX()][cursorHexOff.getY()] = replacement;
-			GlobalFuncs.gui.repaint();
+
+		PaintHex(h, tE);	
+	}
+	
+	/** As SetPaintTerrain, but does it for a blob of seven hexes instead of a single one.
+	 * 
+	 * @param e
+	 * @param tE
+	 */
+	public static void SetPaintTerrainBlob(java.awt.event.MouseEvent e, TerrainEnum tE) {
+		HexOff cursorHexOff = GUIMainDisp.pixelToHexOff(e.getX(), e.getY(), -GlobalFuncs.gui.GMD.defaultHexSize, -GlobalFuncs.gui.GMD.defaultHexSize);
+		Hex h = GlobalFuncs.scenMap.getHex(cursorHexOff.getX(), cursorHexOff.getY());		
+		
+		PaintHex(h, tE);
+		
+		// Now paints surrounding hexes
+		for (int i = 0; i < 6; i++) {
+			HexOff neighbor = HexOff.NeighborOff(cursorHexOff,  i);
+			h = GlobalFuncs.scenMap.getHex(neighbor.getX(), neighbor.getY());
+			PaintHex(h, tE);
 		}
 	
 	}
+	
+	public static void PaintHex(Hex h, TerrainEnum tE) {
+		if (h != null) {
+			if (h.tEnum == TerrainEnum.INVALID) return; 
+			
+			Hex replacement = new Hex(h.x, h.y, tE, 0);
+			replacement.CloneHexData(h);
+			
+			GlobalFuncs.scenMap.hexArray[h.x][h.y] = replacement;
+			GlobalFuncs.gui.repaint();
+		}
+		
+	}
+	
+	
 	
 	/**
 	 * On mouse click, adds a unit to the appropriate side.
