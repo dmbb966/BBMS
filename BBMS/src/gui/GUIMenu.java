@@ -26,15 +26,15 @@ public class GUIMenu extends JMenuBar{
 	
 	public static class NewMap implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
-			GUI_NB.GCO("Initializing a 30x30 map");
-			GlobalFuncs.initializeMap(30, 30);	
+			DialogNewMap d = new DialogNewMap(GlobalFuncs.gui, true, false);
+			d.setVisible(true);
 		}
 	}
 	
 	public static class NewBlankMap implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
-			GUI_NB.GCO("Initializing a blank 30x30 map");
-			GlobalFuncs.initializeMap(30, 30, true);	
+			DialogNewMap d = new DialogNewMap(GlobalFuncs.gui, true, true);
+			d.setVisible(true);
 		}
 	}
 	

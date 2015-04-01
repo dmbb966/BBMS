@@ -48,6 +48,8 @@ public class GlobalFuncs {
 	
 	public static Thread GameClock = new Thread(new ClockThread());
 	
+	public static int visibility = 0;
+	
 	private static int unitCount = 0;
 	
 	// Vapor variables
