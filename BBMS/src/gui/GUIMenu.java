@@ -324,13 +324,27 @@ public class GUIMenu extends JMenuBar{
 		}
 	}
 	
-	/** Test the population dialog */
+	/** Brings up the population dialog */
 	public static class PopDialog implements ActionListener{
 		public void actionPerformed(ActionEvent event) {
 			GUI_NB.GCO("Displaying dialog.");
 			DialogNewPop dialog = new DialogNewPop(GlobalFuncs.gui, true);
 			// dialog.setLocationRelativeTo(GlobalFuncs.gui);
 			dialog.setVisible(true);
+		}
+	}
+	
+	public static class VisDialog implements ActionListener{
+		public void actionPerformed(ActionEvent event) {
+			DialogFileName d = new DialogFileName(GlobalFuncs.gui, true, "Set Visibility");
+			d.setVisible(true);
+			
+			int newVis = Integer.parseInt(GlobalFuncs.tempStr);
+			if (newVis <= 0) GUI_NB.GCO("ERROR: Invalid visibility number.");
+			else {
+				GlobalFuncs.visibility = newVis;
+				GUI_NB.GCO("Visibility set to " + GlobalFuncs.visibility);
+			}
 		}
 	}
 	
@@ -513,8 +527,12 @@ public class GUIMenu extends JMenuBar{
 		menuItem.addActionListener(new CopyConsole());
 		menu.add(menuItem);
 		
-		menuItem = new JMenuItem("Test Population Generation");
-		menuItem.addActionListener(new PopDialog());;
+		menuItem = new JMenuItem("Generate Population");
+		menuItem.addActionListener(new PopDialog());
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Set Visibility");
+		menuItem.addActionListener(new VisDialog());
 		menu.add(menuItem);
 		
 	}
