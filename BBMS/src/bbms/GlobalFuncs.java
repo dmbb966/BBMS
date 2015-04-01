@@ -9,6 +9,7 @@ import java.util.Vector;
 
 import javax.swing.JLabel;
 
+import jneat.Population;
 import clock.Clock;
 import clock.ClockThread;
 import unit.Unit;
@@ -38,6 +39,8 @@ public class GlobalFuncs {
 	public static Hex highlightedHex = null; 
 	public static Unit selectedUnit = null;
 	public static Hex selectedHex = null;
+	
+	public static Population currentPop = null;	
 	
 	public static Thread GameClock = new Thread(new ClockThread());
 	

@@ -231,11 +231,16 @@ public class JNEATtest {
 	}
 	
 	public static void test7() {
-		Population pop = new Population(50, 1, 1, 5, false, 0.1);						
+		Population pop = new Population(50, 1, 1, 5, false, 0.1);	
+		test5sensors(pop, 20);
 		testSave("src/saves/pop2.txt", pop);
+		
+		pop.epoch();
+		
+		testSave("src/saves/pop1.txt", pop);
 				
-		Population comp = testLoad("src/saves/pop2.txt");
-		testSave("src/saves/pop1.txt", comp);
+		//Population comp = testLoad("src/saves/pop2.txt");
+		//testSave("src/saves/pop1.txt", comp);
 	}
 	
 	public static void main(String[] args) {

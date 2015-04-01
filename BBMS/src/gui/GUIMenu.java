@@ -2,6 +2,7 @@ package gui;
 
 import hex.Hex;
 
+import java.awt.Dialog;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
@@ -14,6 +15,7 @@ import bbms.GlobalFuncs;
 import clock.Clock;
 import terrain.TerrainEnum;
 import unit.WaypointList;
+import gui.DialogNewPop;
 
 @SuppressWarnings("serial")
 public class GUIMenu extends JMenuBar{
@@ -244,6 +246,16 @@ public class GUIMenu extends JMenuBar{
 		}
 	}
 	
+	/** Test the population dialog */
+	public static class PopDialog implements ActionListener{
+		public void actionPerformed(ActionEvent event) {
+			GUI_NB.GCO("Displaying dialog.");
+			DialogNewPop dialog = new DialogNewPop(GlobalFuncs.gui, true);
+			// dialog.setLocationRelativeTo(GlobalFuncs.gui);
+			dialog.setVisible(true);
+		}
+	}
+	
 
 	
 
@@ -388,6 +400,10 @@ public class GUIMenu extends JMenuBar{
 		menuItem = new JMenuItem("Copy console output to clipboard");
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(new CopyConsole());
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Test Population Generation");
+		menuItem.addActionListener(new PopDialog());;
 		menu.add(menuItem);
 		
 	}
