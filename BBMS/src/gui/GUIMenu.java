@@ -73,8 +73,7 @@ public class GUIMenu extends JMenuBar{
 	}
 	
 	public static class LoadPopulation implements ActionListener {
-		public void actionPerformed(ActionEvent event) {
-			GUI_NB.GCO("Placeholder: Load population.");
+		public void actionPerformed(ActionEvent event) {			
 			DialogFileName d = new DialogFileName(GlobalFuncs.gui, true, "Load Population");
 			d.setVisible(true);
 			
@@ -89,6 +88,41 @@ public class GUIMenu extends JMenuBar{
 				
 				GlobalFuncs.currentPop = new Population(p);
 			}			
+		}
+	}
+	
+	public static class LoadScenario implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			DialogFileName d = new DialogFileName(GlobalFuncs.gui, true, "Load Scenario");
+			d.setVisible(true);
+			
+			String fullPath = "src/saves/" + GlobalFuncs.tempStr;
+			
+			File f = new File(fullPath);
+			if (!f.exists()) {
+				GUI_NB.GCO("ERROR: " + fullPath + " does not exist!");
+			} else {
+				GUI_NB.GCO("Loading Scenario from: " + fullPath);
+				Path p = f.toPath();
+				
+				GUI_NB.GCO("Functinoality not implemented yet.");
+			}
+		}
+	}
+	
+	public static class SaveScenario implements ActionListener {
+		public void actionPerformed(ActionEvent event) {		
+			DialogFileName d = new DialogFileName(GlobalFuncs.gui, true, "Save Scenario");
+			d.setVisible(true);
+			
+			String fullPath = "src/saves/" + GlobalFuncs.tempStr;
+			File f = new File(fullPath);
+			if (!f.exists()) FIO.newFile(fullPath);
+			Path p = f.toPath();
+			
+			GUI_NB.GCO("Saving scenario to: " + fullPath);			
+			
+			GUI_NB.GCO("Functinoality not implemented yet.");
 		}
 	}
 	
@@ -377,7 +411,18 @@ public class GUIMenu extends JMenuBar{
 			menuItem = new JMenuItem("Load JNEAT Population");
 			menuItem.addActionListener(new LoadPopulation());
 			menu.add(menuItem);
+			
+			menu.addSeparator();
+			
+			menuItem = new JMenuItem("Save Scenario");
+			menuItem.addActionListener(new SaveScenario());
+			menu.add(menuItem);
+						
 		}
+		
+		menuItem = new JMenuItem("Load Scenario");
+		menuItem.addActionListener(new LoadScenario());
+		menu.add(menuItem);
 		
 		menu.addSeparator();
 		
