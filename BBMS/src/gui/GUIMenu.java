@@ -334,6 +334,32 @@ public class GUIMenu extends JMenuBar{
 		}
 	}
 	
+	public static class AddOrg implements ActionListener{
+		public void actionPerformed(ActionEvent event) {
+			if (GlobalFuncs.selectedUnit == null) {
+				GUI_NB.GCO("ERROR!  No unit selected!");
+				return;
+			}
+			else if (GlobalFuncs.currentPop == null) {
+				GUI_NB.GCO("ERROR!  Must generate a JNEAT population first!");
+				return;
+			}
+			else {
+				GUI_NB.GCO("There are " + GlobalFuncs.currentPop.organisms.size() + " organisms to choose from.");
+				DialogFileName selectOrg = new DialogFileName(GlobalFuncs.gui, true, "Select Org 0-" + (GlobalFuncs.currentPop.organisms.size() - 1));
+				selectOrg.setVisible(true);
+				
+				int selectedOrg = Integer.parseInt(GlobalFuncs.tempStr);
+				if (selectedOrg < 0 || selectedOrg > GlobalFuncs.currentPop.organisms.size() - 1) GUI_NB.GCO("ERROR: Invalid organism number.");
+				else {
+					GUI_NB.GCO("You selected organism #" + selectedOrg);
+					GUI_NB.GCO(GlobalFuncs.currentPop.organisms.elementAt(selectedOrg).PrintOrganism());
+					GlobalFuncs.selectedUnit.org = GlobalFuncs.currentPop.organisms.elementAt(selectedOrg);
+				}
+			}
+		}
+	}
+	
 	public static class VisDialog implements ActionListener{
 		public void actionPerformed(ActionEvent event) {
 			DialogFileName d = new DialogFileName(GlobalFuncs.gui, true, "Set Visibility");
@@ -364,6 +390,7 @@ public class GUIMenu extends JMenuBar{
 			DisplayMenu();
 			SetupMenu();
 			ActionsMenu();
+			NeuralNetMenu();
 		}
 		
 		HelpMenu();
@@ -527,14 +554,24 @@ public class GUIMenu extends JMenuBar{
 		menuItem.addActionListener(new CopyConsole());
 		menu.add(menuItem);
 		
-		menuItem = new JMenuItem("Generate Population");
-		menuItem.addActionListener(new PopDialog());
-		menu.add(menuItem);
-		
 		menuItem = new JMenuItem("Set Visibility");
 		menuItem.addActionListener(new VisDialog());
 		menu.add(menuItem);
 		
+	}
+	
+	public void NeuralNetMenu() {
+		JMenu menu = new JMenu("JNEAT");
+		menu.setMnemonic(KeyEvent.VK_J);
+		this.add(menu);
+		
+		JMenuItem menuItem = new JMenuItem("Generate Population");
+		menuItem.addActionListener(new PopDialog());
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Assign Organism to Selected Unit");
+		menuItem.addActionListener(new AddOrg());
+		menu.add(menuItem);
 	}
 	
 	public void HelpMenu() {		
