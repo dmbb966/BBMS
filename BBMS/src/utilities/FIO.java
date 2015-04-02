@@ -97,6 +97,19 @@ public class FIO {
 			
 		GlobalFuncs.allSpots.SaveSpots(p);
 		
+		if (GlobalFuncs.currentPop == null) return true;
+		
+		FIO.appendFile(p, "#Filename for the associated JNEAT population that will be saved");
+		String popFileName = p.toString();
+		popFileName = popFileName.substring(0, popFileName.length() - 4);
+		popFileName = popFileName.concat(".pop");
+		FIO.appendFile(p, popFileName);
+		
+		File f = new File(popFileName);
+		if (!f.exists()) FIO.newFile(popFileName);
+		Path popPath = f.toPath();
+		GlobalFuncs.currentPop.SavePopulationToFile(popPath);
+		
 		return true;
 	}
 	
