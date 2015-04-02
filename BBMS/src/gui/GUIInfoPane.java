@@ -23,7 +23,7 @@ public class GUIInfoPane extends JPanel {
 	public static DetailedInfoEnum mode = DetailedInfoEnum.UNIT;
 	
 	private final int start = 25;
-	private final int spacing = 15;	
+	private final int spacing = 15;
 	
 	public GUIInfoPane() {
 		
@@ -118,7 +118,7 @@ public class GUIInfoPane extends JPanel {
 	 */
 	private void paintDebugMode(Graphics g) {
 		int row = start;
-
+		
 		// Display unit information
 		if (GlobalFuncs.selectedUnit != null) {	
 			g.drawString("Callsign: " + GlobalFuncs.selectedUnit.callsign + "  (" + GlobalFuncs.selectedUnit.side + ")", 10, row);
@@ -159,6 +159,7 @@ public class GUIInfoPane extends JPanel {
 		
 	public void paintComponent(Graphics g) {		
 		super.paintComponent(g);
+	
 		
 		if (GlobalFuncs.mapInitialized){
 			switch (mode) {

@@ -117,7 +117,7 @@ public class GUI_NB extends javax.swing.JFrame {
         BasicInfoPane.setLayout(BasicInfoPaneLayout);
         BasicInfoPaneLayout.setHorizontalGroup(
             BasicInfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 228, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         BasicInfoPaneLayout.setVerticalGroup(
             BasicInfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -125,6 +125,7 @@ public class GUI_NB extends javax.swing.JFrame {
         );
 
         DetailedInfoPane.setBorder(javax.swing.BorderFactory.createTitledBorder("Selected Unit Info"));
+        DetailedInfoPane.setMaximumSize(new java.awt.Dimension(32767, 443));
         DetailedInfoPane.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseMoved(java.awt.event.MouseEvent evt) {
                 DetailedInfoPaneMouseMoved(evt);
@@ -135,7 +136,7 @@ public class GUI_NB extends javax.swing.JFrame {
         DetailedInfoPane.setLayout(DetailedInfoPaneLayout);
         DetailedInfoPaneLayout.setHorizontalGroup(
             DetailedInfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 228, Short.MAX_VALUE)
         );
         DetailedInfoPaneLayout.setVerticalGroup(
             DetailedInfoPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -143,6 +144,7 @@ public class GUI_NB extends javax.swing.JFrame {
         );
 
         MiniMap.setBackground(new java.awt.Color(0, 0, 0));
+        MiniMap.setMaximumSize(new java.awt.Dimension(240, 209));
 
         javax.swing.GroupLayout MiniMapLayout = new javax.swing.GroupLayout(MiniMap);
         MiniMap.setLayout(MiniMapLayout);
@@ -152,17 +154,17 @@ public class GUI_NB extends javax.swing.JFrame {
         );
         MiniMapLayout.setVerticalGroup(
             MiniMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 209, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout InformationPanelLayout = new javax.swing.GroupLayout(InformationPanel);
         InformationPanel.setLayout(InformationPanelLayout);
         InformationPanelLayout.setHorizontalGroup(
             InformationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(MiniMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(MiniMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGroup(InformationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                 .addComponent(BasicInfoPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(DetailedInfoPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(DetailedInfoPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         InformationPanelLayout.setVerticalGroup(
             InformationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -171,7 +173,7 @@ public class GUI_NB extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(DetailedInfoPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(MiniMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(MiniMap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         ConsolePanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 51, 51), 3));
@@ -191,7 +193,7 @@ public class GUI_NB extends javax.swing.JFrame {
         );
         ConsolePanelLayout.setVerticalGroup(
             ConsolePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(ConsoleScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
+            .addComponent(ConsoleScroll)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
