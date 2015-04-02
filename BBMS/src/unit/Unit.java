@@ -22,6 +22,7 @@ import java.util.Vector;
 
 import javax.imageio.ImageIO;
 
+import jneat.Organism;
 import clock.Clock;
 import clock.ClockControl;
 import clock.ClockThread;
@@ -34,6 +35,15 @@ public class Unit {
 	public hex.HexOff HullOffset = new hex.HexOff(0, 0);
 	public hex.HexOff TurretOffset = new hex.HexOff(0, 0);
 	public hex.HexOff TurretRing = new hex.HexOff(0, 0);
+	
+	/** Neural net used for determining placement of the unit*/
+	public Organism org = null;
+	
+	/** Determines the sensor configuration of this network - affects how the sensors are fed. */
+	public OrganismTypeEnum orgType = OrganismTypeEnum.SIMPLE_SINGLE;
+	
+	/** Determines how the fitness for the neural network is evaluated */
+	public FitnessTypeEnum fitType = FitnessTypeEnum.SIMPLE_GREEDY;
 	
 	public double hullOrientation;
 	public double turretOrientation;	// Relative to the hull
