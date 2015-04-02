@@ -142,6 +142,10 @@ public class GlobalFuncs {
 			GUI_NB.GCO("Starting clock");
 			GameClock.start();
 		}
+		
+		currentPop = null;
+		orgAssignNum = 0;
+		
 				
 		GUI_NB.GCO("Generating main map.");
 		

@@ -657,7 +657,3 @@
 # Format: Time index, spotter unit ID, observed unit ID, observed unit x, observed unit y
 
 >Last Spot<
->Last Spot<
-
-#Filename for the associated JNEAT population that will be saved
-src\saves\save.pop

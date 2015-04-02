@@ -15,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
+import jneat.Population;
 import bbms.GlobalFuncs;
 import clock.Clock;
 import terrain.TerrainEnum;
@@ -284,9 +285,27 @@ public class FIO {
 							spotting.SpotReport readSpot = new spotting.SpotReport(spotTime, spotter, observed, loc);
 							loadSpots.addReport(readSpot);
 						}
-
-						
 						break;
+						
+					case 5:
+						// Loads population information
+						if (readL.contains(".pop")) {
+							
+							File popFile = new File(readL);
+							if (!popFile.exists()) {
+								GUI_NB.GCO("ERROR!  Could not read file: >" + readL + "<");
+							}
+							else {
+								GUI_NB.GCO("Loading spotting info from file: >" + readL + "<");
+								Path popPath = popFile.toPath();
+								GlobalFuncs.currentPop = new Population(popPath);
+								GUI_NB.GCO("Population file loaded.");
+							}
+						} else {
+							GUI_NB.GCO("No population associated with this save.");
+						}
+						mode = 6;
+						
 					default: 
 						GUI_NB.GCO("Mode is " + mode + ", string: " + readL);
 					}
