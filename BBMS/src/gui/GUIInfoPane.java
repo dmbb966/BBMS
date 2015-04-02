@@ -118,6 +118,42 @@ public class GUIInfoPane extends JPanel {
 	 */
 	private void paintDebugMode(Graphics g) {
 		int row = start;
+
+		// Display unit information
+		if (GlobalFuncs.selectedUnit != null) {	
+			g.drawString("Callsign: " + GlobalFuncs.selectedUnit.callsign + "  (" + GlobalFuncs.selectedUnit.side + ")", 10, row);
+			row += spacing;
+			
+			g.drawString("Unit Type: " + GlobalFuncs.selectedUnit.type, 10, row);
+			row += spacing;
+			
+			g.drawString("Orientation: " + GlobalFuncs.selectedUnit.subHexDirection + " with progress: " + GlobalFuncs.selectedUnit.subHexLocation, 10, row);
+			row += spacing;
+			
+			g.drawString("Hull azimuth: " + GlobalFuncs.selectedUnit.hullOrientation, 10, row);
+			row += spacing;
+			
+			g.drawString("Turret azimuth: " + GlobalFuncs.selectedUnit.turretOrientation, 10, row);
+			row += spacing;
+			
+			if (GlobalFuncs.selectedUnit.org == null) {
+				g.drawString("No neural net loaded.", 10,  row);				
+			} else {
+				g.drawString("Organism #" + GlobalFuncs.selectedUnit.org.genome.genome_id + " of species #" + 
+						GlobalFuncs.selectedUnit.org.species.id, 10, row);
+			}			
+			row += spacing * 2;
+		}
+		
+
+		// Display summary NN information
+		if (GlobalFuncs.currentPop == null) {
+			g.drawString("No JNEAT Population loaded.",  10, row);			
+		}
+		else {
+			g.drawString("JNEAT pop has " + GlobalFuncs.currentPop.organisms.size() + " orgs in " + 
+					GlobalFuncs.currentPop.species.size() + " species.", 10, row);			
+		}
 		
 	}
 		

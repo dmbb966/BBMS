@@ -8,7 +8,7 @@ import java.util.Vector;
 import bbms.GlobalFuncs;
 
 public class Species {
-	int id;
+	public int id;
 	int age;
 	
 	double avg_fitness;
