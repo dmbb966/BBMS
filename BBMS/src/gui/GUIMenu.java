@@ -485,7 +485,18 @@ public class GUIMenu extends JMenuBar{
 		}
 	}
 	
-
+	/** A test function that sets the fitness of all organisms attached to units to 2.0.
+	 * Yes I know that fitness number is "too high."  Deal with it. */
+	public static class TestFunc implements ActionListener{
+		public void actionPerformed(ActionEvent event) {
+			for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
+				Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
+				
+				if (finger.org != null) finger.org.fitness = 2.0;
+				GUI_NB.GCO("Assigning fitness of 2.0 to organism attached to " + finger.callsign);
+			}
+		}
+	}
 	
 
 
@@ -698,6 +709,12 @@ public class GUIMenu extends JMenuBar{
 		
 		menuItem = new JMenuItem("Sequentially Assign Organisms to Friendlies");
 		menuItem.addActionListener(new SeqAddOrg());
+		menu.add(menuItem);
+		
+		menu.addSeparator();
+		
+		menuItem = new JMenuItem("Test function - fitness");
+		menuItem.addActionListener(new TestFunc());
 		menu.add(menuItem);
 	}
 	

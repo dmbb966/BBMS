@@ -111,8 +111,9 @@ public class Organism {
 			pop_champ_child = Boolean.parseBoolean(result[13]);
 			super_champ_offspring = Integer.parseInt(result[14]);
 			winner = Boolean.parseBoolean(result[15]);
+			checkout = Boolean.parseBoolean(result[16]);
 			
-			if (result.length > 16) System.out.println("ERROR: Line longer than it should be!");
+			if (result.length > 17) System.out.println("ERROR: Line longer than it should be!");
 		
 			String readL;
 									
@@ -176,7 +177,7 @@ public class Organism {
 		StringBuffer buf = new StringBuffer("");
 		
 		buf.append("# Organism data format follows:\n");
-		buf.append("# 'Organism', ID, champion, eliminate, error, expected_offspring, fitness, generation, high_fit, mate_baby, mut_struct_baby, orig_fitness, pop_champ, pop_champ_child, super_champ_offspring, winner\n");		
+		buf.append("# 'Organism', ID, champion, eliminate, error, expected_offspring, fitness, generation, high_fit, mate_baby, mut_struct_baby, orig_fitness, pop_champ, pop_champ_child, super_champ_offspring, winner, checkout\n");		
 		buf.append("#    + Genome\n");
 		
 		
@@ -200,7 +201,8 @@ public class Organism {
 		buf.append(pop_champ + ", ");
 		buf.append(pop_champ_child + ", ");
 		buf.append(super_champ_offspring + ", ");
-		buf.append(winner + "\n");
+		buf.append(winner + ", ");
+		buf.append(checkout + "\n");
 		
 		// Genome
 		buf.append(genome.SaveGenome());
