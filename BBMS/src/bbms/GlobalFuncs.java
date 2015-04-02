@@ -45,6 +45,7 @@ public class GlobalFuncs {
 	
 	public static Population currentPop = null;	
 	public static String tempStr = "";				// Used for some dialog box results
+	public static int orgAssignNum = 0;
 	
 	public static Thread GameClock = new Thread(new ClockThread());
 	

@@ -13,10 +13,12 @@ import java.nio.file.Path;
 
 import javax.swing.*;
 
+import jneat.Organism;
 import jneat.Population;
 import bbms.GlobalFuncs;
 import clock.Clock;
 import terrain.TerrainEnum;
+import unit.Unit;
 import unit.WaypointList;
 import utilities.FIO;
 import gui.DialogNewPop;
@@ -334,6 +336,7 @@ public class GUIMenu extends JMenuBar{
 		}
 	}
 	
+	/** Allows the user to select an organism to attach to the selected unit via dialog box.*/
 	public static class AddOrg implements ActionListener{
 		public void actionPerformed(ActionEvent event) {
 			if (GlobalFuncs.selectedUnit == null) {
@@ -360,6 +363,7 @@ public class GUIMenu extends JMenuBar{
 		}
 	}
 	
+	/** Removes an organism from the selected unit */
 	public static class RemoveOrg implements ActionListener{
 		public void actionPerformed(ActionEvent event) {
 			if (GlobalFuncs.selectedUnit == null) {
@@ -370,6 +374,67 @@ public class GUIMenu extends JMenuBar{
 				GlobalFuncs.selectedUnit.org = null;
 				GUI_NB.GCO("Neural network removed from selected unit.");
 			}
+		}
+	}
+	
+	/** Randomly assigns organisms from the current population to all friendly units.
+	 * This overwrites any existing organism that might already be attached to them.*/
+	public static class RandAddOrg implements ActionListener{
+		public void actionPerformed(ActionEvent event) {
+			if (GlobalFuncs.currentPop == null) {
+				GUI_NB.GCO("ERROR!  Must generate a population first.");
+				return;
+			}
+			else {
+				for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
+					Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
+					Organism org = GlobalFuncs.currentPop.organisms.elementAt(GlobalFuncs.randRange(0, GlobalFuncs.currentPop.organisms.size() - 1));
+					
+					GUI_NB.GCO("Assigning organism #" + org.genome.genome_id + " to friendly unit " + finger.callsign);
+					finger.org = org;
+				}
+			}
+		}
+	}
+	
+	/** Sequentially assigns organisms from the current population to all friendly units.
+	 * This overwrites any existing organism that might already be attached to them.*/
+	public static class SeqAddOrg implements ActionListener{
+		public void actionPerformed(ActionEvent event) {
+			if (GlobalFuncs.currentPop == null) {
+				GUI_NB.GCO("ERROR!  Must generate a population first.");
+				return;
+			}
+			else {
+				int numOrgs = GlobalFuncs.currentPop.organisms.size();
+				for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
+					Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
+					if (GlobalFuncs.orgAssignNum >= numOrgs) GlobalFuncs.orgAssignNum = 0;
+					
+					Organism org = GlobalFuncs.currentPop.organisms.elementAt(GlobalFuncs.orgAssignNum);
+					GlobalFuncs.orgAssignNum++;
+					
+					GUI_NB.GCO("Assiging organism #" + org.genome.genome_id + " to friendly unit " + finger.callsign);
+					finger.org = org;
+				}
+			}
+		}
+	}
+	
+	/** Displays the current organism to the GUI console */
+	public static class ViewOrg implements ActionListener{
+		public void actionPerformed(ActionEvent event) {
+			if (GlobalFuncs.selectedUnit == null) {
+				GUI_NB.GCO("ERROR!  Must select a unit first.");
+				return;
+			}
+			if (GlobalFuncs.selectedUnit.org == null) {
+				GUI_NB.GCO("ERROR!  The selected unit doesn't have a network attached.");
+				return;
+			}
+			
+			GUI_NB.GCO("Organism assigned to " + GlobalFuncs.selectedUnit.callsign);
+			GUI_NB.GCO(GlobalFuncs.selectedUnit.org.PrintOrganism());
 		}
 	}
 	
@@ -588,6 +653,18 @@ public class GUIMenu extends JMenuBar{
 		
 		menuItem = new JMenuItem("Remove Organism from Selected Unit");
 		menuItem.addActionListener(new RemoveOrg());
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("View Organism of Selected Unit");
+		menuItem.addActionListener(new ViewOrg());
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Randomly Assign Organisms to Friendlies");
+		menuItem.addActionListener(new RandAddOrg());
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Sequentially Assign Organisms to Friendlies");
+		menuItem.addActionListener(new SeqAddOrg());
 		menu.add(menuItem);
 	}
 	
