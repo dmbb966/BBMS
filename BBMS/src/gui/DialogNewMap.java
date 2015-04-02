@@ -43,6 +43,7 @@ public class DialogNewMap extends javax.swing.JDialog {
         YDim_Field = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("New Map");
 
         jLabel4.setText("X Dim");
 

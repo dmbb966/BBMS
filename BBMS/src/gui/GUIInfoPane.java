@@ -64,7 +64,24 @@ public class GUIInfoPane extends JPanel {
 	 * @param g
 	 */
 	private void paintUnitMode(Graphics g) {
+		if (GlobalFuncs.selectedUnit == null) return;
+		
 		int row = start;
+		
+		g.drawString("Callsign: " + GlobalFuncs.selectedUnit.callsign + "  (" + GlobalFuncs.selectedUnit.side + ")", 10, row);
+		row += spacing;
+		
+		g.drawString("Unit Type: " + GlobalFuncs.selectedUnit.type, 10, row);
+		row += spacing;
+		
+		g.drawString("Orientation: " + GlobalFuncs.selectedUnit.subHexDirection + " with progress: " + GlobalFuncs.selectedUnit.subHexLocation, 10, row);
+		row += spacing;
+		
+		g.drawString("Hull azimuth: " + GlobalFuncs.selectedUnit.hullOrientation, 10, row);
+		row += spacing;
+		
+		g.drawString("Turret azimuth: " + GlobalFuncs.selectedUnit.turretOrientation, 10, row);
+		
 		
 	}
 	
