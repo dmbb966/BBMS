@@ -360,6 +360,19 @@ public class GUIMenu extends JMenuBar{
 		}
 	}
 	
+	public static class RemoveOrg implements ActionListener{
+		public void actionPerformed(ActionEvent event) {
+			if (GlobalFuncs.selectedUnit == null) {
+				GUI_NB.GCO("ERROR!  No unit selected!");
+				return;			
+			}
+			else {
+				GlobalFuncs.selectedUnit.org = null;
+				GUI_NB.GCO("Neural network removed from selected unit.");
+			}
+		}
+	}
+	
 	public static class VisDialog implements ActionListener{
 		public void actionPerformed(ActionEvent event) {
 			DialogFileName d = new DialogFileName(GlobalFuncs.gui, true, "Set Visibility");
@@ -571,6 +584,10 @@ public class GUIMenu extends JMenuBar{
 		
 		menuItem = new JMenuItem("Assign Organism to Selected Unit");
 		menuItem.addActionListener(new AddOrg());
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Remove Organism from Selected Unit");
+		menuItem.addActionListener(new RemoveOrg());
 		menu.add(menuItem);
 	}
 	
