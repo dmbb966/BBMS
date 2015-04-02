@@ -385,14 +385,37 @@ public class GUIMenu extends JMenuBar{
 				GUI_NB.GCO("ERROR!  Must generate a population first.");
 				return;
 			}
-			else {
-				for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
-					Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
-					Organism org = GlobalFuncs.currentPop.organisms.elementAt(GlobalFuncs.randRange(0, GlobalFuncs.currentPop.organisms.size() - 1));
-					
+			
+			if (GlobalFuncs.currentPop.organisms.size() < GlobalFuncs.friendlyUnitList.size()) {
+				GUI_NB.GCO("ERROR!  There are not enough organisms to assign to units!");
+				return;
+			}
+			
+			int abortcount = 0;
+			// Since all friendly units will have new organisms assigned to them, will clear the checkout vars
+			for (int i = 0; i < GlobalFuncs.currentPop.organisms.size(); i++) {
+				GlobalFuncs.currentPop.organisms.elementAt(i).checkout = false;
+			}
+			
+			for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
+				Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
+				Organism org = GlobalFuncs.currentPop.organisms.elementAt(GlobalFuncs.randRange(0, GlobalFuncs.currentPop.organisms.size() - 1));
+				
+				if (!org.checkout) {
 					GUI_NB.GCO("Assigning organism #" + org.genome.genome_id + " to friendly unit " + finger.callsign);
 					finger.org = org;
+					org.checkout = true;
+				} 
+				else {
+					if (abortcount > 100) {
+						GUI_NB.GCO("ERROR!  There should be enough organisms to assign, but unable to do so.");
+						return;
+					}
+					GUI_NB.GCO("Organism #" + org.genome.genome_id + " is already checked out.  Fishing again.");
+					i--;
+					abortcount++;
 				}
+					
 			}
 		}
 	}
@@ -405,19 +428,29 @@ public class GUIMenu extends JMenuBar{
 				GUI_NB.GCO("ERROR!  Must generate a population first.");
 				return;
 			}
-			else {
-				int numOrgs = GlobalFuncs.currentPop.organisms.size();
-				for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
-					Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
-					if (GlobalFuncs.orgAssignNum >= numOrgs) GlobalFuncs.orgAssignNum = 0;
-					
-					Organism org = GlobalFuncs.currentPop.organisms.elementAt(GlobalFuncs.orgAssignNum);
-					GlobalFuncs.orgAssignNum++;
-					
-					GUI_NB.GCO("Assiging organism #" + org.genome.genome_id + " to friendly unit " + finger.callsign);
-					finger.org = org;
-				}
+			
+			if (GlobalFuncs.currentPop.organisms.size() < GlobalFuncs.friendlyUnitList.size()) {
+				GUI_NB.GCO("ERROR!  There are not enough organisms to assign to units!");
+				return;				
 			}
+			
+			// Since you are assigning organisms to all friendly units, clears the checkout list
+			for (int i = 0; i < GlobalFuncs.currentPop.organisms.size(); i++) {
+				GlobalFuncs.currentPop.organisms.elementAt(i).checkout = false;
+			}
+			
+			int numOrgs = GlobalFuncs.currentPop.organisms.size();
+			for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
+				Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
+				if (GlobalFuncs.orgAssignNum >= numOrgs) GlobalFuncs.orgAssignNum = 0;
+				
+				Organism org = GlobalFuncs.currentPop.organisms.elementAt(GlobalFuncs.orgAssignNum);
+				GlobalFuncs.orgAssignNum++;
+				
+				GUI_NB.GCO("Assiging organism #" + org.genome.genome_id + " to friendly unit " + finger.callsign);
+				finger.org = org;
+			}
+			
 		}
 	}
 	

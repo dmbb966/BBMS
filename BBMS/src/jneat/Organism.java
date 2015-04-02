@@ -11,6 +11,9 @@ import java.util.Iterator;
 public class Organism {
 	int generation;
 	
+	/** When doing training, used to ensure there is only one copy of the organism being used */
+	public boolean checkout = false;
+	
 	/** The adjusted fitness value (adjusted by Species.AdjustFitness())*/
 	public double fitness;
 	
