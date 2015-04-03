@@ -276,6 +276,16 @@ public class GUIMenu extends JMenuBar{
 		}
 	}
 	
+	public static class DisplayModeJNEAT implements ActionListener{
+		public void actionPerformed(ActionEvent event) {
+			GUI_NB.GCO("Display Mode set to JNEAT");
+			GlobalFuncs.showVapor = true;
+			GlobalFuncs.showLOS = false;
+			GlobalFuncs.showFOW = true;
+			GUIInfoPane.changePaneMode(DetailedInfoEnum.JNEAT);
+		}
+	}
+	
 	/** Sets the display mode to DEBUG in the main display and info panes
 	 */
 	public static class DisplayModeDebug implements ActionListener {
@@ -529,6 +539,10 @@ public class GUIMenu extends JMenuBar{
 		
 		menuItem = new JMenuItem("Vapor Display Mode");
 		menuItem.addActionListener(new DisplayModeVapor());
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("JNEAT Display Mode");
+		menuItem.addActionListener(new DisplayModeJNEAT());
 		menu.add(menuItem);
 		
 		menuItem = new JMenuItem("Debug Display Mode");

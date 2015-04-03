@@ -22,23 +22,25 @@ public class NNode {
 	double activesum;
 	
 	/** Total activation amount entering this node */
-	double activation;
+	public double activation;
+	
+	/** Activation value of the node at time t-1.*/
+	public double last_activation;
+	
+	/** Activation value of the node at time t-2.*/
+	public double prior_activation;
+	
 	
 	boolean active_flag;
 	
 	boolean is_traversed;
 	
-	int id;
+	public int id;
 	
 	int activation_count;
 	
 	int inner_level;
 	
-	/** Activation value of the node at time t-1.*/
-	double last_activation;
-	
-	/** Activation value of the node at time t-2.*/
-	double prior_activation;
 	
 	/** Links from other nodes to this node. */
 	Vector<Link> incoming;
