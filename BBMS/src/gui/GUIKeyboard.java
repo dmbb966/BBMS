@@ -245,8 +245,8 @@ public class GUIKeyboard {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			GUI_NB.GCO("Find LOS");
-			if (GlobalFuncs.selectedUnit != null && GlobalFuncs.selectedUnit.location != GlobalFuncs.highlightedHex) {
-				GlobalFuncs.selectedUnit.DisplayLOSTo(GlobalFuncs.highlightedHex.x, GlobalFuncs.highlightedHex.y, true);					
+			if (GlobalFuncs.selectedUnit != null && GlobalFuncs.selectedUnit.location != GlobalFuncs.selectedHex) {
+				GlobalFuncs.selectedUnit.DisplayLOSTo(GlobalFuncs.selectedHex.x, GlobalFuncs.selectedHex.y, true);					
 			}
 		}
 	}
@@ -292,9 +292,9 @@ public class GUIKeyboard {
 	public static class AddWaypoint extends AbstractAction {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (GlobalFuncs.selectedUnit != null && GlobalFuncs.highlightedHex != null) {	
-				int x = GlobalFuncs.highlightedHex.x;
-				int y = GlobalFuncs.highlightedHex.y;
+			if (GlobalFuncs.selectedUnit != null && GlobalFuncs.selectedHex != null) {	
+				int x = GlobalFuncs.selectedHex.x;
+				int y = GlobalFuncs.selectedHex.y;
 				HexOff lastWP = GlobalFuncs.selectedUnit.waypointList.getLastWaypoint();
 				
 				if (x == GlobalFuncs.selectedUnit.location.x && y == GlobalFuncs.selectedUnit.location.y) {
@@ -302,7 +302,7 @@ public class GUIKeyboard {
 				}
 				else if (x != lastWP.getX() || y != lastWP.getY()) 
 				{
-					GlobalFuncs.selectedUnit.waypointList.addWaypoint(GlobalFuncs.highlightedHex.x, GlobalFuncs.highlightedHex.y);
+					GlobalFuncs.selectedUnit.waypointList.addWaypoint(GlobalFuncs.selectedHex.x, GlobalFuncs.selectedHex.y);
 					GUI_NB.GCO("Added waypoint at (" + x + ", " + y + ")");
 					GUI_NB.GCO(GlobalFuncs.selectedUnit.waypointList.displayWaypoints());						
 				}

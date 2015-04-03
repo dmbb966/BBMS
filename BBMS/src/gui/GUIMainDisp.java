@@ -120,11 +120,11 @@ public class GUIMainDisp extends JPanel {
 			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK) {
 				if (clickedHex.HexUnit == null) {
 					//GUI_NB.GCO("Hex " + clickedHex.x + ", " + clickedHex.y + " has no units.");
-					GlobalFuncs.highlightedHex = clickedHex;
+					GlobalFuncs.selectedHex = clickedHex;
 				}
 				else {
 					//GUI_NB.GCO("Hex " + clickedHex.x + ", " + clickedHex.y + " has units.");
-					GlobalFuncs.highlightedHex = clickedHex;
+					GlobalFuncs.selectedHex = clickedHex;
 					GlobalFuncs.selectedUnit = clickedHex.HexUnit;
 					GUI_NB.GCO(GlobalFuncs.selectedUnit.DispUnitInfo());
 					
@@ -308,9 +308,9 @@ public class GUIMainDisp extends JPanel {
 		}
 		
 		// If there is a highlighted hex, it will highlight it last
-		if (GlobalFuncs.highlightedHex != null) {
-			int x = GlobalFuncs.highlightedHex.x - mapDisplayX;
-			int y = GlobalFuncs.highlightedHex.y - mapDisplayY;
+		if (GlobalFuncs.selectedHex != null) {
+			int x = GlobalFuncs.selectedHex.x - mapDisplayX;
+			int y = GlobalFuncs.selectedHex.y - mapDisplayY;
 			
 			xPoint = (int) (hexSize * Math.sqrt(3.0) * (x + 0.5 * (y & 1))) + defaultHexSize;
 			yPoint = (int) (1.5 * hexSize * y) + defaultHexSize;

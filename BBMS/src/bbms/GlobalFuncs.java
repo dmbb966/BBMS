@@ -39,9 +39,9 @@ public class GlobalFuncs {
 	public static Vector<unit.Unit> unitList = new Vector<Unit>();
 	public static Vector<unit.Unit> friendlyUnitList = new Vector<Unit>();
 	public static Vector<unit.Unit> enemyUnitList = new Vector<Unit>();	
-	public static Hex highlightedHex = null; 
+	public static Hex selectedHex = null; 
 	public static Unit selectedUnit = null;
-	public static Hex selectedHex = null;
+	// public static Hex selectedHex = null;
 	
 	public static Population currentPop = null;	
 	public static String tempStr = "";				// Used for some dialog box results
@@ -132,7 +132,7 @@ public class GlobalFuncs {
 		mapInitialized = true;
 		unitCount = 0;
 		selectedUnit = null;
-		highlightedHex = null;
+		selectedHex = null;
 		unitList = new Vector<Unit>();
 		friendlyUnitList = new Vector<Unit>();
 		enemyUnitList = new Vector<Unit>();		
