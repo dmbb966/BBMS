@@ -141,7 +141,16 @@ public class GUIInfoPane extends JPanel {
 			} else {
 				g.drawString("Organism #" + GlobalFuncs.selectedUnit.org.genome.genome_id + " of species #" + 
 						GlobalFuncs.selectedUnit.org.species.id, 10, row);
-			}			
+			}
+			row += spacing;
+			
+			g.drawString("OrgType: " + GlobalFuncs.selectedUnit.orgType, 10, row);
+			row += spacing;
+			
+			g.drawString("FitType: " + GlobalFuncs.selectedUnit.fitType, 10, row);
+					
+					
+			
 			row += spacing * 2;
 		}
 		

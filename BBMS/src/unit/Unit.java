@@ -38,6 +38,7 @@ public class Unit {
 	
 	/** Neural net used for determining placement of the unit*/
 	public Organism org = null;
+	public int orgGenome = -1;				// Used only when loading units, due to the order the save file is built.
 	
 	/** Determines the sensor configuration of this network - affects how the sensors are fed. */
 	public OrganismTypeEnum orgType = OrganismTypeEnum.SIMPLE_SINGLE;
@@ -434,21 +435,28 @@ public class Unit {
 		}
 	}
 	
-	public String SaveUnit() {				
-		int spot = 0;
-		if (spotted) spot = 1;
-		String output = unitID + ", " +
-						callsign + ", " +
-						location.x + ", " + location.y + ", " +
-						String.format("%.2f", hullOrientation) + ", " + 
-						String.format("%.2f", turretOrientation) + ", " + 
-						type + ", " + 
-						side + ", " +
-						spot + ", " + 
-						waypointList.saveWaypoints();				
+	public String SaveUnit() {						
+		StringBuffer out = new StringBuffer("");
 		
-		return output;
-	}	
+		out.append(unitID + ", ");
+		out.append(callsign + ", ");
+		out.append(location.x + ", " + location.y + ", ");
+		out.append(String.format("%.2f", hullOrientation) + ", ");
+		out.append(String.format("%.2f", turretOrientation) + ", ");
+		out.append(type + ", ");
+		out.append(side + ", ");
+		out.append(spotted + ", ");
+		
+		if (org == null) out.append("-1, ");	// No organism attached
+		else out.append(org.genome.genome_id + ", ");
+		
+		out.append(orgType + ", ");
+		out.append(fitType + ", ");
+		
+		out.append(waypointList.saveWaypoints());
+		
+		return out.toString();
+}	
 	
 	public String SaveTarget() {
 		String tgtStr = "_";

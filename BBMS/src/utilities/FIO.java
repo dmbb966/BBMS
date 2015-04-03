@@ -15,10 +15,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
+import jneat.Organism;
 import jneat.Population;
 import bbms.GlobalFuncs;
 import clock.Clock;
 import terrain.TerrainEnum;
+import unit.FitnessTypeEnum;
+import unit.OrganismTypeEnum;
 import unit.SideEnum;
 import unit.Unit;
 import unit.WaypointList;
@@ -200,6 +203,7 @@ public class FIO {
 						else {													
 							//# Unit information
 							//# Format is: unitID, callsign, x, y, hullOrientation, turretOrientation, type, side, spotted, waypoints
+							
 							int unitID = Integer.parseInt(ReadNextChunk(readL, ','));
 							String callsign = ReadNextChunk(readL, ',');
 							int x = Integer.parseInt(ReadNextChunk(readL, ','));
@@ -208,10 +212,12 @@ public class FIO {
 							double turretOrientation = Double.parseDouble(ReadNextChunk(readL, ','));
 							String type = ReadNextChunk(readL, ',');
 							String side = ReadNextChunk(readL, ',');
-							int spotnum = Integer.parseInt(ReadNextChunk(readL, ','));
-							boolean spotted = false;
-							if (spotnum == 1) spotted = true;
+							SideEnum sideE = SideEnum.valueOf(side);
+							boolean spotted = Boolean.parseBoolean(ReadNextChunk(readL, ','));
 							
+							int orgNumber = Integer.parseInt(ReadNextChunk(readL, ','));
+							OrganismTypeEnum orgType = OrganismTypeEnum.valueOf(ReadNextChunk(readL, ','));
+							FitnessTypeEnum fitType = FitnessTypeEnum.valueOf(ReadNextChunk(readL, ','));
 							
 							String wpStr = ReadNextChunk(readL, ')');
 							WaypointList wpList =new WaypointList();						
@@ -226,20 +232,12 @@ public class FIO {
 							}
 							
 							Hex locn = GlobalFuncs.scenMap.getHex(x, y);
-							SideEnum sideE;
-							switch (side) {
-							case "FRIENDLY":
-								sideE = SideEnum.FRIENDLY;
-								break;
-							case "ENEMY":
-								sideE = SideEnum.ENEMY;
-								break;
-							default:
-								sideE = SideEnum.NEUTRAL;
-								break;
-							}
 							
 							locn.HexUnit = new Unit(locn, sideE, type, callsign, hullOrientation, turretOrientation, wpList, spotted);
+							
+							locn.HexUnit.orgType = orgType;
+							locn.HexUnit.fitType = fitType;
+							locn.HexUnit.orgGenome = orgNumber;
 						}
 
 						
@@ -299,7 +297,24 @@ public class FIO {
 								GUI_NB.GCO("Loading spotting info from file: >" + readL + "<");
 								Path popPath = popFile.toPath();
 								GlobalFuncs.currentPop = new Population(popPath);
-								GUI_NB.GCO("Population file loaded.");
+								GUI_NB.GCO("Population file loaded.  Now loading organisms into units.");
+								
+								for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
+									Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
+									
+									if (finger.orgGenome != -1) { 
+										for (int j = 0; j < GlobalFuncs.currentPop.organisms.size(); j++) {
+											Organism org = GlobalFuncs.currentPop.organisms.elementAt(j);
+											
+											if (finger.orgGenome == org.genome.genome_id) {
+												GUI_NB.GCO("Assigning organism #" + org.genome.genome_id + " to unit " + finger.callsign);
+												finger.org = org;
+												break;
+											}
+										}
+									}								
+									
+								}
 							}
 						} else {
 							GUI_NB.GCO("No population associated with this save.");

@@ -647,6 +647,9 @@
 # Unit information
 # Format is: unitID, callsign, x, y, hullOrientation, turretOrientation, type, side, spotted, waypoints
 
+1, Blue 1, 5, 3, 90.00, 0.00, M1A2, FRIENDLY, true, 1, SIMPLE_SINGLE, SIMPLE_GREEDY, 
+2, Blue 2, 5, 5, 90.00, 0.00, M1A2, FRIENDLY, true, 2, SIMPLE_SINGLE, SIMPLE_GREEDY, 
+3, Blue 3, 5, 7, 90.00, 0.00, M1A2, FRIENDLY, true, 4, SIMPLE_SINGLE, SIMPLE_GREEDY, 
 >Last Unit<
 
 # Unit target information
@@ -657,3 +660,5 @@
 # Format: Time index, spotter unit ID, observed unit ID, observed unit x, observed unit y
 
 >Last Spot<
+#Filename for the associated JNEAT population that will be saved
+src\saves\save.pop

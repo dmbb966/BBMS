@@ -7,66 +7,58 @@
 # Population information follows:
 50, 8, 0, 0.0, 0, 4, 0.0, 5, 0.0, 0.0, 0
 # Organism data format follows:
-# 'Organism', ID, champion, eliminate, error, expected_offspring, fitness, generation, high_fit, mate_baby, mut_struct_baby, orig_fitness, pop_champ, pop_champ_child, super_champ_offspring, winner
+# 'Organism', ID, champion, eliminate, error, expected_offspring, fitness, generation, high_fit, mate_baby, mut_struct_baby, orig_fitness, pop_champ, pop_champ_child, super_champ_offspring, winner, checkout
 #    + Genome
 
-Organism, 0, false, false, 0.0, 0.0, 0.0, 1, 0.0, false, false, 0.0, false, false, 0, false
-Node, 1, SIGMOID, SENSOR, BIAS
-Node, 2, SIGMOID, NEURON, HIDDEN
-Node, 3, SIGMOID, NEURON, HIDDEN
-Node, 4, SIGMOID, NEURON, HIDDEN
-Node, 7, SIGMOID, NEURON, OUTPUT
-Gene, 42, -0.3248724341392517, true, Link, 8, 0.0, false, false, -0.3248724341392517, 1, 7
-
-Organism, 1, false, false, 0.0, 0.0, 0.0, 1, 0.0, false, false, 0.0, false, false, 0, false
+Organism, 0, false, false, 0.0, 0.0, 0.0, 1, 0.0, false, false, 0.0, false, false, 0, false, false
 Node, 1, SIGMOID, SENSOR, BIAS
 Node, 2, SIGMOID, NEURON, HIDDEN
 Node, 3, SIGMOID, NEURON, HIDDEN
 Node, 4, SIGMOID, NEURON, HIDDEN
 Node, 5, SIGMOID, NEURON, HIDDEN
 Node, 7, SIGMOID, NEURON, OUTPUT
-Gene, 21, -0.14125055074691772, true, Link, 13, 0.0, false, false, -0.14125055074691772, 1, 4
-Gene, 31, -0.8233199119567871, true, Link, 14, 0.0, false, false, -0.8233199119567871, 4, 5
-Gene, 46, -0.005986273288726807, true, Link, 15, 0.0, false, false, -0.005986273288726807, 5, 7
+Gene, 42, 0.5046287775039673, true, Link, 6, 0.0, false, false, 0.5046287775039673, 1, 7
 
-Organism, 2, false, false, 0.0, 0.0, 0.0, 1, 0.0, false, false, 0.0, false, false, 0, false
+Organism, 1, false, false, 0.0, 0.0, 0.0, 1, 0.0, false, false, 0.0, false, false, 0, false, true
+Node, 1, SIGMOID, SENSOR, BIAS
+Node, 2, SIGMOID, NEURON, HIDDEN
+Node, 7, SIGMOID, NEURON, OUTPUT
+Gene, 42, -0.058593571186065674, true, Link, 13, 0.0, false, false, -0.058593571186065674, 1, 7
+Gene, 43, 0.8359506726264954, true, Link, 14, 0.0, false, false, 0.8359506726264954, 2, 7
+
+Organism, 2, false, false, 0.0, 0.0, 0.0, 1, 0.0, false, false, 0.0, false, false, 0, false, true
 Node, 1, SIGMOID, SENSOR, BIAS
 Node, 7, SIGMOID, NEURON, OUTPUT
-Gene, 42, 0.32670319080352783, true, Link, 22, 0.0, false, false, 0.32670319080352783, 1, 7
+Gene, 42, -0.5945340394973755, true, Link, 19, 0.0, false, false, -0.5945340394973755, 1, 7
 
-Organism, 3, false, false, 0.0, 0.0, 0.0, 1, 0.0, false, false, 0.0, false, false, 0, false
+Organism, 3, false, false, 0.0, 0.0, 0.0, 1, 0.0, false, false, 0.0, false, false, 0, false, false
 Node, 1, SIGMOID, SENSOR, BIAS
 Node, 2, SIGMOID, NEURON, HIDDEN
 Node, 3, SIGMOID, NEURON, HIDDEN
 Node, 4, SIGMOID, NEURON, HIDDEN
 Node, 7, SIGMOID, NEURON, OUTPUT
-Gene, 7, 0.30125927925109863, true, Link, 29, 0.0, false, false, 0.30125927925109863, 1, 2
-Gene, 15, -0.6014085412025452, true, Link, 30, 0.0, false, false, -0.6014085412025452, 2, 3
-Gene, 22, 0.5926008224487305, true, Link, 31, 0.0, false, false, 0.5926008224487305, 2, 4
-Gene, 45, -0.7435436844825745, true, Link, 32, 0.0, false, false, -0.7435436844825745, 4, 7
+Gene, 23, -0.6136859059333801, true, Link, 54, 0.0, false, false, -0.6136859059333801, 3, 4
+Gene, 42, 0.43303847312927246, true, Link, 55, 0.0, false, false, 0.43303847312927246, 1, 7
+Gene, 44, -0.021201252937316895, true, Link, 56, 0.0, false, false, -0.021201252937316895, 3, 7
 
-Organism, 4, false, false, 0.0, 0.0, 0.0, 1, 0.0, false, false, 0.0, false, false, 0, false
+Organism, 4, false, false, 0.0, 0.0, 0.0, 1, 0.0, false, false, 0.0, false, false, 0, false, true
 Node, 1, SIGMOID, SENSOR, BIAS
-Node, 2, SIGMOID, NEURON, HIDDEN
-Node, 3, SIGMOID, NEURON, HIDDEN
-Node, 4, SIGMOID, NEURON, HIDDEN
 Node, 7, SIGMOID, NEURON, OUTPUT
-Gene, 7, -0.5968983173370361, true, Link, 45, 0.0, false, false, -0.5968983173370361, 1, 2
-Gene, 42, -0.6025905013084412, true, Link, 46, 0.0, false, false, -0.6025905013084412, 1, 7
+Gene, 42, 0.6783923506736755, true, Link, 63, 0.0, false, false, 0.6783923506736755, 1, 7
 
 >END ORGANISMS<
 
 Species, 1, 1, 0, 0.0, 0.0, false
-<Species Orgs>, 0, 2
+<Species Orgs>, 0, 4
 
 Species, 2, 1, 0, 0.0, 0.0, false
 <Species Orgs>, 1
 
 Species, 3, 1, 0, 0.0, 0.0, false
-<Species Orgs>, 3
+<Species Orgs>, 2
 
 Species, 4, 1, 0, 0.0, 0.0, false
-<Species Orgs>, 4
+<Species Orgs>, 3
 
 
 >END SPECIES<
