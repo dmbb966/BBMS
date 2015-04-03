@@ -6,6 +6,7 @@ import gui.GUI_NB;
 import java.text.DecimalFormat;
 
 import bbms.GlobalFuncs;
+import unit.SideEnum;
 import unit.Unit;
 
 
@@ -67,9 +68,17 @@ public class Clock {
 		for (int i = 0; i < GlobalFuncs.unitList.size(); i++) {
 			Unit finger = GlobalFuncs.unitList.elementAt(i);
 			finger.MoveToWaypoint();
+			
+			if (finger.side == SideEnum.ENEMY) {
+				if (GlobalFuncs.scenMap.inReconZone(finger.location)) {
+					GlobalFuncs.maxPossibleSpots++;					
+				}
+			}
 		}
 		
 		updateLOSFriendly();	// We don't care about enemy spotting right now.  Will set units it can see to spotted.
+		
+		// GUI_NB.GCO("DEBUG: Max number of possible spots is now: " + GlobalFuncs.maxPossibleSpots);
 		
 		// Update fitness functions for units
 		updateFitnessFriendly();	// We don't care about enemy fitness.
@@ -104,7 +113,7 @@ public class Clock {
 		for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
 			Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
 			
-			finger.curFitness = finger.fitType.EvaluateFitness();
+			finger.curFitness = finger.fitType.EvaluateFitness(finger);
 		}
 
 	}

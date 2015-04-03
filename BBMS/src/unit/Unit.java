@@ -47,7 +47,13 @@ public class Unit {
 	public FitnessTypeEnum fitType = FitnessTypeEnum.SIMPLE_GREEDY;
 	
 	/** Fitness for this current iteration.  Will update NN fitness at the end of the scenario. */
-	public double curFitness = -1.0;	
+	public double curFitness = -1.0;
+	
+	/** Number of spots this unit is credited with over the course of the scenario.  Criteria are that the enemy unit
+	 * must be spotted by this unit while the enemy unit is in the "Recon Zone" of the map.  Partial credit may
+	 * be awarded depending on which fitness function is being used.  The function that updates this number is found
+	 * in FitnessTypeEnum.*/
+	public double spotCredits = 0.0;
 	
 	public double hullOrientation;
 	public double turretOrientation;	// Relative to the hull

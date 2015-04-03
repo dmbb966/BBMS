@@ -1,5 +1,14 @@
 package unit;
 
+import gui.GUI_NB;
+
+import java.util.Vector;
+
+import clock.Clock;
+import spotting.SpotRecords;
+import spotting.SpotReport;
+import bbms.GlobalFuncs;
+
 public enum FitnessTypeEnum {
 	/** Fitness is based on the number of times it spots enemy units throughout the scenario. */
 	SIMPLE_GREEDY,
@@ -10,10 +19,10 @@ public enum FitnessTypeEnum {
 	/** Fitness averaged among all organisms that took part in the scenario */
 	FULL_COMMUNISM;
 	
-	public double EvaluateFitness() {
+	public double EvaluateFitness(Unit x) {
 		switch(this) {
 		case SIMPLE_GREEDY:
-			return EvaluateSimpleGreedy();
+			return EvaluateSimpleGreedy(x);
 		case SHARED_SPOTTING:
 			return 0.7;
 		case SOVIET_COMMUNISM:
@@ -25,7 +34,22 @@ public enum FitnessTypeEnum {
 		return -1.0;
 	}
 	
-	private double EvaluateSimpleGreedy() {
-		return 3.14159;
+	private double EvaluateSimpleGreedy(Unit finger) {
+		// Scan spot reports for the current turn to find what this unit has seen
+		// Then credit it accordingly
+		// Can probably be done more efficiently
+		SpotRecords spots = GlobalFuncs.allSpots.getReportsTime(Clock.time);
+		
+		for (int i = 0; i < spots.records.size(); i++) {
+			SpotReport x = spots.records.elementAt(i);
+			
+			if (x.spotter == finger && GlobalFuncs.scenMap.inReconZone(GlobalFuncs.scenMap.getHex(x.targetLoc))) {
+				finger.spotCredits += 1.0;
+				GUI_NB.GCO("DEBUG: Unit " + finger.callsign + " credited with spotting " + x.target.callsign + " at time " + x.timeSpotted + " (total credits: " + finger.spotCredits);
+			}
+		}
+		
+		// Now calculates the new unit fitness, which is total spots / total number of possible spots
+		return finger.spotCredits / GlobalFuncs.maxPossibleSpots;
 	}
 }
