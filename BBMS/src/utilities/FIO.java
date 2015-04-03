@@ -218,6 +218,7 @@ public class FIO {
 							int orgNumber = Integer.parseInt(ReadNextChunk(readL, ','));
 							OrganismTypeEnum orgType = OrganismTypeEnum.valueOf(ReadNextChunk(readL, ','));
 							FitnessTypeEnum fitType = FitnessTypeEnum.valueOf(ReadNextChunk(readL, ','));
+							double curFitness = Double.parseDouble(ReadNextChunk(readL, ','));
 							
 							String wpStr = ReadNextChunk(readL, ')');
 							WaypointList wpList =new WaypointList();						
@@ -238,6 +239,7 @@ public class FIO {
 							locn.HexUnit.orgType = orgType;
 							locn.HexUnit.fitType = fitType;
 							locn.HexUnit.orgGenome = orgNumber;
+							locn.HexUnit.curFitness = curFitness;
 						}
 
 						

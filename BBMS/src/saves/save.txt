@@ -1,5 +1,5 @@
 # Map and environment characteristics: x size, y size, map view x, map view y, clock time
-30, 20, 0, 0, 0
+30, 20, 0, 0, 2
 
 # Hex data, stored rows
 # Format is: TerrainEnumID, elevation, obstacle height, density, obscuration, vapor, deltaVapor, vaporType
@@ -647,9 +647,8 @@
 # Unit information
 # Format is: unitID, callsign, x, y, hullOrientation, turretOrientation, type, side, spotted, waypoints
 
-1, Blue 1, 5, 3, 90.00, 0.00, M1A2, FRIENDLY, true, 1, SIMPLE_SINGLE, SIMPLE_GREEDY, 
-2, Blue 2, 5, 5, 90.00, 0.00, M1A2, FRIENDLY, true, 2, SIMPLE_SINGLE, SIMPLE_GREEDY, 
-3, Blue 3, 5, 7, 90.00, 0.00, M1A2, FRIENDLY, true, 4, SIMPLE_SINGLE, SIMPLE_GREEDY, 
+1, Blue 1, 4, 7, 90.00, 0.00, M1A2, FRIENDLY, true, 0, SIMPLE_SINGLE, SIMPLE_GREEDY, 3.14159, 
+2, Blue 2, 5, 4, 90.00, 0.00, M1A2, FRIENDLY, true, 4, SIMPLE_SINGLE, SIMPLE_GREEDY, 3.14159, 
 >Last Unit<
 
 # Unit target information

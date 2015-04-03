@@ -46,6 +46,9 @@ public class Unit {
 	/** Determines how the fitness for the neural network is evaluated */
 	public FitnessTypeEnum fitType = FitnessTypeEnum.SIMPLE_GREEDY;
 	
+	/** Fitness for this current iteration.  Will update NN fitness at the end of the scenario. */
+	public double curFitness = -1.0;	
+	
 	public double hullOrientation;
 	public double turretOrientation;	// Relative to the hull
 	
@@ -452,6 +455,7 @@ public class Unit {
 		
 		out.append(orgType + ", ");
 		out.append(fitType + ", ");
+		out.append(curFitness + ", ");
 		
 		out.append(waypointList.saveWaypoints());
 		

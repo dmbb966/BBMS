@@ -152,7 +152,7 @@ public class GUIInfoPane extends JPanel {
 				g.drawString("Organism #" + org.genome.genome_id + " of species #" + org.species.id, 10, row);
 				row += spacing;
 				
-				g.drawString("Fitness: " + String.format("%.4f", org.fitness), 10, row);
+				g.drawString("Cur Fitness: " + String.format("%.4f", finger.curFitness) + " | Org fit: " + String.format("%.2f", org.fitness), 10, row);
 				row += spacing;
 				
 				// Displays sensor inputs and what they can "see"
@@ -211,7 +211,9 @@ public class GUIInfoPane extends JPanel {
 			row += spacing;
 			
 			g.drawString("FitType: " + GlobalFuncs.selectedUnit.fitType, 10, row);
-					
+			row += spacing;
+			
+			g.drawString("CurFit: " + GlobalFuncs.selectedUnit.curFitness, 10, row);
 					
 			
 			row += spacing * 2;

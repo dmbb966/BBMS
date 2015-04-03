@@ -70,6 +70,9 @@ public class Clock {
 		}
 		
 		updateLOSFriendly();	// We don't care about enemy spotting right now.  Will set units it can see to spotted.
+		
+		// Update fitness functions for units
+		updateFitnessFriendly();	// We don't care about enemy fitness.
 				
 		// Now update turret orientations appropriately
 		for (int i = 0; i < GlobalFuncs.unitList.size(); i++) {
@@ -95,6 +98,15 @@ public class Clock {
 		
 		
 		GlobalFuncs.gui.repaint();		
+	}
+	
+	public static void updateFitnessFriendly() {
+		for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
+			Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
+			
+			finger.curFitness = finger.fitType.EvaluateFitness();
+		}
+
 	}
 	
 	public static void ClockLoop(int duration) {
