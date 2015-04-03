@@ -18,6 +18,7 @@ import jneat.Population;
 import bbms.GlobalFuncs;
 import clock.Clock;
 import terrain.TerrainEnum;
+import unit.FitnessTypeEnum;
 import unit.Unit;
 import unit.WaypointList;
 import utilities.FIO;
@@ -520,6 +521,18 @@ public class GUIMenu extends JMenuBar{
 		}
 	}
 	
+	public static class CycleFitnessType implements ActionListener{
+		public void actionPerformed(ActionEvent event) {
+			if (GlobalFuncs.selectedUnit == null) {
+				GUI_NB.GCO("ERROR: No unit selected!");
+			} else {
+				Unit finger = GlobalFuncs.selectedUnit;
+				finger.fitType = FitnessTypeEnum.CycleFitType(finger.fitType);
+				GUI_NB.GCO("Fitness type of unit " + finger.callsign + " is now " + finger.fitType);
+			}
+		}
+	}
+	
 	/** A test function that sets the fitness of all organisms attached to units to 2.0.
 	 * Yes I know that fitness number is "too high."  Deal with it. */
 	public static class TestFunc implements ActionListener{
@@ -760,8 +773,8 @@ public class GUIMenu extends JMenuBar{
 		menuItem.addActionListener(new SetEnemyZone());
 		menu.add(menuItem);
 		
-		menuItem = new JMenuItem("Test function - fitness");
-		menuItem.addActionListener(new TestFunc());
+		menuItem = new JMenuItem("Cycle unit fitness function");
+		menuItem.addActionListener(new CycleFitnessType());
 		menu.add(menuItem);
 	}
 	
