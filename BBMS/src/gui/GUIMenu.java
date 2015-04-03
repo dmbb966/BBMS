@@ -119,13 +119,8 @@ public class GUIMenu extends JMenuBar{
 			d.setVisible(true);
 			
 			String fullPath = "src/saves/" + GlobalFuncs.tempStr;
-			File f = new File(fullPath);
-			if (!f.exists()) FIO.newFile(fullPath);
-			Path p = f.toPath();
-			
-			GUI_NB.GCO("Saving scenario to: " + fullPath);			
-			
-			GUI_NB.GCO("Functinoality not implemented yet.");
+			GUI_NB.GCO("Saving scenario to: " + fullPath);
+			GlobalFuncs.saveScen(fullPath);
 		}
 	}
 	
@@ -292,7 +287,7 @@ public class GUIMenu extends JMenuBar{
 	public static class DisplayModeDebug implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 			GUI_NB.GCO("Display Mode set to DEBUG");
-			GlobalFuncs.showVapor = true;
+			GlobalFuncs.showVapor = false;
 			GlobalFuncs.showLOS = false;
 			GlobalFuncs.showFOW = false;
 			GUIInfoPane.changePaneMode(DetailedInfoEnum.DEBUG);

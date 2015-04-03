@@ -304,6 +304,7 @@ public class HexMap {
 		return true;
 	}
 	
+	/** Old version - use the one that returns a String in the future. */
 	public void saveMap(Path p) {		
 		// Stores map characteristics
 		FIO.overwriteFile(p, "# Map and environment characteristics: x size, y size, map view x, map view y, clock time");
@@ -318,10 +319,35 @@ public class HexMap {
 		for (int y = 0; y < yDim; y++) {
 			FIO.appendFile(p, "\n# Row " + y);
 			for (int x = 0; x < xDim; x++) {
-				FIO.appendFile(p, hexArray[x][y].saveHex());
+				FIO.appendFile(p, hexArray[x][y].saveHex(), false);
 			}
 		}
 		
+	}
+	
+	public String saveMap() {
+		StringBuffer buf = new StringBuffer("");
+		
+		// Store map characteristics
+		buf.append("# Map and environment characteristics: x size, y size, map view x, map view y, clock time\n");
+		
+		buf.append(xDim + ", " + yDim + ", ");
+		buf.append(GlobalFuncs.gui.GMD.mapDisplayX + ", " + GlobalFuncs.gui.GMD.mapDisplayY + ", ");
+		buf.append(Clock.time + "\n");
+		
+		
+		// Stores hex information
+		buf.append("# Hex data, stored in rows.\n");
+		buf.append("# Format: TerrainEnum, elevation, obs height, density, obscuration, vapor, deltaVapor, vaporType\n");
+		
+		for (int y = 0; y < yDim; y++) {
+			buf.append("\n# Row " + y + "\n");
+			for (int x = 0; x < xDim; x++) {
+				buf.append(hexArray[x][y].saveHex());
+			}
+		}
+		
+		return buf.toString();
 	}
 	
 	/** Sets all vapor source hexes to maximum and drains all source sink hexes.

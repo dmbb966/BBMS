@@ -219,6 +219,18 @@ public class GlobalFuncs {
 		return true;
 	}
 	
+	public static boolean saveScen(String saveName) {
+		if (!GlobalFuncs.mapInitialized) return false;
+		
+		File f = new File(saveName);
+		if (!f.exists()) FIO.newFile(saveName);
+		Path p = f.toPath();
+		
+		FIO.SaveScen(p);
+		
+		return true;
+	}
+	
 	public static boolean loadState() {
 		// TODO: Reset all variables as if you were reinitializing the map
 		

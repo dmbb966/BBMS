@@ -415,9 +415,18 @@ public class Hex {
 	
 	// NOTE: Does NOT save hex text 
 	public String saveHex() {
-		String output = tEnum.id + ", " + elevation + ", " + obsHeight + ", " + density + ", " + obscuration + ", " + vapor + ", " + deltaVapor + ", " + vaporType.id;
+		StringBuffer buf = new StringBuffer("");
 		
-		return output;
+		buf.append(tEnum + ", ");
+		buf.append(elevation + ", ");
+		buf.append(obsHeight + ", ");
+		buf.append(density + ", ");
+		buf.append(obscuration + ", ");
+		buf.append(vapor + ", ");
+		buf.append(deltaVapor + ", ");
+		buf.append(vaporType + "\n");
+		
+		return buf.toString();
 	}
 	
 }
