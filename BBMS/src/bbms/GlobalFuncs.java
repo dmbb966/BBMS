@@ -47,6 +47,7 @@ public class GlobalFuncs {
 	public static String tempStr = "";				// Used for some dialog box results
 	public static int orgAssignNum = 0;
 	
+	
 	public static Thread GameClock = new Thread(new ClockThread());
 	
 	public static int visibility = 0;
@@ -145,7 +146,6 @@ public class GlobalFuncs {
 		
 		currentPop = null;
 		orgAssignNum = 0;
-		
 				
 		GUI_NB.GCO("Generating main map.");
 		

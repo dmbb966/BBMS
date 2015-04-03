@@ -398,6 +398,28 @@ public class GUIKeyboard {
 			GlobalFuncs.gui.repaint();
 		}
 	}
+	
+	/** Checks to see whether the selected hex is in the enemy, friendly, or recon zone. */
+	public static class CheckZones extends AbstractAction{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (GlobalFuncs.selectedHex == null) {
+				GUI_NB.GCO("ERROR!  No hex selected!");
+				return;
+			}
+			
+			boolean eZ = GlobalFuncs.scenMap.inEnemyZone(GlobalFuncs.selectedHex);
+			boolean fZ = GlobalFuncs.scenMap.inFriendlyZone(GlobalFuncs.selectedHex);
+			
+			if (eZ) GUI_NB.GCO("Hex is in the enemy zone");
+			
+			if (fZ) GUI_NB.GCO("Hex is in the friendly zone");
+			
+			if (!eZ && !fZ) GUI_NB.GCO("Hex is in the recon zone");
+			
+			
+		}
+	}
 		
 	
 	/** Displays Keyboard Shortcut Info - also accessed from the Help Menu
@@ -421,7 +443,8 @@ public class GUIKeyboard {
 			GUI_NB.GCO("' - Displays waypoint list for the current unit");
 			GUI_NB.GCO("; - Adds a waypoint for the currently selected unit");
 			GUI_NB.GCO(": - Removes the next waypoint for the currently selected unit");
-			GUI_NB.GCO("X - Test key, varies from build to build");
+			GUI_NB.GCO("Q - Step the clock.");
+			GUI_NB.GCO("X - Test key, evals if in enemy/friendly zone");
 		}
 	}
 	
@@ -488,8 +511,11 @@ public class GUIKeyboard {
 		imap.put(KeyStroke.getKeyStroke('\''), "display waypoints");
 		amap.put("display waypoints", new DisplayWaypoints());
 				
-		imap.put(KeyStroke.getKeyStroke('x'), "step the clock");
+		imap.put(KeyStroke.getKeyStroke('c'), "step the clock");
 		amap.put("step the clock", new ClockStep());
+		
+		imap.put(KeyStroke.getKeyStroke('x'), "return zones");
+		amap.put("return zones", new CheckZones());
 		
 		imap.put(KeyStroke.getKeyStroke("F1"), "keyboard shortcuts");
 		amap.put("keyboard shortcuts", new HelpKeyboardShortcuts());

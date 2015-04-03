@@ -495,6 +495,31 @@ public class GUIMenu extends JMenuBar{
 		}
 	}
 	
+	/** Sets the friendly zone to the currently selected hex column and before (less than) it.*/
+	public static class SetFriendlyZone implements ActionListener{
+		public void actionPerformed(ActionEvent event) {
+			if (GlobalFuncs.selectedHex != null) {
+				GlobalFuncs.scenMap.friendlyZone = GlobalFuncs.selectedHex.x;
+				GUI_NB.GCO("Friendly zone set to column: " + GlobalFuncs.scenMap.friendlyZone);
+			} else {
+				GUI_NB.GCO("ERROR: No hex selected!");
+			}
+		}
+	}
+	
+	/** Sets the enemy zone to the currently selected hex column and after (greater than) it.*/
+	public static class SetEnemyZone implements ActionListener{
+		public void actionPerformed(ActionEvent event) {
+			if (GlobalFuncs.selectedHex != null) {
+				GlobalFuncs.scenMap.enemyZone = GlobalFuncs.selectedHex.x;
+				GUI_NB.GCO("Enemy zone set to column: " + GlobalFuncs.scenMap.enemyZone);
+			}
+			else {
+				GUI_NB.GCO("ERROR: No hex selected!");
+			}
+		}
+	}
+	
 	/** A test function that sets the fitness of all organisms attached to units to 2.0.
 	 * Yes I know that fitness number is "too high."  Deal with it. */
 	public static class TestFunc implements ActionListener{
@@ -726,6 +751,14 @@ public class GUIMenu extends JMenuBar{
 		menu.add(menuItem);
 		
 		menu.addSeparator();
+		
+		menuItem = new JMenuItem("Set friendly zone to sel. hex");
+		menuItem.addActionListener(new SetFriendlyZone());
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Set enemy zone to sel. hex");
+		menuItem.addActionListener(new SetEnemyZone());
+		menu.add(menuItem);
 		
 		menuItem = new JMenuItem("Test function - fitness");
 		menuItem.addActionListener(new TestFunc());

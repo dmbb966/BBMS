@@ -17,6 +17,17 @@ public class HexMap {
 	int xDim, yDim;
 	public Hex[][] hexArray;
 	
+	/** Column on the map before (less than) which is considered the "friendly zone" - enemy units spotted 
+	 * within this zone do not count towards fitness because they have made it through the "recon zone". 
+	 * Don't worry about crossing the streams - it won't hurt anything. */
+	public int friendlyZone = -1;
+	
+	/** Column on the map after (greater than) which is considered the "enemy zone" - enemy units spotted 
+	 * within this zone do not count towards fitness because there is "no way" in which friendly scouts can
+	 * be expected to detect them.  Don't worry about crossing the streams - it won't hurt anything. */
+	public int enemyZone = -1;
+	
+	
 	Vector<hex.Hex> shadedHexList;
 	Vector<hex.Hex> textHexList;
 	Vector<hex.Hex> vaporSourceList;
@@ -31,6 +42,8 @@ public class HexMap {
 	public HexMap(int x, int y, boolean cleanMap) {
 		xDim = x;
 		yDim = y;
+		friendlyZone = 2;
+		enemyZone = x - 2;
 		hexArray = new Hex[xDim][yDim];
 		shadedHexList = new Vector<Hex>();
 		textHexList = new Vector<Hex>();
@@ -42,6 +55,16 @@ public class HexMap {
 	
 	public HexMap(int x, int y) {
 		this(x, y, true);
+	}
+	
+	/** Returns if the given hex is in the enemy zone*/
+	public boolean inEnemyZone(Hex h) {
+		return (h.x >= enemyZone);
+	}
+	
+	/** Returns if the given hex is in the friendly zone*/
+	public boolean inFriendlyZone(Hex h) {
+		return (h.x <= friendlyZone);
 	}
 	
 	public void calcAllVapor() {
