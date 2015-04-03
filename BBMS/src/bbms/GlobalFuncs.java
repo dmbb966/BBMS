@@ -41,12 +41,11 @@ public class GlobalFuncs {
 	public static Vector<unit.Unit> enemyUnitList = new Vector<Unit>();	
 	public static Hex selectedHex = null; 
 	public static Unit selectedUnit = null;
-	// public static Hex selectedHex = null;
 	
 	public static Population currentPop = null;	
 	public static String tempStr = "";				// Used for some dialog box results
 	public static int orgAssignNum = 0;
-	
+	public static int maxPossibleSpots = 0;
 	
 	public static Thread GameClock = new Thread(new ClockThread());
 	
@@ -146,6 +145,7 @@ public class GlobalFuncs {
 		
 		currentPop = null;
 		orgAssignNum = 0;
+		maxPossibleSpots = 0;
 				
 		GUI_NB.GCO("Generating main map.");
 		

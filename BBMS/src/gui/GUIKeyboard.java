@@ -415,7 +415,7 @@ public class GUIKeyboard {
 			
 			if (fZ) GUI_NB.GCO("Hex is in the friendly zone");
 			
-			if (!eZ && !fZ) GUI_NB.GCO("Hex is in the recon zone");
+			if (GlobalFuncs.scenMap.inReconZone(GlobalFuncs.selectedHex)) GUI_NB.GCO("Hex is in the recon zone");
 			
 			
 		}

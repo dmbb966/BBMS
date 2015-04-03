@@ -67,6 +67,10 @@ public class HexMap {
 		return (h.x <= friendlyZone);
 	}
 	
+	public boolean inReconZone(Hex h) {
+		return (!inEnemyZone(h) && !inFriendlyZone(h));
+	}
+	
 	public void calcAllVapor() {
 		for (int y = 0; y < yDim; y++) {
 			for (int x = 0; x < xDim; x++) {
