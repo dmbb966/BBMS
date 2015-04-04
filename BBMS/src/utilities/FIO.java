@@ -125,6 +125,12 @@ public class FIO {
 		return true;
 	}
 	
+	public static boolean LoadScen(Path p) {
+		
+		
+		return true;
+	}
+	
 	public static boolean LoadFile(Path p) {
 	
 		int newMapX = 0;
@@ -178,6 +184,9 @@ public class FIO {
 						// Format is: TerrainEnumID, elevation, obstacle height, density, obscuration
 						// Will load the hex at (loadHexX, loadHexY);
 						
+						GlobalFuncs.scenMap.storeHex(loadHexX,  loadHexY,  new Hex(loadHexX, loadHexY, readL));
+						
+						/*
 						TerrainEnum tEnum = TerrainEnum.valueOf(ReadNextChunk(readL, ','));
 						int elevation = Integer.parseInt(ReadNextChunk(readL, ','));
 						int obsHeight = Integer.parseInt(ReadNextChunk(readL, ','));
@@ -188,6 +197,7 @@ public class FIO {
 						VaporEnum vEnum = VaporEnum.valueOf(ReadNextChunk(readL, ','));
 												
 						GlobalFuncs.scenMap.storeHex(loadHexX, loadHexY, new Hex(loadHexX, loadHexY, tEnum, elevation, obsHeight, density, obscuration, vapor, deltaVapor, vEnum));
+						*/
 						
 						loadHexX++;
 						if (loadHexX == newMapX) {

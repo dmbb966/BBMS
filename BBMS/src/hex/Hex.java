@@ -411,7 +411,15 @@ public class Hex {
 	public HexOff toHO() {
 		HexOff converted = new HexOff(x, y);
 		return converted;
-	}		
+	}	
+	
+	public String saveHexHeader() {
+		StringBuffer buf = new StringBuffer("");
+		
+		buf.append("# Hex information format: tEnum, elev, obsH, dens, osc, vapor, dVapor, vaporType\n");
+		
+		return buf.toString();
+	}
 	
 	// NOTE: Does NOT save hex text 
 	public String saveHex() {
@@ -427,6 +435,24 @@ public class Hex {
 		buf.append(vaporType + "\n");
 		
 		return buf.toString();
+	}
+	
+	public Hex(int xi, int yi, String readL) {
+		this(xi, yi, TerrainEnum.INVALID, 0);		// Generic constructor, will fill in the gaps below
+		
+		String[] result = readL.split(", ");
+		
+		tEnum = TerrainEnum.valueOf(result[0]);
+		tType = tEnum.tType;
+		elevation = Integer.parseInt(result[1]);
+		obsHeight = Integer.parseInt(result[2]);
+		density = Integer.parseInt(result[3]);
+		obscuration = Integer.parseInt(result[4]);
+		vapor = Integer.parseInt(result[5]);
+		deltaVapor = Integer.parseInt(result[6]);
+		vaporType = VaporEnum.valueOf(result[7]);
+		
+		if (result.length > 8) GUI_NB.GCO("Error reading data for hex!  Input string too long.");
 	}
 	
 }
