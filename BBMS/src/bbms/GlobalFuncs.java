@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.awt.MenuBar;
 import java.lang.Enum;
 import java.awt.Desktop.Action;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Vector;
 
@@ -155,6 +157,56 @@ public class GlobalFuncs {
 		menu.GenerateMenu();						
 		gui.setJMenuBar(menu); 
 		
+	}
+	
+	public static String saveMapCharacteristics () {
+		StringBuffer buf = new StringBuffer("");
+		
+		buf.append("# Map and environment characteristics: x size, y size, map view x, map view y, clock time\n");
+		
+		buf.append(scenMap.xDim + ", " + scenMap.yDim + ", ");
+		buf.append(gui.GMD.mapDisplayX + ", " + gui.GMD.mapDisplayY + ", ");
+		buf.append(Clock.time + "\n");
+		
+		return buf.toString();
+	}
+	
+	public static boolean loadMapCharacteristics (BufferedReader breader) {
+		try {
+			String readL = breader.readLine();
+			
+			while (readL != null) {
+				GUI_NB.GCO("Reading string: >" + readL + "<");
+				
+				if (readL.startsWith("#")) {} 			//GUI_NB.GCO("Comment follows: " + readL);
+				else if (readL.contentEquals("")) {} 	//GUI_NB.GCO("Blank line: " + readL);			
+				// With the above non-data holding lines stripped out, only valid input will be evaluated here
+				else {
+					String[] result = readL.split(", ");
+					
+					int xDim = Integer.parseInt(result[0]);
+					int yDim = Integer.parseInt(result[1]);
+					
+					initializeMap(xDim, yDim, true);
+					gui.GMD.mapDisplayX = Integer.parseInt(result[2]);
+					gui.GMD.mapDisplayY = Integer.parseInt(result[3]);
+					Clock.time = Integer.parseInt(result[4]);
+					
+					if (result.length > 5) GUI_NB.GCO("ERROR!  Input line for map characteristics is too long!");
+					else {
+						GUI_NB.GCO("Map characteristics loaded successfully.");
+					}
+					return true;
+				}
+				
+				readL = breader.readLine();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		return false;
 	}
 	
 	public static void initializeMap (int x, int y) {

@@ -150,6 +150,9 @@ public class FIO {
 		
 		try {
 			BufferedReader reader = Files.newBufferedReader(p,  cSet);
+			GlobalFuncs.loadMapCharacteristics(reader);
+			mode = 1;
+			
 			String readL;			
 			while ((readL = reader.readLine()) != null) {				
 				if (readL.startsWith("#")) {} 			//GUI_NB.GCO("Comment follows: " + readL);
@@ -162,20 +165,11 @@ public class FIO {
 					
 					switch (mode) {
 					case 0:
-						// Just started reading the file
-						// This string will contain the x, y coordinates
+						// GlobalFuncs.loadMapCharacteristics(reader);
+						// GUI_NB.GCO("Map dimensions are " + newMapX + " by " + newMapY);
+						// GUI_NB.GCO("Clock state is: " + Clock.time);
 						
-						// First chunk is going to be the new map X coordinate
-						newMapX = Integer.parseInt(ReadNextChunk(readL, ','));
-						newMapY = Integer.parseInt(ReadNextChunk(readL, ','));
-						newMapDisplayX = Integer.parseInt(ReadNextChunk(readL, ','));
-						newMapDisplayY = Integer.parseInt(ReadNextChunk(readL, ','));
-						Clock.time = Integer.parseInt(ReadNextChunk(readL, ','));
-						
-						GUI_NB.GCO("Map dimensions are " + newMapX + " by " + newMapY);
-						GUI_NB.GCO("Clock state is: " + Clock.time);
-						
-						GlobalFuncs.initializeMap(newMapX, newMapY, true);			
+						// GlobalFuncs.initializeMap(newMapX, newMapY, true);			
 						mode = 1;						
 						
 						break;
@@ -200,11 +194,11 @@ public class FIO {
 						*/
 						
 						loadHexX++;
-						if (loadHexX == newMapX) {
+						if (loadHexX == GlobalFuncs.scenMap.xDim) {
 							loadHexY++;
 							loadHexX = 0;
 							
-							if (loadHexY == newMapY) {	
+							if (loadHexY == GlobalFuncs.scenMap.yDim) {	
 								mode = 2;
 							}
 						}

@@ -3,6 +3,8 @@ package hex;
 import gui.GUI_NB;
 
 import java.awt.Color;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Vector;
 
@@ -14,7 +16,7 @@ import bbms.GlobalFuncs;
 public class HexMap {
 	
 	private int randPool;
-	int xDim, yDim;
+	public int xDim, yDim;
 	public Hex[][] hexArray;
 	
 	/** Column on the map before (less than) which is considered the "friendly zone" - enemy units spotted 
@@ -325,15 +327,35 @@ public class HexMap {
 		
 	}
 	
+	public boolean loadMap(BufferedReader breader) {
+		try {
+			String readL = breader.readLine();
+			while (breader.readLine() != null) {
+				if (readL.startsWith("#")) {} 			//GUI_NB.GCO("Comment follows: " + readL);
+				else if (readL.contentEquals("")) {} 	//GUI_NB.GCO("Blank line: " + readL);			
+				// With the above non-data holding lines stripped out, only valid input will be evaluated here
+				else {
+					// The first valid line will contain the map information
+				}
+				
+				readL = breader.readLine();
+			}
+						
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		
+		return true;
+	}
+	
 	public String saveMap() {
 		StringBuffer buf = new StringBuffer("");
 		
 		// Store map characteristics
-		buf.append("# Map and environment characteristics: x size, y size, map view x, map view y, clock time\n");
 		
-		buf.append(xDim + ", " + yDim + ", ");
-		buf.append(GlobalFuncs.gui.GMD.mapDisplayX + ", " + GlobalFuncs.gui.GMD.mapDisplayY + ", ");
-		buf.append(Clock.time + "\n");
 		
 		
 		// Stores hex information
