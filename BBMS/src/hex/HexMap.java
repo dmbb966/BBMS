@@ -330,25 +330,36 @@ public class HexMap {
 	public boolean loadMap(BufferedReader breader) {
 		try {
 			String readL = breader.readLine();
-			while (breader.readLine() != null) {
+			int loadHexX = 0;
+			int loadHexY = 0;
+			
+			while (readL != null) {
 				if (readL.startsWith("#")) {} 			//GUI_NB.GCO("Comment follows: " + readL);
 				else if (readL.contentEquals("")) {} 	//GUI_NB.GCO("Blank line: " + readL);			
 				// With the above non-data holding lines stripped out, only valid input will be evaluated here
 				else {
-					// The first valid line will contain the map information
+					GUI_NB.GCO("Reading string: >" + readL + "<");
+					
+					GlobalFuncs.scenMap.storeHex(loadHexX,  loadHexY,  new Hex(loadHexX, loadHexY, readL));
+					loadHexX++;
+					if (loadHexX == xDim) {
+						loadHexY++;
+						loadHexX = 0;
+						
+						if (loadHexY == yDim) {	
+							return true;
+						}
+					}	
 				}
 				
 				readL = breader.readLine();
 			}
-						
-			
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
 		}
 		
-		
-		return true;
+		return false;
 	}
 	
 	public String saveMap() {

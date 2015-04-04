@@ -176,12 +176,11 @@ public class GlobalFuncs {
 			String readL = breader.readLine();
 			
 			while (readL != null) {
-				GUI_NB.GCO("Reading string: >" + readL + "<");
-				
 				if (readL.startsWith("#")) {} 			//GUI_NB.GCO("Comment follows: " + readL);
 				else if (readL.contentEquals("")) {} 	//GUI_NB.GCO("Blank line: " + readL);			
 				// With the above non-data holding lines stripped out, only valid input will be evaluated here
 				else {
+					GUI_NB.GCO("Reading string: >" + readL + "<");
 					String[] result = readL.split(", ");
 					
 					int xDim = Integer.parseInt(result[0]);

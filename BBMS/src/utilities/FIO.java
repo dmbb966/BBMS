@@ -126,15 +126,22 @@ public class FIO {
 	}
 	
 	public static boolean LoadScen(Path p) {
-		
+		try {
+			BufferedReader reader = Files.newBufferedReader(p, cSet);
+			
+			GlobalFuncs.loadMapCharacteristics(reader);
+			GlobalFuncs.scenMap.loadMap(reader);
+			
+			
+		}  catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
 		
 		return true;
 	}
 	
 	public static boolean LoadFile(Path p) {
-	
-		int newMapX = 0;
-		int newMapY = 0;
 		int newMapDisplayX = 0;
 		int newMapDisplayY = 0;
 		int loadHexX = 0;
@@ -151,7 +158,8 @@ public class FIO {
 		try {
 			BufferedReader reader = Files.newBufferedReader(p,  cSet);
 			GlobalFuncs.loadMapCharacteristics(reader);
-			mode = 1;
+			GlobalFuncs.scenMap.loadMap(reader);
+			mode = 2;
 			
 			String readL;			
 			while ((readL = reader.readLine()) != null) {				
@@ -178,7 +186,7 @@ public class FIO {
 						// Format is: TerrainEnumID, elevation, obstacle height, density, obscuration
 						// Will load the hex at (loadHexX, loadHexY);
 						
-						GlobalFuncs.scenMap.storeHex(loadHexX,  loadHexY,  new Hex(loadHexX, loadHexY, readL));
+						// GlobalFuncs.scenMap.storeHex(loadHexX,  loadHexY,  new Hex(loadHexX, loadHexY, readL));
 						
 						/*
 						TerrainEnum tEnum = TerrainEnum.valueOf(ReadNextChunk(readL, ','));
@@ -193,6 +201,7 @@ public class FIO {
 						GlobalFuncs.scenMap.storeHex(loadHexX, loadHexY, new Hex(loadHexX, loadHexY, tEnum, elevation, obsHeight, density, obscuration, vapor, deltaVapor, vEnum));
 						*/
 						
+						/*
 						loadHexX++;
 						if (loadHexX == GlobalFuncs.scenMap.xDim) {
 							loadHexY++;
@@ -201,7 +210,7 @@ public class FIO {
 							if (loadHexY == GlobalFuncs.scenMap.yDim) {	
 								mode = 2;
 							}
-						}
+						} */
 						
 						break;		
 					case 2:
