@@ -134,7 +134,7 @@ public class Unit {
 			moveRate = 100;
 			moveMode = MoveClass.TRACK;			
 		} else {
-			GUI_NB.GCO("ERROR: Could not identify unit type!  Type is >" + type + "<");
+			//GUI_NB.GCO("ERROR: Could not identify unit type!  Type is >" + type + "<");
 		}
 			
 	}
@@ -507,8 +507,8 @@ public class Unit {
 		
 		unitID = Integer.parseInt(result[0]);
 		callsign = result[1];
-		location.x = Integer.parseInt(result[2]);
-		location.y = Integer.parseInt(result[3]);
+		
+		location = GlobalFuncs.scenMap.getHex(Integer.parseInt(result[2]), Integer.parseInt(result[3]));
 		hullOrientation = Double.parseDouble(result[4]);
 		turretOrientation = Double.parseDouble(result[5]);
 		type = result[6];
@@ -523,8 +523,9 @@ public class Unit {
 		
 		waypointList = new WaypointList(result, 13);
 		
-		GUI_NB.GCO("Unit type: >" + type + "< with result[6] = >" + result[6] + "<");
+		
 		RefreshUnitInfo();
+		GUI_NB.GCO("Unit speed and move rate: " + this.moveRate + " and " + this.movePoints);
 	}
 	
 	public String SaveTarget() {
@@ -538,6 +539,7 @@ public class Unit {
 	
 	public int CalcMoveRate() {
 		int moveCost = location.tType.getMoveCost(moveMode);
+		// GUI_NB.GCO("Move calc: MP: " + movePoints + " * MR: " + moveRate + " with clock step " + ClockControl.CLOCK_STEP + "with move cost: " + moveCost);
 		return (HexMap.SUBHEX_SIZE * movePoints * moveRate * ClockControl.CLOCK_STEP) / (100 * 60 * moveCost * 1000);
 	}
 	
