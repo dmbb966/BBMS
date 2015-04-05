@@ -143,9 +143,7 @@ public class FIO {
 	
 	public static boolean LoadFile(Path p) {
 		int newMapDisplayX = 0;
-		int newMapDisplayY = 0;
-		int loadHexX = 0;
-		int loadHexY = 0;	
+		int newMapDisplayY = 0;	
 		spotting.SpotRecords loadSpots = new spotting.SpotRecords();	
 		// Stage in reading the save game file
 		// 0 = Just started
@@ -219,7 +217,12 @@ public class FIO {
 							GUI_NB.GCO("Last unit reached");		
 							mode = 3;							
 						}
-						else {													
+						else {							
+							Unit newUnit = new Unit(readL);
+							Hex locn = GlobalFuncs.scenMap.getHex(newUnit.location.x, newUnit.location.y);
+							locn.HexUnit = newUnit;
+							
+							/*
 							//# Unit information
 							//# Format is: unitID, callsign, x, y, hullOrientation, turretOrientation, type, side, spotted, waypoints
 							
@@ -251,7 +254,7 @@ public class FIO {
 								wpStr = ReadNextChunk(readL, ')');
 							}
 							
-							Hex locn = GlobalFuncs.scenMap.getHex(x, y);
+							
 							
 							locn.HexUnit = new Unit(locn, sideE, type, callsign, hullOrientation, turretOrientation, wpList, spotted);
 							
@@ -259,6 +262,7 @@ public class FIO {
 							locn.HexUnit.fitType = fitType;
 							locn.HexUnit.orgGenome = orgNumber;
 							locn.HexUnit.curFitness = curFitness;
+							*/
 						}
 
 						

@@ -5,6 +5,7 @@ import java.util.Deque;
 import java.util.LinkedList;
 
 import utilities.FIO;
+import gui.GUI_NB;
 import hex.HexMap;
 import hex.HexOff;
 
@@ -74,14 +75,28 @@ public class WaypointList {
 	}
 	
 	public String saveWaypoints() {
-		String output = "";
+		StringBuffer buf = new StringBuffer("");
+		
 		for (int i = 0; i < waypointList.size(); i++) {
-			HexOff finger = waypointList.get(i);	// This can probably be optimized
-			output = output + "(" + finger.getX() + ", " + finger.getY() + ") "; 
+			HexOff finger = waypointList.get(i);
+			buf.append("(" + finger.getX() + "; " + finger.getY() + ")");
+			if (i == waypointList.size() - 1) buf.append(", ");
 		}
 		
-		if (waypointList.size() == 0) return ""; 		
-		return output.substring(0, output.length() - 1);
+		return buf.toString();
+	}
+	
+	public WaypointList(String[] result, int start) {
+		this();
+		
+		for (int i = start; i < result.length; i++) {
+			String sub[] = result[i].split("; ");
+			int newX = Integer.parseInt(sub[0].substring(1));
+			int newY = Integer.parseInt(sub[1].substring(0, sub[1].length() - 1));
+			GUI_NB.GCO("Sub1: >" + sub[0] + "<  Sub2: >" + sub[1] + "< == (" + newX + ", " + newY + ")");
+			
+			addWaypoint(newX, newY);
+		}
 	}
 	
 	/*

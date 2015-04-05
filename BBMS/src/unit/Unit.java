@@ -82,30 +82,42 @@ public class Unit {
 	// What side its on
 	public SideEnum side;
 	
-	public Unit (hex.Hex locn, SideEnum s, String givenType, String givenCallsign, double hullOrient, double turretOrient, WaypointList wpL, boolean spot) {
-		location = locn;
-		side = s;
-		type = givenType;
-		target = null;
-		// trackTarget = true;
+	public void AddtoSide(SideEnum side) {
+		this.side = side;
 		
-		spotted = spot;
-		
-		hullOrientation = hullOrient;
-		turretOrientation = turretOrient;
-		if (wpL != null) waypointList = wpL;
-		
-		switch (s) {
-			case ENEMY:
-				GlobalFuncs.enemyUnitList.addElement(this);				
-				break;
-			case FRIENDLY:
-				GlobalFuncs.friendlyUnitList.addElement(this);
-				spotted = true;
-				break;								
+		switch (side) {
+		case ENEMY:
+			GlobalFuncs.enemyUnitList.addElement(this);				
+			break;
+		case FRIENDLY:
+			GlobalFuncs.friendlyUnitList.addElement(this);
+			spotted = true;
+			break;
+		case NEUTRAL:
+			break;
+		}		
+	}
+	
+	public void RemovefromSide(SideEnum side) {
+		// Remove from current side lists
+				switch (side) {
+				case ENEMY:
+					GlobalFuncs.enemyUnitList.remove(this);
+					break;
+				case FRIENDLY:
+					GlobalFuncs.friendlyUnitList.remove(this);
+					break;
+				case NEUTRAL:
+					break;
+				}		
+	}
+	
+	public void ChangeSide(SideEnum side) {
+		RemovefromSide(side);
+		AddtoSide(side);
 		}
-		
-		
+	
+	public void RefreshUnitInfo() {
 		
 		if (type.matches("M1A2")) {			
 			HullOffset = new hex.HexOff(27, 12);
@@ -122,9 +134,26 @@ public class Unit {
 			moveRate = 100;
 			moveMode = MoveClass.TRACK;			
 		}
+			
+	}
+	
+	public Unit (hex.Hex locn, SideEnum s, String givenType, String givenCallsign, double hullOrient, double turretOrient, WaypointList wpL, boolean spot) {
+		location = locn;
+		side = s;
+		type = givenType;
+		target = null;
+		// trackTarget = true;
+		
+		spotted = spot;
+		
+		hullOrientation = hullOrient;
+		turretOrientation = turretOrient;
+		if (wpL != null) waypointList = wpL;
 		
 		callsign = givenCallsign;		
 		unitID = GlobalFuncs.getNewUnitCount();
+		
+		RefreshUnitInfo();
 			
 		GlobalFuncs.unitList.addElement(this);
 	}
@@ -466,7 +495,34 @@ public class Unit {
 		out.append(waypointList.saveWaypoints());
 		
 		return out.toString();
-}	
+	}
+	
+	public Unit(String readL) {
+		this(new Hex(-1, -1, TerrainEnum.INVALID, 0), SideEnum.NEUTRAL, "X", "X", 0.0, 0.0, null, false);
+		RemovefromSide(side);
+		
+		String[] result = readL.split(", ");
+		
+		unitID = Integer.parseInt(result[0]);
+		callsign = result[1];
+		location.x = Integer.parseInt(result[2]);
+		location.y = Integer.parseInt(result[3]);
+		hullOrientation = Double.parseDouble(result[4]);
+		turretOrientation = Double.parseDouble(result[5]);
+		type = result[6];
+		side = SideEnum.valueOf(result[7]);
+		AddtoSide(side);
+		
+		spotted = Boolean.parseBoolean(result[8]);
+		orgGenome = Integer.parseInt(result[9]);
+		orgType = OrganismTypeEnum.valueOf(result[10]);
+		fitType = FitnessTypeEnum.valueOf(result[11]);
+		curFitness = Double.parseDouble(result[12]);
+		
+		waypointList = new WaypointList(result, 13);
+		
+		RefreshUnitInfo();
+	}
 	
 	public String SaveTarget() {
 		String tgtStr = "_";
