@@ -158,6 +158,7 @@ public class GlobalFuncs {
 		COAIndex = 1;
 		curCOA = new COA("Default");
 		allCOAs = new Vector<COA>();
+		allCOAs.addElement(curCOA);
 				
 		GUI_NB.GCO("Generating main map.");
 		
