@@ -133,6 +133,8 @@ public class Unit {
 			movePoints = 20;
 			moveRate = 100;
 			moveMode = MoveClass.TRACK;			
+		} else {
+			GUI_NB.GCO("ERROR: Could not identify unit type!  Type is >" + type + "<");
 		}
 			
 	}
@@ -521,6 +523,7 @@ public class Unit {
 		
 		waypointList = new WaypointList(result, 13);
 		
+		GUI_NB.GCO("Unit type: >" + type + "< with result[6] = >" + result[6] + "<");
 		RefreshUnitInfo();
 	}
 	

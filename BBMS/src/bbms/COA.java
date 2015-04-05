@@ -3,6 +3,7 @@ package bbms;
 import gui.GUI_NB;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.Vector;
 
 import unit.Unit;
@@ -35,14 +36,34 @@ public class COA {
 		for (int i = 0; i < GlobalFuncs.unitList.size(); i++) {
 			Unit finger = GlobalFuncs.unitList.elementAt(i);
 			finger.AddtoSide(finger.side);
-			finger.location.HexUnit = finger;
+			GlobalFuncs.scenMap.getHex(finger.location.toHO()).HexUnit = finger;
+			//finger.location.HexUnit = finger;
 		}
 		
 		GUI_NB.GCO("COA " + name + " successfully loaded.");
 	}
 	
-	public COA(BufferedReader buf) {
+	public COA(BufferedReader buf, String readR) {
+		// First line (string readL) contains COA name
+		this.name = readR.substring(5, readR.length() - 1);
 		
+		try {
+			String readL = buf.readLine();
+			while (!readL.contentEquals("")) {
+				GUI_NB.GCO("String: >" + readL + "<");
+				if (readL.startsWith(">Last")) {return;}
+				if (!readL.startsWith("#")) {
+					Unit finger = new Unit(readL);
+					this.unitList.addElement(finger);	
+				}
+				
+				readL = buf.readLine();
+			}	
+		}  catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		GUI_NB.GCO("Loaded COA " + name);
 	}
 	
 	public String PrintCOA() {
