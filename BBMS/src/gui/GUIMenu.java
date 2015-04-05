@@ -568,9 +568,14 @@ public class GUIMenu extends JMenuBar{
 				return;
 			}
 			
+			// GlobalFuncs.curCOA.SaveCOA();
+			
 			COA nCOA = new COA(GlobalFuncs.tempStr);
 			GlobalFuncs.allCOAs.addElement(nCOA);
 			GlobalFuncs.COAIndex = GlobalFuncs.allCOAs.size();
+			GlobalFuncs.curCOA = nCOA;
+			GlobalFuncs.curCOA.LoadCOA();
+			GlobalFuncs.gui.repaint();
 		}
 	}
 	

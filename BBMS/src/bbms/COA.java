@@ -16,16 +16,16 @@ public class COA {
 		name = n;
 	}
 	
-	public void SaveCOA() {
-		this.unitList = (Vector<Unit>) GlobalFuncs.unitList.clone();
-	}
-	
 	public void LoadCOA() {
 		// First remove existing units
 		for (int i = 0; i < GlobalFuncs.unitList.size(); i++) {
 			Unit finger = GlobalFuncs.unitList.elementAt(i);
 			finger.RemovefromSide(finger.side);
+			finger.location.HexUnit = null;
 		}
+		
+		GlobalFuncs.selectedUnit = null;
+		GlobalFuncs.selectedHex = null;
 		
 		GlobalFuncs.unitList = this.unitList;
 		// Add to appropriate lists
@@ -35,6 +35,7 @@ public class COA {
 		for (int i = 0; i < GlobalFuncs.unitList.size(); i++) {
 			Unit finger = GlobalFuncs.unitList.elementAt(i);
 			finger.AddtoSide(finger.side);
+			finger.location.HexUnit = finger;
 		}
 		
 		GUI_NB.GCO("COA " + name + " successfully loaded.");
@@ -44,24 +45,17 @@ public class COA {
 		
 	}
 	
-	public String SaveToFile() {
-		StringBuffer buf = new StringBuffer("");
-		
-		
-		
-		return buf.toString();
-	}
-	
 	public String PrintCOA() {
 		StringBuffer buf = new StringBuffer("");
 		
-		buf.append("COA >" + name + "<\n\n");
+		buf.append("COA >" + name + "<\n");
 		
 		for (int i = 0; i < this.unitList.size(); i++) {
 			Unit finger = this.unitList.elementAt(i);
 			
-			buf.append(finger.SaveUnit());
+			buf.append(finger.SaveUnit() + "\n");
 		}
+		buf.append("\n");
 		
 		return buf.toString();
 	}

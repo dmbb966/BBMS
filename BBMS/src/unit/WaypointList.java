@@ -80,7 +80,7 @@ public class WaypointList {
 		for (int i = 0; i < waypointList.size(); i++) {
 			HexOff finger = waypointList.get(i);
 			buf.append("(" + finger.getX() + "; " + finger.getY() + ")");
-			if (i == waypointList.size() - 1) buf.append(", ");
+			if (i != waypointList.size() - 1) buf.append(", ");
 		}
 		
 		return buf.toString();
