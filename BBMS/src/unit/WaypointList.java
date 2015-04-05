@@ -93,7 +93,7 @@ public class WaypointList {
 			String sub[] = result[i].split("; ");
 			int newX = Integer.parseInt(sub[0].substring(1));
 			int newY = Integer.parseInt(sub[1].substring(0, sub[1].length() - 1));
-			GUI_NB.GCO("Sub1: >" + sub[0] + "<  Sub2: >" + sub[1] + "< == (" + newX + ", " + newY + ")");
+			// GUI_NB.GCO("Sub1: >" + sub[0] + "<  Sub2: >" + sub[1] + "< == (" + newX + ", " + newY + ")");
 			
 			addWaypoint(newX, newY);
 		}

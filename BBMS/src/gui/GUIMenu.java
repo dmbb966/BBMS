@@ -15,6 +15,7 @@ import javax.swing.*;
 
 import jneat.Organism;
 import jneat.Population;
+import bbms.COA;
 import bbms.GlobalFuncs;
 import clock.Clock;
 import terrain.TerrainEnum;
@@ -108,7 +109,8 @@ public class GUIMenu extends JMenuBar{
 				GUI_NB.GCO("Loading Scenario from: " + fullPath);
 				Path p = f.toPath();
 				
-				GUI_NB.GCO("Functinoality not implemented yet.");
+				FIO.LoadScen(p);
+				
 			}
 		}
 	}
@@ -528,6 +530,62 @@ public class GUIMenu extends JMenuBar{
 		}
 	}
 	
+	public static class NextCOA implements ActionListener{
+		public void actionPerformed(ActionEvent event) {
+			GlobalFuncs.COAIndex++;
+			
+			if (GlobalFuncs.COAIndex > GlobalFuncs.allCOAs.size()) {
+				GlobalFuncs.COAIndex = 1;
+			}
+			
+			GlobalFuncs.curCOA = GlobalFuncs.allCOAs.elementAt(GlobalFuncs.COAIndex - 1);
+			
+			GlobalFuncs.curCOA.LoadCOA();
+		}
+	}
+	
+	public static class PrevCOA implements ActionListener{
+		public void actionPerformed(ActionEvent event) {
+			GlobalFuncs.COAIndex--;
+			
+			if (GlobalFuncs.COAIndex <= 0) {
+				GlobalFuncs.COAIndex = GlobalFuncs.allCOAs.size();
+			}
+			
+			GlobalFuncs.curCOA = GlobalFuncs.allCOAs.elementAt(GlobalFuncs.COAIndex - 1);
+			
+			GlobalFuncs.curCOA.LoadCOA();
+		}
+	}
+	
+	public static class NewCOA implements ActionListener{
+		public void actionPerformed(ActionEvent event) {
+			DialogFileName d = new DialogFileName(GlobalFuncs.gui, true, "New COA Name");
+			d.setVisible(true);
+			
+			if (GlobalFuncs.tempStr.contains(",")) {
+				GUI_NB.GCO("ERROR: COA name cannot contain commas.");
+				return;
+			}
+			
+			COA nCOA = new COA(GlobalFuncs.tempStr);
+		}
+	}
+	
+	public static class DelCOA implements ActionListener{
+		public void actionPerformed(ActionEvent event) {
+			if (GlobalFuncs.allCOAs.size() == 1) {
+				GUI_NB.GCO("ERROR: You cannot delete your final COA!");
+				return;
+			}
+			
+			int curIndex = GlobalFuncs.COAIndex;
+			new NextCOA();
+			
+			GlobalFuncs.allCOAs.removeElementAt(curIndex - 1);
+		}
+	}
+	
 	/** A test function that sets the fitness of all organisms attached to units to 2.0.
 	 * Yes I know that fitness number is "too high."  Deal with it. */
 	public static class TestFunc implements ActionListener{
@@ -556,10 +614,35 @@ public class GUIMenu extends JMenuBar{
 			SetupMenu();
 			ActionsMenu();
 			NeuralNetMenu();
+			ScenarioMenu();
 		}
 		
 		HelpMenu();
 	}
+	
+	public void ScenarioMenu() {
+		JMenu menu = new JMenu("Scenario");
+		menu.setMnemonic(KeyEvent.VK_S);
+		this.add(menu);
+		
+		JMenuItem menuItem = new JMenuItem("Next COA");
+		menuItem.addActionListener(new NextCOA());
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Prev COA");
+		menuItem.addActionListener(new PrevCOA());
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("New COA");
+		menuItem.addActionListener(new NewCOA());
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Delete COA");
+		menuItem.addActionListener(new DelCOA());
+		menu.add(menuItem);
+	}
+	
+	
 	
 	public void DisplayMenu() {
 		JMenu menu = new JMenu("Display");

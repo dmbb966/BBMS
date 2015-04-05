@@ -128,9 +128,27 @@ public class FIO {
 	public static boolean LoadScen(Path p) {
 		try {
 			BufferedReader reader = Files.newBufferedReader(p, cSet);
+			String readL = "";
 			
 			GlobalFuncs.loadMapCharacteristics(reader);
 			GlobalFuncs.scenMap.loadMap(reader);
+			
+			// Load units
+			while(readL != null) {
+				readL = reader.readLine();
+				
+				if (readL.equals("")) { }
+				else if (readL.startsWith("#")) {}
+				else if (readL.equals(">Last Unit<")) {
+					break;
+				}
+				else {
+					Unit newUnit = new Unit(readL);
+					Hex locn = GlobalFuncs.scenMap.getHex(newUnit.location.x, newUnit.location.y);
+					locn.HexUnit = newUnit;
+				}
+			}
+			
 			
 			
 		}  catch (IOException e) {

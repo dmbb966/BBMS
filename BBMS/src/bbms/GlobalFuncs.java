@@ -49,6 +49,12 @@ public class GlobalFuncs {
 	public static int orgAssignNum = 0;
 	public static int maxPossibleSpots = 0;
 	
+	// Used for scenario creation and execution
+	public static int COAIndex = 1;
+	public static COA curCOA = null;
+	public static Vector<COA> allCOAs = new Vector<COA>();
+	
+	
 	public static Thread GameClock = new Thread(new ClockThread());
 	
 	public static int visibility = 0;
@@ -148,6 +154,10 @@ public class GlobalFuncs {
 		currentPop = null;
 		orgAssignNum = 0;
 		maxPossibleSpots = 0;
+		
+		COAIndex = 1;
+		curCOA = new COA("Default");
+		allCOAs = new Vector<COA>();
 				
 		GUI_NB.GCO("Generating main map.");
 		
@@ -162,11 +172,12 @@ public class GlobalFuncs {
 	public static String saveMapCharacteristics () {
 		StringBuffer buf = new StringBuffer("");
 		
-		buf.append("# Map and environment characteristics: x size, y size, map view x, map view y, clock time\n");
+		buf.append("# Map and environment characteristics: x size, y size, map view x, map view y, clock time, coa, maxcoa\n");
 		
 		buf.append(scenMap.xDim + ", " + scenMap.yDim + ", ");
 		buf.append(gui.GMD.mapDisplayX + ", " + gui.GMD.mapDisplayY + ", ");
-		buf.append(Clock.time + "\n");
+		buf.append(Clock.time + ", ");
+		buf.append(COAIndex + ", ");
 		
 		return buf.toString();
 	}
@@ -191,7 +202,10 @@ public class GlobalFuncs {
 					gui.GMD.mapDisplayY = Integer.parseInt(result[3]);
 					Clock.time = Integer.parseInt(result[4]);
 					
-					if (result.length > 5) GUI_NB.GCO("ERROR!  Input line for map characteristics is too long!");
+					COAIndex = Integer.parseInt(result[5]);
+					
+					
+					if (result.length > 6) GUI_NB.GCO("ERROR!  Input line for map characteristics is too long!");
 					else {
 						GUI_NB.GCO("Map characteristics loaded successfully.");
 					}
