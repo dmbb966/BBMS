@@ -158,6 +158,16 @@ public class Unit {
 		RefreshUnitInfo();
 			
 		GlobalFuncs.unitList.addElement(this);
+		switch (s) {
+		case FRIENDLY:
+			GlobalFuncs.friendlyUnitList.addElement(this);
+			break;
+		case ENEMY:
+			GlobalFuncs.enemyUnitList.addElement(this);
+			break;
+		case NEUTRAL:
+			break;
+		}
 	}
 		
 	public String DispUnitInfo() {

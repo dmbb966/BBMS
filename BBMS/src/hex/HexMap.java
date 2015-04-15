@@ -6,10 +6,12 @@ import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Iterator;
 import java.util.Vector;
 
 import clock.Clock;
 import terrain.TerrainEnum;
+import unit.Unit;
 import utilities.FIO;
 import bbms.GlobalFuncs;
 
@@ -166,6 +168,52 @@ public class HexMap {
 		UpdateSourceSink();
 	}
 	
+	public void ShowSideWaypoints(unit.SideEnum side) {		
+		GUI_NB.GCO("Showing all wayspoints on side: " + side.toString());
+		// First, clears hex text
+		clearTextAll();
+				
+		// Gets lists of units to work with
+		Vector<Unit> unitList = null;
+		switch (side) {
+		case FRIENDLY:
+			unitList = GlobalFuncs.friendlyUnitList;
+			GUI_NB.GCO("DEBUG: Unit list has " + unitList.size() + " size compared to " + GlobalFuncs.friendlyUnitList.size());
+			break;
+		case ENEMY:
+			unitList = GlobalFuncs.enemyUnitList;
+			break;
+		case NEUTRAL:
+			GUI_NB.GCO("ERROR!  Neutral units not implemented.");
+			return;
+		}
+		
+		Iterator<Unit> itr_unit = unitList.iterator();
+		while (itr_unit.hasNext()) {
+			Unit finger = itr_unit.next();
+			GUI_NB.GCO("DEBUG: Unit selected is " + finger.callsign);
+			
+			if (finger.waypointList != null) {
+				for (int i = 0; i < finger.waypointList.waypointList.size(); i++) {
+					HexOff thisWP = finger.waypointList.waypointList.get(i);
+					Hex thisHex = GlobalFuncs.scenMap.getHex(thisWP);
+					GUI_NB.GCO("DEBUG: Looking at WP " + (i + 1) + " at " + thisHex.toString());
+					
+					if (thisHex.hexText.equals("")) {
+						setHexText(thisHex, "WP " + (i + 1) + " :1", Color.WHITE);
+					} else	// Will only have WPs since we cleared text at the start 
+					{
+						String curHexText = getHexText(thisHex);
+						String[] splitText = curHexText.split(":");
+						int stackedWPs = Integer.parseInt(splitText[1]);
+						stackedWPs++;
+						setHexText(thisHex, "WP " + (i + 1) + " :" + Integer.toString(stackedWPs), Color.WHITE);
+					}
+				}
+			}
+		}
+	}
+	
 	public void shadeHex(Hex h, Color c) {
 		h.shadedColor = c;
 		if (h.shaded) return;
@@ -183,8 +231,12 @@ public class HexMap {
 		h.hexText = s;
 		if (h.displayText) return;
 		h.displayText = true;
-		textHexList.add(h);		
+		if (!textHexList.contains(h)) textHexList.add(h);		
 	}	
+	
+	public String getHexText(Hex h) {
+		return h.hexText;
+	}
 	
 	public void showHexText(Hex h) {
 		setHexText(h, h.hexText, h.textColor);
@@ -397,5 +449,7 @@ public class HexMap {
 			finger.vapor = 0;
 		}
 	}
+	
+	
 
 }

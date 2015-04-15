@@ -593,6 +593,17 @@ public class GUIMenu extends JMenuBar{
 		}
 	}
 	
+	public static class DisplaySideWP implements ActionListener{
+		public void actionPerformed(ActionEvent event) {
+			if (GlobalFuncs.selectedUnit == null) {
+				GUI_NB.GCO("ERROR!  Must select a unit first.");
+				return;
+			} else {
+				GlobalFuncs.scenMap.ShowSideWaypoints(GlobalFuncs.selectedUnit.side);
+			}
+		}
+	}
+	
 	/** A test function that sets the fitness of all organisms attached to units to 2.0.
 	 * Yes I know that fitness number is "too high."  Deal with it. */
 	public static class TestFunc implements ActionListener{
@@ -670,6 +681,12 @@ public class GUIMenu extends JMenuBar{
 		
 		menuItem = new JMenuItem("Debug Display Mode");
 		menuItem.addActionListener(new DisplayModeDebug());
+		menu.add(menuItem);
+		
+		menu.addSeparator();
+		
+		menuItem = new JMenuItem("Show Waypoints of Selected Side");
+		menuItem.addActionListener(new DisplaySideWP());
 		menu.add(menuItem);
 		
 	}
