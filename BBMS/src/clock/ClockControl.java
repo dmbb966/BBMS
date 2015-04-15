@@ -1,5 +1,6 @@
 package clock;
 
+import bbms.GlobalFuncs;
 import gui.GUI_NB;
 
 public class ClockControl {
@@ -17,6 +18,7 @@ public class ClockControl {
      * Toggles whether or not the clock is paused
      */
     public static void Pause() {
+    	if (GlobalFuncs.runtoEq) GlobalFuncs.runtoEq = false;		// Changing the rate will stop autorun
         paused = !paused;
         if (paused) GUI_NB.GCO("Time is paused.");
         else GUI_NB.GCO("Time is unpaused.");
@@ -34,6 +36,7 @@ public class ClockControl {
      * Increases the timescale of the clock by one setting.  Maxes out at x12
      */ 
     public static void AccelTime() {
+    	if (GlobalFuncs.runtoEq) GlobalFuncs.runtoEq = false;		// Changing the rate will stop autorun
         if (timescale < 10) timescale++;
         AdjustDelayScale();        
     }
@@ -41,10 +44,19 @@ public class ClockControl {
     /**
      * Decreases the timescale of the clock by one setting.  Minimum is x1/8
      */
-    public static void DecelTime() {       
+    public static void DecelTime() {
+    	if (GlobalFuncs.runtoEq) GlobalFuncs.runtoEq = false;		// Changing the rate will stop autorun
         if (timescale > 1) timescale--;
         AdjustDelayScale();                        
      }
+    
+    public static void SetTimeScale(byte i) {
+    	timescale = i;
+    	if (i < 1) timescale = 1;
+    	if (i > 10) timescale = 10;
+    	
+    	AdjustDelayScale();
+    }
     
     /**
      * Returns the string corresponding to the current time scale rate 

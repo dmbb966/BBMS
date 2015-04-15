@@ -312,6 +312,25 @@ public class GUIMenu extends JMenuBar{
 			GlobalFuncs.scenMap.StandardVaporMap();
 		}
 	}
+	
+	/** Automatically runs the clock forward until equilibrium has been reached */
+	public static class RuntoEquilibrium implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			DialogFileName selectDelta = new DialogFileName(GlobalFuncs.gui, true, "Set DV Tolerance");
+			selectDelta.setVisible(true);
+			GlobalFuncs.dvTolerance = Integer.parseInt(GlobalFuncs.tempStr);
+			if (GlobalFuncs.dvTolerance < 0) {
+				GUI_NB.GCO("ERROR!  Cannot set DV Tolerance to negative.");
+				return;
+			}
+			else {				
+				if (clock.ClockControl.paused) clock.ClockControl.Pause();
+				clock.ClockControl.SetTimeScale((byte) 10);
+				GlobalFuncs.runtoEq = true;
+			}
+			
+		}
+	}
 
 	
 	/** Displays version info
@@ -821,6 +840,10 @@ public class GUIMenu extends JMenuBar{
 		
 		menuItem = new JMenuItem("Reset vapor density to default");
 		menuItem.addActionListener(new ResetVapor());
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Run to equilibrium");
+		menuItem.addActionListener(new RuntoEquilibrium());;
 		menu.add(menuItem);
 		
 		menu.addSeparator();

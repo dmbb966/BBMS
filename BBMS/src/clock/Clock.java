@@ -120,6 +120,7 @@ public class Clock {
 	
 	public static void ClockLoop(int duration) {
 		// GUI_NB.GCO("Clock time is now " + DisplayTimeFull() + " with time rate " + ClockControl.PrintTimeScale());
+						
 		GlobalFuncs.ticksStable++;
 		moveAllUnits(duration);
 		
@@ -129,7 +130,18 @@ public class Clock {
 		GlobalFuncs.scenMap.recalcFlowRate();
 		
 		GlobalFuncs.scenMap.calcAllVapor();
-		GlobalFuncs.scenMap.updateAllVapor();		
+		GlobalFuncs.scenMap.updateAllVapor();
+		
+		if (GlobalFuncs.runtoEq) { 
+			
+			if (Math.abs(GlobalFuncs.totalVaporDelta) <= GlobalFuncs.dvTolerance && GlobalFuncs.ticksStable > 100) {
+				ClockControl.SetTimeScale((byte) 4);
+				if (!ClockControl.paused) ClockControl.Pause();
+				GlobalFuncs.runtoEq = false;
+				GUI_NB.GCODTG("Reached desired DV threshold.");
+			}
+
+		}		
 		
 		GlobalFuncs.gui.BasicInfoPane.repaint();
 		

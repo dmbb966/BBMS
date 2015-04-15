@@ -56,6 +56,8 @@ public class GlobalFuncs {
 	
 	
 	public static Thread GameClock = new Thread(new ClockThread());
+	public static boolean runtoEq = false;		// If true, the clock will run at a high rate of speed until equilibrium is reached
+	public static int dvTolerance = 0;			// When the vapor DV equals this number, will terminate autorun
 	
 	public static int visibility = 0;
 	
