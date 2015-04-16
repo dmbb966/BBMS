@@ -84,6 +84,20 @@ public class HexMap {
 		}
 	}
 	
+	/** Returns a random hex within the Recon Zone of the map */
+	public Hex RandomHexReconZone() {
+		int x = GlobalFuncs.randRange(friendlyZone + 1, enemyZone - 1);
+		int y = GlobalFuncs.randRange(0, yDim);
+		
+		Hex finger = getHex(x, y);
+		
+		if (!inReconZone(finger)) {
+			GUI_NB.GCO("ERROR!  Hex " + x + ", " + y + " is not in the recon zone!");
+		}
+		
+		return finger;
+	}
+	
 	/** 
 	 * Checks vapor sources and sinks to determine the anticipated change for the next turn.
 	 */
@@ -142,6 +156,12 @@ public class HexMap {
 	 * @return
 	 */
 	public void recalcFlowRate() {
+		
+		if (GlobalFuncs.fixSlowRate) {
+			GlobalFuncs.flowRate = 1.0;
+			return;
+		}
+		
 		if (GlobalFuncs.reduceRate) {
 			GlobalFuncs.reduceRate = false;
 			GlobalFuncs.flowRate -= GlobalFuncs.flowStep * 5.0;

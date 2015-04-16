@@ -259,8 +259,10 @@ public class GUIKeyboard {
 	public static class DisplayCircularLOS extends AbstractAction {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			
+			GUI_NB.GCO("Displaying circular LOS to range: " + GlobalFuncs.visibility);
 			if (GlobalFuncs.selectedUnit != null) {
-				GlobalFuncs.selectedUnit.DisplayLOSToRange(GlobalFuncs.scenMap.getXDim());
+				GlobalFuncs.selectedUnit.DisplayLOSToRange(GlobalFuncs.visibility);
 			}
 		}
 	}

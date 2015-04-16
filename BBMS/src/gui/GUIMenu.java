@@ -194,6 +194,7 @@ public class GUIMenu extends JMenuBar{
 		public void actionPerformed(ActionEvent event) {
 			GUI_NB.GCO("Clicking will now set hex to VAPOR SOURCE");
 			GlobalFuncs.placeUnit = 21;
+			new DisplayModeVapor().actionPerformed(event);
 		}
 	}
 	
@@ -203,6 +204,7 @@ public class GUIMenu extends JMenuBar{
 		public void actionPerformed(ActionEvent event) {
 			GUI_NB.GCO("Clicking will now set hex to VAPOR SINK");
 			GlobalFuncs.placeUnit = 22;
+			new DisplayModeVapor().actionPerformed(event);
 		}
 	}
 	
@@ -212,6 +214,7 @@ public class GUIMenu extends JMenuBar{
 		public void actionPerformed(ActionEvent event) {
 			GUI_NB.GCO("Clicking will now REMOVE vapor source or sink");
 			GlobalFuncs.placeUnit = 20;
+			new DisplayModeVapor().actionPerformed(event);
 		}
 	}
 	
@@ -312,6 +315,14 @@ public class GUIMenu extends JMenuBar{
 			GlobalFuncs.scenMap.StandardVaporMap();
 		}
 	}
+	
+	public static class ToggleFixedSlowVapor implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			GlobalFuncs.fixSlowRate = !GlobalFuncs.fixSlowRate;
+			GUI_NB.GCO("Toggled fixed slow vapor rate to: " + GlobalFuncs.fixSlowRate);
+		}
+	}
+	
 	
 	/** Automatically runs the clock forward until equilibrium has been reached */
 	public static class RuntoEquilibrium implements ActionListener {
@@ -664,14 +675,25 @@ public class GUIMenu extends JMenuBar{
 		}
 	}
 	
+	public static class UnitSensorCheck implements ActionListener{
+		public void actionPerformed(ActionEvent event) {
+			if (GlobalFuncs.selectedUnit == null) {
+				GUI_NB.GCO("ERROR!  Must select a unit first.");
+				return;
+			}
+						
+			GlobalFuncs.selectedUnit.orgType.SenseFlowSingle(GlobalFuncs.selectedUnit);
+		}
+	}
+	
 	/** A test function that sets the fitness of all organisms attached to units to 2.0.
 	 * Yes I know that fitness number is "too high."  Deal with it. */
 	public static class TestFunc implements ActionListener{
 		public void actionPerformed(ActionEvent event) {
-			GUI_NB.GCO("Unit size lists:");
-			GUI_NB.GCO("Friendly: " + GlobalFuncs.friendlyUnitList.size());
-			GUI_NB.GCO("Enemy:    " + GlobalFuncs.enemyUnitList.size());
-			GUI_NB.GCO("Total:    " + GlobalFuncs.unitList.size());
+			for (int i = 0; i < 10; i++) {
+				GlobalFuncs.scenMap.RandomHexReconZone();
+			}
+		
 		}
 	}
 	
@@ -861,6 +883,10 @@ public class GUIMenu extends JMenuBar{
 		menuItem = new JMenuItem("Mode: Remove Vapor Source/Sink");
 		menuItem.addActionListener(new ModeSetVaporNorm());
 		menu.add(menuItem);
+	
+		menuItem = new JMenuItem("Toggle Fixed Slow Vapor Rate");
+		menuItem.addActionListener(new ToggleFixedSlowVapor());
+		menu.add(menuItem);
 		
 		menu.addSeparator();
 		
@@ -959,6 +985,10 @@ public class GUIMenu extends JMenuBar{
 		
 		menuItem = new JMenuItem("Cycle unit fitness function");
 		menuItem.addActionListener(new CycleFitnessType());
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Sensor check for unit");
+		menuItem.addActionListener(new UnitSensorCheck());
 		menu.add(menuItem);
 	}
 	

@@ -74,6 +74,7 @@ public class GlobalFuncs {
 	public static int flowCheck = 5;
 	/** If true, will reduce the flow rate for this tick */
 	public static boolean reduceRate = false;
+	public static boolean fixSlowRate = false;
 	/** Highest flow rate as calculated by sources and sinks*/
 	public static int maxDelta = 0;		
 	/** Number of ticks since the last source or sink was removed.  
@@ -176,12 +177,13 @@ public class GlobalFuncs {
 	public static String saveMapCharacteristics () {
 		StringBuffer buf = new StringBuffer("");
 		
-		buf.append("# Map and environment characteristics: x size, y size, map view x, map view y, clock time, coa, maxcoa\n");
+		buf.append("# Map and environment characteristics: x size, y size, map view x, map view y, clock time, coa, maxcoa, visibility\n");
 		
 		buf.append(scenMap.xDim + ", " + scenMap.yDim + ", ");
 		buf.append(gui.GMD.mapDisplayX + ", " + gui.GMD.mapDisplayY + ", ");
 		buf.append(Clock.time + ", ");
 		buf.append(COAIndex + ", ");
+		buf.append(GlobalFuncs.visibility + ", ");
 		
 		return buf.toString();
 	}
@@ -208,8 +210,10 @@ public class GlobalFuncs {
 					
 					COAIndex = Integer.parseInt(result[5]);
 					
+					GlobalFuncs.visibility = Integer.parseInt(result[6]);
 					
-					if (result.length > 6) GUI_NB.GCO("ERROR!  Input line for map characteristics is too long!");
+					
+					if (result.length > 7) GUI_NB.GCO("ERROR!  Input line for map characteristics is too long!");
 					else {
 						GUI_NB.GCO("Map characteristics loaded successfully.");
 					}

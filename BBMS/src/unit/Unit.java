@@ -27,6 +27,7 @@ import clock.Clock;
 import clock.ClockControl;
 import clock.ClockThread;
 import terrain.TerrainEnum;
+import terrain.TerrainType;
 import bbms.GlobalFuncs;
 
 public class Unit {
@@ -294,7 +295,8 @@ public class Unit {
 		// Does not count the hex the unit itself is in, hence, i starts at 1
 		for (int i = 1; i < hexList.size(); i++) {
 			Hex h = hexList.elementAt(i);			
-			if (visibility > 30) return false;			
+			if (visibility > 30) return false;		
+			if (h.tEnum == TerrainEnum.INVALID) return false;
 			
 			visibility += h.density;
 		}
@@ -354,6 +356,26 @@ public class Unit {
 			Hex finger = ring.elementAt(i);
 			DisplayLOSTo(finger.x, finger.y, false);
 		}
+	}
+	
+	public Vector<Hex> GetLOSToRange(int range) {
+		Vector<Hex> ring = HexOff.HexRing(location.x,  location.y,  range);
+		Vector<Hex> output = new Vector<Hex>();
+		GUI_NB.GCO("Init GetLOSToRange.  Range is " + range);
+		
+		for (int dist = 0; dist <= range; dist++) {
+			ring = HexOff.HexRing(location.x,  location.y,  dist);
+			
+			GUI_NB.GCO("Outer loop: Ring size is " + ring.size());
+			
+			for (int i = 0; i < ring.size(); i++) {
+				Hex finger = ring.elementAt(i);
+				
+				if (HasLOSTo(finger.x, finger.y)) output.addElement(finger);
+			}			
+		}
+	
+		return output;
 	}
 	
 	public void DisplayWaypoints() {

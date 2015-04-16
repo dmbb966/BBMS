@@ -177,15 +177,22 @@ public class HexOff {
 		HexOff target = HexCast(origin, 270.0, distance);
 		Hex finger = GlobalFuncs.scenMap.getHex(target.x, target.y);
 		
-		for (int direction = 0; direction < 6; direction ++) {
-			for (int walk = 0; walk < distance; walk ++) {
-				hexRing.addElement(finger);
-				target = target.findNeighbor(direction);
-				finger = GlobalFuncs.scenMap.getHex(target.x, target.y);
-				// GlobalFuncs.scenMap.shadeHex(finger, Color.WHITE);								
-				// bbms.GUI_NB.GCO("Add at " + target.DisplayHexStr());
+		if (distance == 0) {
+			hexRing.addElement(GlobalFuncs.scenMap.getHex(x, y));
+		}
+		else {
+			for (int direction = 0; direction < 6; direction ++) {
+				for (int walk = 0; walk < distance; walk ++) {
+					hexRing.addElement(finger);
+					target = target.findNeighbor(direction);
+					finger = GlobalFuncs.scenMap.getHex(target.x, target.y);
+					// GlobalFuncs.scenMap.shadeHex(finger, Color.WHITE);								
+					// bbms.GUI_NB.GCO("Add at " + target.DisplayHexStr());
+				}
 			}
 		}
+		
+		
 		
 		// GlobalFuncs.gui.repaint();
 		

@@ -122,7 +122,7 @@ public class Clock {
 		// GUI_NB.GCO("Clock time is now " + DisplayTimeFull() + " with time rate " + ClockControl.PrintTimeScale());
 						
 		GlobalFuncs.ticksStable++;
-		moveAllUnits(duration);
+		
 		
 		GlobalFuncs.maxDelta = 0;
 		GlobalFuncs.scenMap.updateVaporSS();		// Calculates maximum DV at sources and sinks
@@ -141,7 +141,9 @@ public class Clock {
 				GUI_NB.GCODTG("Reached desired DV threshold.");
 			}
 
-		}		
+		} else {		
+			moveAllUnits(duration);
+		}
 		
 		GlobalFuncs.gui.BasicInfoPane.repaint();
 		

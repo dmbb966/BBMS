@@ -177,6 +177,8 @@ public class FIO {
 				}
 			}
 		}		
+		
+		GlobalFuncs.gui.repaint();
 	}
 	
 	public static boolean LoadScen(Path p) {
@@ -211,7 +213,7 @@ public class FIO {
 			
 			ScenIterationSetup();
 			
-			GlobalFuncs.gui.repaint();
+
 			
 			GUI_NB.GCO("Scenario loaded successfully.");	
 			
