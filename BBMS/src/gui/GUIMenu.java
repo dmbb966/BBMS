@@ -642,6 +642,22 @@ public class GUIMenu extends JMenuBar{
 		}
 	}
 	
+	public static class TeleportUnit implements ActionListener{
+		public void actionPerformed(ActionEvent event) {
+			if (GlobalFuncs.selectedUnit == null) {
+				GUI_NB.GCO("ERROR!  Must select a unit first.");
+				return;
+			}
+			
+			if (GlobalFuncs.selectedHex == null) {
+				GUI_NB.GCO("ERROR!  Must select a hex first.");
+				return;
+			}
+			
+			GlobalFuncs.selectedUnit.TeleportTo(GlobalFuncs.selectedHex);
+		}
+	}
+	
 	/** A test function that sets the fitness of all organisms attached to units to 2.0.
 	 * Yes I know that fitness number is "too high."  Deal with it. */
 	public static class TestFunc implements ActionListener{
@@ -834,6 +850,12 @@ public class GUIMenu extends JMenuBar{
 		
 		menuItem = new JMenuItem("Mode: Remove Vapor Source/Sink");
 		menuItem.addActionListener(new ModeSetVaporNorm());
+		menu.add(menuItem);
+		
+		menu.addSeparator();
+		
+		menuItem = new JMenuItem("Teleport Unit");
+		menuItem.addActionListener(new TeleportUnit());
 		menu.add(menuItem);
 	}
 	
