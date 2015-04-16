@@ -598,6 +598,25 @@ public class GUIMenu extends JMenuBar{
 		}
 	}
 	
+	public static class CopyCOA implements ActionListener{
+		public void actionPerformed(ActionEvent event) {
+			DialogFileName d = new DialogFileName(GlobalFuncs.gui, true, "New COA Name");
+			d.setVisible(true);
+			
+			if (GlobalFuncs.tempStr.contains(",")) {
+				GUI_NB.GCO("ERROR: COA name cannot contain commas.");
+				return;
+			}
+			
+			COA nCOA = new COA(GlobalFuncs.curCOA, GlobalFuncs.tempStr);
+			GlobalFuncs.allCOAs.addElement(nCOA);
+			GlobalFuncs.COAIndex = GlobalFuncs.allCOAs.size();
+			GlobalFuncs.curCOA = nCOA;
+			GlobalFuncs.curCOA.LoadCOA();
+			GlobalFuncs.gui.repaint();
+		}
+	}
+	
 	public static class DelCOA implements ActionListener{
 		public void actionPerformed(ActionEvent event) {
 			if (GlobalFuncs.allCOAs.size() == 1) {
@@ -627,12 +646,10 @@ public class GUIMenu extends JMenuBar{
 	 * Yes I know that fitness number is "too high."  Deal with it. */
 	public static class TestFunc implements ActionListener{
 		public void actionPerformed(ActionEvent event) {
-			for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
-				Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
-				
-				if (finger.org != null) finger.org.fitness = 2.0;
-				GUI_NB.GCO("Assigning fitness of 2.0 to organism attached to " + finger.callsign);
-			}
+			GUI_NB.GCO("Unit size lists:");
+			GUI_NB.GCO("Friendly: " + GlobalFuncs.friendlyUnitList.size());
+			GUI_NB.GCO("Enemy:    " + GlobalFuncs.enemyUnitList.size());
+			GUI_NB.GCO("Total:    " + GlobalFuncs.unitList.size());
 		}
 	}
 	
@@ -670,8 +687,14 @@ public class GUIMenu extends JMenuBar{
 		menuItem.addActionListener(new PrevCOA());
 		menu.add(menuItem);
 		
+		menu.addSeparator();
+		
 		menuItem = new JMenuItem("New COA");
 		menuItem.addActionListener(new NewCOA());
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Copy COA");
+		menuItem.addActionListener(new CopyCOA());
 		menu.add(menuItem);
 		
 		menuItem = new JMenuItem("Delete COA");
@@ -855,6 +878,10 @@ public class GUIMenu extends JMenuBar{
 		
 		menuItem = new JMenuItem("Set Visibility");
 		menuItem.addActionListener(new VisDialog());
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Test Function");
+		menuItem.addActionListener(new TestFunc());
 		menu.add(menuItem);
 		
 	}

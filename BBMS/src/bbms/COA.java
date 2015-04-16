@@ -43,6 +43,12 @@ public class COA {
 		GUI_NB.GCO("COA " + name + " successfully loaded.");
 	}
 	
+	@SuppressWarnings("unchecked")
+	public COA(COA parent, String name) {
+		this.unitList = (Vector<Unit>) parent.unitList.clone();
+		this.name = name;
+	}
+	
 	public COA(BufferedReader buf, String readR) {
 		// First line (string readL) contains COA name
 		this.name = readR.substring(5, readR.length() - 1);

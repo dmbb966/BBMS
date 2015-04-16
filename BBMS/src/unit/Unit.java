@@ -485,6 +485,21 @@ public class Unit {
 		}
 	}
 	
+	/** Magically teleports the unit to the desired hex */
+	public void TeleportTo(Hex h) {
+		Hex currentLoc = this.location;
+		if (h.HexUnit != null) {
+			GUI_NB.GCO("ERROR!  Cannot move unit to desired hex, since that hex is occupied.");
+			return;
+		}
+		
+		currentLoc.HexUnit = null;
+		h.HexUnit = this;
+		this.location = h;
+		
+		GUI_NB.GCO("Unit moved successfully.");
+	}
+	
 	public String SaveUnit() {						
 		StringBuffer out = new StringBuffer("");
 		
