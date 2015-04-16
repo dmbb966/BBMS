@@ -631,6 +631,12 @@ public class GUIMenu extends JMenuBar{
 		}
 	}
 	
+	public static class ReinitCOA implements ActionListener{
+		public void actionPerformed(ActionEvent event) {
+			FIO.ScenIterationSetup();
+		}
+	}
+	
 	public static class DisplaySideWP implements ActionListener{
 		public void actionPerformed(ActionEvent event) {
 			if (GlobalFuncs.selectedUnit == null) {
@@ -701,6 +707,10 @@ public class GUIMenu extends JMenuBar{
 		
 		menuItem = new JMenuItem("Prev COA");
 		menuItem.addActionListener(new PrevCOA());
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Reinitialize this COA");
+		menuItem.addActionListener(new ReinitCOA());
 		menu.add(menuItem);
 		
 		menu.addSeparator();

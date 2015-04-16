@@ -1,5 +1,6 @@
 package utilities;
 
+import gui.DialogFileName;
 import gui.GUI_NB;
 import hex.Hex;
 import hex.HexMap;
@@ -138,6 +139,46 @@ public class FIO {
 		return true;
 	}
 	
+	/** Goes through the setup for this scenario, namely, for the current COA will initialize new units*/
+	public static void ScenIterationSetup() {
+		GlobalFuncs.allSpots.records.clear();
+		GUI_NB.GCO("All spot records have been cleared.");
+		
+		DialogFileName x = new DialogFileName(GlobalFuncs.gui, true, "Num Friendly Units");
+		x.setVisible(true);
+		
+		int friendlyUnits = Integer.parseInt(GlobalFuncs.tempStr);
+		
+		if (friendlyUnits < 1) {
+			GUI_NB.GCO("ERROR!  Not a valid number.");
+		}
+		else {
+			// First, eliminate friendly units from the unit roster
+			for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
+				Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
+				finger.location.HexUnit = null;
+				GlobalFuncs.unitList.remove(finger);					
+			}
+			GlobalFuncs.friendlyUnitList.clear();
+			
+			// Now adds units along the left map boundary
+			for (int i = 0; i < friendlyUnits; i++) {
+				int col = i / GlobalFuncs.scenMap.yDim;
+				int row = i % GlobalFuncs.scenMap.yDim;
+				
+				Hex destination = GlobalFuncs.scenMap.getHex(col, row);
+				if (destination.HexUnit != null) {
+					GUI_NB.GCO("Destination hex occupied, moving to the next one.");
+					friendlyUnits++;
+				}
+				else {
+					// Add friendly unit
+					destination.HexUnit = new Unit(destination, SideEnum.FRIENDLY, "M1A2", "Scout " + i, 90.0, 0.0, null, false);
+				}
+			}
+		}		
+	}
+	
 	public static boolean LoadScen(Path p) {
 		try {
 			BufferedReader reader = Files.newBufferedReader(p, cSet);
@@ -163,10 +204,14 @@ public class FIO {
 					GlobalFuncs.allCOAs.addElement(newCOA);
 				}
 			}
-			
+									
 			// All COAs loaded, now load the last saved COA, already loaded in loadMapCharacteristics
 			GlobalFuncs.curCOA = GlobalFuncs.allCOAs.elementAt(GlobalFuncs.COAIndex - 1);
 			GlobalFuncs.curCOA.LoadCOA();
+			
+			ScenIterationSetup();
+			
+			GlobalFuncs.gui.repaint();
 			
 			GUI_NB.GCO("Scenario loaded successfully.");	
 			
