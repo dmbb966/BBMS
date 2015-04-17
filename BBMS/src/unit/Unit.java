@@ -245,7 +245,7 @@ public class Unit {
 	public void OrientTurretTo(int x, int y) {
 		turretOrientation = getAzimuth(location.x, location.y, x, y) - hullOrientation;
 		// trackTarget = false;
-	}
+	}	
 	
 	/**
 	 * Orients the turret to the specified target
@@ -283,9 +283,10 @@ public class Unit {
 		GlobalFuncs.gui.repaint();
 	}
 	
-	public boolean HasLOSTo(int x, int y) {
-		HexOff currentHex = new HexOff(location.x, location.y);
-		HexOff targetHex = new HexOff(x, y);
+	/** Returns whether or not there is LOS between the two hexes */
+	public static boolean LOSBetween(Hex a, Hex b) {
+		HexOff currentHex = a.toHO();
+		HexOff targetHex = b.toHO();
 		Vector<hex.Hex> hexList = HexOff.HexesBetween(currentHex, targetHex);
 		
 		// Exceeds maximum viewing distance
@@ -302,6 +303,13 @@ public class Unit {
 		}
 		
 		return true;
+	}
+	
+	public boolean HasLOSTo(int x, int y) {
+		Hex a = this.location;
+		Hex b = GlobalFuncs.scenMap.getHex(x, y);
+		
+		return LOSBetween(a, b);				
 	}
 	
 	public void DisplayLOSToTarget() {
@@ -358,24 +366,28 @@ public class Unit {
 		}
 	}
 	
-	public Vector<Hex> GetLOSToRange(int range) {
-		Vector<Hex> ring = HexOff.HexRing(location.x,  location.y,  range);
+	public static Vector<Hex> GetLOSToRange(Hex origin, int range) {
+		Vector<Hex> ring = HexOff.HexRing(origin.x,  origin.y,  range);
 		Vector<Hex> output = new Vector<Hex>();
 		GUI_NB.GCO("Init GetLOSToRange.  Range is " + range);
 		
 		for (int dist = 0; dist <= range; dist++) {
-			ring = HexOff.HexRing(location.x,  location.y,  dist);
+			ring = HexOff.HexRing(origin.x,  origin.y,  dist);
 			
 			GUI_NB.GCO("Outer loop: Ring size is " + ring.size());
 			
 			for (int i = 0; i < ring.size(); i++) {
 				Hex finger = ring.elementAt(i);
 				
-				if (HasLOSTo(finger.x, finger.y)) output.addElement(finger);
+				if (LOSBetween(origin, finger)) output.addElement(finger);
 			}			
 		}
 	
-		return output;
+		return output;		
+	}
+	
+	public Vector<Hex> GetLOSToRange(int range) {
+		return GetLOSToRange(this.location, range);
 	}
 	
 	public void DisplayWaypoints() {
