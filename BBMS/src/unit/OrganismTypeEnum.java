@@ -28,5 +28,9 @@ public enum OrganismTypeEnum {
 		
 		return sumDV;
 	}	
+	
+	public static double NormalizedSenseFlowSingle(Hex origin) {
+		return SenseFlowSingle(origin) / GlobalFuncs.maxSpottedDV;
+	}
 }
 

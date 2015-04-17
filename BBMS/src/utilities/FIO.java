@@ -179,7 +179,7 @@ public class FIO {
 		}		
 		
 		GlobalFuncs.gui.repaint();
-	}
+	}		
 	
 	public static boolean LoadScen(Path p) {
 		try {
@@ -212,8 +212,10 @@ public class FIO {
 			GlobalFuncs.curCOA.LoadCOA();
 			
 			ScenIterationSetup();
+			GlobalFuncs.maxSpottedDV = GlobalFuncs.scenMap.CalcExactDVNorm();
+			GUI_NB.GCO("Exact DV Norm calculated: " + GlobalFuncs.maxSpottedDV);
 			
-
+			if (GlobalFuncs.maxSpottedDV == 1.0) GUI_NB.GCO("WARNING: Flow rate uninitialized for this scenario!");
 			
 			GUI_NB.GCO("Scenario loaded successfully.");	
 			

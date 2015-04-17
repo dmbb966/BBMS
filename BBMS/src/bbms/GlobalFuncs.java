@@ -180,13 +180,15 @@ public class GlobalFuncs {
 	public static String saveMapCharacteristics () {
 		StringBuffer buf = new StringBuffer("");
 		
-		buf.append("# Map and environment characteristics: x size, y size, map view x, map view y, clock time, coa, maxcoa, visibility\n");
+		buf.append("# Map and environment characteristics: x size, y size, map view x, map view y, clock time, coa, maxcoa, visibility, friendlyzone, enemyzone\n");
 		
 		buf.append(scenMap.xDim + ", " + scenMap.yDim + ", ");
 		buf.append(gui.GMD.mapDisplayX + ", " + gui.GMD.mapDisplayY + ", ");
 		buf.append(Clock.time + ", ");
 		buf.append(COAIndex + ", ");
 		buf.append(GlobalFuncs.visibility + ", ");
+		buf.append(GlobalFuncs.scenMap.friendlyZone + ", ");
+		buf.append(GlobalFuncs.scenMap.enemyZone + ", ");
 		
 		return buf.toString();
 	}
@@ -215,8 +217,11 @@ public class GlobalFuncs {
 					
 					GlobalFuncs.visibility = Integer.parseInt(result[6]);
 					
+					GlobalFuncs.scenMap.friendlyZone = Integer.parseInt(result[7]);
+					GlobalFuncs.scenMap.enemyZone = Integer.parseInt(result[8]);
 					
-					if (result.length > 7) GUI_NB.GCO("ERROR!  Input line for map characteristics is too long!");
+					
+					if (result.length > 9) GUI_NB.GCO("ERROR!  Input line for map characteristics is too long!");
 					else {
 						GUI_NB.GCO("Map characteristics loaded successfully.");
 					}
