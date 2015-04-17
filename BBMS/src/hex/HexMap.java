@@ -196,6 +196,7 @@ public class HexMap {
 		if (GlobalFuncs.reduceRate) {
 			GlobalFuncs.reduceRate = false;
 			GlobalFuncs.flowRate -= GlobalFuncs.flowStep * 5.0;
+			if (GlobalFuncs.flowRate < 1.00) GlobalFuncs.flowRate = 1.0;
 		}
 		else if (GlobalFuncs.ticksStable % GlobalFuncs.flowCheck == GlobalFuncs.flowCheck - 1) {
 			if (GlobalFuncs.flowRate < GlobalFuncs.flowRateCap) GlobalFuncs.flowRate += GlobalFuncs.flowStep;						

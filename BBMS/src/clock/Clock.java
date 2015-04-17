@@ -123,16 +123,14 @@ public class Clock {
 						
 		GlobalFuncs.ticksStable++;
 		
-		
-		GlobalFuncs.maxDelta = 0;
-		GlobalFuncs.scenMap.updateVaporSS();		// Calculates maximum DV at sources and sinks
-		
-		GlobalFuncs.scenMap.recalcFlowRate();
-		
-		GlobalFuncs.scenMap.calcAllVapor();
-		GlobalFuncs.scenMap.updateAllVapor();
-		
 		if (GlobalFuncs.runtoEq) { 
+			GlobalFuncs.maxDelta = 0;
+			GlobalFuncs.scenMap.updateVaporSS();		// Calculates maximum DV at sources and sinks
+			
+			GlobalFuncs.scenMap.recalcFlowRate();
+			
+			GlobalFuncs.scenMap.calcAllVapor();
+			GlobalFuncs.scenMap.updateAllVapor();
 			
 			if (Math.abs(GlobalFuncs.totalVaporDelta) <= GlobalFuncs.dvTolerance && GlobalFuncs.ticksStable > 100) {
 				ClockControl.SetTimeScale((byte) 4);

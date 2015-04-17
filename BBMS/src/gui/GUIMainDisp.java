@@ -414,6 +414,20 @@ public class GUIMainDisp extends JPanel {
 		}
 	}
 	
+	/** Recenters the map display on the given hex.  Assumes map display is 14 hexes across by 10 hexes high */
+	public void centerView(Hex h) {
+		int xCoord = h.x;
+		int yCoord = h.y;
+		
+		int newDisplayX = Math.max(h.x - 7, 0);
+		int newDisplayY = Math.max(h.y - 5, 0);
+		
+		mapDisplayX = newDisplayX;
+		mapDisplayY = newDisplayY;
+		
+		GlobalFuncs.gui.repaint();
+	}
+	
 	public void drawUnits(Graphics g, int hexSize) {
 		unit.Unit u;
 		for (int i = 0; i < GlobalFuncs.unitList.size(); i++) {

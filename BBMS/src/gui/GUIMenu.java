@@ -718,6 +718,7 @@ public class GUIMenu extends JMenuBar{
 			}
 			
 			unit.JNEATIntegration.DeployOne(GlobalFuncs.selectedUnit);
+			GlobalFuncs.gui.GMD.centerView(GlobalFuncs.selectedUnit.location);
 
 		}
 	}
