@@ -16,15 +16,15 @@ public enum OrganismTypeEnum {
 		Vector<Hex> visibleHexes = Unit.GetLOSToRange(origin, GlobalFuncs.visibility);
 		double sumDV = 0;
 		
-		GUI_NB.GCO("Beginning flow check.");
+		// GUI_NB.GCO("Beginning flow check.");
 		
 		for (int i = 0; i < visibleHexes.size(); i++){
 			Hex finger = visibleHexes.elementAt(i);
-			finger.DisplayInfo();
+			// finger.DisplayInfo();
 			sumDV += finger.deltaVapor;
 		}
 		
-		GUI_NB.GCO("Check complete.  Visible hex size is: " + visibleHexes.size() + " with total DV: " + sumDV);
+		// GUI_NB.GCO("Check complete.  Visible hex size is: " + visibleHexes.size() + " with total DV: " + sumDV);
 		
 		return sumDV;
 	}	

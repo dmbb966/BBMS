@@ -705,10 +705,11 @@ public class GUIMenu extends JMenuBar{
 	 * Yes I know that fitness number is "too high."  Deal with it. */
 	public static class TestFunc implements ActionListener{
 		public void actionPerformed(ActionEvent event) {
-			for (int i = 0; i < 10; i++) {
-				GlobalFuncs.scenMap.RandomHexReconZone();
+			for (int i = 10; i < 200; i += 10) {
+				GUI_NB.GCO(i + " samples: " + GlobalFuncs.scenMap.CalcApproxDVNorm(i));
 			}
-		
+			
+			GUI_NB.GCO("Exact: " + GlobalFuncs.scenMap.CalcExactDVNorm());
 		}
 	}
 	

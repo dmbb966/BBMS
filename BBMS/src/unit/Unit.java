@@ -382,12 +382,12 @@ public class Unit {
 	public static Vector<Hex> GetLOSToRange(Hex origin, int range) {
 		Vector<Hex> ring = HexOff.HexRing(origin.x,  origin.y,  range);
 		Vector<Hex> output = new Vector<Hex>();
-		GUI_NB.GCO("Init GetLOSToRange.  Range is " + range);
+		//GUI_NB.GCO("Init GetLOSToRange.  Range is " + range);
 		
 		for (int dist = 0; dist <= range; dist++) {
 			ring = HexOff.HexRing(origin.x,  origin.y,  dist);
 			
-			GUI_NB.GCO("Outer loop: Ring size is " + ring.size());
+			//GUI_NB.GCO("Outer loop: Ring size is " + ring.size());
 			
 			for (int i = 0; i < ring.size(); i++) {
 				Hex finger = ring.elementAt(i);

@@ -11,6 +11,7 @@ import java.util.Vector;
 
 import clock.Clock;
 import terrain.TerrainEnum;
+import unit.OrganismTypeEnum;
 import unit.Unit;
 import utilities.FIO;
 import bbms.GlobalFuncs;
@@ -82,6 +83,36 @@ public class HexMap {
 				finger.CalcVapor();
 			}
 		}
+	}
+	
+	
+	/** Samples a number of random hexes within the recon zone to determine the average visibility of DV
+	 * Stores it in GlobalFuncs to normalize things later on.*/
+	public double CalcApproxDVNorm(int samples) {
+		double mostDV = 1.0;
+		
+		for (int i = 0; i < samples; i++) {
+			Hex finger = RandomHexReconZone();
+			double comparator = OrganismTypeEnum.SenseFlowSingle(finger);
+			if (comparator > mostDV) mostDV = comparator;
+		}
+		return mostDV;
+	}
+	
+	public double CalcExactDVNorm() {
+		double mostDV = 1.0;
+		
+		for (int y = 0; y < yDim; y++) {
+			for (int x = 0; x < xDim; x++) {
+				Hex finger = getHex(x, y);
+				if (inReconZone(finger)) {
+					double comparator = OrganismTypeEnum.SenseFlowSingle(finger);
+					if (comparator > mostDV) mostDV = comparator;
+				}
+			}
+		}
+		
+		return mostDV;
 	}
 	
 	/** Returns a random hex within the Recon Zone of the map */
