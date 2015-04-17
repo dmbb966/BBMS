@@ -99,6 +99,13 @@ public class Unit {
 		}		
 	}
 	
+	public void RemoveUnit() {
+		GlobalFuncs.unitList.removeElement(this);
+		RemovefromSide(this.side);
+		if (GlobalFuncs.selectedUnit == this) GlobalFuncs.selectedUnit = null;
+		GlobalFuncs.gui.repaint();
+	}
+	
 	public void RemovefromSide(SideEnum side) {
 		// Remove from current side lists
 				switch (side) {

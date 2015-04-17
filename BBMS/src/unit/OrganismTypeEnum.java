@@ -12,6 +12,7 @@ public enum OrganismTypeEnum {
 	/** Six sensors each covering a 60-degree arc around the agent, goes to a single output */
 	SIX_DIRECTIONAL;
 	
+	/** Senses the vapor DV for all hexes that it can see.  Will NOT count DV in the "friendly" zone */
 	public static double SenseFlowSingle(Hex origin) {		
 		Vector<Hex> visibleHexes = Unit.GetLOSToRange(origin, GlobalFuncs.visibility);
 		double sumDV = 0;
@@ -21,7 +22,7 @@ public enum OrganismTypeEnum {
 		for (int i = 0; i < visibleHexes.size(); i++){
 			Hex finger = visibleHexes.elementAt(i);
 			// finger.DisplayInfo();
-			sumDV += finger.deltaVapor;
+			if (!GlobalFuncs.scenMap.inFriendlyZone(finger)) sumDV += finger.deltaVapor;
 		}
 		
 		// GUI_NB.GCO("Check complete.  Visible hex size is: " + visibleHexes.size() + " with total DV: " + sumDV);

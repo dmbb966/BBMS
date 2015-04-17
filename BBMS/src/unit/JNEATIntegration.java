@@ -1,10 +1,45 @@
 package unit;
 
+import jneat.Organism;
 import bbms.GlobalFuncs;
 import gui.GUI_NB;
 import hex.Hex;
 
 public class JNEATIntegration {
+	
+	/** Sequentially fill friendly units with Neural Nets from the population */
+	public static void FillAllScouts() {
+		if (GlobalFuncs.currentPop == null) {
+			GUI_NB.GCO("ERROR!  Must generate a population first.");
+			return;
+		}		
+		
+		if (GlobalFuncs.currentPop.organisms.size() < GlobalFuncs.friendlyUnitList.size()) {
+			GUI_NB.GCO("ERROR!  Not enough organisms to fill friendly units!");
+			return;
+		}
+		
+		int numOrgs = GlobalFuncs.currentPop.organisms.size();
+		for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
+			Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
+			if (GlobalFuncs.orgAssignNum >= numOrgs) GlobalFuncs.orgAssignNum = 0;
+			
+			Organism org = GlobalFuncs.currentPop.organisms.elementAt(GlobalFuncs.orgAssignNum);
+			GlobalFuncs.orgAssignNum++;
+			
+			GUI_NB.GCO("Assiging organism #" + org.genome.genome_id + " to friendly unit " + finger.callsign);
+			finger.org = org;
+		}				
+	}
+	
+	/** Deploy all friendly units according to their neural nets */
+	public static void DeployAll() {
+		for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
+			Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
+			
+			unit.JNEATIntegration.DeployOne(finger);
+		}
+	}
 			
 	/** Based on sensor evaluations, determine where to deploy this unit */
 	public static void DeployOne(Unit u) {

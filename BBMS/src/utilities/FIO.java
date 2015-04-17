@@ -200,10 +200,12 @@ public class FIO {
 			}
 			else {
 				// Add friendly unit
-				destination.HexUnit = new Unit(destination, SideEnum.FRIENDLY, "M1A2", "Scout " + i, 90.0, 0.0, null, false);
+				destination.HexUnit = new Unit(destination, SideEnum.FRIENDLY, "M1A2", "Scout " + i, 90.0, 0.0, null, true);
 			}
-		}
+		}		 
 				
+		unit.JNEATIntegration.FillAllScouts();		// Puts a Org in each unit
+		unit.JNEATIntegration.DeployAll();			// Deploys those units accordingly
 		
 		GlobalFuncs.gui.repaint();
 	}		
@@ -238,11 +240,10 @@ public class FIO {
 			GlobalFuncs.curCOA = GlobalFuncs.allCOAs.elementAt(GlobalFuncs.COAIndex - 1);
 			GlobalFuncs.curCOA.LoadCOA();
 			
+			// This dialog will either generate or load a NN population, create enough friendlies to fill fully
 			DialogLoadScen x = new DialogLoadScen(GlobalFuncs.gui, false);
 			x.setVisible(true);
 						
-			//ScenIterationSetup();
-			
 			GlobalFuncs.maxSpottedDV = GlobalFuncs.scenMap.CalcExactDVNorm();
 			GUI_NB.GCO("Exact DV Norm calculated: " + GlobalFuncs.maxSpottedDV);
 			

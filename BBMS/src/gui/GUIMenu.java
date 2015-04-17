@@ -416,6 +416,18 @@ public class GUIMenu extends JMenuBar{
 		}
 	}
 	
+	/** Removes selected unit */
+	public static class RemoveUnit implements ActionListener{
+		public void actionPerformed(ActionEvent event) {
+			if (GlobalFuncs.selectedUnit == null) {
+				GUI_NB.GCO("ERROR!  No unit selected!");
+				return;
+			}
+			
+			GlobalFuncs.selectedUnit.RemoveUnit();
+		}
+	}
+	
 	/** Randomly assigns organisms from the current population to all friendly units.
 	 * This overwrites any existing organism that might already be attached to them.*/
 	public static class RandAddOrg implements ActionListener{
@@ -463,33 +475,8 @@ public class GUIMenu extends JMenuBar{
 	 * This overwrites any existing organism that might already be attached to them.*/
 	public static class SeqAddOrg implements ActionListener{
 		public void actionPerformed(ActionEvent event) {
-			if (GlobalFuncs.currentPop == null) {
-				GUI_NB.GCO("ERROR!  Must generate a population first.");
-				return;
-			}
 			
-			if (GlobalFuncs.currentPop.organisms.size() < GlobalFuncs.friendlyUnitList.size()) {
-				GUI_NB.GCO("ERROR!  There are not enough organisms to assign to units!");
-				return;				
-			}
-			
-			// Since you are assigning organisms to all friendly units, clears the checkout list
-			for (int i = 0; i < GlobalFuncs.currentPop.organisms.size(); i++) {
-				GlobalFuncs.currentPop.organisms.elementAt(i).checkout = false;
-			}
-			
-			int numOrgs = GlobalFuncs.currentPop.organisms.size();
-			for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
-				Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
-				if (GlobalFuncs.orgAssignNum >= numOrgs) GlobalFuncs.orgAssignNum = 0;
-				
-				Organism org = GlobalFuncs.currentPop.organisms.elementAt(GlobalFuncs.orgAssignNum);
-				GlobalFuncs.orgAssignNum++;
-				
-				GUI_NB.GCO("Assiging organism #" + org.genome.genome_id + " to friendly unit " + finger.callsign);
-				finger.org = org;
-			}
-			
+			unit.JNEATIntegration.FillAllScouts();			
 		}
 	}
 	
@@ -725,11 +712,7 @@ public class GUIMenu extends JMenuBar{
 	
 	public static class PlaceAllNN implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
-			for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
-				Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
-				
-				unit.JNEATIntegration.DeployOne(finger);
-			}
+			unit.JNEATIntegration.DeployAll();
 		}
 	}
 	
@@ -935,8 +918,12 @@ public class GUIMenu extends JMenuBar{
 		
 		menu.addSeparator();
 		
-		menuItem = new JMenuItem("Teleport Unit");
+		menuItem = new JMenuItem("Teleport Selected Unit");
 		menuItem.addActionListener(new TeleportUnit());
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Remove Selected Unit");
+		menuItem.addActionListener(new RemoveUnit());
 		menu.add(menuItem);
 	}
 	
