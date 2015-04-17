@@ -35,6 +35,7 @@ public class GlobalFuncs {
 	public static boolean showVapor = false;
 	public static boolean showLOS = true;
 	public static boolean showFOW = false;	// Toggles fog of war
+	public static boolean showWPs = false;
 	
 	public static boolean RotateHull = true;
 	

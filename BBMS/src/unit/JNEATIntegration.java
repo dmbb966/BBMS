@@ -74,7 +74,7 @@ public class JNEATIntegration {
 				if (networkResult > resultThreshold) {
 					GUI_NB.GCO("Location accepted. Teleporting unit.");
 					u.TeleportTo(prospective);
-					u.DisplayLOSToRange(GlobalFuncs.visibility);
+					//u.DisplayLOSToRange(GlobalFuncs.visibility);
 					foundSpot = true;
 				}
 			}

@@ -147,6 +147,30 @@ public class Unit {
 			
 	}
 	
+	/** Used when copying COAs */
+	public Unit (Unit u) {
+		location = u.location;
+		side = u.side;
+		type = u.type;
+		target = null;
+		
+		spotted = false;
+		
+		hullOrientation = u.hullOrientation;
+		turretOrientation = u.turretOrientation;
+		waypointList = new WaypointList(u.waypointList);
+		
+		callsign = u.callsign;
+		unitID = u.unitID;
+		
+		RefreshUnitInfo();
+		
+		// Doesn't need to worry about unit lists since on loadCOA, it automatically does this		
+		
+		
+		
+	}
+	
 	public Unit (hex.Hex locn, SideEnum s, String givenType, String givenCallsign, double hullOrient, double turretOrient, WaypointList wpL, boolean spot) {
 		location = locn;
 		side = s;

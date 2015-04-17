@@ -4,6 +4,7 @@ import gui.GUI_NB;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Vector;
 
 import unit.Unit;
@@ -17,7 +18,7 @@ public class COA {
 		name = n;
 	}
 	
-	public void LoadCOA() {
+	public void LoadCOA() {				
 		// First remove existing units
 		for (int i = 0; i < GlobalFuncs.unitList.size(); i++) {
 			Unit finger = GlobalFuncs.unitList.elementAt(i);
@@ -42,15 +43,22 @@ public class COA {
 		
 		GUI_NB.GCO("COA " + name + " successfully loaded.");
 	}
-	
-	@SuppressWarnings("unchecked")
+		
 	public COA(COA parent, String name) {
-		this.unitList = (Vector<Unit>) parent.unitList.clone();
+		
+		
+		for (int i = 0; i < parent.unitList.size(); i++) {
+			System.out.println("Parent unit size: " + parent.unitList.size());
+			Unit finger = parent.unitList.elementAt(i);
+			Unit newUnit = new Unit(finger);
+			this.unitList.addElement(newUnit);
+		}
+				
 		this.name = name;
 	}
 	
 	public COA(BufferedReader buf, String readR) {
-		// First line (string readL) contains COA name
+		// First line (string readL) contains COA name		
 		this.name = readR.substring(5, readR.length() - 1);
 		
 		try {

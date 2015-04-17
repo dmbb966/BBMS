@@ -17,6 +17,17 @@ public class WaypointList {
 		waypointList = new LinkedList<HexOff>();
 	}
 	
+	/** Copies waypoint lists - for COA copy */
+	public WaypointList(WaypointList w) {
+		waypointList = new LinkedList<HexOff>();
+		
+		for (int i = 0; i < w.waypointList.size(); i++) {
+			HexOff finger = w.waypointList.get(i);
+			
+			this.waypointList.add(new HexOff(finger.getX(), finger.getY()));
+		}
+	}
+	
 	
 	
 	public boolean addWaypoint(int x, int y) {

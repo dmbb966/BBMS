@@ -642,7 +642,7 @@ public class GUIMenu extends JMenuBar{
 				GUI_NB.GCO("ERROR!  Must select a unit first.");
 				return;
 			} else {
-				GlobalFuncs.scenMap.ShowSideWaypoints(GlobalFuncs.selectedUnit.side);
+				GlobalFuncs.showWPs = !GlobalFuncs.showWPs;
 			}
 		}
 	}

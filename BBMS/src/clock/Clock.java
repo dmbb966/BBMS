@@ -64,6 +64,8 @@ public class Clock {
 	 */
 	public static void moveAllUnits(int duration) {
 		
+		int enemyEndZone = 0;
+		
 		// Move units first.  This will make all enemy forces un-spotted.  All friendly forces will be considered spotted.
 		for (int i = 0; i < GlobalFuncs.unitList.size(); i++) {
 			Unit finger = GlobalFuncs.unitList.elementAt(i);
@@ -72,8 +74,14 @@ public class Clock {
 			if (finger.side == SideEnum.ENEMY) {
 				if (!GlobalFuncs.scenMap.inFriendlyZone(finger.location)) {
 					GlobalFuncs.maxPossibleSpots++;					
+				} else {
+					enemyEndZone++;
 				}
 			}
+		}
+		
+		if (enemyEndZone == GlobalFuncs.enemyUnitList.size()) {
+			GUI_NB.GCO("END OF SCENARIO");
 		}
 		
 		updateLOSFriendly();	// We don't care about enemy spotting right now.  Will set units it can see to spotted.

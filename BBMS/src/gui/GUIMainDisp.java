@@ -480,6 +480,8 @@ public class GUIMainDisp extends JPanel {
 		drawHexMapComposite(GlobalFuncs.scenMap, 30, g);
 		drawUnits(g, 30);		
 		
+		if (GlobalFuncs.showWPs) GlobalFuncs.scenMap.ShowSideWaypoints(SideEnum.ENEMY);
+		
 		// drawHexMapComposite(15, 15, defaultHexSize, g);
 	}
 

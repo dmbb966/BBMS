@@ -221,7 +221,7 @@ public class HexMap {
 	}
 	
 	public void ShowSideWaypoints(unit.SideEnum side) {		
-		GUI_NB.GCO("Showing all wayspoints on side: " + side.toString());
+		// GUI_NB.GCO("Showing all wayspoints on side: " + side.toString());
 		// First, clears hex text
 		clearTextAll();
 				
@@ -243,13 +243,13 @@ public class HexMap {
 		Iterator<Unit> itr_unit = unitList.iterator();
 		while (itr_unit.hasNext()) {
 			Unit finger = itr_unit.next();
-			GUI_NB.GCO("DEBUG: Unit selected is " + finger.callsign);
+			//GUI_NB.GCO("DEBUG: Unit selected is " + finger.callsign);
 			
 			if (finger.waypointList != null) {
 				for (int i = 0; i < finger.waypointList.waypointList.size(); i++) {
 					HexOff thisWP = finger.waypointList.waypointList.get(i);
 					Hex thisHex = GlobalFuncs.scenMap.getHex(thisWP);
-					GUI_NB.GCO("DEBUG: Looking at WP " + (i + 1) + " at " + thisHex.toString());
+					//GUI_NB.GCO("DEBUG: Looking at WP " + (i + 1) + " at " + thisHex.toString());
 					
 					if (thisHex.hexText.equals("")) {
 						setHexText(thisHex, "WP " + (i + 1) + " :1", Color.WHITE);
