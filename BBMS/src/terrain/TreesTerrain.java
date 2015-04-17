@@ -33,7 +33,8 @@ public class TreesTerrain extends TerrainType{
 
 	@Override
 	public int generateDensity() {
-		return GlobalFuncs.randRange(25, 36);
+		return GlobalFuncs.randRange(32,36);		// Simplifies so trees will always block LOS
+		//return GlobalFuncs.randRange(25, 36);		// This is the value true to SPMBT
 	}
 
 	@Override

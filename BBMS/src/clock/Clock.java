@@ -70,7 +70,7 @@ public class Clock {
 			finger.MoveToWaypoint();
 			
 			if (finger.side == SideEnum.ENEMY) {
-				if (GlobalFuncs.scenMap.inReconZone(finger.location)) {
+				if (!GlobalFuncs.scenMap.inFriendlyZone(finger.location)) {
 					GlobalFuncs.maxPossibleSpots++;					
 				}
 			}

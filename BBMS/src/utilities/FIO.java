@@ -1,6 +1,7 @@
 package utilities;
 
 import gui.DialogFileName;
+import gui.DialogLoadScen;
 import gui.GUI_NB;
 import hex.Hex;
 import hex.HexMap;
@@ -139,11 +140,28 @@ public class FIO {
 		return true;
 	}
 	
-	/** Goes through the setup for this scenario, namely, for the current COA will initialize new units*/
+	public static void ScenIterationFromFile() {
+		String fullPath = "src/saves/" + GlobalFuncs.tempStr;
+		File popFile = newFile(fullPath);
+		if (!popFile.exists()) {
+			GUI_NB.GCO("Error reading population file!");
+			
+			DialogLoadScen x = new DialogLoadScen(GlobalFuncs.gui, true);
+			x.setVisible(true);
+		}
+		else {
+			
+			GUI_NB.GCO("Loading population data.");
+			Path p = popFile.toPath();
+			GlobalFuncs.currentPop = new Population(p);
+			GUI_NB.GCO("Population data read.  Initializing scenario with " + GlobalFuncs.currentPop.organisms.size() + " orgs");
+			
+			int numScouts = GlobalFuncs.currentPop.organisms.size();
+			ScenIterationSetup(numScouts);
+		}
+	}
+	
 	public static void ScenIterationSetup() {
-		GlobalFuncs.allSpots.records.clear();
-		GUI_NB.GCO("All spot records have been cleared.");
-		
 		DialogFileName x = new DialogFileName(GlobalFuncs.gui, true, "Num Friendly Units");
 		x.setVisible(true);
 		
@@ -151,32 +169,41 @@ public class FIO {
 		
 		if (friendlyUnits < 1) {
 			GUI_NB.GCO("ERROR!  Not a valid number.");
-		}
-		else {
-			// First, eliminate friendly units from the unit roster
-			for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
-				Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
-				finger.location.HexUnit = null;
-				GlobalFuncs.unitList.remove(finger);					
-			}
-			GlobalFuncs.friendlyUnitList.clear();
-			
-			// Now adds units along the left map boundary
-			for (int i = 0; i < friendlyUnits; i++) {
-				int col = i / GlobalFuncs.scenMap.yDim;
-				int row = i % GlobalFuncs.scenMap.yDim;
-				
-				Hex destination = GlobalFuncs.scenMap.getHex(col, row);
-				if (destination.HexUnit != null) {
-					GUI_NB.GCO("Destination hex occupied, moving to the next one.");
-					friendlyUnits++;
-				}
-				else {
-					// Add friendly unit
-					destination.HexUnit = new Unit(destination, SideEnum.FRIENDLY, "M1A2", "Scout " + i, 90.0, 0.0, null, false);
-				}
-			}
 		}		
+		else {
+			ScenIterationSetup(friendlyUnits);
+		}
+	}
+	
+	/** Goes through the setup for this scenario, namely, for the current COA will initialize new units*/
+	public static void ScenIterationSetup(int numScouts) {
+		GlobalFuncs.allSpots.records.clear();
+		GUI_NB.GCO("All spot records have been cleared.");				
+		
+		// First, eliminate friendly units from the unit roster
+		for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
+			Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
+			finger.location.HexUnit = null;
+			GlobalFuncs.unitList.remove(finger);					
+		}
+		GlobalFuncs.friendlyUnitList.clear();
+		
+		// Now adds units along the left map boundary
+		for (int i = 0; i < numScouts; i++) {
+			int col = i / GlobalFuncs.scenMap.yDim;
+			int row = i % GlobalFuncs.scenMap.yDim;
+			
+			Hex destination = GlobalFuncs.scenMap.getHex(col, row);
+			if (destination.HexUnit != null) {
+				GUI_NB.GCO("Destination hex occupied, moving to the next one.");
+				numScouts++;
+			}
+			else {
+				// Add friendly unit
+				destination.HexUnit = new Unit(destination, SideEnum.FRIENDLY, "M1A2", "Scout " + i, 90.0, 0.0, null, false);
+			}
+		}
+				
 		
 		GlobalFuncs.gui.repaint();
 	}		
@@ -211,7 +238,11 @@ public class FIO {
 			GlobalFuncs.curCOA = GlobalFuncs.allCOAs.elementAt(GlobalFuncs.COAIndex - 1);
 			GlobalFuncs.curCOA.LoadCOA();
 			
-			ScenIterationSetup();
+			DialogLoadScen x = new DialogLoadScen(GlobalFuncs.gui, false);
+			x.setVisible(true);
+						
+			//ScenIterationSetup();
+			
 			GlobalFuncs.maxSpottedDV = GlobalFuncs.scenMap.CalcExactDVNorm();
 			GUI_NB.GCO("Exact DV Norm calculated: " + GlobalFuncs.maxSpottedDV);
 			
@@ -406,7 +437,7 @@ public class FIO {
 								GUI_NB.GCO("ERROR!  Could not read file: >" + readL + "<");
 							}
 							else {
-								GUI_NB.GCO("Loading spotting info from file: >" + readL + "<");
+								GUI_NB.GCO("Loading population info from file: >" + readL + "<");
 								Path popPath = popFile.toPath();
 								GlobalFuncs.currentPop = new Population(popPath);
 								GUI_NB.GCO("Population file loaded.  Now loading organisms into units.");

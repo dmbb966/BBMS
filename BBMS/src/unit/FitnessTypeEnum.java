@@ -59,7 +59,7 @@ public enum FitnessTypeEnum {
 		for (int i = 0; i < spots.records.size(); i++) {
 			SpotReport x = spots.records.elementAt(i);
 			
-			if (x.spotter == finger && GlobalFuncs.scenMap.inReconZone(GlobalFuncs.scenMap.getHex(x.targetLoc))) {
+			if (x.spotter == finger && !GlobalFuncs.scenMap.inFriendlyZone(GlobalFuncs.scenMap.getHex(x.targetLoc))) {
 				finger.spotCredits += 1.0;
 				GUI_NB.GCO("DEBUG: Unit " + finger.callsign + " credited with spotting " + x.target.callsign + " at time " + x.timeSpotted + " (total credits: " + finger.spotCredits);
 			}
@@ -79,7 +79,7 @@ public enum FitnessTypeEnum {
 		for (int i = 0; i < spots.records.size(); i++) {
 			SpotReport x = spots.records.elementAt(i);
 			
-			if (x.spotter == finger && GlobalFuncs.scenMap.inReconZone(GlobalFuncs.scenMap.getHex(x.targetLoc))) {
+			if (x.spotter == finger && !GlobalFuncs.scenMap.inFriendlyZone(GlobalFuncs.scenMap.getHex(x.targetLoc))) {
 				// Find out how to share this
 				SpotRecords y = spots.getReportsTarget(x.target);
 				finger.spotCredits += (1.0 / y.records.size());

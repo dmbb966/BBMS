@@ -723,14 +723,21 @@ public class GUIMenu extends JMenuBar{
 		}
 	}
 	
+	public static class PlaceAllNN implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
+				Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
+				
+				unit.JNEATIntegration.DeployOne(finger);
+			}
+		}
+	}
+	
 	/** A test function that sets the fitness of all organisms attached to units to 2.0.
 	 * Yes I know that fitness number is "too high."  Deal with it. */
 	public static class TestFunc implements ActionListener{
 		public void actionPerformed(ActionEvent event) {
-			for (int i = 0; i < 10; i++) {
-				Hex finger = GlobalFuncs.scenMap.RandomHexReconZone();
-				GUI_NB.GCO("Normalized fitness of hex " + finger.x + ", " + finger.y + " is: " + OrganismTypeEnum.NormalizedSenseFlowSingle(finger));
-			}
+			GUI_NB.GCO("Friendly unit size list is: " + GlobalFuncs.friendlyUnitList.size());
 			
 		}
 	}
@@ -1041,6 +1048,10 @@ public class GUIMenu extends JMenuBar{
 		
 		menuItem = new JMenuItem("Place selected unit via NN");
 		menuItem.addActionListener(new PlaceUnitNN());
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("PLace all units via NN");
+		menuItem.addActionListener(new PlaceAllNN());
 		menu.add(menuItem);
 	}
 	
