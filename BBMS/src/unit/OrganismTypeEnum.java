@@ -12,8 +12,8 @@ public enum OrganismTypeEnum {
 	/** Six sensors each covering a 60-degree arc around the agent, goes to a single output */
 	SIX_DIRECTIONAL;
 	
-	public double SenseFlowSingle(Unit u) {		
-		Vector<Hex> visibleHexes = u.GetLOSToRange(GlobalFuncs.visibility);
+	public static double SenseFlowSingle(Hex origin) {		
+		Vector<Hex> visibleHexes = Unit.GetLOSToRange(origin, GlobalFuncs.visibility);
 		double sumDV = 0;
 		
 		GUI_NB.GCO("Beginning flow check.");

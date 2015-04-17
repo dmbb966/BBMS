@@ -256,13 +256,12 @@ public class Unit {
 		}		
 	}
 	
-	/**
-	 * Displays the LOS from the current unit to a given x, y coordinate.
-	 * If "clear" is set to true, clears all shaded hexes before drawing.
-	 */
-	public void DisplayLOSTo(int x, int y, boolean clear) {
-		HexOff currentHex = new HexOff(location.x, location.y);
-		HexOff targetHex = new HexOff(x, y);
+	
+	/** Displays the LOS between the origin and destination hexes.
+	 * If "clear" is true, will clear all shaded hexes before drawing. */
+	public static void DisplayLOSBetween(Hex origin, Hex destination, boolean clear) {
+		HexOff currentHex = new HexOff(origin.x, origin.y);
+		HexOff targetHex = new HexOff(destination.x, destination.y);
 		Vector<hex.Hex> hexList = HexOff.HexesBetween(currentHex, targetHex);
 		if (hexList.size() > GlobalFuncs.visibility + 1) return;
 		
@@ -280,7 +279,15 @@ public class Unit {
 			// GUI_NB.GCO("Setting hex " + h.x + ", " + h.y + " to shaded with visibility " + visibility);
 			visibility += h.density;
 		}
-		GlobalFuncs.gui.repaint();
+		GlobalFuncs.gui.repaint();		
+	}
+	
+	/**
+	 * Displays the LOS from the current unit to a given x, y coordinate.
+	 * If "clear" is set to true, clears all shaded hexes before drawing.
+	 */
+	public void DisplayLOSTo(int x, int y, boolean clear) {
+		DisplayLOSBetween(this.location, GlobalFuncs.scenMap.getHex(x, y), clear);
 	}
 	
 	/** Returns whether or not there is LOS between the two hexes */
@@ -357,13 +364,19 @@ public class Unit {
 		}				
 	}
 	
-	public void DisplayLOSToRange(int range) {
-		Vector<Hex> ring = HexOff.HexRing(location.x, location.y, range);
+	public static void DisplayLOSToRange(Hex origin, int range) {
+		Vector<Hex> ring = HexOff.HexRing(origin.x, origin.y, range);
+		
+		GlobalFuncs.scenMap.unshadeAll();
 		
 		for (int i = 0; i < ring.size(); i++) {
 			Hex finger = ring.elementAt(i);
-			DisplayLOSTo(finger.x, finger.y, false);
-		}
+			DisplayLOSBetween(origin, finger, false);
+		}		
+	}
+	
+	public void DisplayLOSToRange(int range) {
+		DisplayLOSToRange(this.location, range);
 	}
 	
 	public static Vector<Hex> GetLOSToRange(Hex origin, int range) {

@@ -20,6 +20,7 @@ import bbms.GlobalFuncs;
 import clock.Clock;
 import terrain.TerrainEnum;
 import unit.FitnessTypeEnum;
+import unit.OrganismTypeEnum;
 import unit.Unit;
 import unit.WaypointList;
 import utilities.FIO;
@@ -682,7 +683,21 @@ public class GUIMenu extends JMenuBar{
 				return;
 			}
 						
-			GlobalFuncs.selectedUnit.orgType.SenseFlowSingle(GlobalFuncs.selectedUnit);
+			OrganismTypeEnum.SenseFlowSingle(GlobalFuncs.selectedUnit.location);
+			GlobalFuncs.selectedUnit.DisplayLOSToRange(GlobalFuncs.visibility);
+		}
+	}
+	
+	public static class HexSensorCheck implements ActionListener{
+		public void actionPerformed(ActionEvent event) {
+			if (GlobalFuncs.selectedHex == null) {
+				GUI_NB.GCO("ERROR!  Must select a hex first.");
+				return;				
+			}
+			
+			// Unit.GetLOSToRange(GlobalFuncs.selectedHex, GlobalFuncs.visibility);
+			OrganismTypeEnum.SenseFlowSingle(GlobalFuncs.selectedHex);
+			Unit.DisplayLOSToRange(GlobalFuncs.selectedHex, GlobalFuncs.visibility);
 		}
 	}
 	
@@ -989,6 +1004,10 @@ public class GUIMenu extends JMenuBar{
 		
 		menuItem = new JMenuItem("Sensor check for unit");
 		menuItem.addActionListener(new UnitSensorCheck());
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Sensor check for sel. hex");
+		menuItem.addActionListener(new HexSensorCheck());
 		menu.add(menuItem);
 	}
 	
