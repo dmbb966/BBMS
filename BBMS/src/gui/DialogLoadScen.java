@@ -6,6 +6,11 @@
 
 package gui;
 
+import java.io.File;
+
+import utilities.FIO;
+import bbms.GlobalFuncs;
+
 /**
  *
  * @author Brian
@@ -245,10 +250,10 @@ public class DialogLoadScen extends javax.swing.JDialog {
     }// </editor-fold>    
     
     private boolean ValidateGlobalInputs() {
-    	double percentPerRun = Double.parseDouble(PercentRunField.getText());
+    	double ppr = Double.parseDouble(PercentRunField.getText());
     	int runsPerOrg = Integer.parseInt(RunPerOrgField.getText());
     	
-    	if (percentPerRun < 0.0 || percentPerRun > 1.0) {
+    	if (ppr < 0.0 || ppr > 1.0) {
     		Warning_Label.setText("ERROR: Percent per run out of bounds.");
     		return false;
     	}
@@ -257,6 +262,15 @@ public class DialogLoadScen extends javax.swing.JDialog {
     		Warning_Label.setText("ERROR: Runs per org out of bounds.");
     		return false;
     	}
+    	
+    	GlobalFuncs.percentPerRun = ppr;
+    	GlobalFuncs.totalRunsPerOrg = runsPerOrg;
+    	
+    	File dOut = FIO.newFile("src/saves/" + DetailedOutputFileField.getText());
+    	File sOut = FIO.newFile("src/saves/" + SummaryOutputFileField.getText());
+    	
+    	GlobalFuncs.detailedOutput = dOut.toPath();
+    	GlobalFuncs.summaryOutput = sOut.toPath();
     	
     	return true;
     }

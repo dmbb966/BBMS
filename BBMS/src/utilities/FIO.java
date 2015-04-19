@@ -52,6 +52,9 @@ public class FIO {
 
 	public static File newFile(String s) {
 		File f = new File(s);
+		
+		if (f.exists()) return f;
+		
 		try {
 			f.createNewFile();
 		} catch (IOException e) {

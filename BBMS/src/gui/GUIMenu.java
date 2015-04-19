@@ -733,7 +733,16 @@ public class GUIMenu extends JMenuBar{
 	 * Yes I know that fitness number is "too high."  Deal with it. */
 	public static class TestFunc implements ActionListener{
 		public void actionPerformed(ActionEvent event) {
-			GUI_NB.GCO("Current org number: " + GlobalFuncs.orgAssignNum + " with total number of runs completed: " + GlobalFuncs.runsPerOrg);
+			if (GlobalFuncs.selectedUnit.org != null) {
+				Organism finger = GlobalFuncs.selectedUnit.org;
+				GUI_NB.GCO("Old org fitness: " + finger.fitness + " over " + finger.fitAveragedOver);
+				double newFit = GlobalFuncs.randFloat();
+				GUI_NB.GCO("Adding: " + newFit);
+				
+				finger.AverageFitness(newFit);
+				
+				GUI_NB.GCO("New org fitness: " + finger.fitness + " over " + finger.fitAveragedOver);
+			}
 		}
 	}
 	

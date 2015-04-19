@@ -50,6 +50,13 @@ public class GlobalFuncs {
 	public static String tempStr = "";				// Used for some dialog box results
 	public static int orgAssignNum = 0;
 	public static int runsPerOrg = 0;
+	
+	public static Path detailedOutput = null;
+	public static Path summaryOutput = null;
+	public static double percentPerRun = 0.1;
+	public static int totalRunsPerOrg = 3;
+	public static int iterationCount = 0;
+	
 	public static int maxPossibleSpots = 0;
 	
 	public static double moveRateMult = 10.0;

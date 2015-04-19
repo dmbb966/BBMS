@@ -17,6 +17,8 @@ public class Organism {
 	/** The adjusted fitness value (adjusted by Species.AdjustFitness())*/
 	public double fitness;
 	
+	public int fitAveragedOver = 0;
+	
 	/** A DEBUG variable - high fitness of champ */
 	double high_fit;			
 	
@@ -171,6 +173,19 @@ public class Organism {
 			return;
 		}		
 		
+	}
+	
+	/** Averages fitness over several runs */
+	public void AverageFitness(double newFit) {
+		
+		double oldFitness = fitness * fitAveragedOver;
+		fitAveragedOver++;
+		fitness = (oldFitness + newFit) / (fitAveragedOver); 
+	}
+	
+	public void ResetAvgFitness() {
+		fitness = 0.0;
+		fitAveragedOver = 0;
 	}
 	
 	public String SaveOrgHeader() {
