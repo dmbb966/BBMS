@@ -462,6 +462,15 @@ public class Unit {
 			OrientHullTo(destination.x, destination.y);
 			
 			// TODO There will be a bug if two units occupy the same space simultaneously, but it isn't debilitating.
+			// Will destroy friendly units...
+			Unit oldUnit = destination.HexUnit;
+			if (oldUnit != null) {
+				GlobalFuncs.destroyedUnitList.addElement(oldUnit);
+				oldUnit.RemoveUnit();
+				GlobalFuncs.unitList.removeElement(oldUnit);
+			}
+			
+			
 			// Moves vehicle
 			location.HexUnit = null;
 			location = destination;
@@ -643,7 +652,7 @@ public class Unit {
 	public int CalcMoveRate() {
 		int moveCost = location.tType.getMoveCost(moveMode);
 		// GUI_NB.GCO("Move calc: MP: " + movePoints + " * MR: " + moveRate + " with clock step " + ClockControl.CLOCK_STEP + "with move cost: " + moveCost);
-		return (HexMap.SUBHEX_SIZE * movePoints * moveRate * ClockControl.CLOCK_STEP) / (100 * 60 * moveCost * 1000);
+		return (int) ((HexMap.SUBHEX_SIZE * movePoints * moveRate * ClockControl.CLOCK_STEP * GlobalFuncs.moveRateMult) / (100 * 60 * moveCost * 1000));
 	}
 	
 	 

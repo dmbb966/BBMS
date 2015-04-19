@@ -61,7 +61,7 @@ public enum FitnessTypeEnum {
 			
 			if (x.spotter == finger && !GlobalFuncs.scenMap.inFriendlyZone(GlobalFuncs.scenMap.getHex(x.targetLoc))) {
 				finger.spotCredits += 1.0;
-				GUI_NB.GCO("DEBUG: Unit " + finger.callsign + " credited with spotting " + x.target.callsign + " at time " + x.timeSpotted + " (total credits: " + finger.spotCredits);
+				//GUI_NB.GCO("DEBUG: Unit " + finger.callsign + " credited with spotting " + x.target.callsign + " at time " + x.timeSpotted + " (total credits: " + finger.spotCredits);
 			}
 		}
 		
@@ -83,7 +83,7 @@ public enum FitnessTypeEnum {
 				// Find out how to share this
 				SpotRecords y = spots.getReportsTarget(x.target);
 				finger.spotCredits += (1.0 / y.records.size());
-				GUI_NB.GCO("DEBUG: Unit " + finger.callsign + " credited with spotting " + x.target.callsign + " shared by " + y.records.size() + " (total credits: " + finger.spotCredits);
+				//GUI_NB.GCO("DEBUG: Unit " + finger.callsign + " credited with spotting " + x.target.callsign + " shared by " + y.records.size() + " (total credits: " + finger.spotCredits);
 			}
 		}
 		

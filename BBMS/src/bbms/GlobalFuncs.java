@@ -42,13 +42,17 @@ public class GlobalFuncs {
 	public static Vector<unit.Unit> unitList = new Vector<Unit>();
 	public static Vector<unit.Unit> friendlyUnitList = new Vector<Unit>();
 	public static Vector<unit.Unit> enemyUnitList = new Vector<Unit>();	
+	public static Vector<unit.Unit> destroyedUnitList = new Vector<Unit>();
 	public static Hex selectedHex = null; 
 	public static Unit selectedUnit = null;
 	
 	public static Population currentPop = null;	
 	public static String tempStr = "";				// Used for some dialog box results
 	public static int orgAssignNum = 0;
+	public static int runsPerOrg = 0;
 	public static int maxPossibleSpots = 0;
+	
+	public static double moveRateMult = 10.0;
 	
 	// Used for scenario creation and execution
 	public static int COAIndex = 1;
@@ -147,9 +151,11 @@ public class GlobalFuncs {
 		unitCount = 0;
 		selectedUnit = null;
 		selectedHex = null;
-		unitList = new Vector<Unit>();
-		friendlyUnitList = new Vector<Unit>();
-		enemyUnitList = new Vector<Unit>();		
+		unitList.clear();
+		friendlyUnitList.clear();
+		enemyUnitList.clear();
+		destroyedUnitList.clear();
+		
 		GUIKeyboard.initializeKeyCommands();
 		Clock.SetTime(8, 24, 13);
 		GlobalFuncs.ticksStable = 0;

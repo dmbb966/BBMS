@@ -416,6 +416,19 @@ public class GUIMenu extends JMenuBar{
 		}
 	}
 	
+	/** Removes orgs from all units */
+	public static class RemoveAllOrg implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
+				Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
+				
+				finger.org = null;
+			}
+			
+			GUI_NB.GCO("All organisms removed from units.");
+		}
+	}
+	
 	/** Removes selected unit */
 	public static class RemoveUnit implements ActionListener{
 		public void actionPerformed(ActionEvent event) {
@@ -720,8 +733,7 @@ public class GUIMenu extends JMenuBar{
 	 * Yes I know that fitness number is "too high."  Deal with it. */
 	public static class TestFunc implements ActionListener{
 		public void actionPerformed(ActionEvent event) {
-			GUI_NB.GCO("Friendly unit size list is: " + GlobalFuncs.friendlyUnitList.size());
-			
+			GUI_NB.GCO("Current org number: " + GlobalFuncs.orgAssignNum + " with total number of runs completed: " + GlobalFuncs.runsPerOrg);
 		}
 	}
 	
@@ -1003,6 +1015,10 @@ public class GUIMenu extends JMenuBar{
 		
 		menuItem = new JMenuItem("Sequentially Assign Organisms to Friendlies");
 		menuItem.addActionListener(new SeqAddOrg());
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Remove all Organisms from Friendlies");
+		menuItem.addActionListener(new RemoveAllOrg());
 		menu.add(menuItem);
 		
 		menu.addSeparator();

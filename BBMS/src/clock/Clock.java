@@ -6,6 +6,7 @@ import gui.GUI_NB;
 import java.text.DecimalFormat;
 
 import bbms.GlobalFuncs;
+import unit.JNEATIntegration;
 import unit.SideEnum;
 import unit.Unit;
 
@@ -81,7 +82,7 @@ public class Clock {
 		}
 		
 		if (enemyEndZone == GlobalFuncs.enemyUnitList.size()) {
-			GUI_NB.GCO("END OF SCENARIO");
+			JNEATIntegration.EndofScenario();
 		}
 		
 		updateLOSFriendly();	// We don't care about enemy spotting right now.  Will set units it can see to spotted.

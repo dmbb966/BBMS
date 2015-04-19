@@ -1,11 +1,30 @@
 package unit;
 
+import clock.ClockControl;
 import jneat.Organism;
 import bbms.GlobalFuncs;
 import gui.GUI_NB;
 import hex.Hex;
 
 public class JNEATIntegration {
+	
+	public static void EndofScenario() {
+		ClockControl.Pause();
+		
+		for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
+			Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
+			finger.org.fitness = finger.fitType.EvaluateFitness(finger);
+			GUI_NB.GCO("Unit " + finger.callsign + " has fitness " + finger.org.fitness);
+		}
+		
+		GUI_NB.GCO(":::DESTROYED UNITS:::");
+		
+		for (int i = 0; i < GlobalFuncs.destroyedUnitList.size(); i++) {
+			Unit finger = GlobalFuncs.destroyedUnitList.elementAt(i);
+			finger.org.fitness = finger.fitType.EvaluateFitness(finger);
+			GUI_NB.GCO("Unit " + finger.callsign + " has fitness " + finger.org.fitness);
+		}
+	}
 	
 	/** Sequentially fill friendly units with Neural Nets from the population */
 	public static void FillAllScouts() {
@@ -22,7 +41,10 @@ public class JNEATIntegration {
 		int numOrgs = GlobalFuncs.currentPop.organisms.size();
 		for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
 			Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
-			if (GlobalFuncs.orgAssignNum >= numOrgs) GlobalFuncs.orgAssignNum = 0;
+			if (GlobalFuncs.orgAssignNum >= numOrgs) {
+				GlobalFuncs.orgAssignNum = 0;
+				GlobalFuncs.runsPerOrg++;
+			}
 			
 			Organism org = GlobalFuncs.currentPop.organisms.elementAt(GlobalFuncs.orgAssignNum);
 			GlobalFuncs.orgAssignNum++;
