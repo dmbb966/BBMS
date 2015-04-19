@@ -104,6 +104,13 @@ public class Clock {
 		time += 1;
 		
 		GUIBasicInfo.UpdateHexUnit();
+		
+		for (int i = 0; i < GlobalFuncs.enemyUnitList.size(); i++) {
+			Unit finger = GlobalFuncs.enemyUnitList.elementAt(i);
+			
+			GUI_NB.GCO("Unit " + finger.callsign + " is at " + finger.location.DisplayCoords());
+		}
+		
 		GlobalFuncs.gui.repaint();
 	}
 

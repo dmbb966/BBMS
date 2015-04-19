@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.file.Path;
 
 import utilities.FIO;
+import clock.Clock;
 import clock.ClockControl;
 import jneat.Organism;
 import jneat.Population;
@@ -44,6 +45,8 @@ public class JNEATIntegration {
 			GlobalFuncs.orgAssignNum = 0;
 		}
 		
+		GlobalFuncs.maxPossibleSpots = 0;
+		Clock.time = 0;
 		
 		ScenIterationSetup(GlobalFuncs.numScoutsPer);
 	}

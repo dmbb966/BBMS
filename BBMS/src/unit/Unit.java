@@ -381,6 +381,8 @@ public class Unit {
 		if (this.side == SideEnum.ENEMY) enemyList = GlobalFuncs.friendlyUnitList;
 		else enemyList = GlobalFuncs.enemyUnitList;
 		
+		
+		
 		if (enemyList.size() != 0) {
 			for (int i = 0; i < enemyList.size(); i++) {
 				selected = enemyList.elementAt(i);
@@ -566,8 +568,8 @@ public class Unit {
 		if (moveDirection < 0) return;
 		
 		// --------------------------------------------------------
-		 MoveUnit(moveDirection);				
-		// MoveUnitSubHex(moveDirection);
+		MoveUnit(moveDirection);				
+		//MoveUnitSubHex(moveDirection);
 		
 		if (location.toHO().ConvertToAx().getX() == nextWP.getX() && location.toHO().ConvertToAx().getY() == nextWP.getY()) {
 			// GUI_NB.GCO("Waypoint reached.");
