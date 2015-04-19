@@ -1,13 +1,21 @@
 package unit;
 
+import java.io.File;
+import java.nio.file.Path;
+
+import utilities.FIO;
 import clock.ClockControl;
 import jneat.Organism;
+import jneat.Population;
 import bbms.GlobalFuncs;
+import gui.DialogFileName;
+import gui.DialogLoadScen;
 import gui.GUI_NB;
 import hex.Hex;
 
 public class JNEATIntegration {
 	
+	// NOTE: Start of scenario is found in FIO
 	public static void EndofScenario() {
 		ClockControl.Pause();
 		
@@ -106,6 +114,76 @@ public class JNEATIntegration {
 				errCount = 0;
 			}
 		}
+	}
+
+	public static void ScenIterationFromFile() {
+		String fullPath = "src/saves/" + GlobalFuncs.tempStr;
+		File popFile = FIO.newFile(fullPath);
+		if (!popFile.exists()) {
+			GUI_NB.GCO("Error reading population file!");
+			
+			DialogLoadScen x = new DialogLoadScen(GlobalFuncs.gui, true);
+			x.setVisible(true);
+		}
+		else {
+			
+			GUI_NB.GCO("Loading population data.");
+			Path p = popFile.toPath();
+			GlobalFuncs.currentPop = new Population(p);
+			GUI_NB.GCO("Population data read.  Initializing scenario with " + GlobalFuncs.currentPop.organisms.size() + " orgs");
+			
+			int numScouts = GlobalFuncs.currentPop.organisms.size();
+			JNEATIntegration.ScenIterationSetup(numScouts);
+		}
+	}
+
+	public static void ScenIterationSetup() {
+		DialogFileName x = new DialogFileName(GlobalFuncs.gui, true, "Num Friendly Units");
+		x.setVisible(true);
+		
+		int friendlyUnits = Integer.parseInt(GlobalFuncs.tempStr);
+		
+		if (friendlyUnits < 1) {
+			GUI_NB.GCO("ERROR!  Not a valid number.");
+		}		
+		else {
+			JNEATIntegration.ScenIterationSetup(friendlyUnits);
+		}
+	}
+
+	/** Goes through the setup for this scenario, namely, for the current COA will initialize new units*/
+	public static void ScenIterationSetup(int numScouts) {
+		GlobalFuncs.allSpots.records.clear();
+		GUI_NB.GCO("All spot records have been cleared.");				
+		
+		// First, eliminate friendly units from the unit roster
+		for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
+			Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
+			finger.location.HexUnit = null;
+			GlobalFuncs.unitList.remove(finger);					
+		}
+		GlobalFuncs.friendlyUnitList.clear();
+		
+		// Now adds units along the left map boundary
+		for (int i = 0; i < numScouts; i++) {
+			int col = i / GlobalFuncs.scenMap.yDim;
+			int row = i % GlobalFuncs.scenMap.yDim;
+			
+			Hex destination = GlobalFuncs.scenMap.getHex(col, row);
+			if (destination.HexUnit != null) {
+				GUI_NB.GCO("Destination hex occupied, moving to the next one.");
+				numScouts++;
+			}
+			else {
+				// Add friendly unit
+				destination.HexUnit = new Unit(destination, SideEnum.FRIENDLY, "M1A2", "Scout " + i, 90.0, 0.0, null, true);
+			}
+		}		 
+				
+		FillAllScouts();		// Puts a Org in each unit
+		DeployAll();			// Deploys those units accordingly
+		
+		GlobalFuncs.gui.repaint();
 	}
 
 }

@@ -20,6 +20,7 @@ import bbms.GlobalFuncs;
 import clock.Clock;
 import terrain.TerrainEnum;
 import unit.FitnessTypeEnum;
+import unit.JNEATIntegration;
 import unit.OrganismTypeEnum;
 import unit.Unit;
 import unit.WaypointList;
@@ -645,7 +646,7 @@ public class GUIMenu extends JMenuBar{
 	
 	public static class ReinitCOA implements ActionListener{
 		public void actionPerformed(ActionEvent event) {
-			FIO.ScenIterationSetup();
+			JNEATIntegration.ScenIterationSetup();
 		}
 	}
 	

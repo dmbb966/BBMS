@@ -292,7 +292,7 @@ public class DialogLoadScen extends javax.swing.JDialog {
             GUI_NB.GCO("New population added.");
             
             GUI_NB.GCO("Running scenario iteration setup.");
-            utilities.FIO.ScenIterationSetup(popSize);
+            unit.JNEATIntegration.ScenIterationSetup(popSize);
             dispose();
         }                
     }                                            
@@ -300,7 +300,7 @@ public class DialogLoadScen extends javax.swing.JDialog {
     private void Load_ButtonMouseClicked(java.awt.event.MouseEvent evt) {                                         
         bbms.GlobalFuncs.tempStr = LoadPopFile.getText();
         if (ValidateGlobalInputs()) {
-        	utilities.FIO.ScenIterationFromFile();
+        	unit.JNEATIntegration.ScenIterationFromFile();
             dispose();
         }        
     }                                        
