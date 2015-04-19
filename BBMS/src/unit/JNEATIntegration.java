@@ -99,10 +99,10 @@ public class JNEATIntegration {
 				
 				double networkResult = u.org.net.outputs.firstElement().getActivation();
 				
-				GUI_NB.GCO("Prospective hex: (" + prospective.x + ", " + prospective.y + ") is input: " + sensorInput + " with output: " + networkResult);
+				//GUI_NB.GCO("Prospective hex: (" + prospective.x + ", " + prospective.y + ") is input: " + sensorInput + " with output: " + networkResult);
 				
 				if (networkResult > resultThreshold) {
-					GUI_NB.GCO("Location accepted. Teleporting unit.");
+					//GUI_NB.GCO("Location accepted. Teleporting unit.");
 					u.TeleportTo(prospective);
 					//u.DisplayLOSToRange(GlobalFuncs.visibility);
 					foundSpot = true;
@@ -131,6 +131,7 @@ public class JNEATIntegration {
 			Path p = popFile.toPath();
 			GlobalFuncs.currentPop = new Population(p);
 			GUI_NB.GCO("Population data read.  Initializing scenario with " + GlobalFuncs.currentPop.organisms.size() + " orgs");
+			GlobalFuncs.newEpoch = true;
 			
 			int numScouts = GlobalFuncs.currentPop.organisms.size();
 			JNEATIntegration.ScenIterationSetup(numScouts);
@@ -179,6 +180,16 @@ public class JNEATIntegration {
 				destination.HexUnit = new Unit(destination, SideEnum.FRIENDLY, "M1A2", "Scout " + i, 90.0, 0.0, null, true);
 			}
 		}		 
+		
+		GUI_NB.GCO("New epoch: " + GlobalFuncs.newEpoch);
+		
+		if (GlobalFuncs.newEpoch) {
+			GUI_NB.GCO("New epoch: outputting network information to: " + GlobalFuncs.detailedOutput.toString());
+			
+			FIO.appendFile(GlobalFuncs.detailedOutput, "\n\n\n---->>> NEW EPOCH at iteration " + GlobalFuncs.iterationCount + "<<<----\n\n\n");
+			FIO.appendFile(GlobalFuncs.detailedOutput, GlobalFuncs.currentPop.SavePopulation());
+			//FIO.appendFile(GlobalFuncs.detailedOutput, GlobalFuncs.currentPop.PrintPopulation());
+		}
 				
 		FillAllScouts();		// Puts a Org in each unit
 		DeployAll();			// Deploys those units accordingly

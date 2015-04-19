@@ -56,6 +56,7 @@ public class GlobalFuncs {
 	public static double percentPerRun = 0.1;
 	public static int totalRunsPerOrg = 3;
 	public static int iterationCount = 0;
+	public static boolean newEpoch = false;
 	
 	public static int maxPossibleSpots = 0;
 	

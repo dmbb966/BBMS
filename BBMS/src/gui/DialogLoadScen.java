@@ -247,8 +247,8 @@ public class DialogLoadScen extends javax.swing.JDialog {
 
         pack();
         setLocationRelativeTo(null);
-    }// </editor-fold>    
-    
+    }// </editor-fold>                        
+
     private boolean ValidateGlobalInputs() {
     	double ppr = Double.parseDouble(PercentRunField.getText());
     	int runsPerOrg = Integer.parseInt(RunPerOrgField.getText());
@@ -274,7 +274,7 @@ public class DialogLoadScen extends javax.swing.JDialog {
     	
     	return true;
     }
-
+    
     private void Generate_ButtonMouseClicked(java.awt.event.MouseEvent evt) {                                             
         int popSize = Integer.parseInt(NumScouts_Field.getText());
         int numSensors = Integer.parseInt(NumSensors_Field.getText());
@@ -291,10 +291,12 @@ public class DialogLoadScen extends javax.swing.JDialog {
             bbms.GlobalFuncs.currentPop = new jneat.Population(popSize, numSensors, numOutputs, numHidden, false, probLink);
             GUI_NB.GCO("New population added.");
             
+            
             GUI_NB.GCO("Running scenario iteration setup.");
-            unit.JNEATIntegration.ScenIterationSetup(popSize);
+            GlobalFuncs.newEpoch = true;
+            unit.JNEATIntegration.ScenIterationSetup(popSize);            
             dispose();
-        }                
+        }    
     }                                            
 
     private void Load_ButtonMouseClicked(java.awt.event.MouseEvent evt) {                                         
