@@ -32,6 +32,8 @@ public class JNEATIntegration {
 			finger.org.fitness = finger.fitType.EvaluateFitness(finger);
 			GUI_NB.GCO("Unit " + finger.callsign + " has fitness " + finger.org.fitness);
 		}
+		
+		PrintSummaryResults();
 	}
 	
 	/** Sequentially fill friendly units with Neural Nets from the population */
@@ -150,6 +152,39 @@ public class JNEATIntegration {
 		else {
 			JNEATIntegration.ScenIterationSetup(friendlyUnits);
 		}
+	}
+	
+	/** Prints the summary results from this iteration to the summary file */
+	public static void PrintSummaryResults() {
+		
+		for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
+			Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
+			FIO.appendFile(GlobalFuncs.summaryOutput, PrintSummaryLine(finger));
+		}
+		
+		for (int i = 0; i < GlobalFuncs.destroyedUnitList.size(); i++) {
+			Unit finger = GlobalFuncs.destroyedUnitList.elementAt(i);
+			FIO.appendFile(GlobalFuncs.summaryOutput, PrintSummaryLine(finger));
+		}
+		
+	}
+	
+	/** Puts it all on one line */
+	public static String PrintSummaryLine(Unit u) {
+		StringBuffer buf = new StringBuffer("");
+		
+		buf.append(GlobalFuncs.iterationCount + ", ");
+		buf.append(u.org.genome.genome_id + ", ");
+		buf.append(u.callsign + ", ");
+		buf.append(u.location.DisplayCoords() + ", ");
+		buf.append(u.destroyed + ", ");
+		buf.append(u.spotCredits + ", ");
+		buf.append(u.spotCredits / GlobalFuncs.maxPossibleSpots + ", ");
+		buf.append(u.org.fitness + ", ");
+		buf.append(u.org.fitAveragedOver);
+		
+		return buf.toString();
+		
 	}
 
 	/** Goes through the setup for this scenario, namely, for the current COA will initialize new units*/

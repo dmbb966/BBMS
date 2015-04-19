@@ -455,4 +455,8 @@ public class Hex {
 		if (result.length > 8) GUI_NB.GCO("Error reading data for hex!  Input string too long.");
 	}
 	
+	public String DisplayCoords() {
+		return ("(" + x + ", " + y + ")");
+	}
+	
 }

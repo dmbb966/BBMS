@@ -56,6 +56,8 @@ public class Unit {
 	 * in FitnessTypeEnum.*/
 	public double spotCredits = 0.0;
 	
+	public boolean destroyed = false;
+	
 	public double hullOrientation;
 	public double turretOrientation;	// Relative to the hull
 	
@@ -103,6 +105,7 @@ public class Unit {
 		GlobalFuncs.unitList.removeElement(this);
 		RemovefromSide(this.side);
 		if (GlobalFuncs.selectedUnit == this) GlobalFuncs.selectedUnit = null;
+		this.destroyed = true;
 		GlobalFuncs.gui.repaint();
 	}
 	
