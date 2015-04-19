@@ -419,6 +419,8 @@ public class GUIKeyboard {
 			
 			if (GlobalFuncs.scenMap.inReconZone(GlobalFuncs.selectedHex)) GUI_NB.GCO("Hex is in the recon zone");
 			
+			GUI_NB.GCO("Unit size: " + GlobalFuncs.unitList.size() + " with " + GlobalFuncs.friendlyUnitList.size() + " friendlies and " + GlobalFuncs.enemyUnitList.size() + " enemies.");
+			
 			
 		}
 	}

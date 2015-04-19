@@ -5,8 +5,10 @@ import gui.GUI_NB;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.Vector;
 
+import unit.SideEnum;
 import unit.Unit;
 
 public class COA {
@@ -19,27 +21,48 @@ public class COA {
 	}
 	
 	public void LoadCOA() {				
+		// GUI_NB.GCO("Starting friendlies: " + GlobalFuncs.friendlyUnitList.size());
+		
 		// First remove existing units
-		for (int i = 0; i < GlobalFuncs.unitList.size(); i++) {
-			Unit finger = GlobalFuncs.unitList.elementAt(i);
+		Iterator<Unit> itr_unit = GlobalFuncs.unitList.iterator();
+		while (itr_unit.hasNext()) {
+			Unit finger = itr_unit.next();
 			finger.RemovefromSide(finger.side);
-			finger.location.HexUnit = null;
+			finger.location.HexUnit = null;			
 		}
+	
+		//GlobalFuncs.unitList.clear();
+		//GlobalFuncs.gui.repaint();
 		
 		GlobalFuncs.selectedUnit = null;
 		GlobalFuncs.selectedHex = null;
 		
-		GlobalFuncs.unitList = this.unitList;
+		//GlobalFuncs.unitList = this.unitList;
+		GlobalFuncs.unitList = GlobalFuncs.duplicateUnitVec(this.unitList);
+		GUI_NB.GCO("DEBUG: Original unit list size: " + this.unitList.size() + " and now stored in GlobalFuncs: " + GlobalFuncs.unitList.size());
 		// Add to appropriate lists
 		GlobalFuncs.enemyUnitList = new Vector<Unit>();
 		GlobalFuncs.friendlyUnitList = new Vector<Unit>();
+		GlobalFuncs.destroyedUnitList = new Vector<Unit>();
 		
-		for (int i = 0; i < GlobalFuncs.unitList.size(); i++) {
-			Unit finger = GlobalFuncs.unitList.elementAt(i);
-			finger.AddtoSide(finger.side);
-			GlobalFuncs.scenMap.getHex(finger.location.toHO()).HexUnit = finger;
+		//GUI_NB.GCO("Middling friendlies: " + GlobalFuncs.friendlyUnitList.size());
+		
+		for (int i = 0; i < this.unitList.size(); i++) {
+			Unit finger = this.unitList.elementAt(i);
+			
+			// Only model eenmy units in a COA.
+			if (finger.side != SideEnum.FRIENDLY) {				
+				finger.AddtoSide(finger.side);
+				GlobalFuncs.scenMap.getHex(finger.location.toHO()).HexUnit = finger;
+			} else {
+				GUI_NB.GCO("Skipping friendly unit on COA Load");
+			
+			}
+			
 			//finger.location.HexUnit = finger;
 		}
+		
+		//GUI_NB.GCO("Endling friendlies: " + GlobalFuncs.friendlyUnitList.size());
 		
 		GUI_NB.GCO("COA " + name + " successfully loaded.");
 	}
@@ -64,7 +87,7 @@ public class COA {
 		try {
 			String readL = buf.readLine();
 			while (!readL.contentEquals("")) {
-				GUI_NB.GCO("String: >" + readL + "<");
+				// GUI_NB.GCO("String: >" + readL + "<");
 				if (readL.startsWith(">Last")) {return;}
 				if (!readL.startsWith("#")) {
 					Unit finger = new Unit(readL);

@@ -21,7 +21,7 @@ public class JNEATIntegration {
 		
 		for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
 			Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
-			finger.org.fitness = finger.fitType.EvaluateFitness(finger);
+			finger.org.AverageFitness(finger.curFitness);
 			GUI_NB.GCO("Unit " + finger.callsign + " has fitness " + finger.org.fitness);
 		}
 		
@@ -29,11 +29,23 @@ public class JNEATIntegration {
 		
 		for (int i = 0; i < GlobalFuncs.destroyedUnitList.size(); i++) {
 			Unit finger = GlobalFuncs.destroyedUnitList.elementAt(i);
-			finger.org.fitness = finger.fitType.EvaluateFitness(finger);
+			finger.org.AverageFitness(finger.curFitness);
 			GUI_NB.GCO("Unit " + finger.callsign + " has fitness " + finger.org.fitness);
 		}
 		
-		PrintSummaryResults();
+		PrintSummaryResults();				
+		
+		GlobalFuncs.iterationCount++;
+		
+		if (GlobalFuncs.newEpoch){
+			GUI_NB.GCO("NEW EPOCH");
+			GlobalFuncs.currentPop.epoch();
+			GlobalFuncs.currentRunsPerOrg = 0;
+			GlobalFuncs.orgAssignNum = 0;
+		}
+		
+		
+		ScenIterationSetup(GlobalFuncs.numScoutsPer);
 	}
 	
 	/** Sequentially fill friendly units with Neural Nets from the population */
@@ -52,8 +64,15 @@ public class JNEATIntegration {
 		for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
 			Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
 			if (GlobalFuncs.orgAssignNum >= numOrgs) {
+				
 				GlobalFuncs.orgAssignNum = 0;
-				GlobalFuncs.runsPerOrg++;
+				GlobalFuncs.currentRunsPerOrg++;
+				GUI_NB.GCO("Current runs per Org inc to: " + GlobalFuncs.currentRunsPerOrg);
+			}
+			
+			if (GlobalFuncs.currentRunsPerOrg >= GlobalFuncs.maxRunsPerOrg && !GlobalFuncs.newEpoch) {
+				GlobalFuncs.newEpoch = true;
+				GUI_NB.GCO("Last iteration of the current epoch.  CurRuns: " + GlobalFuncs.currentRunsPerOrg + " out of max: " + GlobalFuncs.maxRunsPerOrg);
 			}
 			
 			Organism org = GlobalFuncs.currentPop.organisms.elementAt(GlobalFuncs.orgAssignNum);
@@ -118,41 +137,9 @@ public class JNEATIntegration {
 		}
 	}
 
-	public static void ScenIterationFromFile() {
-		String fullPath = "src/saves/" + GlobalFuncs.tempStr;
-		File popFile = FIO.newFile(fullPath);
-		if (!popFile.exists()) {
-			GUI_NB.GCO("Error reading population file!");
-			
-			DialogLoadScen x = new DialogLoadScen(GlobalFuncs.gui, true);
-			x.setVisible(true);
-		}
-		else {
-			
-			GUI_NB.GCO("Loading population data.");
-			Path p = popFile.toPath();
-			GlobalFuncs.currentPop = new Population(p);
-			GUI_NB.GCO("Population data read.  Initializing scenario with " + GlobalFuncs.currentPop.organisms.size() + " orgs");
-			GlobalFuncs.newEpoch = true;
-			
-			int numScouts = GlobalFuncs.currentPop.organisms.size();
-			JNEATIntegration.ScenIterationSetup(numScouts);
-		}
-	}
 
-	public static void ScenIterationSetup() {
-		DialogFileName x = new DialogFileName(GlobalFuncs.gui, true, "Num Friendly Units");
-		x.setVisible(true);
-		
-		int friendlyUnits = Integer.parseInt(GlobalFuncs.tempStr);
-		
-		if (friendlyUnits < 1) {
-			GUI_NB.GCO("ERROR!  Not a valid number.");
-		}		
-		else {
-			JNEATIntegration.ScenIterationSetup(friendlyUnits);
-		}
-	}
+
+
 	
 	/** Prints the summary results from this iteration to the summary file */
 	public static void PrintSummaryResults() {
@@ -186,11 +173,52 @@ public class JNEATIntegration {
 		return buf.toString();
 		
 	}
+	
+	public static void ScenIterationSetup() {
+		DialogFileName x = new DialogFileName(GlobalFuncs.gui, true, "Num Friendly Units");
+		x.setVisible(true);
+		
+		int friendlyUnits = Integer.parseInt(GlobalFuncs.tempStr);
+		
+		if (friendlyUnits < 1) {
+			GUI_NB.GCO("ERROR!  Not a valid number.");
+		}		
+		else {
+			JNEATIntegration.ScenIterationSetup(friendlyUnits);
+		}
+	}
+	
+	public static void ScenIterationFromFile() {
+		String fullPath = "src/saves/" + GlobalFuncs.tempStr;
+		File popFile = FIO.newFile(fullPath);
+		if (!popFile.exists()) {
+			GUI_NB.GCO("Error reading population file!");
+			
+			DialogLoadScen x = new DialogLoadScen(GlobalFuncs.gui, true);
+			x.setVisible(true);
+		}
+		else {
+			
+			GUI_NB.GCO("Loading population data.");
+			Path p = popFile.toPath();
+			GlobalFuncs.currentPop = new Population(p);
+			GUI_NB.GCO("Population data read.  Initializing scenario with " + GlobalFuncs.currentPop.organisms.size() + " orgs");
+			GlobalFuncs.newEpoch = true;
+			
+			int numScouts = GlobalFuncs.currentPop.PopulationSlice(GlobalFuncs.percentPerRun);			
+			
+			JNEATIntegration.ScenIterationSetup(numScouts);
+		}
+	}
 
 	/** Goes through the setup for this scenario, namely, for the current COA will initialize new units*/
 	public static void ScenIterationSetup(int numScouts) {
+		GlobalFuncs.numScoutsPer = numScouts;
 		GlobalFuncs.allSpots.records.clear();
-		GUI_NB.GCO("All spot records have been cleared.");				
+		//GUI_NB.GCO("All spot records have been cleared.");
+		GUI_NB.GCO("New scenario iteration: Populating " + numScouts + " scouts of pop size " + GlobalFuncs.currentPop.organisms.size());
+		
+		GlobalFuncs.curCOA.LoadCOA();
 		
 		// First, eliminate friendly units from the unit roster
 		for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
@@ -199,6 +227,9 @@ public class JNEATIntegration {
 			GlobalFuncs.unitList.remove(finger);					
 		}
 		GlobalFuncs.friendlyUnitList.clear();
+		GlobalFuncs.destroyedUnitList.clear();	// These are already gone from the map from the last run.
+		
+
 		
 		// Now adds units along the left map boundary
 		for (int i = 0; i < numScouts; i++) {
@@ -207,7 +238,7 @@ public class JNEATIntegration {
 			
 			Hex destination = GlobalFuncs.scenMap.getHex(col, row);
 			if (destination.HexUnit != null) {
-				GUI_NB.GCO("Destination hex occupied, moving to the next one.");
+				// GUI_NB.GCO("Destination hex occupied, moving to the next one.");
 				numScouts++;
 			}
 			else {
@@ -216,7 +247,7 @@ public class JNEATIntegration {
 			}
 		}		 
 		
-		GUI_NB.GCO("New epoch: " + GlobalFuncs.newEpoch);
+		// GUI_NB.GCO("Num friendlies: " + GlobalFuncs.friendlyUnitList.size());
 		
 		if (GlobalFuncs.newEpoch) {
 			GUI_NB.GCO("New epoch: outputting network information to: " + GlobalFuncs.detailedOutput.toString());
@@ -224,6 +255,7 @@ public class JNEATIntegration {
 			FIO.appendFile(GlobalFuncs.detailedOutput, "\n\n\n---->>> NEW EPOCH at iteration " + GlobalFuncs.iterationCount + "<<<----\n\n\n");
 			FIO.appendFile(GlobalFuncs.detailedOutput, GlobalFuncs.currentPop.SavePopulation());
 			//FIO.appendFile(GlobalFuncs.detailedOutput, GlobalFuncs.currentPop.PrintPopulation());
+			GlobalFuncs.newEpoch = false;
 		}
 				
 		FillAllScouts();		// Puts a Org in each unit

@@ -566,8 +566,8 @@ public class Unit {
 		if (moveDirection < 0) return;
 		
 		// --------------------------------------------------------
-		// MoveUnit(moveDirection);				
-		MoveUnitSubHex(moveDirection);
+		 MoveUnit(moveDirection);				
+		// MoveUnitSubHex(moveDirection);
 		
 		if (location.toHO().ConvertToAx().getX() == nextWP.getX() && location.toHO().ConvertToAx().getY() == nextWP.getY()) {
 			// GUI_NB.GCO("Waypoint reached.");
@@ -587,7 +587,7 @@ public class Unit {
 		h.HexUnit = this;
 		this.location = h;
 		
-		GUI_NB.GCO("Unit moved successfully.");
+		// GUI_NB.GCO("Unit moved successfully.");
 	}
 	
 	public String SaveUnit() {						

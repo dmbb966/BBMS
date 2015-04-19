@@ -264,7 +264,7 @@ public class DialogLoadScen extends javax.swing.JDialog {
     	}
     	
     	GlobalFuncs.percentPerRun = ppr;
-    	GlobalFuncs.totalRunsPerOrg = runsPerOrg;
+    	GlobalFuncs.maxRunsPerOrg = runsPerOrg;
     	
     	File dOut = FIO.newFile("src/saves/" + DetailedOutputFileField.getText());
     	File sOut = FIO.newFile("src/saves/" + SummaryOutputFileField.getText());
@@ -291,10 +291,10 @@ public class DialogLoadScen extends javax.swing.JDialog {
             bbms.GlobalFuncs.currentPop = new jneat.Population(popSize, numSensors, numOutputs, numHidden, false, probLink);
             GUI_NB.GCO("New population added.");
             
-            
             GUI_NB.GCO("Running scenario iteration setup.");
+            int subPopSize = GlobalFuncs.currentPop.PopulationSlice(GlobalFuncs.percentPerRun);
             GlobalFuncs.newEpoch = true;
-            unit.JNEATIntegration.ScenIterationSetup(popSize);            
+            unit.JNEATIntegration.ScenIterationSetup(subPopSize);
             dispose();
         }    
     }                                            

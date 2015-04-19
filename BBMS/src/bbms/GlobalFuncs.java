@@ -49,13 +49,14 @@ public class GlobalFuncs {
 	public static Population currentPop = null;	
 	public static String tempStr = "";				// Used for some dialog box results
 	public static int orgAssignNum = 0;
-	public static int runsPerOrg = 0;
+	public static int maxRunsPerOrg = 1;
 	
 	public static Path detailedOutput = null;
 	public static Path summaryOutput = null;
 	public static double percentPerRun = 0.1;
-	public static int totalRunsPerOrg = 3;
+	public static int currentRunsPerOrg = 0;
 	public static int iterationCount = 0;
+	public static int numScoutsPer = 0;
 	public static boolean newEpoch = false;
 	
 	public static int maxPossibleSpots = 0;
@@ -278,6 +279,19 @@ public class GlobalFuncs {
 	 */
 	public static int getUnitCount() {
 		return unitCount;
+	}
+	
+	/** Creates a distinct (non-linked) copy of a unit vector */
+	public static Vector<Unit> duplicateUnitVec(Vector<Unit> original) {
+		Vector<Unit> ret = new Vector<Unit>(original.size());
+		
+		for (int i = 0; i < original.size(); i++) {
+			Unit orig = original.elementAt(i);
+			Unit copy = new Unit(orig);
+			ret.addElement(copy);
+		}
+		
+		return ret;
 	}
 	
 	/**

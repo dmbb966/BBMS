@@ -154,7 +154,7 @@ public class FIO {
 			// Load units
 			while(readL != null) {
 				readL = reader.readLine();
-				GUI_NB.GCO("String: >" + readL + "<");
+				// GUI_NB.GCO("String: >" + readL + "<");
 				
 				if (readL.contentEquals("")) { }
 				else if (readL.startsWith("#")) {}
@@ -167,9 +167,8 @@ public class FIO {
 				}
 			}
 									
-			// All COAs loaded, now load the last saved COA, already loaded in loadMapCharacteristics
 			GlobalFuncs.curCOA = GlobalFuncs.allCOAs.elementAt(GlobalFuncs.COAIndex - 1);
-			GlobalFuncs.curCOA.LoadCOA();
+			
 			
 			// This dialog will either generate or load a NN population, create enough friendlies to fill fully
 			DialogLoadScen x = new DialogLoadScen(GlobalFuncs.gui, false);
@@ -217,7 +216,7 @@ public class FIO {
 				// With the above non-data holding lines stripped out, only valid input will be evaluated here
 				else {
 					readFinger = 0;
-					GUI_NB.GCO("Reading string: *" + readL + "*");
+					// GUI_NB.GCO("Reading string: *" + readL + "*");
 					
 					switch (mode) {
 					case 0:

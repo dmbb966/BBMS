@@ -442,7 +442,7 @@ public class HexMap {
 				else if (readL.contentEquals("")) {} 	//GUI_NB.GCO("Blank line: " + readL);			
 				// With the above non-data holding lines stripped out, only valid input will be evaluated here
 				else {
-					GUI_NB.GCO("Reading string: >" + readL + "<");
+					//GUI_NB.GCO("Reading string: >" + readL + "<");
 					
 					GlobalFuncs.scenMap.storeHex(loadHexX,  loadHexY,  new Hex(loadHexX, loadHexY, readL));
 					loadHexX++;

@@ -1,5 +1,7 @@
 package jneat;
 
+import gui.GUI_NB;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -635,6 +637,14 @@ public class Population {
 		}			
 		
 		return true;		
+	}
+	
+	/** Returns a percentage of the total number of organisms in this population.  Used for sub population testing. */
+	public int PopulationSlice(double percent) {
+		double subPopSize = organisms.size() * percent;
+		//System.out.println("Percent is: " + percent + " with size " + organisms.size() + " and other size " + population_size + " gives sub pop: " + subPopSize);
+		
+		return (int) Math.max(1, organisms.size() * percent);
 	}
 	
 	/** Loads organisms from a file
