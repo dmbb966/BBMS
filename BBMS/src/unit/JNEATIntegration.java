@@ -22,7 +22,7 @@ public class JNEATIntegration {
 		
 		for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
 			Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
-			finger.org.AverageFitness(finger.curFitness);
+			finger.org.AverageFitness(finger.fitType.EvaluateFitness(finger));
 			GUI_NB.GCO("Unit " + finger.callsign + " has fitness " + finger.org.fitness);
 		}
 		
@@ -216,6 +216,8 @@ public class JNEATIntegration {
 
 	/** Goes through the setup for this scenario, namely, for the current COA will initialize new units*/
 	public static void ScenIterationSetup(int numScouts) {
+		GUI_NB.GCO("0CurRuns: " + GlobalFuncs.currentRunsPerOrg + " out of max: " + GlobalFuncs.maxRunsPerOrg + " with new epoch: " + GlobalFuncs.newEpoch);
+
 		GlobalFuncs.numScoutsPer = numScouts;
 		GlobalFuncs.allSpots.records.clear();
 		//GUI_NB.GCO("All spot records have been cleared.");
@@ -252,6 +254,7 @@ public class JNEATIntegration {
 		
 		// GUI_NB.GCO("Num friendlies: " + GlobalFuncs.friendlyUnitList.size());
 		
+		
 		if (GlobalFuncs.newEpoch) {
 			GUI_NB.GCO("New epoch: outputting network information to: " + GlobalFuncs.detailedOutput.toString());
 			
@@ -262,7 +265,9 @@ public class JNEATIntegration {
 		}
 				
 		FillAllScouts();		// Puts a Org in each unit
+		
 		DeployAll();			// Deploys those units accordingly
+		
 		
 		GlobalFuncs.gui.repaint();
 	}

@@ -124,7 +124,7 @@ public class DialogLoadScen extends javax.swing.JDialog {
 
         jLabel10.setText("Percent per Run");
 
-        PercentRunField.setText("0.1");
+        PercentRunField.setText("1.0");
 
         jLabel11.setText("Runs per Organism");
 
@@ -290,6 +290,8 @@ public class DialogLoadScen extends javax.swing.JDialog {
             FIO.overwriteFile(GlobalFuncs.summaryOutput, "");
             GUI_NB.GCO("Output files overwritten");
         }
+        
+        GlobalFuncs.newEpoch = true;
     	
     	return true;
     }
@@ -313,7 +315,6 @@ public class DialogLoadScen extends javax.swing.JDialog {
             GUI_NB.GCO("Running scenario iteration setup.");
             int subPopSize = GlobalFuncs.currentPop.PopulationSlice(GlobalFuncs.percentPerRun);
             unit.JNEATIntegration.ScenIterationSetup(subPopSize);
-            GlobalFuncs.newEpoch = true;
             dispose();
         }    
     }                                            
