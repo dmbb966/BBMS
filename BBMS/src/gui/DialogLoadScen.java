@@ -63,6 +63,10 @@ public class DialogLoadScen extends javax.swing.JDialog {
         RunPerOrgField = new javax.swing.JTextField();
         Warning_Label = new javax.swing.JLabel();
         OverwriteCheckbox = new javax.swing.JCheckBox();
+        jLabel12 = new javax.swing.JLabel();
+        MaxEpochsField = new javax.swing.JTextField();
+        PauseEpochCheckbox = new javax.swing.JCheckBox();
+        PauseIterCheckbox = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Load Scenario");
@@ -139,6 +143,24 @@ public class DialogLoadScen extends javax.swing.JDialog {
             }
         });
 
+        jLabel12.setText("Stop After Epochs");
+
+        MaxEpochsField.setText("500");
+
+        PauseEpochCheckbox.setText("Pause at Epoch");
+        PauseEpochCheckbox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                PauseEpochCheckboxItemStateChanged(evt);
+            }
+        });
+
+        PauseIterCheckbox.setText("Pause at Iter");
+        PauseIterCheckbox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                PauseIterCheckboxItemStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -169,43 +191,50 @@ public class DialogLoadScen extends javax.swing.JDialog {
                                 .addComponent(jLabel5)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(LinkProb_Field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
-                        .addComponent(Generate_Button))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(Generate_Button))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(PauseIterCheckbox)
+                                    .addComponent(PauseEpochCheckbox)))))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(LoadPopFile, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(31, 31, 31)
                         .addComponent(Load_Button))
                     .addComponent(jLabel6)
                     .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel11)
+                            .addComponent(jLabel10))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jLabel9)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel11)
-                                    .addComponent(jLabel10))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(PercentRunField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(RunPerOrgField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(DetailedOutputFileField, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
-                                            .addComponent(SummaryOutputFileField))
-                                        .addComponent(jLabel7)
-                                        .addComponent(jLabel8))
-                                    .addComponent(OverwriteCheckbox, javax.swing.GroupLayout.Alignment.TRAILING))))
-                        .addGap(17, 17, 17))
+                            .addComponent(PercentRunField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(RunPerOrgField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(Warning_Label)
-                        .addGap(44, 44, 44))))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(DetailedOutputFileField, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
+                                    .addComponent(SummaryOutputFileField))
+                                .addComponent(jLabel7)
+                                .addComponent(jLabel8))
+                            .addComponent(OverwriteCheckbox, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(Warning_Label)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel12)
+                                .addGap(18, 18, 18)
+                                .addComponent(MaxEpochsField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGap(17, 17, 17))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -231,12 +260,14 @@ public class DialogLoadScen extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(NumHidden_Field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
-                    .addComponent(SummaryOutputFileField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(SummaryOutputFileField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(PauseIterCheckbox))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(LinkProb_Field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5)
-                    .addComponent(OverwriteCheckbox))
+                    .addComponent(OverwriteCheckbox)
+                    .addComponent(PauseEpochCheckbox))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -254,7 +285,9 @@ public class DialogLoadScen extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(LoadPopFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Load_Button)
-                    .addComponent(Warning_Label))
+                    .addComponent(Warning_Label)
+                    .addComponent(jLabel12)
+                    .addComponent(MaxEpochsField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(14, 14, 14))
         );
 
@@ -265,19 +298,26 @@ public class DialogLoadScen extends javax.swing.JDialog {
     private boolean ValidateGlobalInputs() {
     	double ppr = Double.parseDouble(PercentRunField.getText());
     	int runsPerOrg = Integer.parseInt(RunPerOrgField.getText());
+        int maxE = Integer.parseInt(MaxEpochsField.getText());
     	
     	if (ppr < 0.0 || ppr > 1.0) {
-    		Warning_Label.setText("ERROR: Percent per run out of bounds.");
-    		return false;
+            Warning_Label.setText("ERROR: Percent per run out of bounds.");
+            return false;
     	}
     	
     	if (runsPerOrg <= 0) {
-    		Warning_Label.setText("ERROR: Runs per org out of bounds.");
-    		return false;
+            Warning_Label.setText("ERROR: Runs per org out of bounds.");
+            return false;
     	}
+        
+        if (maxE <= 0) {
+            Warning_Label.setText("ERROR: Max epochs out of bounds.");
+            return false;
+        }
     	
     	GlobalFuncs.percentPerRun = ppr;
     	GlobalFuncs.maxRunsPerOrg = runsPerOrg;
+        GlobalFuncs.maxEpochs = maxE;
     	
     	File dOut = FIO.newFile("src/saves/" + DetailedOutputFileField.getText());
     	File sOut = FIO.newFile("src/saves/" + SummaryOutputFileField.getText());
@@ -287,7 +327,7 @@ public class DialogLoadScen extends javax.swing.JDialog {
         
         if (overwriteDataFiles) {
             FIO.overwriteFile(GlobalFuncs.detailedOutput, "");
-            FIO.overwriteFile(GlobalFuncs.summaryOutput, "");
+            FIO.overwriteFile(GlobalFuncs.summaryOutput, unit.JNEATIntegration.PrintSummaryKey());
             GUI_NB.GCO("Output files overwritten");
         }
         
@@ -330,6 +370,16 @@ public class DialogLoadScen extends javax.swing.JDialog {
     private void OverwriteCheckboxItemStateChanged(java.awt.event.ItemEvent evt) {                                                   
         if (evt.getStateChange() == 1) overwriteDataFiles = true;
         else overwriteDataFiles = false;
+    }                                                  
+
+    private void PauseEpochCheckboxItemStateChanged(java.awt.event.ItemEvent evt) {                                                    
+        if (evt.getStateChange() == 1) GlobalFuncs.pauseNewEpoch = true;
+        else GlobalFuncs.pauseNewEpoch = false;
+    }                                                   
+
+    private void PauseIterCheckboxItemStateChanged(java.awt.event.ItemEvent evt) {                                                   
+        if (evt.getStateChange() == 1) GlobalFuncs.pauseNewIter = true;
+        else GlobalFuncs.pauseNewIter = false;
     }                                                  
 
     /**
@@ -380,11 +430,14 @@ public class DialogLoadScen extends javax.swing.JDialog {
     private javax.swing.JTextField LinkProb_Field;
     private javax.swing.JTextField LoadPopFile;
     private javax.swing.JButton Load_Button;
+    private javax.swing.JTextField MaxEpochsField;
     private javax.swing.JTextField NumHidden_Field;
     private javax.swing.JTextField NumOutputs_Field;
     private javax.swing.JTextField NumScouts_Field;
     private javax.swing.JTextField NumSensors_Field;
     private javax.swing.JCheckBox OverwriteCheckbox;
+    private javax.swing.JCheckBox PauseEpochCheckbox;
+    private javax.swing.JCheckBox PauseIterCheckbox;
     private javax.swing.JTextField PercentRunField;
     private javax.swing.JTextField RunPerOrgField;
     private javax.swing.JTextField SummaryOutputFileField;
@@ -392,6 +445,7 @@ public class DialogLoadScen extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

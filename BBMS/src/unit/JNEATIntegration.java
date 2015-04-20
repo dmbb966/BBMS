@@ -39,10 +39,23 @@ public class JNEATIntegration {
 		GlobalFuncs.iterationCount++;
 		
 		if (GlobalFuncs.newEpoch){
-			GUI_NB.GCO("NEW EPOCH");
+			GlobalFuncs.curEpoch++;
+			GUI_NB.GCO("Starting NEW EPOCH: #" + GlobalFuncs.curEpoch);
 			GlobalFuncs.currentPop.epoch();
 			GlobalFuncs.currentRunsPerOrg = 0;
 			GlobalFuncs.orgAssignNum = 0;
+		}
+		
+		if (GlobalFuncs.pauseNewIter || (GlobalFuncs.pauseNewEpoch && GlobalFuncs.newEpoch)) {
+			// Pause at these iterations; since scenario already paused, will do so
+		}
+		else {
+			if (GlobalFuncs.curEpoch > GlobalFuncs.maxEpochs) {
+				// Pause when max epochs exceeded
+			}
+			else {
+				ClockControl.Pause();	// Unpauses the scenario
+			}
 		}
 		
 		GlobalFuncs.maxPossibleSpots = 0;
@@ -159,11 +172,29 @@ public class JNEATIntegration {
 		
 	}
 	
+	public static String PrintSummaryKey() {
+		StringBuffer buf = new StringBuffer("");
+		
+		buf.append("Iteration #, ");
+		buf.append("Epoch #, ");
+		buf.append("Organism #, ");
+		buf.append("Unit Callsign, ");
+		buf.append("Unit Coordinates, ");
+		buf.append("Unit destroyed, ");
+		buf.append("Spotting credits, ");
+		buf.append("Final fitness, ");
+		buf.append("Organism averaged fitness, ");
+		buf.append("Organism number of averages");
+		
+		return buf.toString();
+	}
+	
 	/** Puts it all on one line */
 	public static String PrintSummaryLine(Unit u) {
 		StringBuffer buf = new StringBuffer("");
 		
 		buf.append(GlobalFuncs.iterationCount + ", ");
+		buf.append(GlobalFuncs.curEpoch + ", ");
 		buf.append(u.org.genome.genome_id + ", ");
 		buf.append(u.callsign + ", ");
 		buf.append(u.location.DisplayCoords() + ", ");

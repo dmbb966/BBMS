@@ -57,6 +57,10 @@ public class GlobalFuncs {
 	public static int currentRunsPerOrg = 0;
 	public static int iterationCount = 0;
 	public static int numScoutsPer = 0;
+	public static int curEpoch = 1;
+	public static int maxEpochs = 1;
+	public static boolean pauseNewIter = false;
+	public static boolean pauseNewEpoch = false;
 	public static boolean newEpoch = false;
 	
 	public static int maxPossibleSpots = 0;
