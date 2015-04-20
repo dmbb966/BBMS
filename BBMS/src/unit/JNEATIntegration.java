@@ -30,7 +30,8 @@ public class JNEATIntegration {
 		
 		for (int i = 0; i < GlobalFuncs.destroyedUnitList.size(); i++) {
 			Unit finger = GlobalFuncs.destroyedUnitList.elementAt(i);
-			finger.org.AverageFitness(finger.curFitness);
+
+			finger.org.AverageFitness(finger.fitType.EvaluateFitness(finger));			// Essentially penalizes for unit destruction as a destroyed sensor no longer spots
 			GUI_NB.GCO("Unit " + finger.callsign + " has fitness " + finger.org.fitness);
 		}
 		
