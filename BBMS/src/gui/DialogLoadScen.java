@@ -343,18 +343,19 @@ public class DialogLoadScen extends javax.swing.JDialog {
         int numHidden = Integer.parseInt(NumHidden_Field.getText());
         double probLink = Double.parseDouble(LinkProb_Field.getText());
 
-        if (popSize < 1) Warning_Label.setText("ERROR: Pop Size < 1");
+        if (popSize < 0) Warning_Label.setText("ERROR: Pop Size < 1");
         else if (numSensors < 1) Warning_Label.setText("ERROR: Num Sensors < 1");
         else if (numOutputs < 1) Warning_Label.setText("ERROR: Num Outputs < 1");
         else if (numHidden < 0) Warning_Label.setText("ERROR: Num Hidden < 1");
         else if (probLink < 0 || probLink > 1) Warning_Label.setText("ERROR: Prob Link not valid percent");
         else if (ValidateGlobalInputs()){
-            bbms.GlobalFuncs.currentPop = new jneat.Population(popSize, numSensors, numOutputs, numHidden, false, probLink);
-            GUI_NB.GCO("New population added.");
             
-            GUI_NB.GCO("Running scenario iteration setup.");
+            bbms.GlobalFuncs.currentPop = new jneat.Population(Math.max(1, popSize), numSensors, numOutputs, numHidden, false, probLink);
+            GUI_NB.GCO("New population added.");            
+            GUI_NB.GCO("Running scenario iteration setup.");        
             int subPopSize = GlobalFuncs.currentPop.PopulationSlice(GlobalFuncs.percentPerRun);
-            unit.JNEATIntegration.ScenIterationSetup(subPopSize);
+            if (popSize == 0) unit.JNEATIntegration.ScenIterationSetup(popSize);    // Key for editing a scenario
+            else unit.JNEATIntegration.ScenIterationSetup(subPopSize);
             dispose();
         }    
     }                                            

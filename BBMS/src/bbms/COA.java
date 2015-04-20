@@ -20,6 +20,11 @@ public class COA {
 		name = n;
 	}
 	
+	public void SaveCOA() {
+		// Saves the current unit list to this COA
+		this.unitList = GlobalFuncs.duplicateUnitVec(GlobalFuncs.unitList);
+	}
+	
 	public void LoadCOA() {				
 		// GUI_NB.GCO("Starting friendlies: " + GlobalFuncs.friendlyUnitList.size());
 		

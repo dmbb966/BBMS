@@ -247,15 +247,18 @@ public class JNEATIntegration {
 	}
 
 	/** Goes through the setup for this scenario, namely, for the current COA will initialize new units*/
-	public static void ScenIterationSetup(int numScouts) {
-		GUI_NB.GCO("0CurRuns: " + GlobalFuncs.currentRunsPerOrg + " out of max: " + GlobalFuncs.maxRunsPerOrg + " with new epoch: " + GlobalFuncs.newEpoch);
+	public static void ScenIterationSetup(int numScouts) {		
 
 		GlobalFuncs.numScoutsPer = numScouts;
 		GlobalFuncs.allSpots.records.clear();
 		//GUI_NB.GCO("All spot records have been cleared.");
-		GUI_NB.GCO("New scenario iteration: Populating " + numScouts + " scouts of pop size " + GlobalFuncs.currentPop.organisms.size());
 		
 		GlobalFuncs.curCOA.LoadCOA();
+		if (numScouts == 0) return;
+		
+		GUI_NB.GCO("New scenario iteration: Populating " + numScouts + " scouts of pop size " + GlobalFuncs.currentPop.organisms.size());
+		
+		
 		
 		// First, eliminate friendly units from the unit roster
 		for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {

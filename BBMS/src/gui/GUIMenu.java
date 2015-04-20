@@ -564,6 +564,7 @@ public class GUIMenu extends JMenuBar{
 	
 	public static class NextCOA implements ActionListener{
 		public void actionPerformed(ActionEvent event) {
+			GlobalFuncs.curCOA.SaveCOA();
 			GlobalFuncs.COAIndex++;
 			
 			if (GlobalFuncs.COAIndex > GlobalFuncs.allCOAs.size()) {
