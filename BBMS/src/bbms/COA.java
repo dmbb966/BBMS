@@ -47,8 +47,8 @@ public class COA {
 		
 		//GUI_NB.GCO("Middling friendlies: " + GlobalFuncs.friendlyUnitList.size());
 		
-		for (int i = 0; i < this.unitList.size(); i++) {
-			Unit finger = this.unitList.elementAt(i);
+		for (int i = 0; i < GlobalFuncs.unitList.size(); i++) {
+			Unit finger = GlobalFuncs.unitList.elementAt(i);
 			
 			// Only model eenmy units in a COA.
 			if (finger.side != SideEnum.FRIENDLY) {				

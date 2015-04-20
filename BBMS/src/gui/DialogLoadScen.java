@@ -16,6 +16,8 @@ import bbms.GlobalFuncs;
  * @author Brian
  */
 public class DialogLoadScen extends javax.swing.JDialog {
+    
+    private boolean overwriteDataFiles = false;
 
     /**
      * Creates new form DialogNewPop
@@ -60,6 +62,7 @@ public class DialogLoadScen extends javax.swing.JDialog {
         jLabel11 = new javax.swing.JLabel();
         RunPerOrgField = new javax.swing.JTextField();
         Warning_Label = new javax.swing.JLabel();
+        OverwriteCheckbox = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Load Scenario");
@@ -129,6 +132,13 @@ public class DialogLoadScen extends javax.swing.JDialog {
 
         Warning_Label.setText(" ");
 
+        OverwriteCheckbox.setText("Overwrite Files");
+        OverwriteCheckbox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                OverwriteCheckboxItemStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -171,14 +181,6 @@ public class DialogLoadScen extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(DetailedOutputFileField, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
-                                        .addComponent(SummaryOutputFileField))
-                                    .addComponent(jLabel7)
-                                    .addComponent(jLabel8)))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jLabel9)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -188,7 +190,17 @@ public class DialogLoadScen extends javax.swing.JDialog {
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(PercentRunField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(RunPerOrgField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(RunPerOrgField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(DetailedOutputFileField, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
+                                            .addComponent(SummaryOutputFileField))
+                                        .addComponent(jLabel7)
+                                        .addComponent(jLabel8))
+                                    .addComponent(OverwriteCheckbox, javax.swing.GroupLayout.Alignment.TRAILING))))
                         .addGap(17, 17, 17))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -223,7 +235,8 @@ public class DialogLoadScen extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(LinkProb_Field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
+                    .addComponent(jLabel5)
+                    .addComponent(OverwriteCheckbox))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -271,6 +284,12 @@ public class DialogLoadScen extends javax.swing.JDialog {
     	
     	GlobalFuncs.detailedOutput = dOut.toPath();
     	GlobalFuncs.summaryOutput = sOut.toPath();
+        
+        if (overwriteDataFiles) {
+            FIO.overwriteFile(GlobalFuncs.detailedOutput, "");
+            FIO.overwriteFile(GlobalFuncs.summaryOutput, "");
+            GUI_NB.GCO("Output files overwritten");
+        }
     	
     	return true;
     }
@@ -293,8 +312,8 @@ public class DialogLoadScen extends javax.swing.JDialog {
             
             GUI_NB.GCO("Running scenario iteration setup.");
             int subPopSize = GlobalFuncs.currentPop.PopulationSlice(GlobalFuncs.percentPerRun);
-            GlobalFuncs.newEpoch = true;
             unit.JNEATIntegration.ScenIterationSetup(subPopSize);
+            GlobalFuncs.newEpoch = true;
             dispose();
         }    
     }                                            
@@ -306,6 +325,11 @@ public class DialogLoadScen extends javax.swing.JDialog {
             dispose();
         }        
     }                                        
+
+    private void OverwriteCheckboxItemStateChanged(java.awt.event.ItemEvent evt) {                                                   
+        if (evt.getStateChange() == 1) overwriteDataFiles = true;
+        else overwriteDataFiles = false;
+    }                                                  
 
     /**
      * @param args the command line arguments
@@ -359,6 +383,7 @@ public class DialogLoadScen extends javax.swing.JDialog {
     private javax.swing.JTextField NumOutputs_Field;
     private javax.swing.JTextField NumScouts_Field;
     private javax.swing.JTextField NumSensors_Field;
+    private javax.swing.JCheckBox OverwriteCheckbox;
     private javax.swing.JTextField PercentRunField;
     private javax.swing.JTextField RunPerOrgField;
     private javax.swing.JTextField SummaryOutputFileField;
