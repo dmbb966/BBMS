@@ -372,6 +372,7 @@ public class DialogLoadScen extends javax.swing.JDialog {
         }
         
         GlobalFuncs.newEpoch = true;
+        clock.ClockControl.SetTimeScale((byte)11);
     	
     	return true;
     }

@@ -37,7 +37,7 @@ public class ClockControl {
      */ 
     public static void AccelTime() {
     	if (GlobalFuncs.runtoEq) GlobalFuncs.runtoEq = false;		// Changing the rate will stop autorun
-        if (timescale < 10) timescale++;
+        if (timescale < 11) timescale++;
         AdjustDelayScale();        
     }
     
@@ -53,7 +53,7 @@ public class ClockControl {
     public static void SetTimeScale(byte i) {
     	timescale = i;
     	if (i < 1) timescale = 1;
-    	if (i > 10) timescale = 10;
+    	if (i > 11) timescale = 11;
     	
     	AdjustDelayScale();
     }
@@ -77,6 +77,7 @@ public class ClockControl {
         	case 8: return "x12";
         	case 9: return "x24";
         	case 10: return "x48";
+        	case 11: return "x96";
         	default: return "ERROR";
         }
     }
@@ -99,6 +100,7 @@ public class ClockControl {
         	case 8: return 12.000;
         	case 9: return 24.000;
         	case 10: return 48.000;
+        	case 11: return 96.000;
         	default: return -1.000;
         }
     }
