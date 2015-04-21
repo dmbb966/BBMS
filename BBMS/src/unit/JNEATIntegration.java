@@ -44,8 +44,16 @@ public class JNEATIntegration {
 			GUI_NB.GCO("Starting NEW EPOCH: #" + GlobalFuncs.curEpoch);
 			String debugOutput = GlobalFuncs.currentPop.epoch();
 			GUI_NB.GCO(debugOutput);
+			FIO.appendFile(GlobalFuncs.detailedOutput, "New Epoch: #" + GlobalFuncs.curEpoch);
+			FIO.appendFile(GlobalFuncs.detailedOutput, debugOutput);
 			GlobalFuncs.currentRunsPerOrg = 0;
 			GlobalFuncs.orgAssignNum = 0;
+			
+			// Randomly chooses a COA
+			if (!GlobalFuncs.randCOAEpoch) {
+				GlobalFuncs.COAIndex = GlobalFuncs.randRange(0, GlobalFuncs.allCOAs.size() - 1);
+				GlobalFuncs.curCOA = GlobalFuncs.allCOAs.elementAt(GlobalFuncs.COAIndex);
+			}
 		}
 		
 		if (GlobalFuncs.pauseNewIter || (GlobalFuncs.pauseNewEpoch && GlobalFuncs.newEpoch)) {
@@ -254,6 +262,12 @@ public class JNEATIntegration {
 		GlobalFuncs.allSpots.records.clear();
 		//GUI_NB.GCO("All spot records have been cleared.");
 		
+		// Randomly chooses a COA
+		if (GlobalFuncs.randCOAEpoch) {
+			GlobalFuncs.COAIndex = GlobalFuncs.randRange(0, GlobalFuncs.allCOAs.size() - 1);
+			GlobalFuncs.curCOA = GlobalFuncs.allCOAs.elementAt(GlobalFuncs.COAIndex);
+		}
+				
 		GlobalFuncs.curCOA.LoadCOA();
 		if (numScouts == 0) return;
 		
@@ -294,8 +308,11 @@ public class JNEATIntegration {
 		if (GlobalFuncs.newEpoch) {
 			GUI_NB.GCO("New epoch: outputting network information to: " + GlobalFuncs.detailedOutput.toString());
 			
-			FIO.appendFile(GlobalFuncs.detailedOutput, "\n\n\n---->>> NEW EPOCH at iteration " + GlobalFuncs.iterationCount + "<<<----\n\n\n");
-			FIO.appendFile(GlobalFuncs.detailedOutput, GlobalFuncs.currentPop.SavePopulation());
+			File netInfo = FIO.newFile("src/saves/" + GlobalFuncs.outputPrefix + "pop" + GlobalFuncs.curEpoch + ".pop");
+			GlobalFuncs.currentPop.SavePopulationToFile(netInfo.toPath());
+			
+			//FIO.appendFile(GlobalFuncs.detailedOutput, "\n\n\n---->>> NEW EPOCH at iteration " + GlobalFuncs.iterationCount + "<<<----\n\n\n");
+			//FIO.appendFile(GlobalFuncs.detailedOutput, GlobalFuncs.currentPop.SavePopulation());
 			//FIO.appendFile(GlobalFuncs.detailedOutput, GlobalFuncs.currentPop.PrintPopulation());
 			GlobalFuncs.newEpoch = false;
 		}

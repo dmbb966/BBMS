@@ -219,7 +219,7 @@ public class Species {
 			if (thechamp.super_champ_offspring > 0) {
 				System.out.println("DEBUG: Super champ present in Species #" + id);
 				mother = thechamp;
-				baby = new Organism(0.0, newGenome, generation);
+		
 				newGenome = mother.genome.duplicate(i);
 				
 				if (thechamp.super_champ_offspring > 1) {
@@ -232,7 +232,10 @@ public class Species {
 						mut_struct_baby = true;
 					}
 				} 
-				else if (thechamp.super_champ_offspring == 1) {
+				
+				baby = new Organism(0.0, newGenome, generation);
+				
+				if (thechamp.super_champ_offspring == 1) {
 					if (thechamp.pop_champ){
 						baby.pop_champ_child = true;
 						baby.high_fit = mother.orig_fitness;

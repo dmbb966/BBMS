@@ -37,9 +37,9 @@ public class HexMap {
 	Vector<hex.Hex> textHexList;
 	Vector<hex.Hex> vaporSourceList;
 	Vector<hex.Hex> vaporSinkList; 
-	public static int chanceTrees = 40;
+	public static int chanceTrees = 50;
 	public static int chanceHighGrass = 0;
-	public static int chanceClear = 60;
+	public static int chanceClear = 50;
 	public static int totalWeight = chanceClear + chanceHighGrass + chanceTrees;
 	
 	public static final int SUBHEX_SIZE = 5000;		// Sub units in one 50m hex
@@ -118,7 +118,7 @@ public class HexMap {
 	/** Returns a random hex within the Recon Zone of the map */
 	public Hex RandomHexReconZone() {
 		int x = GlobalFuncs.randRange(friendlyZone + 1, enemyZone - 1);
-		int y = GlobalFuncs.randRange(0, yDim);
+		int y = GlobalFuncs.randRange(0, yDim - 1);
 		
 		Hex finger = getHex(x, y);
 		

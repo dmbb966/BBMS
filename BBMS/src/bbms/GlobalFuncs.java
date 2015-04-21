@@ -53,6 +53,7 @@ public class GlobalFuncs {
 	
 	public static Path detailedOutput = null;
 	public static Path summaryOutput = null;
+	public static String outputPrefix = "";
 	public static double percentPerRun = 0.1;
 	public static int currentRunsPerOrg = 0;
 	public static int iterationCount = 0;
@@ -62,6 +63,7 @@ public class GlobalFuncs {
 	public static boolean pauseNewIter = false;
 	public static boolean pauseNewEpoch = false;
 	public static boolean newEpoch = false;
+	public static boolean randCOAEpoch = true;
 	
 	public static int maxPossibleSpots = 0;
 	
@@ -170,7 +172,7 @@ public class GlobalFuncs {
 		destroyedUnitList.clear();
 		
 		GUIKeyboard.initializeKeyCommands();
-		Clock.SetTime(8, 24, 13);
+		Clock.SetTime(0, 0, 0);
 		GlobalFuncs.ticksStable = 0;
 		if (!clockInitialized) {
 			GUI_NB.GCO("Starting clock");
