@@ -47,10 +47,11 @@ public class JNEATIntegration {
 		GlobalFuncs.iterationCount++;
 		
 		if (GlobalFuncs.newEpoch){
-			PrintSummaryOutput();
+			
 			GlobalFuncs.curEpoch++;
 			GUI_NB.GCO("Starting NEW EPOCH: #" + GlobalFuncs.curEpoch);
 			String debugOutput = GlobalFuncs.currentPop.epoch();
+			PrintSummaryOutput();
 			GUI_NB.GCO(debugOutput);
 			FIO.appendFile(GlobalFuncs.detailedOutput, "New Epoch: #" + GlobalFuncs.curEpoch);
 			FIO.appendFile(GlobalFuncs.detailedOutput, debugOutput);

@@ -17,7 +17,7 @@ import bbms.GlobalFuncs;
  */
 public class DialogLoadScen extends javax.swing.JDialog {
     
-    private boolean overwriteDataFiles = false;
+    private boolean overwriteDataFiles = true;
 
     /**
      * Creates new form DialogNewPop

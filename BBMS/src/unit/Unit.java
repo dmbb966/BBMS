@@ -642,7 +642,7 @@ public class Unit {
 		
 		
 		RefreshUnitInfo();
-		GUI_NB.GCO("Unit speed and move rate: " + this.moveRate + " and " + this.movePoints);
+		// GUI_NB.GCO("Unit speed and move rate: " + this.moveRate + " and " + this.movePoints);
 	}
 	
 	public String SaveTarget() {
