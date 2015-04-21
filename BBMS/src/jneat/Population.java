@@ -105,7 +105,7 @@ public class Population {
 	}
 	
 	/** Epoch turns over a population to the next generation based on fitness */
-	public void epoch() {
+	public String epoch() {
 		// Use species' age to modify the objective fitness of organisms
 		// That is, give younger species an advantage so they can take hold
 		// Also penalizes stagnant species
@@ -113,17 +113,22 @@ public class Population {
 		// Finally, if any are below the survival threshold, mark for death
 		Species bestSpecies = null;
 		int generation = final_gen + 1;
+		StringBuffer buf = new StringBuffer("");		// Summarizes changes in the epoch
+				
 		
+		buf.append("Species fitness adjustment:\n");
 		Iterator<Species> itr_species = species.iterator();
 		while (itr_species.hasNext()) {
 			Species _species = itr_species.next();
+			buf.append("Species " + _species.id + " fitness changes from " + _species.avg_fitness);
+			
 			System.out.println("Prior fitness: " + _species.PrintSpecies());
 			_species.AdjustFitness();
+			
+			buf.append(" to " + _species.avg_fitness + "\n");
 			System.out.println("Adjusted fitness: " + _species.PrintSpecies());
 		}
-		
-		
-		
+						
 		// Compute average fitness over all organisms
 		Iterator<Organism> itr_organism = organisms.iterator();
 		double totalFitness = 0.0;
@@ -134,6 +139,9 @@ public class Population {
 		double overall_average = totalFitness / organisms.size();
 		
 		System.out.println(">>> Average fitness for this population: " + overall_average);
+		buf.append("\nAverage population fitness: " + overall_average + "\n");
+		
+		buf.append("\nBaby allotment:\n");
 		
 		// Compute the number of expected offspring for each individual organism
 		itr_organism = organisms.iterator();
@@ -142,6 +150,7 @@ public class Population {
 			_organism.expected_offspring = _organism.fitness / overall_average;  
 			
 			System.out.println(">>> Organism " + _organism.genome.genome_id + " is allotted " + _organism.expected_offspring + " babies.");
+			buf.append("Organism " + _organism.genome.genome_id + " of species " + _organism.species.id + " with fitness " + _organism.fitness + " has " + _organism.expected_offspring + " babies.\n");
 		}
 		
 		/*
@@ -172,6 +181,7 @@ public class Population {
 		// and assume that this won't cause a massive population explosion
 		if (total_expected > population_size) {
 			System.out.println("DEBUG: Due to rounding, target population increasing from " + population_size + " to " + total_expected);
+			buf.append("Due to rounding, target popuulation is increasing from " + population_size + " to " + total_expected + "\n");
 			population_size = total_expected;
 		}
 		
@@ -184,6 +194,7 @@ public class Population {
 			int max_expected = 0;
 			
 			System.out.println("DEBUG: Expected population below target population size.  Adding " + delta + " organisms.");
+			buf.append("Expected population is below target population size.  Adding " + delta + " organisms.\n");
 			
 			// If there is not a huge discrepancy, simply give the most fit species additional offspring to compensate
 			if (delta < population_size * 0.5) {
@@ -202,7 +213,8 @@ public class Population {
 			// This happens if a stagnant species dominates the population and then gets killed off by age
 			// The whole population plummets in fitness.  Thus, we repopulate from the best existing one.			
 			else {
-				System.out.println("WARNING: The population has died.  Repopulating with the best offspring.\n\n");								
+				System.out.println("WARNING: The population has died.  Repopulating with the best offspring.\n\n");		
+				buf.append("WARNING: Population has died.  Repopulating with the best offspring.\n");
 				while (itr_species.hasNext()) {
 					Species _species = itr_species.next();
 					if (_species.expected_offspring >= max_expected) {
@@ -249,6 +261,7 @@ public class Population {
 			highest_fitness = curSpecies.organisms.firstElement().orig_fitness;
 			highest_last_changed = 0;
 			System.out.println("\n Population has reached a new record fitness of: " + highest_fitness);
+			buf.append("\nPopulation has a new highest fitness: " + highest_fitness + " in organism " + curSpecies.organisms.firstElement().genome.genome_id + "\n");
 		} else {
 			++highest_last_changed;			
 		}
@@ -257,6 +270,7 @@ public class Population {
 		// Check for stagnation - if so, perform delta-coding
 		if (highest_last_changed >= JNEATGlobal.p_dropoff_age + 5) {
 			System.out.println(">>>>> Population is stagnant!  Performing delta coding.");
+			buf.append("WARNING: Population stagnant.  Perbforming delta coding.");
 			
 			highest_last_changed = 0;
 			int half_pop = population_size / 2;
@@ -375,6 +389,7 @@ public class Population {
 			if (_organism.eliminate) {
 				// Remove organism from species
 				System.out.println(">>> >>> Eliminating organism " + _organism.genome.genome_id);
+				buf.append("Eliminating organism " + _organism.genome.genome_id + " from species " + _organism.species.id + " with fitness " + _organism.fitness + "\n");
 				_organism.species.RemoveOrganism(_organism);
 				vDel.add(_organism);
 			}
@@ -457,7 +472,9 @@ public class Population {
 			}
 		}
 		
-		if (!best_OK) System.out.println("WARNING!  The best species died!");					
+		if (!best_OK) System.out.println("WARNING!  The best species died!");	
+		
+		return buf.toString();
 	}
 	
 	public void speciate() {

@@ -127,7 +127,7 @@ public class Hex {
 	
 	/**
 	 * Sets the vapor component of this hex, between 0 and 255 inclusive.
-	 * @param vi
+	 * @param v
 	 */
 	public void SetVapor(int vi) {
 		if (vi >= 0 && vi <= 25500) vapor = vi;							

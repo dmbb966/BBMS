@@ -37,7 +37,7 @@ public class HexMap {
 	Vector<hex.Hex> textHexList;
 	Vector<hex.Hex> vaporSourceList;
 	Vector<hex.Hex> vaporSinkList; 
-	public static int chanceTrees = 20;
+	public static int chanceTrees = 40;
 	public static int chanceHighGrass = 0;
 	public static int chanceClear = 60;
 	public static int totalWeight = chanceClear + chanceHighGrass + chanceTrees;
@@ -133,17 +133,21 @@ public class HexMap {
 	 * Checks vapor sources and sinks to determine the anticipated change for the next turn.
 	 */
 	public void updateVaporSS() {
+		int sinkDV = 0;
 		for (int i = 0; i < vaporSinkList.size(); i++) {
 			Hex finger = vaporSinkList.elementAt(i);
 			int DV = finger.ReturnVaporCalc();
-			if (DV > GlobalFuncs.maxDelta) GlobalFuncs.maxDelta = DV; 					
+			sinkDV += DV;			 				
 		}
 		
+		int srcDV = 0;		
 		for (int i = 0; i < vaporSourceList.size(); i++) {
 			Hex finger = vaporSourceList.elementAt(i);
 			int DV = finger.ReturnVaporCalc();			
-			if (DV > GlobalFuncs.maxDelta) GlobalFuncs.maxDelta = DV;
+			srcDV += DV;			
 		}
+		
+		GlobalFuncs.maxDelta = Math.max(srcDV, sinkDV);
 	}
 	
 	/**
