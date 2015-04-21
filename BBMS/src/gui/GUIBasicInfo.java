@@ -92,7 +92,7 @@ public class GUIBasicInfo extends JPanel {
 			//g.drawString("Clock " + clock.Clock.time, 10, start);
 			g.drawString(Clock.DisplayTimeNorm(), 10, row);
 			g.drawString(ClockControl.PrintTimeScale(), 85, row);
-			g.drawString("COA " + GlobalFuncs.COAIndex, 165, row);
+			g.drawString("COA " + GlobalFuncs.curCOA.name, 165, row);
 			
 			row += spacing;
 			

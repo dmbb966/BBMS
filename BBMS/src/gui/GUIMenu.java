@@ -591,6 +591,20 @@ public class GUIMenu extends JMenuBar{
 		}
 	}
 	
+	public static class RenameCOA implements ActionListener{
+		public void actionPerformed(ActionEvent event) {
+			DialogFileName d = new DialogFileName(GlobalFuncs.gui, true, "New COA Name");
+			d.setVisible(true);
+			
+			if (GlobalFuncs.tempStr.contains(",")) {
+				GUI_NB.GCO("ERROR: COA name cannot contain commas.");
+				return;
+			}
+			
+			GlobalFuncs.curCOA.name = GlobalFuncs.tempStr;
+		}
+	}
+	
 	public static class NewCOA implements ActionListener{
 		public void actionPerformed(ActionEvent event) {
 			DialogFileName d = new DialogFileName(GlobalFuncs.gui, true, "New COA Name");
@@ -798,6 +812,10 @@ public class GUIMenu extends JMenuBar{
 		
 		menuItem = new JMenuItem("Delete COA");
 		menuItem.addActionListener(new DelCOA());
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Rename COA");
+		menuItem.addActionListener(new RenameCOA());
 		menu.add(menuItem);
 	}
 	
