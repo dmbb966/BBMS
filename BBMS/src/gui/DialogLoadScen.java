@@ -167,7 +167,7 @@ public class DialogLoadScen extends javax.swing.JDialog {
 
         jLabel13.setText("Subdir");
 
-        PrefixOutputField.setText("T1");
+        PrefixOutputField.setText(GlobalFuncs.dirPrefix);
 
         RandCOACheckbox.setSelected(true);
         RandCOACheckbox.setText("Rand COA in Epoch");

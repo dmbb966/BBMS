@@ -39,6 +39,9 @@ public class GlobalFuncs {
 	
 	public static boolean RotateHull = true;
 	
+	public static String dirPrefix = "T1";
+	
+	
 	public static Vector<unit.Unit> unitList = new Vector<Unit>();
 	public static Vector<unit.Unit> friendlyUnitList = new Vector<Unit>();
 	public static Vector<unit.Unit> enemyUnitList = new Vector<Unit>();	
