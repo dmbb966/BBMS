@@ -53,6 +53,7 @@ public class GlobalFuncs {
 	
 	public static Path detailedOutput = null;
 	public static Path summaryOutput = null;
+	public static Path fullIterOutput = null;
 	public static String outputPrefix = "";
 	public static double percentPerRun = 0.1;
 	public static int currentRunsPerOrg = 0;

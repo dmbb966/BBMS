@@ -139,6 +139,7 @@ public class DialogLoadScen extends javax.swing.JDialog {
 
         Warning_Label.setText(" ");
 
+        OverwriteCheckbox.setSelected(true);
         OverwriteCheckbox.setText("Overwrite Files");
         OverwriteCheckbox.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -164,7 +165,7 @@ public class DialogLoadScen extends javax.swing.JDialog {
             }
         });
 
-        jLabel13.setText("Prefix");
+        jLabel13.setText("Subdir");
 
         PrefixOutputField.setText("T1");
 
@@ -352,16 +353,21 @@ public class DialogLoadScen extends javax.swing.JDialog {
     	GlobalFuncs.maxRunsPerOrg = runsPerOrg;
         GlobalFuncs.maxEpochs = maxE;
         GlobalFuncs.outputPrefix = PrefixOutputField.getText();
-    	
-    	File dOut = FIO.newFile("src/saves/" + PrefixOutputField.getText() + DetailedOutputFileField.getText());
-    	File sOut = FIO.newFile("src/saves/" + PrefixOutputField.getText() + SummaryOutputFileField.getText());
+        
+        FIO.newDirectory("src/saves/" + GlobalFuncs.outputPrefix);
+            	
+    	File dOut = FIO.newFile("src/saves/" + GlobalFuncs.outputPrefix + "/" + DetailedOutputFileField.getText());
+    	File sOut = FIO.newFile("src/saves/" + GlobalFuncs.outputPrefix + "/" + SummaryOutputFileField.getText());
+        File iterOut = FIO.newFile("src/saves/" + GlobalFuncs.outputPrefix + "/" + "detailedIterations.txt");
     	
     	GlobalFuncs.detailedOutput = dOut.toPath();
     	GlobalFuncs.summaryOutput = sOut.toPath();
+        GlobalFuncs.fullIterOutput = iterOut.toPath();
         
         if (overwriteDataFiles) {
             FIO.overwriteFile(GlobalFuncs.detailedOutput, "");
             FIO.overwriteFile(GlobalFuncs.summaryOutput, unit.JNEATIntegration.PrintSummaryKey());
+            FIO.overwriteFile(GlobalFuncs.fullIterOutput, unit.JNEATIntegration.PrintDetailedIterKey());
             GUI_NB.GCO("Output files overwritten");
         }
         

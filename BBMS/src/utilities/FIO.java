@@ -47,6 +47,23 @@ public class FIO {
 		
 		return true;		
 	}
+	
+	public static boolean newDirectory (String s) {
+		File checkDir = new File(s);
+		
+		if (!checkDir.exists()) {
+			if (checkDir.mkdir()) {
+				// Directory created successfully
+				return true;
+			}
+			else {
+				System.err.format("Error making directory!");
+				return false;
+			}
+		}
+		
+		return true;
+	}
 
 	public static File newFile(String s) {
 		File f = new File(s);

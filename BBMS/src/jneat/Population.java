@@ -39,15 +39,18 @@ public class Population {
 	
 	// Fitness statistics
 	/** Average fitness of the current epoch */
-	double mean_fitness;
+	public double mean_fitness;
 	double variance;
 	double standard_deviation;
+	
+	/** Average fitness of eliminated organisms from the last epoch*/
+	public double avg_fit_eliminated = 0.0;
 	
 	/** An integer that, when above zero, tells the epoch when the first winner appeared */
 	int winnergen;
 	
 	/** Maximum fitness, used for delta code and stagnation detection */
-	double highest_fitness;
+	public double highest_fitness;
 	
 	/** If too high, leads to delta coding process*/
 	int highest_last_changed;
@@ -137,6 +140,7 @@ public class Population {
 		}
 		
 		double overall_average = totalFitness / organisms.size();
+		mean_fitness = overall_average;
 		
 		System.out.println(">>> Average fitness for this population: " + overall_average);
 		buf.append("\nAverage population fitness: " + overall_average + "\n");
@@ -384,6 +388,9 @@ public class Population {
 		itr_organism = organisms.iterator();
 		Vector<Organism> vDel = new Vector<Organism>();
 		
+		double sumElimFit = 0.0;
+		int numElim = 0;
+		
 		while (itr_organism.hasNext()) {
 			Organism _organism = itr_organism.next();
 			if (_organism.eliminate) {
@@ -391,9 +398,13 @@ public class Population {
 				System.out.println(">>> >>> Eliminating organism " + _organism.genome.genome_id);
 				buf.append("Eliminating organism " + _organism.genome.genome_id + " from species " + _organism.species.id + " with fitness " + _organism.fitness + "\n");
 				_organism.species.RemoveOrganism(_organism);
+				sumElimFit += _organism.fitness;
+				numElim++;
 				vDel.add(_organism);
 			}
 		}
+		
+		avg_fit_eliminated = sumElimFit / numElim;
 		
 		// Eliminate organisms from the master list
 		for (int i = 0; i < vDel.size(); i++) {

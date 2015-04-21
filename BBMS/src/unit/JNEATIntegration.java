@@ -16,6 +16,9 @@ import hex.Hex;
 
 public class JNEATIntegration {
 	
+	static double death_sum = 0.0;
+	static int death_count = 0;
+	
 	// NOTE: Start of scenario is found in FIO
 	public static void EndofScenario() {
 		ClockControl.Pause();
@@ -24,6 +27,7 @@ public class JNEATIntegration {
 			Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
 			finger.org.AverageFitness(finger.fitType.EvaluateFitness(finger));
 			GUI_NB.GCO("Unit " + finger.callsign + " has fitness " + finger.org.fitness);
+			death_count++;
 		}
 		
 		GUI_NB.GCO(":::DESTROYED UNITS:::");
@@ -33,13 +37,17 @@ public class JNEATIntegration {
 
 			finger.org.AverageFitness(finger.fitType.EvaluateFitness(finger));			// Essentially penalizes for unit destruction as a destroyed sensor no longer spots
 			GUI_NB.GCO("Unit " + finger.callsign + " has fitness " + finger.org.fitness);
+			death_sum++;			
+			death_count++;
 		}
 		
-		PrintSummaryResults();				
+		PrintDetailedIter();				
+
 		
 		GlobalFuncs.iterationCount++;
 		
 		if (GlobalFuncs.newEpoch){
+			PrintSummaryOutput();
 			GlobalFuncs.curEpoch++;
 			GUI_NB.GCO("Starting NEW EPOCH: #" + GlobalFuncs.curEpoch);
 			String debugOutput = GlobalFuncs.currentPop.epoch();
@@ -48,6 +56,8 @@ public class JNEATIntegration {
 			FIO.appendFile(GlobalFuncs.detailedOutput, debugOutput);
 			GlobalFuncs.currentRunsPerOrg = 0;
 			GlobalFuncs.orgAssignNum = 0;
+			death_count = 0;
+			death_sum = 0.0;
 			
 			// Randomly chooses a COA
 			if (!GlobalFuncs.randCOAEpoch) {
@@ -165,28 +175,63 @@ public class JNEATIntegration {
 
 
 
-
+	/** Prints the population summary for each epoch to file */
+	public static void PrintSummaryOutput() {
+		FIO.appendFile(GlobalFuncs.summaryOutput, PrintSummaryLine());
+	}
 	
-	/** Prints the summary results from this iteration to the summary file */
-	public static void PrintSummaryResults() {
+	public static String PrintSummaryLine() {
+		StringBuffer buf = new StringBuffer("");
 		
-		for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
-			Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
-			FIO.appendFile(GlobalFuncs.summaryOutput, PrintSummaryLine(finger));
-		}
+		buf.append(GlobalFuncs.curEpoch + ", ");
+		buf.append(GlobalFuncs.currentPop.organisms.size() + ", ");
+		buf.append(GlobalFuncs.currentPop.species.size() + ", ");
+		buf.append(GlobalFuncs.currentPop.mean_fitness + ", ");
+		buf.append(GlobalFuncs.currentPop.highest_fitness + ", ");
+		buf.append(GlobalFuncs.currentPop.avg_fit_eliminated + ", ");
+		buf.append((death_sum / death_count));
 		
-		for (int i = 0; i < GlobalFuncs.destroyedUnitList.size(); i++) {
-			Unit finger = GlobalFuncs.destroyedUnitList.elementAt(i);
-			FIO.appendFile(GlobalFuncs.summaryOutput, PrintSummaryLine(finger));
-		}
-		
+		return buf.toString();
 	}
 	
 	public static String PrintSummaryKey() {
 		StringBuffer buf = new StringBuffer("");
 		
+		buf.append("Epoch #, ");
+		buf.append("Pop Size, ");
+		buf.append("Num Species, ");
+		buf.append("Avg Fitness, ");
+		buf.append("Highest Fitness, ");
+		buf.append("Avg Fit Eliminated, ");
+		buf.append("Avg Death Rate");
+		
+		return buf.toString();
+	}
+	
+	
+
+	
+	/** Prints the iteration results from this iteration to the iteration detail file */
+	public static void PrintDetailedIter() {
+		
+		for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
+			Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
+			FIO.appendFile(GlobalFuncs.fullIterOutput, PrintDetailedItrLine(finger));
+		}
+		
+		for (int i = 0; i < GlobalFuncs.destroyedUnitList.size(); i++) {
+			Unit finger = GlobalFuncs.destroyedUnitList.elementAt(i);
+			FIO.appendFile(GlobalFuncs.fullIterOutput, PrintDetailedItrLine(finger));
+		}
+		
+	}
+	
+	public static String PrintDetailedIterKey() {
+		StringBuffer buf = new StringBuffer("");
+		
 		buf.append("Iteration #, ");
 		buf.append("Epoch #, ");
+		buf.append("COA Name, ");
 		buf.append("Organism #, ");
 		buf.append("Unit Callsign, ");
 		buf.append("Unit Coordinates, ");
@@ -200,11 +245,12 @@ public class JNEATIntegration {
 	}
 	
 	/** Puts it all on one line */
-	public static String PrintSummaryLine(Unit u) {
+	public static String PrintDetailedItrLine(Unit u) {
 		StringBuffer buf = new StringBuffer("");
 		
 		buf.append(GlobalFuncs.iterationCount + ", ");
 		buf.append(GlobalFuncs.curEpoch + ", ");
+		buf.append(GlobalFuncs.curCOA.name + ", ");
 		buf.append(u.org.genome.genome_id + ", ");
 		buf.append(u.callsign + ", ");
 		buf.append(u.location.DisplayCoords() + ", ");
@@ -308,7 +354,7 @@ public class JNEATIntegration {
 		if (GlobalFuncs.newEpoch) {
 			GUI_NB.GCO("New epoch: outputting network information to: " + GlobalFuncs.detailedOutput.toString());
 			
-			File netInfo = FIO.newFile("src/saves/" + GlobalFuncs.outputPrefix + "pop" + GlobalFuncs.curEpoch + ".pop");
+			File netInfo = FIO.newFile("src/saves/" + GlobalFuncs.outputPrefix + "/" + GlobalFuncs.outputPrefix + "pop" + GlobalFuncs.curEpoch + ".pop");
 			GlobalFuncs.currentPop.SavePopulationToFile(netInfo.toPath());
 			
 			//FIO.appendFile(GlobalFuncs.detailedOutput, "\n\n\n---->>> NEW EPOCH at iteration " + GlobalFuncs.iterationCount + "<<<----\n\n\n");
