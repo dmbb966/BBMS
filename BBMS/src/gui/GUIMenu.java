@@ -699,9 +699,9 @@ public class GUIMenu extends JMenuBar{
 				GUI_NB.GCO("ERROR!  Must select a unit first.");
 				return;
 			}
-						
-			double sense = OrganismTypeEnum.SenseFlowSingle(GlobalFuncs.selectedUnit.location);
-			GUI_NB.GCO("Unnormalized value for unit: " + sense + " and normalized: " + sense / GlobalFuncs.maxSpottedDV);						
+			
+			GUI_NB.GCO("FOV Sensor returns: " + unit.OrganismTypeEnum.SenseFlowFOV(GlobalFuncs.selectedUnit.location) + 
+					" and individual sensor returns: " + unit.OrganismTypeEnum.SenseFlowLocation(GlobalFuncs.selectedUnit.location));
 			GlobalFuncs.selectedUnit.DisplayLOSToRange(GlobalFuncs.visibility);
 		}
 	}
@@ -714,8 +714,9 @@ public class GUIMenu extends JMenuBar{
 			}
 			
 			// Unit.GetLOSToRange(GlobalFuncs.selectedHex, GlobalFuncs.visibility);
-			double sense = OrganismTypeEnum.SenseFlowSingle(GlobalFuncs.selectedHex);
-			GUI_NB.GCO("Unnormalized value for hex: " + sense + " and normalized: " + sense / GlobalFuncs.maxSpottedDV);
+			//double sense = OrganismTypeEnum.SenseFlowFOV(GlobalFuncs.selectedHex);
+			//GUI_NB.GCO("Unnormalized value for hex: " + sense + " and normalized: " + sense / GlobalFuncs.maxSpottedDV);
+			unit.OrganismTypeEnum.SenseFlow60(GlobalFuncs.selectedHex);
 			Unit.DisplayLOSToRange(GlobalFuncs.selectedHex, GlobalFuncs.visibility);
 		}
 	}

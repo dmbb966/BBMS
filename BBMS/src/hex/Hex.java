@@ -455,6 +455,14 @@ public class Hex {
 		if (result.length > 8) GUI_NB.GCO("Error reading data for hex!  Input string too long.");
 	}
 	
+	/** Takes the direction (which of the six hex faces) from the current hex to the destination */
+	public int DirectionTo(Hex destination) {
+		
+		double azimuth = this.toHO().AzimuthTo(destination.toHO());
+		
+		return (int) (azimuth / 60);
+	}
+	
 	public String DisplayCoords() {
 		return ("(" + x + ", " + y + ")");
 	}

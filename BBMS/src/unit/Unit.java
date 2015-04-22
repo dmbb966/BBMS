@@ -166,6 +166,8 @@ public class Unit {
 		callsign = u.callsign;
 		unitID = u.unitID;
 		
+		orgType = u.orgType;
+		
 		RefreshUnitInfo();
 		
 		// Doesn't need to worry about unit lists since on loadCOA, it automatically does this		
@@ -189,6 +191,8 @@ public class Unit {
 		
 		callsign = givenCallsign;		
 		unitID = GlobalFuncs.getNewUnitCount();
+		
+		orgType = GlobalFuncs.defaultOrgType;
 		
 		RefreshUnitInfo();
 			
@@ -659,6 +663,48 @@ public class Unit {
 		// GUI_NB.GCO("Move calc: MP: " + movePoints + " * MR: " + moveRate + " with clock step " + ClockControl.CLOCK_STEP + "with move cost: " + moveCost);
 		return (int) ((HexMap.SUBHEX_SIZE * movePoints * moveRate * ClockControl.CLOCK_STEP * GlobalFuncs.moveRateMult) / (100 * 60 * moveCost * 1000));
 	}
+	
+	/** Activates the sensors for its given type and returns the output of the network */
+	public double UseSensors(Hex prospective) {
+		
+		double sensorInput = 0.0;
+		
+		switch (orgType) {
+		
+		case SIMPLE_SINGLE:
+			sensorInput = OrganismTypeEnum.NormalizedSenseFlowSingle(prospective);
+			
+			org.net.inputs.firstElement().LoadSensor(sensorInput);
+			org.net.ActivateNetwork();
+			
+			return org.net.outputs.firstElement().getActivation();
+			
+		case SIMPLE_DUAL:
+			sensorInput = OrganismTypeEnum.NormalizedSenseFlowSingle(prospective);			
+			org.net.inputs.elementAt(0).LoadSensor(sensorInput);
+			
+			sensorInput = OrganismTypeEnum.SenseFlowLocation(prospective);
+			org.net.inputs.elementAt(1).LoadSensor(sensorInput);
+			org.net.ActivateNetwork();
+			
+			return org.net.outputs.firstElement().getActivation();
+			
+		case SIX_DIRECTIONAL:
+			double[] sensorFaces = OrganismTypeEnum.SenseFlow60(prospective);
+			double thisHex = OrganismTypeEnum.SenseFlowLocation(prospective);
+			
+			for (int i = 0; i < 6; i++) {
+				org.net.inputs.elementAt(i).LoadSensor(sensorFaces[i]);
+			}
+			org.net.inputs.elementAt(6).LoadSensor(thisHex);
+			org.net.ActivateNetwork();
+			
+			return org.net.outputs.firstElement().getActivation();						
+		}
+		
+		return 0.0;
+	}
+	
 	
 	 
 }

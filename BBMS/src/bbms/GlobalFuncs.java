@@ -16,6 +16,7 @@ import javax.swing.JMenuBar;
 import jneat.Population;
 import clock.Clock;
 import clock.ClockThread;
+import unit.OrganismTypeEnum;
 import unit.Unit;
 import utilities.FIO;
 import utilities.MersenneTwister;
@@ -39,7 +40,7 @@ public class GlobalFuncs {
 	
 	public static boolean RotateHull = true;
 	
-	public static String dirPrefix = "T1";
+	public static String dirPrefix = "T";
 	
 	
 	public static Vector<unit.Unit> unitList = new Vector<Unit>();
@@ -48,6 +49,8 @@ public class GlobalFuncs {
 	public static Vector<unit.Unit> destroyedUnitList = new Vector<Unit>();
 	public static Hex selectedHex = null; 
 	public static Unit selectedUnit = null;
+	
+	public static OrganismTypeEnum defaultOrgType = OrganismTypeEnum.SIMPLE_SINGLE;
 	
 	public static Population currentPop = null;	
 	public static String tempStr = "";				// Used for some dialog box results

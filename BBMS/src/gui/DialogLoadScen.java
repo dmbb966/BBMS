@@ -392,6 +392,19 @@ public class DialogLoadScen extends javax.swing.JDialog {
         else if (ValidateGlobalInputs()){
             
             bbms.GlobalFuncs.currentPop = new jneat.Population(Math.max(1, popSize), numSensors, numOutputs, numHidden, false, probLink);
+            
+            switch(numSensors) {
+                case 1: 
+                    GlobalFuncs.defaultOrgType = unit.OrganismTypeEnum.SIMPLE_SINGLE;
+                    break;
+                case 2:
+                    GlobalFuncs.defaultOrgType = unit.OrganismTypeEnum.SIMPLE_DUAL;
+                    break;
+                case 7:
+                    GlobalFuncs.defaultOrgType = unit.OrganismTypeEnum.SIX_DIRECTIONAL;
+                    break;                
+            }
+            
             GUI_NB.GCO("New population added.");            
             GUI_NB.GCO("Running scenario iteration setup.");        
             int subPopSize = GlobalFuncs.currentPop.PopulationSlice(GlobalFuncs.percentPerRun);

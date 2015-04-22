@@ -93,7 +93,7 @@ public class HexMap {
 		
 		for (int i = 0; i < samples; i++) {
 			Hex finger = RandomHexReconZone();
-			double comparator = OrganismTypeEnum.SenseFlowSingle(finger);
+			double comparator = OrganismTypeEnum.SenseFlowFOV(finger);
 			if (comparator > mostDV) mostDV = comparator;
 		}
 		return mostDV;
@@ -106,7 +106,7 @@ public class HexMap {
 			for (int x = 0; x < xDim; x++) {
 				Hex finger = getHex(x, y);
 				if (inReconZone(finger)) {
-					double comparator = OrganismTypeEnum.SenseFlowSingle(finger);
+					double comparator = OrganismTypeEnum.SenseFlowFOV(finger);
 					if (comparator > mostDV) mostDV = comparator;
 				}
 			}
