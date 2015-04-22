@@ -21,7 +21,7 @@ public class JNEATIntegration {
 	
 	// NOTE: Start of scenario is found in FIO
 	public static void EndofScenario() {
-		ClockControl.Pause();
+		ClockControl.SetPaused(true);
 		
 		for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
 			Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
@@ -76,7 +76,7 @@ public class JNEATIntegration {
 				// Pause when max epochs exceeded
 			}
 			else {
-				ClockControl.Pause();	// Unpauses the scenario
+				ClockControl.SetPaused(false);	// Unpauses the scenario
 			}
 		}
 		
@@ -189,7 +189,7 @@ public class JNEATIntegration {
 		buf.append(GlobalFuncs.currentPop.organisms.size() + ", ");
 		buf.append(GlobalFuncs.currentPop.species.size() + ", ");
 		buf.append(GlobalFuncs.currentPop.mean_fitness + ", ");
-		buf.append(GlobalFuncs.currentPop.highest_fitness + ", ");
+		buf.append(GlobalFuncs.currentPop.max_fitness_this_epoch + ", ");
 		buf.append(GlobalFuncs.currentPop.avg_fit_eliminated + ", ");
 		buf.append((death_sum / death_count));
 		
@@ -203,7 +203,7 @@ public class JNEATIntegration {
 		buf.append("Pop Size, ");
 		buf.append("Num Species, ");
 		buf.append("Avg Fitness, ");
-		buf.append("Highest Fitness, ");
+		buf.append("Max Fitness, ");
 		buf.append("Avg Fit Eliminated, ");
 		buf.append("Avg Death Rate");
 		

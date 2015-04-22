@@ -635,6 +635,7 @@ public class GUIMenu extends JMenuBar{
 				GUI_NB.GCO("ERROR: COA name cannot contain commas.");
 				return;
 			}
+			GlobalFuncs.curCOA.SaveCOA();
 			
 			COA nCOA = new COA(GlobalFuncs.curCOA, GlobalFuncs.tempStr);
 			GlobalFuncs.allCOAs.addElement(nCOA);

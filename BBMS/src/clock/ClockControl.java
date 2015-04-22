@@ -14,6 +14,13 @@ public class ClockControl {
     	return clockDelay;
     }
     
+    /** Sets paused status to a particular value */
+    public static void SetPaused(boolean p) {
+    	paused = p;
+    	if (paused) GUI_NB.GCO("Time set to paused.");
+        else GUI_NB.GCO("Time set to unpaused.");    	
+    }
+    
     /**
      * Toggles whether or not the clock is paused
      */

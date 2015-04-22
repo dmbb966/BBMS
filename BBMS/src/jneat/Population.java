@@ -40,6 +40,7 @@ public class Population {
 	// Fitness statistics
 	/** Average fitness of the current epoch */
 	public double mean_fitness;
+	public double max_fitness_this_epoch;
 	double variance;
 	double standard_deviation;
 	
@@ -135,8 +136,12 @@ public class Population {
 		// Compute average fitness over all organisms
 		Iterator<Organism> itr_organism = organisms.iterator();
 		double totalFitness = 0.0;
+		max_fitness_this_epoch = 0.0;
 		while (itr_organism.hasNext()) {
-			totalFitness += itr_organism.next().fitness;
+			double thisFit = itr_organism.next().fitness;
+			totalFitness += thisFit;
+			if (thisFit > max_fitness_this_epoch) max_fitness_this_epoch = thisFit;
+			
 		}
 		
 		double overall_average = totalFitness / organisms.size();
