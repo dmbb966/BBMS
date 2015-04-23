@@ -112,7 +112,7 @@ public class DialogLoadScen extends javax.swing.JDialog {
 
         NumScouts_Field.setColumns(3);
         NumScouts_Field.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        NumScouts_Field.setText("5");
+        NumScouts_Field.setText("100");
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setText("Num Scouts");
@@ -136,7 +136,7 @@ public class DialogLoadScen extends javax.swing.JDialog {
 
         jLabel10.setText("Percent per Run");
 
-        PercentRunField.setText("1.0");
+        PercentRunField.setText("0.1");
 
         jLabel11.setText("Runs per Organism");
 
@@ -154,7 +154,7 @@ public class DialogLoadScen extends javax.swing.JDialog {
 
         jLabel12.setText("Stop After Epochs");
 
-        MaxEpochsField.setText("500");
+        MaxEpochsField.setText("50");
 
         PauseEpochCheckbox.setText("Pause at Epoch");
         PauseEpochCheckbox.addItemListener(new java.awt.event.ItemListener() {
