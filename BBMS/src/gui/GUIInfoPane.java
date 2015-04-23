@@ -199,6 +199,9 @@ public class GUIInfoPane extends JPanel {
 			g.drawString("Turret azimuth: " + GlobalFuncs.selectedUnit.turretOrientation, 10, row);
 			row += spacing;
 			
+			g.drawString("Spotted: " + GlobalFuncs.selectedUnit.spotted, 10, row);
+			row += spacing;
+			
 			if (GlobalFuncs.selectedUnit.org == null) {
 				g.drawString("No neural net loaded.", 10,  row);				
 			} else {

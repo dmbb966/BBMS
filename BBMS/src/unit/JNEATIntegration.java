@@ -18,6 +18,8 @@ public class JNEATIntegration {
 	
 	static double death_sum = 0.0;
 	static int death_count = 0;
+	static double epoch_spotted = 0;
+	static int epoch_possibleSpot = 0;
 	
 	// NOTE: Start of scenario is found in FIO
 	public static void EndofScenario() {
@@ -35,7 +37,8 @@ public class JNEATIntegration {
 		for (int i = 0; i < GlobalFuncs.destroyedUnitList.size(); i++) {
 			Unit finger = GlobalFuncs.destroyedUnitList.elementAt(i);
 
-			finger.org.AverageFitness(finger.fitType.EvaluateFitness(finger));			// Essentially penalizes for unit destruction as a destroyed sensor no longer spots
+			// Destroyed units have a fitness multiplier applied to them, on top of the fitness lost by no longer spotting.
+			finger.org.AverageFitness(finger.fitType.EvaluateFitness(finger) * GlobalFuncs.deathPenalty);
 			GUI_NB.GCO("Unit " + finger.callsign + " has fitness " + finger.org.fitness);
 			death_sum++;			
 			death_count++;
@@ -43,6 +46,8 @@ public class JNEATIntegration {
 		
 		PrintDetailedIter();				
 
+		epoch_spotted += GlobalFuncs.spottedSoFar;
+		epoch_possibleSpot += GlobalFuncs.maxPossibleSpots;
 		
 		GlobalFuncs.iterationCount++;
 		
@@ -60,6 +65,9 @@ public class JNEATIntegration {
 			GlobalFuncs.orgAssignNum = 0;
 			death_count = 0;
 			death_sum = 0.0;
+			epoch_spotted = 0.0;
+			epoch_possibleSpot = 0;
+			
 			
 			// Randomly chooses a COA
 			if (!GlobalFuncs.randCOAEpoch) {
@@ -80,6 +88,7 @@ public class JNEATIntegration {
 			}
 		}
 		
+		GlobalFuncs.spottedSoFar = 0;
 		GlobalFuncs.maxPossibleSpots = 0;
 		Clock.time = 0;
 		
@@ -156,8 +165,11 @@ public class JNEATIntegration {
 				//GUI_NB.GCO("Prospective hex: (" + prospective.x + ", " + prospective.y + ") is input: " + sensorInput + " with output: " + networkResult);
 				
 				if (networkResult > resultThreshold) {
-					//GUI_NB.GCO("Location accepted. Teleporting unit.");
+					//GUI_NB.GCO("Location accepted. Teleporting unit.");					
 					u.TeleportTo(prospective);
+					u.emplaced = true;
+					u.UpdateSharedSpotting();
+					
 					//u.DisplayLOSToRange(GlobalFuncs.visibility);
 					foundSpot = true;
 				}
@@ -186,7 +198,8 @@ public class JNEATIntegration {
 		buf.append(GlobalFuncs.currentPop.mean_fitness + ", ");
 		buf.append(GlobalFuncs.currentPop.max_fitness_this_epoch + ", ");
 		buf.append(GlobalFuncs.currentPop.avg_fit_eliminated + ", ");
-		buf.append((death_sum / death_count));
+		buf.append((death_sum / death_count) + ", ");
+		buf.append((epoch_spotted / epoch_possibleSpot));
 		
 		return buf.toString();
 	}
@@ -200,7 +213,8 @@ public class JNEATIntegration {
 		buf.append("Avg Fitness, ");
 		buf.append("Max Fitness, ");
 		buf.append("Avg Fit Eliminated, ");
-		buf.append("Avg Death Rate");
+		buf.append("Avg Death Rate, ");
+		buf.append("Overal Team Performance");
 		
 		return buf.toString();
 	}
@@ -236,7 +250,8 @@ public class JNEATIntegration {
 		buf.append("Spotting credits, ");
 		buf.append("Final fitness, ");
 		buf.append("Organism averaged fitness, ");
-		buf.append("Organism number of averages");
+		buf.append("Organism number of averages, ");
+		buf.append("Team performance");
 		
 		return buf.toString();
 	}
@@ -255,7 +270,8 @@ public class JNEATIntegration {
 		buf.append(u.spotCredits + ", ");
 		buf.append(u.spotCredits / GlobalFuncs.maxPossibleSpots + ", ");
 		buf.append(u.org.fitness + ", ");
-		buf.append(u.org.fitAveragedOver);
+		buf.append(u.org.fitAveragedOver + ", ");
+		buf.append(((double)GlobalFuncs.spottedSoFar / GlobalFuncs.maxPossibleSpots));
 		
 		return buf.toString();
 		

@@ -16,6 +16,7 @@ import javax.swing.JMenuBar;
 import jneat.Population;
 import clock.Clock;
 import clock.ClockThread;
+import unit.FitnessTypeEnum;
 import unit.OrganismTypeEnum;
 import unit.Unit;
 import utilities.FIO;
@@ -42,6 +43,8 @@ public class GlobalFuncs {
 	
 	public static String dirPrefix = "T";
 	
+	public static double deathPenalty = 1.0;	// Fitness multiplier if the unit is destroyed
+	public static FitnessTypeEnum defaultFitType = FitnessTypeEnum.SIMPLE_GREEDY;
 	
 	public static Vector<unit.Unit> unitList = new Vector<Unit>();
 	public static Vector<unit.Unit> friendlyUnitList = new Vector<Unit>();
@@ -72,6 +75,8 @@ public class GlobalFuncs {
 	public static boolean newEpoch = false;
 	public static boolean randCOAEpoch = true;
 	
+	
+	public static int spottedSoFar = 0;
 	public static int maxPossibleSpots = 0;
 	
 	public static double moveRateMult = 10.0;

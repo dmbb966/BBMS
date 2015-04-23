@@ -15,7 +15,7 @@ public enum OrganismTypeEnum {
 	SIX_DIRECTIONAL;
 	
 	/** Senses the vapor DV for all hexes that it can see.  Will NOT count DV in the "friendly" zone */
-	public static double SenseFlowFOV(Hex origin) {		
+	public static double SenseFlowFOV(Hex origin, FitnessTypeEnum fT) {		
 		Vector<Hex> visibleHexes = Unit.GetLOSToRange(origin, GlobalFuncs.visibility);
 		double sumDV = 0;
 		
@@ -24,7 +24,10 @@ public enum OrganismTypeEnum {
 		for (int i = 0; i < visibleHexes.size(); i++){
 			Hex finger = visibleHexes.elementAt(i);
 			// finger.DisplayInfo();
-			if (!GlobalFuncs.scenMap.inFriendlyZone(finger)) sumDV += finger.deltaVapor;
+			if (!GlobalFuncs.scenMap.inFriendlyZone(finger)) {
+				if (fT == FitnessTypeEnum.SHARED_SPOTTING) sumDV += finger.CalcSharedDV();
+				else sumDV += finger.deltaVapor;
+			}
 		}
 		
 		// GUI_NB.GCO("Check complete.  Visible hex size is: " + visibleHexes.size() + " with total DV: " + sumDV);
@@ -33,11 +36,13 @@ public enum OrganismTypeEnum {
 	}	
 	
 	/** Returns the normalized delta vapor of the specified hex*/
-	public static double SenseFlowLocation(Hex origin) {			
+	public static double SenseFlowLocation(Hex origin, FitnessTypeEnum fT) {
+		if (fT == FitnessTypeEnum.SHARED_SPOTTING) return (double) origin.CalcSharedDV() / GlobalFuncs.maxsingleDV;
+		
 		return (double) origin.deltaVapor / GlobalFuncs.maxsingleDV;
 	}
 	
-	public static double[] SenseFlow60(Hex origin) {
+	public static double[] SenseFlow60(Hex origin, FitnessTypeEnum fT) {
 		double[] ret = {0, 0, 0, 0, 0, 0};
 		
 		Vector<Hex> visibleHexes = Unit.GetLOSToRange(origin,  GlobalFuncs.visibility);
@@ -45,7 +50,8 @@ public enum OrganismTypeEnum {
 			Hex finger = visibleHexes.elementAt(i);
 			int direction = origin.DirectionTo(finger);
 			
-			ret[direction] += finger.deltaVapor;
+			if (fT == FitnessTypeEnum.SHARED_SPOTTING) ret[direction] += finger.CalcSharedDV();
+			else ret[direction] += finger.deltaVapor;
 		}
 		
 		for (int i = 0; i < 6; i++) {
@@ -57,8 +63,8 @@ public enum OrganismTypeEnum {
 		return ret;
 	}
 	
-	public static double NormalizedSenseFlowSingle(Hex origin) {
-		return SenseFlowFOV(origin) / GlobalFuncs.maxSpottedDV;
+	public static double NormalizedSenseFlowSingle(Hex origin, FitnessTypeEnum fT) {
+		return SenseFlowFOV(origin, fT) / GlobalFuncs.maxSpottedDV;
 	}
 }
 

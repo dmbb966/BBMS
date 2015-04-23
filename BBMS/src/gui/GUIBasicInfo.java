@@ -19,6 +19,7 @@ public class GUIBasicInfo extends JPanel {
 	static String obsc = "";
 	static String dens = "";
 	static String obsH = "";
+	static String spots = "";
 	
 	static String unitCallsign = "";
 	static String unitType = ""; 	
@@ -50,7 +51,8 @@ public class GUIBasicInfo extends JPanel {
 			elev = "Elev: " + lastHex.elevation + "m";																							
 			obsc = "Obsc: " + lastHex.obscuration;			
 			dens = "Density: " + lastHex.density;						
-			obsH = "ObsH: " + lastHex.obsHeight + "m";	
+			obsH = "ObsH: " + lastHex.obsHeight + "m";
+			spots = "Spot: " + lastHex.numSpots;
 			
 			if (lastHex.HexUnit != null) {
 				unitCallsign = lastHex.HexUnit.callsign;
@@ -118,6 +120,7 @@ public class GUIBasicInfo extends JPanel {
 			row += spacing;			
 			// Fourth line: Debug info - mouse cursor location
 			g.drawString("Mouse at (" + mouseX + ", " + mouseY + "), (" + uniMouseX + ", " + uniMouseY + ")", 10, row);
+			g.drawString(spots, 165, row);
 		}				
 	}
 	

@@ -701,9 +701,7 @@ public class GUIMenu extends JMenuBar{
 			}
 			
 			GlobalFuncs.selectedUnit.UseSensors(GlobalFuncs.selectedUnit.location);
-			
-			GUI_NB.GCO("FOV Sensor returns: " + unit.OrganismTypeEnum.SenseFlowFOV(GlobalFuncs.selectedUnit.location) + 
-					" and individual sensor returns: " + unit.OrganismTypeEnum.SenseFlowLocation(GlobalFuncs.selectedUnit.location));
+						
 			GlobalFuncs.selectedUnit.DisplayLOSToRange(GlobalFuncs.visibility);
 		}
 	}
@@ -718,7 +716,7 @@ public class GUIMenu extends JMenuBar{
 			// Unit.GetLOSToRange(GlobalFuncs.selectedHex, GlobalFuncs.visibility);
 			//double sense = OrganismTypeEnum.SenseFlowFOV(GlobalFuncs.selectedHex);
 			//GUI_NB.GCO("Unnormalized value for hex: " + sense + " and normalized: " + sense / GlobalFuncs.maxSpottedDV);
-			unit.OrganismTypeEnum.SenseFlow60(GlobalFuncs.selectedHex);
+			unit.OrganismTypeEnum.SenseFlow60(GlobalFuncs.selectedHex, FitnessTypeEnum.SIMPLE_GREEDY);
 			Unit.DisplayLOSToRange(GlobalFuncs.selectedHex, GlobalFuncs.visibility);
 		}
 	}

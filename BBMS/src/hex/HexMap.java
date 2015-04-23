@@ -11,6 +11,7 @@ import java.util.Vector;
 
 import clock.Clock;
 import terrain.TerrainEnum;
+import unit.FitnessTypeEnum;
 import unit.OrganismTypeEnum;
 import unit.Unit;
 import utilities.FIO;
@@ -93,7 +94,7 @@ public class HexMap {
 		
 		for (int i = 0; i < samples; i++) {
 			Hex finger = RandomHexReconZone();
-			double comparator = OrganismTypeEnum.SenseFlowFOV(finger);
+			double comparator = OrganismTypeEnum.SenseFlowFOV(finger, FitnessTypeEnum.SIMPLE_GREEDY);
 			if (comparator > mostDV) mostDV = comparator;
 		}
 		return mostDV;
@@ -108,7 +109,7 @@ public class HexMap {
 			for (int x = 0; x < xDim; x++) {
 				Hex finger = getHex(x, y);
 				if (inReconZone(finger)) {
-					double[] comp60 = OrganismTypeEnum.SenseFlow60(finger);					
+					double[] comp60 = OrganismTypeEnum.SenseFlow60(finger, FitnessTypeEnum.SIMPLE_GREEDY);					
 					double FOVsum = 0.0;					
 					
 					for (int i = 0; i < 6; i++) {

@@ -30,6 +30,7 @@ public class Hex {
 	public int vaporOut;		// How much the vapor level in this hex will change at the next iteration.
 	public int vaporIn;
 	public int deltaVapor;
+	public int numSpots = 1;	// Number of friendly units that have eyes on this hex + 1.  Used for shared spotting fitness functions.
 	
 	public VaporEnum vaporType = VaporEnum.NONE;
 	
@@ -256,6 +257,10 @@ public class Hex {
 			}
 								
 		}
+	}
+	
+	public double CalcSharedDV() {
+		return (double)deltaVapor / numSpots;
 	}
 	
 	/**

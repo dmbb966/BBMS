@@ -70,6 +70,11 @@ public class Clock {
 		// Move units first.  This will make all enemy forces un-spotted.  All friendly forces will be considered spotted.
 		for (int i = 0; i < GlobalFuncs.unitList.size(); i++) {
 			Unit finger = GlobalFuncs.unitList.elementAt(i);
+			
+			if (finger.side == SideEnum.ENEMY) {
+				if (finger.spotted && !GlobalFuncs.scenMap.inFriendlyZone(finger.location)) GlobalFuncs.spottedSoFar++;
+			}
+			
 			finger.MoveToWaypoint();
 			
 			if (finger.side == SideEnum.ENEMY) {

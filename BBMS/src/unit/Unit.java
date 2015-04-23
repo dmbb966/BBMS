@@ -45,7 +45,7 @@ public class Unit {
 	public OrganismTypeEnum orgType = OrganismTypeEnum.SIMPLE_SINGLE;
 	
 	/** Determines how the fitness for the neural network is evaluated */
-	public FitnessTypeEnum fitType = FitnessTypeEnum.SIMPLE_GREEDY;
+	public FitnessTypeEnum fitType = GlobalFuncs.defaultFitType;
 	
 	/** Fitness for this current iteration.  Will update NN fitness at the end of the scenario. */
 	public double curFitness = -1.0;
@@ -57,6 +57,7 @@ public class Unit {
 	public double spotCredits = 0.0;
 	
 	public boolean destroyed = false;
+	public boolean emplaced = false;		// When true, teleporting will reset shared spotting
 	
 	public double hullOrientation;
 	public double turretOrientation;	// Relative to the hull
@@ -439,6 +440,29 @@ public class Unit {
 		return output;		
 	}
 	
+	public void UpdateSharedSpotting() {
+		Vector<Hex> hexList = GetLOSToRange(location, GlobalFuncs.visibility);
+		
+		for (int i = 0; i < hexList.size(); i++) {
+			Hex finger = hexList.elementAt(i);
+			finger.numSpots++;
+		}
+	}
+	
+	public void RemoveSharedSpotting() {
+		Vector<Hex> hexList = GetLOSToRange(location, GlobalFuncs.visibility);
+		
+		for (int i = 0; i < hexList.size(); i++) {
+			Hex finger = hexList.elementAt(i);
+			finger.numSpots--;
+			
+			if (finger.numSpots < 1) {
+				GUI_NB.GCO("ERROR!  Attempting to reduce number of spots below one.");
+				finger.numSpots = 1;
+			}
+		}		
+	}
+	
 	public Vector<Hex> GetLOSToRange(int range) {
 		return GetLOSToRange(this.location, range);
 	}
@@ -589,9 +613,15 @@ public class Unit {
 			return;
 		}
 		
+		if (emplaced) {
+			RemoveSharedSpotting();
+		}
+		
 		currentLoc.HexUnit = null;
 		h.HexUnit = this;
 		this.location = h;
+		
+		if (emplaced) UpdateSharedSpotting();
 		
 		// GUI_NB.GCO("Unit moved successfully.");
 	}
@@ -672,7 +702,7 @@ public class Unit {
 		switch (orgType) {
 		
 		case SIMPLE_SINGLE:
-			sensorInput = OrganismTypeEnum.NormalizedSenseFlowSingle(prospective);
+			sensorInput = OrganismTypeEnum.NormalizedSenseFlowSingle(prospective, fitType);
 			
 			org.net.inputs.firstElement().LoadSensor(sensorInput);
 			org.net.ActivateNetwork();
@@ -680,18 +710,18 @@ public class Unit {
 			return org.net.outputs.firstElement().getActivation();
 			
 		case SIMPLE_DUAL:
-			sensorInput = OrganismTypeEnum.NormalizedSenseFlowSingle(prospective);			
+			sensorInput = OrganismTypeEnum.NormalizedSenseFlowSingle(prospective, fitType);			
 			org.net.inputs.elementAt(0).LoadSensor(sensorInput);
 			
-			sensorInput = OrganismTypeEnum.SenseFlowLocation(prospective);
+			sensorInput = OrganismTypeEnum.SenseFlowLocation(prospective, fitType);
 			org.net.inputs.elementAt(1).LoadSensor(sensorInput);
 			org.net.ActivateNetwork();
 			
 			return org.net.outputs.firstElement().getActivation();
 			
 		case SIX_DIRECTIONAL:
-			double[] sensorFaces = OrganismTypeEnum.SenseFlow60(prospective);
-			double thisHex = OrganismTypeEnum.SenseFlowLocation(prospective);
+			double[] sensorFaces = OrganismTypeEnum.SenseFlow60(prospective, fitType);
+			double thisHex = OrganismTypeEnum.SenseFlowLocation(prospective, fitType);
 			
 			for (int i = 0; i < 6; i++) {
 				org.net.inputs.elementAt(i).LoadSensor(sensorFaces[i]);
