@@ -225,6 +225,14 @@ public class HexMap {
 		}
 	}
 	
+	public void resetSpotCounts() {
+		for (int y = 0; y < yDim; y++) {
+			for (int x = 0; x < xDim; x++) {
+				hexArray[x][y].numSpots = 1;
+			}
+		}
+	}
+	
 	public void updateAllVapor() {
 		
 		long oldTV = GlobalFuncs.totalVapor;
