@@ -40,7 +40,7 @@ public class JNEATGlobal {
 	// /** Size of the population is locally defined in the Population class */
 	// public static int p_pop_size = 500;
 	
-	static double mutateProbConst = 0.15;
+	static double mutateProbConst = 0.75;
 	
 	// Mutation probabilities
 	static double p_mutate_add_link_prob = mutateProbConst;

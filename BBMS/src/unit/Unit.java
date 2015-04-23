@@ -103,6 +103,7 @@ public class Unit {
 	}
 	
 	public void RemoveUnit() {
+		if (emplaced) RemoveSharedSpotting();
 		GlobalFuncs.unitList.removeElement(this);
 		RemovefromSide(this.side);
 		if (GlobalFuncs.selectedUnit == this) GlobalFuncs.selectedUnit = null;
