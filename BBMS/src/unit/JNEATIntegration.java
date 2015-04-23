@@ -92,7 +92,7 @@ public class JNEATIntegration {
 		GlobalFuncs.maxPossibleSpots = 0;
 		Clock.time = 0;
 		
-		GlobalFuncs.scenMap.resetSpotCounts();
+		if (GlobalFuncs.calcShared) GlobalFuncs.scenMap.resetSpotCounts();
 		ScenIterationSetup(GlobalFuncs.numScoutsPer);
 	}
 	
@@ -168,8 +168,11 @@ public class JNEATIntegration {
 				if (networkResult > resultThreshold) {
 					//GUI_NB.GCO("Location accepted. Teleporting unit.");					
 					u.TeleportTo(prospective);
-					u.emplaced = true;
-					u.UpdateSharedSpotting();
+					
+					if (GlobalFuncs.calcShared) {
+						u.emplaced = true;
+						u.UpdateSharedSpotting();
+					}					
 					
 					//u.DisplayLOSToRange(GlobalFuncs.visibility);
 					foundSpot = true;

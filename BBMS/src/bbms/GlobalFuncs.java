@@ -55,6 +55,8 @@ public class GlobalFuncs {
 	
 	public static OrganismTypeEnum defaultOrgType = OrganismTypeEnum.SIMPLE_SINGLE;
 	
+	public static boolean calcShared = false;
+	
 	public static Population currentPop = null;	
 	public static String tempStr = "";				// Used for some dialog box results
 	public static int orgAssignNum = 0;

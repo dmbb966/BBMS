@@ -423,7 +423,10 @@ public class DialogLoadScen extends javax.swing.JDialog {
         clock.ClockControl.SetTimeScale((byte)11);
         
         if (fitTyeNum == 1) GlobalFuncs.defaultFitType = FitnessTypeEnum.SIMPLE_GREEDY;
-        else if (fitTyeNum == 2) GlobalFuncs.defaultFitType = FitnessTypeEnum.SHARED_SPOTTING;
+        else if (fitTyeNum == 2) {
+            GlobalFuncs.defaultFitType = FitnessTypeEnum.SHARED_SPOTTING;
+            GlobalFuncs.calcShared = true;
+        }
     	
     	return true;
     }
