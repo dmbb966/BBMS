@@ -99,20 +99,37 @@ public class HexMap {
 		return mostDV;
 	}
 	
-	public double CalcExactDVNorm() {
+	public void UpdateExactDVNorm() {
 		double mostDV = 1.0;
+		double most60DV = 1.0;
+		double mostSingleHex = 1.0;
 		
 		for (int y = 0; y < yDim; y++) {
 			for (int x = 0; x < xDim; x++) {
 				Hex finger = getHex(x, y);
 				if (inReconZone(finger)) {
-					double comparator = OrganismTypeEnum.SenseFlowFOV(finger);
-					if (comparator > mostDV) mostDV = comparator;
+					double[] comp60 = OrganismTypeEnum.SenseFlow60(finger);					
+					double FOVsum = 0.0;					
+					
+					for (int i = 0; i < 6; i++) {
+						FOVsum += comp60[i];
+						if (comp60[i] > most60DV) most60DV = comp60[i];
+						GUI_NB.GCO("Unnormalized flow from " + i + " is " + comp60[i]);
+					}
+					
+					mostDV = Math.max(FOVsum,  mostDV);
+					mostSingleHex = Math.max(mostSingleHex, finger.deltaVapor);
 				}
 			}
 		}
 		
-		return mostDV;
+		GlobalFuncs.maxSpottedDV = mostDV;
+		GlobalFuncs.maxSpottedDV60 = most60DV;
+		GlobalFuncs.maxsingleDV = mostSingleHex;
+		
+		GUI_NB.GCO("Calculated exact normalized DV: " + mostDV);
+		GUI_NB.GCO("Calculated exact 60 degree normalized DV: " + most60DV);
+		GUI_NB.GCO("Calculated exact single hex normalized DV: " + mostSingleHex);
 	}
 	
 	/** Returns a random hex within the Recon Zone of the map */

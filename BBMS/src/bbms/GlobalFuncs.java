@@ -92,6 +92,8 @@ public class GlobalFuncs {
 	
 	/** Used to normalize results for sensor input */
 	public static double maxSpottedDV = 1.0;	
+	public static double maxSpottedDV60 = 1.0;
+	public static double maxsingleDV = 1.0;
 	
 	// Vapor variables
 	/** Universal modifier to vapor flow rate */	 

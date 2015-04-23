@@ -34,7 +34,7 @@ public enum OrganismTypeEnum {
 	
 	/** Returns the normalized delta vapor of the specified hex*/
 	public static double SenseFlowLocation(Hex origin) {			
-		return (double) origin.deltaVapor / GlobalFuncs.maxSpottedDV;
+		return (double) origin.deltaVapor / GlobalFuncs.maxsingleDV;
 	}
 	
 	public static double[] SenseFlow60(Hex origin) {
@@ -50,8 +50,8 @@ public enum OrganismTypeEnum {
 		
 		for (int i = 0; i < 6; i++) {
 			double temp = ret[i];
-			ret[i] = ret[i] / GlobalFuncs.maxSpottedDV;
-			GUI_NB.GCO("Original value: " + temp + "/tNormalized value: " + ret[i]);
+			ret[i] = ret[i] / GlobalFuncs.maxSpottedDV60;
+			// GUI_NB.GCO("Original value: " + temp + "/tNormalized value: " + ret[i]);
 		}
 		
 		return ret;

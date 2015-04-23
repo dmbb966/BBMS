@@ -150,14 +150,9 @@ public class JNEATIntegration {
 			
 			// Only chooses unoccupied hexes
 			if (prospective.HexUnit == null) {
-				// Gets sensor value for this hex
-				double sensorInput = OrganismTypeEnum.NormalizedSenseFlowSingle(prospective);
-				
-				u.org.net.inputs.firstElement().LoadSensor(sensorInput);
-				u.org.net.ActivateNetwork();
-				
-				double networkResult = u.org.net.outputs.firstElement().getActivation();
-				
+				// Uses the units' respective sensor function
+				double networkResult = u.UseSensors(prospective);
+												
 				//GUI_NB.GCO("Prospective hex: (" + prospective.x + ", " + prospective.y + ") is input: " + sensorInput + " with output: " + networkResult);
 				
 				if (networkResult > resultThreshold) {

@@ -193,8 +193,7 @@ public class FIO {
 			DialogLoadScen x = new DialogLoadScen(GlobalFuncs.gui, false);
 			x.setVisible(true);
 						
-			GlobalFuncs.maxSpottedDV = GlobalFuncs.scenMap.CalcExactDVNorm();
-			GUI_NB.GCO("Exact DV Norm calculated: " + GlobalFuncs.maxSpottedDV);
+			GlobalFuncs.scenMap.UpdateExactDVNorm();			
 			
 			if (GlobalFuncs.maxSpottedDV == 1.0) GUI_NB.GCO("WARNING: Flow rate uninitialized for this scenario!");
 			

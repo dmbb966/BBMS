@@ -700,6 +700,8 @@ public class GUIMenu extends JMenuBar{
 				return;
 			}
 			
+			GlobalFuncs.selectedUnit.UseSensors(GlobalFuncs.selectedUnit.location);
+			
 			GUI_NB.GCO("FOV Sensor returns: " + unit.OrganismTypeEnum.SenseFlowFOV(GlobalFuncs.selectedUnit.location) + 
 					" and individual sensor returns: " + unit.OrganismTypeEnum.SenseFlowLocation(GlobalFuncs.selectedUnit.location));
 			GlobalFuncs.selectedUnit.DisplayLOSToRange(GlobalFuncs.visibility);
@@ -723,8 +725,7 @@ public class GUIMenu extends JMenuBar{
 	
 	public static class NormFlowRate implements ActionListener{
 		public void actionPerformed(ActionEvent event) {
-			GlobalFuncs.maxSpottedDV = GlobalFuncs.scenMap.CalcExactDVNorm();
-			GUI_NB.GCO("Exact DV Norm calculated: " + GlobalFuncs.maxSpottedDV);
+			GlobalFuncs.scenMap.UpdateExactDVNorm();
 		}
 	}
 	
