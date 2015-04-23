@@ -337,6 +337,7 @@ public class JNEATIntegration {
 		// First, eliminate friendly units from the unit roster
 		for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
 			Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
+			if (finger.emplaced) finger.RemoveSharedSpotting(); 
 			finger.location.HexUnit = null;
 			GlobalFuncs.unitList.remove(finger);					
 		}
