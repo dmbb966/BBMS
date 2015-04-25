@@ -99,6 +99,8 @@ public class GUIMenu extends JMenuBar{
 	
 	public static class LoadScenario implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
+			GlobalFuncs.runningTest = false;
+			
 			DialogFileName d = new DialogFileName(GlobalFuncs.gui, true, "Load Scenario");
 			d.setVisible(true);
 			
@@ -746,6 +748,15 @@ public class GUIMenu extends JMenuBar{
 		}
 	}
 	
+	public static class TestPopulation implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			// This dialog will either generate or load a NN population, create enough friendlies to fill fully
+			GlobalFuncs.runningTest = true;
+			DialogTestPop x = new DialogTestPop(GlobalFuncs.gui, false);
+			x.setVisible(true);
+		}
+	}
+	
 	/** A test function that sets the fitness of all organisms attached to units to 2.0.
 	 * Yes I know that fitness number is "too high."  Deal with it. */
 	public static class TestFunc implements ActionListener{
@@ -899,6 +910,10 @@ public class GUIMenu extends JMenuBar{
 		
 		menuItem = new JMenuItem("Load Scenario");
 		menuItem.addActionListener(new LoadScenario());
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Test Population");
+		menuItem.addActionListener(new TestPopulation());
 		menu.add(menuItem);
 		
 		menu.addSeparator();

@@ -87,7 +87,8 @@ public class Clock {
 		}
 		
 		if (enemyEndZone == GlobalFuncs.enemyUnitList.size()) {
-			JNEATIntegration.EndofScenario();
+			if (GlobalFuncs.runningTest) JNEATIntegration.EndofTest();
+			else JNEATIntegration.EndofScenario();
 		}
 		
 		updateLOSFriendly();	// We don't care about enemy spotting right now.  Will set units it can see to spotted.

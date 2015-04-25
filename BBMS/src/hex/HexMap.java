@@ -115,7 +115,7 @@ public class HexMap {
 					for (int i = 0; i < 6; i++) {
 						FOVsum += comp60[i];
 						if (comp60[i] > most60DV) most60DV = comp60[i];
-						GUI_NB.GCO("Unnormalized flow from " + i + " is " + comp60[i]);
+						//GUI_NB.GCO("Unnormalized flow from " + i + " is " + comp60[i]);
 					}
 					
 					mostDV = Math.max(FOVsum,  mostDV);

@@ -499,12 +499,14 @@ public class Unit {
 			// Will destroy friendly units...
 			Unit oldUnit = destination.HexUnit;
 			if (oldUnit != null) {
-				GlobalFuncs.destroyedUnitList.addElement(oldUnit);
-				oldUnit.RemoveUnit();
-				GlobalFuncs.unitList.removeElement(oldUnit);
+				if (oldUnit.side == SideEnum.FRIENDLY) {
+					GlobalFuncs.destroyedUnitList.addElement(oldUnit);
+					oldUnit.RemoveUnit();
+					GlobalFuncs.unitList.removeElement(oldUnit);
+				}
+				else return;		// Won't run over a friendly unit								
 			}
-			
-			
+				
 			// Moves vehicle
 			location.HexUnit = null;
 			location = destination;

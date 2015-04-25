@@ -40,6 +40,7 @@ public class GlobalFuncs {
 	public static boolean showWPs = false;
 	
 	public static boolean RotateHull = true;
+	public static boolean runningTest = false;
 	
 	public static String dirPrefix = "T";
 	
@@ -61,11 +62,15 @@ public class GlobalFuncs {
 	public static String tempStr = "";				// Used for some dialog box results
 	public static int orgAssignNum = 0;
 	public static int maxRunsPerOrg = 1;
+	public static int numTests = 1;
 	
 	public static Path detailedOutput = null;
 	public static Path summaryOutput = null;
 	public static Path fullIterOutput = null;
+	public static Path targetPop = null;
+	public static Path currentTestPath = null;
 	public static String outputPrefix = "";
+	public static String inputPrefix = "";
 	public static double percentPerRun = 0.1;
 	public static int currentRunsPerOrg = 0;
 	public static int iterationCount = 0;
@@ -77,6 +82,7 @@ public class GlobalFuncs {
 	public static boolean newEpoch = false;
 	public static boolean randCOAEpoch = true;
 	
+	public static int currentPopEpochNum = 0;
 	
 	public static int spottedSoFar = 0;
 	public static int maxPossibleSpots = 0;

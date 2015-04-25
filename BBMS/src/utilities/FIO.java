@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.Vector;
 
@@ -156,6 +157,61 @@ public class FIO {
 		if (!f.exists()) FIO.newFile(popFileName);
 		Path popPath = f.toPath();
 		GlobalFuncs.currentPop.SavePopulationToFile(popPath);
+		
+		return true;
+	}
+	
+	public static boolean CopyPop(int epoch) {
+		Path copyOrigin = FIO.newFile("src/saves/" + GlobalFuncs.inputPrefix + "/" + GlobalFuncs.inputPrefix + "pop" + epoch + ".pop").toPath();
+		Path copyTarget = FIO.newFile("src/saves/" + GlobalFuncs.outputPrefix + "/" + GlobalFuncs.inputPrefix + "_" + epoch + ".pop").toPath();
+		
+		try {
+			Files.copy(copyOrigin,  copyTarget, StandardCopyOption.REPLACE_EXISTING);
+			GlobalFuncs.targetPop = copyTarget;
+			
+		} catch (IOException e) {
+	           System.err.format("IO Exception when copying pop file: %s%n", e); 
+	        } 
+		
+		return true;
+	}
+	
+	public static boolean LoadTest(Path p) {
+		try {
+			BufferedReader reader = Files.newBufferedReader(p, cSet);
+			String readL = "";
+			
+			GlobalFuncs.loadMapCharacteristics(reader);
+			GlobalFuncs.scenMap.loadMap(reader);
+			
+			GlobalFuncs.allCOAs = new Vector<COA>();
+			
+			// Load units
+			while(readL != null) {
+				readL = reader.readLine();
+				// GUI_NB.GCO("String: >" + readL + "<");
+				
+				if (readL.contentEquals("")) { }
+				else if (readL.startsWith("#")) {}
+				else if (readL.contains(">Last COA<")) {
+					break;
+				}
+				else if (readL.startsWith("COA")) {
+					COA newCOA = new COA(reader, readL);
+					GlobalFuncs.allCOAs.addElement(newCOA);
+				}
+			}
+									
+			GlobalFuncs.curCOA = GlobalFuncs.allCOAs.firstElement();	
+			GlobalFuncs.scenMap.UpdateExactDVNorm();
+			if (GlobalFuncs.maxSpottedDV == 1.0) GUI_NB.GCO("WARNING: Flow rate uninitialized for this scenario!");
+			
+			GUI_NB.GCO("Test loaded successfully.");	
+			
+		}  catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
 		
 		return true;
 	}

@@ -21,6 +21,61 @@ public class JNEATIntegration {
 	static double epoch_spotted = 0;
 	static int epoch_possibleSpot = 0;
 	
+	public static void EndofTest() {
+		ClockControl.SetPaused(true);
+		
+		for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
+			death_count++;			
+		}
+		
+		GUI_NB.GCO(":::DESTROYED UNITS:::");
+		
+		for (int i = 0; i < GlobalFuncs.destroyedUnitList.size(); i++) {										
+			death_sum++;			
+			death_count++;
+		}
+		
+		GUI_NB.GCO("Spotted: " + GlobalFuncs.spottedSoFar + " out of " + GlobalFuncs.maxPossibleSpots);
+		GlobalFuncs.iterationCount++;
+		
+		epoch_spotted += GlobalFuncs.spottedSoFar;
+		epoch_possibleSpot += GlobalFuncs.maxPossibleSpots;
+		
+		if (GlobalFuncs.iterationCount > GlobalFuncs.numTests) {
+			PrintTestSummary();
+			GlobalFuncs.COAIndex++;
+			GlobalFuncs.iterationCount = 0;
+			death_count = 0;
+			death_sum = 0.0;
+			epoch_spotted = 0.0;
+			epoch_possibleSpot = 0;
+		}
+							
+		if (GlobalFuncs.COAIndex >= GlobalFuncs.allCOAs.size()) {
+			PopTestNewEpoch(GlobalFuncs.currentPopEpochNum + 5);	
+		}
+		else {
+			if (GlobalFuncs.pauseNewIter || (GlobalFuncs.pauseNewEpoch && GlobalFuncs.newEpoch)) {
+				// Pause at these iterations; since test already paused, will do so
+			}
+			else {
+				if (GlobalFuncs.curEpoch > GlobalFuncs.maxEpochs) {
+					// Pause when max epochs exceeded
+				}
+				else {
+					ClockControl.SetPaused(false);	// Unpauses the test
+				}
+			}
+			
+			GlobalFuncs.spottedSoFar = 0;
+			GlobalFuncs.maxPossibleSpots = 0;
+			Clock.time = 0;
+			
+			if (GlobalFuncs.calcShared) GlobalFuncs.scenMap.resetSpotCounts();
+			TestIterationSetup(GlobalFuncs.numScoutsPer);
+		}
+	}
+	
 	// NOTE: Start of scenario is found in FIO
 	public static void EndofScenario() {
 		ClockControl.SetPaused(true);
@@ -94,6 +149,20 @@ public class JNEATIntegration {
 		
 		if (GlobalFuncs.calcShared) GlobalFuncs.scenMap.resetSpotCounts();
 		ScenIterationSetup(GlobalFuncs.numScoutsPer);
+	}
+	
+	public static void FillScoutsRandomly(int numScouts) {
+		if (GlobalFuncs.currentPop == null) {
+			GUI_NB.GCO("ERROR!  Must generate a population first.");
+			return;
+		}
+		
+		for (int i = 0; i < numScouts; i++) {
+			Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
+			Organism org = GlobalFuncs.currentPop.organisms.elementAt(GlobalFuncs.randRange(0, GlobalFuncs.currentPop.organisms.size() - 1));
+			GUI_NB.GCO("Assiging organism #" + org.genome.genome_id + " to friendly unit " + finger.callsign);
+			finger.org = org;
+		}
 	}
 	
 	/** Sequentially fill friendly units with Neural Nets from the population */
@@ -193,6 +262,56 @@ public class JNEATIntegration {
 		FIO.appendFile(GlobalFuncs.summaryOutput, PrintSummaryLine());
 	}
 	
+	public static void PrintTestSummary() {
+		StringBuffer buf = new StringBuffer("");
+		
+		buf.append(GlobalFuncs.currentTestPath.toString() + ", ");
+		buf.append("COA " + GlobalFuncs.curCOA.name + ", ");
+		buf.append(GlobalFuncs.currentPopEpochNum + ", ");
+		buf.append((death_sum / death_count) + ", ");
+		buf.append((epoch_spotted / epoch_possibleSpot));
+		
+		FIO.appendFile(GlobalFuncs.summaryOutput, buf.toString());
+		
+	}
+	
+	public static String PrintTestSummaryKey() {
+		StringBuffer buf = new StringBuffer("");
+		
+		buf.append("Scenario, ");
+		buf.append("COA, ");
+		buf.append("Generation, ");
+		buf.append("Avg Death Rate, ");
+		buf.append("Avg Team Performance");
+		
+		return buf.toString();
+	}
+	
+	public static void PrintTestDetailed() {
+		StringBuffer buf = new StringBuffer("");
+		
+		buf.append(GlobalFuncs.currentTestPath.toString() + ", ");
+		buf.append("COA " + GlobalFuncs.curCOA.name + ", ");
+		buf.append(GlobalFuncs.currentPopEpochNum + ", ");
+		buf.append((death_sum / death_count) + ", ");
+		buf.append((epoch_spotted / epoch_possibleSpot));
+		
+		FIO.appendFile(GlobalFuncs.summaryOutput, buf.toString());
+		
+	}
+	
+	public static String PrintTestDetailedKey() {
+		StringBuffer buf = new StringBuffer("");
+		
+		buf.append("Scenario, ");
+		buf.append("COA, ");
+		buf.append("Generation, ");
+		buf.append("Avg Death Rate, ");
+		buf.append("Avg Team Performance");
+		
+		return buf.toString();
+	}
+	
 	public static String PrintSummaryLine() {
 		StringBuffer buf = new StringBuffer("");
 		
@@ -218,7 +337,7 @@ public class JNEATIntegration {
 		buf.append("Max Fitness, ");
 		buf.append("Avg Fit Eliminated, ");
 		buf.append("Avg Death Rate, ");
-		buf.append("Overal Team Performance");
+		buf.append("Overall Team Performance");
 		
 		return buf.toString();
 	}
@@ -295,6 +414,43 @@ public class JNEATIntegration {
 		}
 	}
 	
+    public static void PopTestFromDir(int numScouts, int numTestsPer) {
+		GUI_NB.GCO("Attempted to load with " + numScouts + " scouts and " + numTestsPer + " iterations.");
+		GlobalFuncs.numTests = numTestsPer;
+    
+		GUI_NB.GCO("Now attempting to load scenario s22.scen");
+		GlobalFuncs.currentTestPath = new File("src/saves/s22.scen").toPath();
+		FIO.LoadTest(GlobalFuncs.currentTestPath);
+		
+		GlobalFuncs.currentPopEpochNum = 1;
+		GUI_NB.GCO("Loading population data.");
+		FIO.CopyPop(GlobalFuncs.currentPopEpochNum);
+		GlobalFuncs.currentPop = new Population(GlobalFuncs.targetPop);		
+		GUI_NB.GCO("Population data read.  Initializing scenario with " + GlobalFuncs.currentPop.organisms.size() + " orgs");
+		GlobalFuncs.newEpoch = true;				
+		
+		GlobalFuncs.COAIndex = 0;
+		JNEATIntegration.TestIterationSetup(numScouts);
+		
+		// GUI_NB.GCO("Now initiating stuff.");
+		//TestIterationSetup(numScouts);		
+    }
+    
+    public static void PopTestNewEpoch(int newEpoch) {
+    	GlobalFuncs.currentPopEpochNum = newEpoch;
+    	FIO.CopyPop(GlobalFuncs.currentPopEpochNum);
+    	GlobalFuncs.currentPop = new Population(GlobalFuncs.targetPop);
+    	GUI_NB.GCO("Population data read.  Initializing scenario with " + GlobalFuncs.currentPop.organisms.size() + " orgs");
+    	
+    	GlobalFuncs.newEpoch = true;
+    	GlobalFuncs.COAIndex = 0;
+    	JNEATIntegration.TestIterationSetup(GlobalFuncs.numScoutsPer);
+    	
+    	ClockControl.SetPaused(false);
+    }
+    
+
+	
 	public static void ScenIterationFromFile() {
 		String fullPath = "src/saves/" + GlobalFuncs.tempStr;
 		File popFile = FIO.newFile(fullPath);
@@ -312,10 +468,85 @@ public class JNEATIntegration {
 			GUI_NB.GCO("Population data read.  Initializing scenario with " + GlobalFuncs.currentPop.organisms.size() + " orgs");
 			GlobalFuncs.newEpoch = true;
 			
-			int numScouts = GlobalFuncs.currentPop.PopulationSlice(GlobalFuncs.percentPerRun);			
+			int numScouts = GlobalFuncs.currentPop.PopulationSlice(GlobalFuncs.percentPerRun);
 			
 			JNEATIntegration.ScenIterationSetup(numScouts);
 		}
+	}
+	
+    public static void RunTestOn(Path scenario, Population pop, int numScouts) {
+    	FIO.LoadTest(scenario);
+    	
+    	GlobalFuncs.currentPop = pop;
+    	GUI_NB.GCO("Population data loaded.  Initializing scenario.");
+    	
+    	switch (GlobalFuncs.currentPop.organisms.get(0).net.inputs.size()) {
+    	case 1:
+    		GlobalFuncs.defaultOrgType = OrganismTypeEnum.SIMPLE_SINGLE;
+    		break;
+    	case 2:
+    		GlobalFuncs.defaultOrgType = OrganismTypeEnum.SIMPLE_DUAL;
+    		break;
+    	case 7:
+    		GlobalFuncs.defaultOrgType = OrganismTypeEnum.SIX_DIRECTIONAL;
+    		break;
+		default:
+			GlobalFuncs.defaultOrgType = OrganismTypeEnum.SIMPLE_SINGLE;
+			GUI_NB.GCO("ERROR!  Could not determine organism type based on population file.  Defaulting to simple single.");
+			break;    			
+    	}
+    	GlobalFuncs.newEpoch = true;    	
+    	
+    	// Determines which sensor type 
+    	
+    	TestIterationSetup(numScouts);
+    }
+	
+	public static void TestIterationSetup(int numScouts) {
+		GlobalFuncs.allSpots.records.clear();
+		GlobalFuncs.numScoutsPer = numScouts;
+		
+		// Sequentially choose a COA
+		GlobalFuncs.curCOA = GlobalFuncs.allCOAs.elementAt(GlobalFuncs.COAIndex);
+		GlobalFuncs.curCOA.LoadCOA();
+		
+		if (numScouts == 0) return;
+		
+		GUI_NB.GCO("New test iteration: Populating " + numScouts + " scouts of pop size " + GlobalFuncs.currentPop.organisms.size());
+		
+		// First, eliminate friendly units from the unit roster
+		for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
+			Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
+			if (finger.emplaced) finger.RemoveSharedSpotting(); 
+			finger.location.HexUnit = null;
+			GlobalFuncs.unitList.remove(finger);					
+		}
+		GlobalFuncs.friendlyUnitList.clear();
+		GlobalFuncs.destroyedUnitList.clear();	// These are already gone from the map from the last run.
+				
+		// Now adds units along the left map boundary
+		for (int i = 0; i < numScouts; i++) {
+			int col = i / GlobalFuncs.scenMap.yDim;
+			int row = i % GlobalFuncs.scenMap.yDim;
+			
+			Hex destination = GlobalFuncs.scenMap.getHex(col, row);
+			if (destination.HexUnit != null) {
+				// GUI_NB.GCO("Destination hex occupied, moving to the next one.");
+				numScouts++;
+			}
+			else {
+				// Add friendly unit
+				destination.HexUnit = new Unit(destination, SideEnum.FRIENDLY, "M1A2", "Scout " + i, 90.0, 0.0, null, true);
+			}
+		}
+		
+		FillScoutsRandomly(numScouts);		// Puts a Org in each unit
+		
+		DeployAll();			// Deploys those units accordingly
+		
+		
+		GlobalFuncs.gui.repaint();
+		
 	}
 
 	/** Goes through the setup for this scenario, namely, for the current COA will initialize new units*/
