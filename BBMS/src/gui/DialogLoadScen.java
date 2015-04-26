@@ -445,7 +445,7 @@ public class DialogLoadScen extends javax.swing.JDialog {
         else if (probLink < 0 || probLink > 1) Warning_Label.setText("ERROR: Prob Link not valid percent");
         else if (ValidateGlobalInputs()){
             
-            bbms.GlobalFuncs.currentPop = new jneat.Population(Math.max(1, popSize), numSensors, numOutputs, numHidden, false, probLink);
+            
             
             switch(numSensors) {
                 case 1: 
@@ -456,8 +456,18 @@ public class DialogLoadScen extends javax.swing.JDialog {
                     break;
                 case 7:
                     GlobalFuncs.defaultOrgType = unit.OrganismTypeEnum.SIX_DIRECTIONAL;
-                    break;                
+                    break;
+                case 88:
+                    GlobalFuncs.defaultOrgType = unit.OrganismTypeEnum.BASE_MAXHEX;
+                    numSensors = 3;
+                    break;
+                case 99:
+                    GlobalFuncs.defaultOrgType = unit.OrganismTypeEnum.BASE_RANDOM;
+                    numSensors = 4;
+                    break;                    
             }
+            
+            bbms.GlobalFuncs.currentPop = new jneat.Population(Math.max(1, popSize), numSensors, numOutputs, numHidden, false, probLink);
             
             GUI_NB.GCO("New population added.");            
             GUI_NB.GCO("Running scenario iteration setup.");        

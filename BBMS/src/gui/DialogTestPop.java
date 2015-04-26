@@ -277,7 +277,7 @@ public class DialogTestPop extends javax.swing.JDialog {
         
         if (overwriteDataFiles) {
             FIO.overwriteFile(GlobalFuncs.detailedOutput, "");
-            FIO.overwriteFile(GlobalFuncs.summaryOutput, unit.JNEATIntegration.PrintTestSummaryKey());
+            //FIO.overwriteFile(GlobalFuncs.summaryOutput, unit.JNEATIntegration.PrintTestSummaryKey());
             FIO.overwriteFile(GlobalFuncs.fullIterOutput, unit.JNEATIntegration.PrintDetailedIterKey());
             GUI_NB.GCO("Output files overwritten");
         }

@@ -581,6 +581,7 @@ public class GUIMenu extends JMenuBar{
 	
 	public static class PrevCOA implements ActionListener{
 		public void actionPerformed(ActionEvent event) {
+			GlobalFuncs.curCOA.SaveCOA();
 			GlobalFuncs.COAIndex--;
 			
 			if (GlobalFuncs.COAIndex <= 0) {
@@ -617,7 +618,9 @@ public class GUIMenu extends JMenuBar{
 				return;
 			}
 			
-			// GlobalFuncs.curCOA.SaveCOA();
+			
+			
+			GlobalFuncs.curCOA.SaveCOA();
 			
 			COA nCOA = new COA(GlobalFuncs.tempStr);
 			GlobalFuncs.allCOAs.addElement(nCOA);
@@ -659,6 +662,12 @@ public class GUIMenu extends JMenuBar{
 			new NextCOA();
 			
 			GlobalFuncs.allCOAs.removeElementAt(curIndex - 1);
+		}
+	}
+	
+	public static class SaveCOA implements ActionListener{
+		public void actionPerformed(ActionEvent event) {
+			GlobalFuncs.curCOA.SaveCOA();
 		}
 	}
 	
@@ -828,6 +837,10 @@ public class GUIMenu extends JMenuBar{
 		
 		menuItem = new JMenuItem("Rename COA");
 		menuItem.addActionListener(new RenameCOA());
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Save COA");
+		menuItem.addActionListener(new SaveCOA());
 		menu.add(menuItem);
 	}
 	

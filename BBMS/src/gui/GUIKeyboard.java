@@ -150,6 +150,16 @@ public class GUIKeyboard {
 		}
 	}
 	
+	/** Clears all waypoints from a unit list */
+	public static class ClearWaypoints extends AbstractAction {
+		public void actionPerformed(ActionEvent e) {
+			if (GlobalFuncs.selectedUnit != null) {
+				GUI_NB.GCO("Clearing all waypoints from selected unit.");
+				GlobalFuncs.selectedUnit.waypointList.waypointList.clear();
+			}
+		}
+	}
+	
 	/**
 	 * Rotates either the hull or turret of the selected unit to the left by 10 degrees
 	 * Depends on the GlobalFuncs boolean "RotateHull"
@@ -518,8 +528,8 @@ public class GUIKeyboard {
 		imap.put(KeyStroke.getKeyStroke('c'), "step the clock");
 		amap.put("step the clock", new ClockStep());
 		
-		imap.put(KeyStroke.getKeyStroke('x'), "return zones");
-		amap.put("return zones", new CheckZones());
+		imap.put(KeyStroke.getKeyStroke('x'), "clear waypoints");
+		amap.put("clear waypoints", new ClearWaypoints());
 		
 		imap.put(KeyStroke.getKeyStroke("F1"), "keyboard shortcuts");
 		amap.put("keyboard shortcuts", new HelpKeyboardShortcuts());

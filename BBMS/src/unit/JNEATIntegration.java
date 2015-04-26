@@ -2,6 +2,7 @@ package unit;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.Vector;
 
 import utilities.FIO;
 import clock.Clock;
@@ -20,6 +21,8 @@ public class JNEATIntegration {
 	static int death_count = 0;
 	static double epoch_spotted = 0;
 	static int epoch_possibleSpot = 0;
+	
+	static int testNumber = 0;
 	
 	public static void EndofTest() {
 		ClockControl.SetPaused(true);
@@ -51,8 +54,20 @@ public class JNEATIntegration {
 			epoch_possibleSpot = 0;
 		}
 							
-		if (GlobalFuncs.COAIndex >= GlobalFuncs.allCOAs.size()) {
-			PopTestNewEpoch(GlobalFuncs.currentPopEpochNum + 5);	
+		if (GlobalFuncs.COAIndex > GlobalFuncs.allCOAs.size()) {
+			
+			GlobalFuncs.currentPopEpochNum += 1;
+					
+			
+			if (GlobalFuncs.currentPopEpochNum > 50) {
+				GlobalFuncs.currentPopEpochNum = 1;
+				testNumber++;
+				RunNextTest();
+				return;
+			}
+			
+			PopTestNewEpoch(GlobalFuncs.currentPopEpochNum);
+					
 		}
 		else {
 			if (GlobalFuncs.pauseNewIter || (GlobalFuncs.pauseNewEpoch && GlobalFuncs.newEpoch)) {
@@ -126,8 +141,8 @@ public class JNEATIntegration {
 			
 			// Randomly chooses a COA
 			if (!GlobalFuncs.randCOAEpoch) {
-				GlobalFuncs.COAIndex = GlobalFuncs.randRange(0, GlobalFuncs.allCOAs.size() - 1);
-				GlobalFuncs.curCOA = GlobalFuncs.allCOAs.elementAt(GlobalFuncs.COAIndex);
+				GlobalFuncs.COAIndex = GlobalFuncs.randRange(1, GlobalFuncs.allCOAs.size());
+				GlobalFuncs.curCOA = GlobalFuncs.allCOAs.elementAt(GlobalFuncs.COAIndex - 1);
 			}
 		}
 		
@@ -208,11 +223,67 @@ public class JNEATIntegration {
 			unit.JNEATIntegration.DeployOne(finger);
 		}
 	}
+	
+	public static void DeployRandomly(Unit u) {
+		Hex destination = GlobalFuncs.scenMap.RandomHexReconZone();
+		while (destination.HexUnit != null) {
+			destination = GlobalFuncs.scenMap.RandomHexReconZone();
+		}
+		u.TeleportTo(destination);			
+	}
+	
+	public static void DeployMaxView(Unit u, int power) {
+		Hex destination = null;
+		double maxView = 0;
+		
+		// Takes 50 samples
+		for (int i = 0; i < 50; i++) {
+			Hex finger = GlobalFuncs.scenMap.RandomHexReconZone();
+			if (finger.HexUnit == null) {
+				
+				Vector<Hex> theList = Unit.GetLOSToRange(finger, GlobalFuncs.visibility);
+				
+				double viewage = 0.0;
+				if (GlobalFuncs.calcShared){
+					for (int j = 0; j < theList.size(); j++) {
+						Hex f = theList.elementAt(j);
+						viewage += (1.0 / (f.numSpots * power));
+					}
+				}
+				else {
+					viewage = theList.size();
+				}
+				
+				if (viewage > maxView) {
+					maxView = viewage;
+					destination = finger;
+				}
+			}
+			else i--;
+		}
+		
+		u.TeleportTo(destination);
+		if (GlobalFuncs.calcShared) {
+			u.emplaced = true;
+			u.UpdateSharedSpotting();
+		}
+		GUI_NB.GCO("Placing " + u.callsign + " with maxView " + maxView);
+	}
 			
 	/** Based on sensor evaluations, determine where to deploy this unit */
 	public static void DeployOne(Unit u) {
 		if (u.org == null) {
 			GUI_NB.GCO("ERROR!  Unit " + u.callsign + " does not have an organism!");
+			return;
+		}
+		
+		if (u.orgType == OrganismTypeEnum.BASE_RANDOM) {
+			DeployRandomly(u);
+			return;
+		}
+		
+		if (u.orgType == OrganismTypeEnum.BASE_MAXHEX) {
+			DeployMaxView(u, 1);
 			return;
 		}
 		
@@ -275,11 +346,11 @@ public class JNEATIntegration {
 		
 	}
 	
-	public static String PrintTestSummaryKey() {
+	public static String PrintTestSummaryKey(String scen) {
 		StringBuffer buf = new StringBuffer("");
 		
 		buf.append("Scenario, ");
-		buf.append("COA, ");
+		buf.append("COA, ");		
 		buf.append("Generation, ");
 		buf.append("Avg Death Rate, ");
 		buf.append("Avg Team Performance");
@@ -414,22 +485,89 @@ public class JNEATIntegration {
 		}
 	}
 	
-    public static void PopTestFromDir(int numScouts, int numTestsPer) {
+	public static void ClearAllData() {
+		GlobalFuncs.allCOAs.clear();
+		GlobalFuncs.unitList.clear();
+		GlobalFuncs.allSpots.records.clear();
+		GlobalFuncs.currentPop = null;
+		
+	}
+	
+	public static void RunNextTest() {
+		switch (testNumber) {
+		case 1:
+			PopTestOn(GlobalFuncs.numScoutsPer, GlobalFuncs.numTests, "s30.scen");
+			break;		
+		case 2:
+			PopTestOn(GlobalFuncs.numScoutsPer, GlobalFuncs.numTests, "s40.scen");
+			break;
+		case 3:
+			PopTestOn(GlobalFuncs.numScoutsPer, GlobalFuncs.numTests, "testDurango.scen");
+			break;
+		default:
+			GUI_NB.GCO("Out of tests!");
+			break;
+		}	
+	}
+	
+	public static void PopTestFromDir(int numScouts, int numTestsPer) {
+		for (int i = 1; i < 51; i++) {
+			FIO.CopyPop(i);
+		}
+		
+		ClockControl.SetTimeScale((byte) 11);
+		ClockControl.SetPaused(true);
+		
+    	GlobalFuncs.summaryOutput = new File("src/saves/" + GlobalFuncs.outputPrefix + "/Summary.txt").toPath();    	
+    	FIO.newFile(GlobalFuncs.summaryOutput.toString());
+    	FIO.overwriteFile(GlobalFuncs.summaryOutput, PrintTestSummaryKey("s22.scen"));
+		
+		PopTestOn(numScouts, numTestsPer, "s22.scen");					
+	}
+	
+    public static void PopTestOn(int numScouts, int numTestsPer, String scen) {
+    	String scenFullPath = "src/saves/" + scen;
+
+    	
 		GUI_NB.GCO("Attempted to load with " + numScouts + " scouts and " + numTestsPer + " iterations.");
 		GlobalFuncs.numTests = numTestsPer;
     
 		GUI_NB.GCO("Now attempting to load scenario s22.scen");
-		GlobalFuncs.currentTestPath = new File("src/saves/s22.scen").toPath();
+		GlobalFuncs.currentTestPath = new File(scenFullPath).toPath();
 		FIO.LoadTest(GlobalFuncs.currentTestPath);
 		
 		GlobalFuncs.currentPopEpochNum = 1;
 		GUI_NB.GCO("Loading population data.");
-		FIO.CopyPop(GlobalFuncs.currentPopEpochNum);
+		
+		GlobalFuncs.targetPop = FIO.PoppyCock(GlobalFuncs.currentPopEpochNum);
 		GlobalFuncs.currentPop = new Population(GlobalFuncs.targetPop);		
 		GUI_NB.GCO("Population data read.  Initializing scenario with " + GlobalFuncs.currentPop.organisms.size() + " orgs");
+		
+    	switch (GlobalFuncs.currentPop.organisms.get(0).net.inputs.size()) {
+    	case 1:
+    		GlobalFuncs.defaultOrgType = OrganismTypeEnum.SIMPLE_SINGLE;
+    		break;
+    	case 2:
+    		GlobalFuncs.defaultOrgType = OrganismTypeEnum.SIMPLE_DUAL;
+    		break;
+    	case 3:
+    		GlobalFuncs.defaultOrgType = OrganismTypeEnum.BASE_MAXHEX;
+    		break;
+    	case 4:
+    		GlobalFuncs.defaultOrgType = OrganismTypeEnum.BASE_RANDOM;
+    		break;
+    	case 7:
+    		GlobalFuncs.defaultOrgType = OrganismTypeEnum.SIX_DIRECTIONAL;
+    		break;
+		default:
+			GlobalFuncs.defaultOrgType = OrganismTypeEnum.SIMPLE_SINGLE;
+			GUI_NB.GCO("ERROR!  Could not determine organism type based on population file.  Defaulting to simple single.");
+			break;    			
+    	}
+		
 		GlobalFuncs.newEpoch = true;				
 		
-		GlobalFuncs.COAIndex = 0;
+		GlobalFuncs.COAIndex = 1;
 		JNEATIntegration.TestIterationSetup(numScouts);
 		
 		// GUI_NB.GCO("Now initiating stuff.");
@@ -438,12 +576,12 @@ public class JNEATIntegration {
     
     public static void PopTestNewEpoch(int newEpoch) {
     	GlobalFuncs.currentPopEpochNum = newEpoch;
-    	FIO.CopyPop(GlobalFuncs.currentPopEpochNum);
+    	GlobalFuncs.targetPop = FIO.PoppyCock(GlobalFuncs.currentPopEpochNum);
     	GlobalFuncs.currentPop = new Population(GlobalFuncs.targetPop);
     	GUI_NB.GCO("Population data read.  Initializing scenario with " + GlobalFuncs.currentPop.organisms.size() + " orgs");
     	
     	GlobalFuncs.newEpoch = true;
-    	GlobalFuncs.COAIndex = 0;
+    	GlobalFuncs.COAIndex = 1;
     	JNEATIntegration.TestIterationSetup(GlobalFuncs.numScoutsPer);
     	
     	ClockControl.SetPaused(false);
@@ -474,40 +612,13 @@ public class JNEATIntegration {
 		}
 	}
 	
-    public static void RunTestOn(Path scenario, Population pop, int numScouts) {
-    	FIO.LoadTest(scenario);
-    	
-    	GlobalFuncs.currentPop = pop;
-    	GUI_NB.GCO("Population data loaded.  Initializing scenario.");
-    	
-    	switch (GlobalFuncs.currentPop.organisms.get(0).net.inputs.size()) {
-    	case 1:
-    		GlobalFuncs.defaultOrgType = OrganismTypeEnum.SIMPLE_SINGLE;
-    		break;
-    	case 2:
-    		GlobalFuncs.defaultOrgType = OrganismTypeEnum.SIMPLE_DUAL;
-    		break;
-    	case 7:
-    		GlobalFuncs.defaultOrgType = OrganismTypeEnum.SIX_DIRECTIONAL;
-    		break;
-		default:
-			GlobalFuncs.defaultOrgType = OrganismTypeEnum.SIMPLE_SINGLE;
-			GUI_NB.GCO("ERROR!  Could not determine organism type based on population file.  Defaulting to simple single.");
-			break;    			
-    	}
-    	GlobalFuncs.newEpoch = true;    	
-    	
-    	// Determines which sensor type 
-    	
-    	TestIterationSetup(numScouts);
-    }
 	
 	public static void TestIterationSetup(int numScouts) {
 		GlobalFuncs.allSpots.records.clear();
 		GlobalFuncs.numScoutsPer = numScouts;
 		
 		// Sequentially choose a COA
-		GlobalFuncs.curCOA = GlobalFuncs.allCOAs.elementAt(GlobalFuncs.COAIndex);
+		GlobalFuncs.curCOA = GlobalFuncs.allCOAs.elementAt(GlobalFuncs.COAIndex - 1);
 		GlobalFuncs.curCOA.LoadCOA();
 		
 		if (numScouts == 0) return;
@@ -540,12 +651,14 @@ public class JNEATIntegration {
 			}
 		}
 		
+
 		FillScoutsRandomly(numScouts);		// Puts a Org in each unit
 		
 		DeployAll();			// Deploys those units accordingly
-		
+		GUI_NB.GCO(">>>> Iteration: " + GlobalFuncs.currentPopEpochNum);
 		
 		GlobalFuncs.gui.repaint();
+		if (ClockControl.paused) ClockControl.Pause();
 		
 	}
 

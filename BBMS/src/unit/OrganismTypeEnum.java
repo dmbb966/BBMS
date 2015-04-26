@@ -12,7 +12,11 @@ public enum OrganismTypeEnum {
 	/** As Simple-Single, but has a separate sensor for the hex the unit is in. */
 	SIMPLE_DUAL,
 	/** Six sensors each covering a 60-degree arc around the agent, goes to a single output and a seventh for the hex it is in */
-	SIX_DIRECTIONAL;
+	SIX_DIRECTIONAL,
+	/** Base case that selects hexes on a purely random basis */
+	BASE_RANDOM,
+	/** Base case that selects hexes which can see the most number of hexes */
+	BASE_MAXHEX;
 	
 	/** Senses the vapor DV for all hexes that it can see.  Will NOT count DV in the "friendly" zone */
 	public static double SenseFlowFOV(Hex origin, FitnessTypeEnum fT) {		

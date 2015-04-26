@@ -531,7 +531,6 @@ public class HexMap {
 			finger.vapor = 0;
 		}
 	}
-	
-	
+
 
 }

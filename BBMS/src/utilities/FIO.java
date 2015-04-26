@@ -176,6 +176,10 @@ public class FIO {
 		return true;
 	}
 	
+	public static Path PoppyCock(int epoch) {
+		return FIO.newFile("src/saves/" + GlobalFuncs.outputPrefix + "/" + GlobalFuncs.inputPrefix + "_" + epoch + ".pop").toPath();
+	}
+	
 	public static boolean LoadTest(Path p) {
 		try {
 			BufferedReader reader = Files.newBufferedReader(p, cSet);
@@ -242,7 +246,7 @@ public class FIO {
 				}
 			}
 									
-			GlobalFuncs.curCOA = GlobalFuncs.allCOAs.elementAt(GlobalFuncs.COAIndex - 1);
+			GlobalFuncs.curCOA = GlobalFuncs.allCOAs.elementAt(GlobalFuncs.COAIndex);
 			
 			
 			// This dialog will either generate or load a NN population, create enough friendlies to fill fully

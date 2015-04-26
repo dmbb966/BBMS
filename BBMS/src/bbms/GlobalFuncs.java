@@ -63,6 +63,7 @@ public class GlobalFuncs {
 	public static int orgAssignNum = 0;
 	public static int maxRunsPerOrg = 1;
 	public static int numTests = 1;
+	public static int numDifferentTests = 1;
 	
 	public static Path detailedOutput = null;
 	public static Path summaryOutput = null;
@@ -260,6 +261,9 @@ public class GlobalFuncs {
 					COAIndex = Integer.parseInt(result[5]);
 					
 					GlobalFuncs.visibility = Integer.parseInt(result[6]);
+					
+					//FIXME - Remove this!
+					GlobalFuncs.visibility = 4;
 					
 					GlobalFuncs.scenMap.friendlyZone = Integer.parseInt(result[7]);
 					GlobalFuncs.scenMap.enemyZone = Integer.parseInt(result[8]);
