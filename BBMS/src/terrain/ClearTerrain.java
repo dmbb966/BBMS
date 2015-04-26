@@ -1,5 +1,7 @@
 package terrain;
 
+import java.awt.Color;
+
 import unit.MoveClass;
 
 public class ClearTerrain extends TerrainType{
@@ -50,6 +52,9 @@ public class ClearTerrain extends TerrainType{
 		return TerrainEnum.CLEAR;
 	}
 	
-	
+	@Override
+	public Color getColor() {
+		return Color.WHITE;
+	}
 
 }

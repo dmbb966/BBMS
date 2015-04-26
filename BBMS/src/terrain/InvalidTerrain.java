@@ -1,5 +1,7 @@
 package terrain;
 
+import java.awt.Color;
+
 import unit.MoveClass;
 
 public class InvalidTerrain extends TerrainType{
@@ -50,6 +52,10 @@ public class InvalidTerrain extends TerrainType{
 		return TerrainEnum.INVALID;
 	}
 	
+	@Override
+	public Color getColor() {
+		return Color.GRAY;
+	}
 	
 
 }

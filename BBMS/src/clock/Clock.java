@@ -2,6 +2,7 @@ package clock;
 
 import gui.GUIBasicInfo;
 import gui.GUI_NB;
+import hex.MiniMapEnum;
 
 import java.text.DecimalFormat;
 
@@ -146,22 +147,28 @@ public class Clock {
 						
 		GlobalFuncs.ticksStable++;
 		
-		if (GlobalFuncs.runtoEq) { 
+		if (GlobalFuncs.runtoEq || GlobalFuncs.updateVapor) { 
+			
 			GlobalFuncs.maxDelta = 0;
 			GlobalFuncs.scenMap.updateVaporSS();		// Calculates maximum DV at sources and sinks
-			
+			//GUI_NB.GCO("Num sources: " + GlobalFuncs.scenMap.vaporSourceList.size() + " and sinks: " + GlobalFuncs.scenMap.vaporSinkList.size());
+			if (GlobalFuncs.fixSlowRate && GlobalFuncs.updateVapor && time % 100 == 1) GlobalFuncs.scenMap.UpdateExactDVNorm();
 			GlobalFuncs.scenMap.recalcFlowRate();
 			
 			GlobalFuncs.scenMap.calcAllVapor();
 			GlobalFuncs.scenMap.updateAllVapor();
 			
-			if (Math.abs(GlobalFuncs.totalVaporDelta) <= GlobalFuncs.dvTolerance && GlobalFuncs.ticksStable > 100) {
-				ClockControl.SetTimeScale((byte) 4);
-				if (!ClockControl.paused) ClockControl.Pause();
-				GlobalFuncs.runtoEq = false;
-				GUI_NB.GCODTG("Reached desired DV threshold.");
+			if (GlobalFuncs.runtoEq) {
+				if (Math.abs(GlobalFuncs.totalVaporDelta) <= GlobalFuncs.dvTolerance && GlobalFuncs.ticksStable > 100) {
+					ClockControl.SetTimeScale((byte) 4);
+					if (!ClockControl.paused) ClockControl.Pause();
+					GlobalFuncs.runtoEq = false;
+					GUI_NB.GCODTG("Reached desired DV threshold.");
+				}	
 			}
+			
 
+			GlobalFuncs.gui.repaint();
 		} else {		
 			moveAllUnits(duration);
 		}

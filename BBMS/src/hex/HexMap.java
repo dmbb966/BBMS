@@ -36,11 +36,11 @@ public class HexMap {
 	
 	Vector<hex.Hex> shadedHexList;
 	Vector<hex.Hex> textHexList;
-	Vector<hex.Hex> vaporSourceList;
-	Vector<hex.Hex> vaporSinkList; 
-	public static int chanceTrees = 50;
+	public Vector<hex.Hex> vaporSourceList;
+	public Vector<hex.Hex> vaporSinkList; 
+	public static int chanceTrees = 20;
 	public static int chanceHighGrass = 0;
-	public static int chanceClear = 50;
+	public static int chanceClear = 80;
 	public static int totalWeight = chanceClear + chanceHighGrass + chanceTrees;
 	
 	public static final int SUBHEX_SIZE = 5000;		// Sub units in one 50m hex
@@ -223,6 +223,8 @@ public class HexMap {
 		else if (GlobalFuncs.ticksStable % GlobalFuncs.flowCheck == GlobalFuncs.flowCheck - 1) {
 			if (GlobalFuncs.flowRate < GlobalFuncs.flowRateCap) GlobalFuncs.flowRate += GlobalFuncs.flowStep;						
 		}
+		
+		
 	}
 	
 	public void resetSpotCounts() {

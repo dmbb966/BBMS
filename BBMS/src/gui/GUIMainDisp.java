@@ -2,6 +2,7 @@ package gui;
 
 import hex.Hex;
 import hex.HexMap;
+import hex.HexOff;
 import hex.VaporEnum;
 
 import java.awt.Color;
@@ -62,6 +63,14 @@ public class GUIMainDisp extends JPanel {
 		
 	}
 	
+	public static hex.HexOff pixelToMiniHex(int x, int y) {
+		
+		int yHex = y / GlobalFuncs.miniMapSize;
+		int xHex = (x - (GlobalFuncs.miniMapSize * yHex & 1 / 2)) / GlobalFuncs.miniMapSize;
+		
+		return new hex.HexOff(xHex - 2, yHex - 2);
+	}
+	
 	private static hex.HexAx pixelToHex(int x, int y, int offsetX, int offsetY)
 	{
 		// Courtesy of http://www.redblobgames.com/grids/hexagons/
@@ -76,6 +85,8 @@ public class GUIMainDisp extends JPanel {
 	}
 	
 	public static hex.HexOff pixelToHexOff(int x, int y, int offsetX, int offsetY) {
+		if (GlobalFuncs.displayMiniMap) return pixelToMiniHex(x, y);
+		
 		hex.HexAx interim = pixelToHex(x, y, offsetX, offsetY);
 		hex.HexOff result = interim.ConvertToOff();
 		
@@ -252,8 +263,31 @@ public class GUIMainDisp extends JPanel {
 		}				
 	}
 	
+	public void drawHexMapMini(HexMap hMap, int squareSize, Graphics g) {
+		if (hMap == null) return;
+		
+		Color oldColor = g.getColor();
+				
+		for (int y = 0; y < hMap.yDim * 2; y++) {
+			for (int x = 0; x < hMap.xDim * 2; x++) {
+				int xPoint = (int) (x * squareSize + (0.5 * squareSize * (y & 1)));
+				int yPoint = y * squareSize;
+				Hex h = hMap.getHex(x - 2, y - 2);
+				h.DrawHexMini(xPoint, yPoint, squareSize, g);				
+			}
+		}
+						
+		g.setColor(oldColor);
+		
+		GlobalFuncs.gui.repaint();
+	}
+	
 	public void drawHexMapComposite(HexMap hMap, int hexSize, Graphics g) {
 		if (hMap == null) return;
+		if (GlobalFuncs.displayMiniMap) {
+			drawHexMapMini(hMap, GlobalFuncs.miniMapSize, g);
+			return;
+		}
 		
 		int hWidth = (int) (Math.sqrt(3) * hexSize);
 		int hHeight = (int) (1.5 * hexSize);

@@ -1,6 +1,7 @@
 package gui;
 
 import hex.Hex;
+import hex.MiniMapEnum;
 
 import java.awt.Dialog;
 import java.awt.Toolkit;
@@ -527,6 +528,31 @@ public class GUIMenu extends JMenuBar{
 		}
 	}
 	
+	public static class MiniMap implements ActionListener{
+		public void actionPerformed(ActionEvent event) {
+			GlobalFuncs.displayMiniMap = !GlobalFuncs.displayMiniMap;
+		}
+	}
+	
+	public static class MiniVaporAmt implements ActionListener{
+		public void actionPerformed(ActionEvent event) {
+			GlobalFuncs.MiniMapType = MiniMapEnum.VAPOR_AMT;
+		}
+	}
+	
+	public static class MiniVaporDV implements ActionListener{
+		public void actionPerformed(ActionEvent event) {
+			GlobalFuncs.scenMap.UpdateExactDVNorm();
+			GlobalFuncs.MiniMapType = MiniMapEnum.VAPOR_DV;
+		}
+	}
+	
+	public static class MiniTerrain implements ActionListener{
+		public void actionPerformed(ActionEvent event) {
+			GlobalFuncs.MiniMapType = MiniMapEnum.TERRAIN;			
+		}
+	}
+	
 	/** Sets the friendly zone to the currently selected hex column and before (less than) it.*/
 	public static class SetFriendlyZone implements ActionListener{
 		public void actionPerformed(ActionEvent event) {
@@ -688,6 +714,13 @@ public class GUIMenu extends JMenuBar{
 		}
 	}
 	
+	public static class ToggleVaporUpdate implements ActionListener{
+		public void actionPerformed(ActionEvent event) {
+			GlobalFuncs.updateVapor = !GlobalFuncs.updateVapor;
+			GUI_NB.GCO("Vapor update set to: " + GlobalFuncs.updateVapor);
+		}
+	}
+	
 	public static class TeleportUnit implements ActionListener{
 		public void actionPerformed(ActionEvent event) {
 			if (GlobalFuncs.selectedUnit == null) {
@@ -798,6 +831,7 @@ public class GUIMenu extends JMenuBar{
 			SetupMenu();
 			ActionsMenu();
 			NeuralNetMenu();
+			MapMenu();
 			ScenarioMenu();
 		}
 		
@@ -981,10 +1015,6 @@ public class GUIMenu extends JMenuBar{
 		menuItem = new JMenuItem("Mode: Remove Vapor Source/Sink");
 		menuItem.addActionListener(new ModeSetVaporNorm());
 		menu.add(menuItem);
-	
-		menuItem = new JMenuItem("Toggle Fixed Slow Vapor Rate");
-		menuItem.addActionListener(new ToggleFixedSlowVapor());
-		menu.add(menuItem);
 		
 		menu.addSeparator();
 		
@@ -1024,9 +1054,17 @@ public class GUIMenu extends JMenuBar{
 		menuItem = new JMenuItem("Reset vapor density to default");
 		menuItem.addActionListener(new ResetVapor());
 		menu.add(menuItem);
+				
+		menuItem = new JMenuItem("Toggle Fixed Slow Vapor Rate");
+		menuItem.addActionListener(new ToggleFixedSlowVapor());
+		menu.add(menuItem);
 		
 		menuItem = new JMenuItem("Run to equilibrium");
-		menuItem.addActionListener(new RuntoEquilibrium());;
+		menuItem.addActionListener(new RuntoEquilibrium());
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Toggle constant vapor update");
+		menuItem.addActionListener(new ToggleVaporUpdate());
 		menu.add(menuItem);
 		
 		menu.addSeparator();
@@ -1039,6 +1077,8 @@ public class GUIMenu extends JMenuBar{
 		menuItem = new JMenuItem("Set Visibility");
 		menuItem.addActionListener(new VisDialog());
 		menu.add(menuItem);
+		
+
 		
 		menuItem = new JMenuItem("Test Function");
 		menuItem.addActionListener(new TestFunc());
@@ -1113,6 +1153,30 @@ public class GUIMenu extends JMenuBar{
 		
 		menuItem = new JMenuItem("PLace all units via NN");
 		menuItem.addActionListener(new PlaceAllNN());
+		menu.add(menuItem);
+	}
+	
+	public void MapMenu() {
+		JMenu menu = new JMenu("Map");
+		menu.setMnemonic(KeyEvent.VK_M);
+		this.add(menu);
+		
+		JMenuItem menuItem;
+		
+		menuItem = new JMenuItem("Toggle Minimap");
+		menuItem.addActionListener(new MiniMap());
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Show Vapor Amount");
+		menuItem.addActionListener(new MiniVaporAmt());
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Show Vapor DV");
+		menuItem.addActionListener(new MiniVaporDV());
+		menu.add(menuItem);
+		
+		menuItem = new JMenuItem("Show Terrain");
+		menuItem.addActionListener(new MiniTerrain());
 		menu.add(menuItem);
 	}
 	

@@ -39,8 +39,14 @@ public class GlobalFuncs {
 	public static boolean showFOW = false;	// Toggles fog of war
 	public static boolean showWPs = false;
 	
+	public static int miniMapSize = 16;
+	public static boolean updateVapor = false;
+	
 	public static boolean RotateHull = true;
 	public static boolean runningTest = false;
+	
+	public static boolean displayMiniMap = false;
+	public static MiniMapEnum MiniMapType = MiniMapEnum.TERRAIN;
 	
 	public static String dirPrefix = "T";
 	
@@ -258,7 +264,8 @@ public class GlobalFuncs {
 					gui.GMD.mapDisplayY = Integer.parseInt(result[3]);
 					Clock.time = Integer.parseInt(result[4]);
 					
-					COAIndex = Integer.parseInt(result[5]);
+					//COAIndex = Integer.parseInt(result[5]);
+					COAIndex = 1;
 					
 					GlobalFuncs.visibility = Integer.parseInt(result[6]);
 					

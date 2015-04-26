@@ -1,5 +1,7 @@
 package terrain;
 
+import java.awt.Color;
+
 import unit.MoveClass;
 import bbms.GlobalFuncs;
 
@@ -49,6 +51,11 @@ public class TallGrassTerrain extends TerrainType{
 	@Override
 	public TerrainEnum getTerrainEnum() {
 		return TerrainEnum.T_GRASS;
+	}
+	
+	@Override
+	public Color getColor() {
+		return Color.YELLOW;
 	}
 
 }

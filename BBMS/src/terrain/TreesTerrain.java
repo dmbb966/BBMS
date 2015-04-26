@@ -1,5 +1,7 @@
 package terrain;
 
+import java.awt.Color;
+
 import unit.MoveClass;
 import bbms.GlobalFuncs;
 
@@ -50,6 +52,11 @@ public class TreesTerrain extends TerrainType{
 	@Override
 	public TerrainEnum getTerrainEnum() {
 		return TerrainEnum.TREES;
+	}
+	
+	@Override
+	public Color getColor() {
+		return Color.GREEN;
 	}
 
 }

@@ -147,7 +147,7 @@ public class Hex {
 			//GlobalFuncs.flowRate -= GlobalFuncs.flowStep;
 		}
 		if (vapor < 0 && vaporType != VaporEnum.SINK) {
-			if (!clock.ClockControl.paused) clock.ClockControl.Pause();
+			//if (!clock.ClockControl.paused) clock.ClockControl.Pause();
 			GUI_NB.GCODTG("ERROR!!  Hex (" + x + ", " + y + ") has negative vapor!  Flow rate set to 1.");
 			GlobalFuncs.flowRate = 1.00;
 		}
@@ -297,6 +297,65 @@ public class Hex {
 		int prediction = (25500 * sinkDist) / (sinkDist + sourceDist);
 		vapor = prediction;
 		
+	}
+	
+	/** Draws a square size x size pixel representation of this hex to the GUI Main Display */
+	public void DrawHexMini(int xi, int yi, int size, Graphics g) {
+		Color oldBrush = g.getColor();
+		Color c = this.tType.getColor();
+		
+		double scale = 0.0;
+		int colorScale = 0;
+		
+		switch (GlobalFuncs.MiniMapType) {
+		case VAPOR_AMT:
+			scale = (double)this.vapor / 25500.0;
+			colorScale = (int) (scale * 255);
+			
+			
+			if (this.vaporType == VaporEnum.SINK) g.setColor(Color.RED);
+			else if (this.vaporType == VaporEnum.SOURCE) g.setColor(Color.GREEN); 
+			else g.setColor(new Color(0, 0, colorScale));
+			
+			break;
+		case VAPOR_DV:
+			scale = (double)this.deltaVapor / GlobalFuncs.maxsingleDV;
+			colorScale = (int) (scale * 255 / GlobalFuncs.flowRate);
+			
+			colorScale = Math.min(255, colorScale);
+									
+			
+			if (this.vaporType == VaporEnum.SINK) g.setColor(Color.RED);
+			else if (this.vaporType == VaporEnum.SOURCE) g.setColor(Color.GREEN); 
+			else g.setColor(new Color(0, 0, colorScale));			
+			break;
+		case TERRAIN:
+			if (this.vaporType == VaporEnum.SINK) g.setColor(Color.RED);
+			else if (this.vaporType == VaporEnum.SOURCE) g.setColor(Color.GREEN); 
+			else g.setColor(c);
+			
+			break;
+		}
+		
+		if (this.tEnum == TerrainEnum.INVALID) g.setColor(Color.GRAY);
+		
+		g.fillRect(xi, yi, size, size);
+		
+		g.setColor(Color.BLACK);
+		g.drawRect(xi, yi, size, size);
+		
+		
+		
+		if (GlobalFuncs.MiniMapType == MiniMapEnum.VAPOR_AMT || GlobalFuncs.MiniMapType == MiniMapEnum.VAPOR_DV) {
+			int xCent = xi + (size / 2);
+			int yCent = yi + (size / 2);
+			
+			g.setColor(tType.getColor());
+			if (tEnum != TerrainEnum.INVALID) g.fillRect(xCent - 1,  yCent - 1,  2,  2);
+		}
+		
+		g.setColor(oldBrush);
+		//GUI_NB.GCO("DEBUG: " + (xi + size) + ", " + (yi + size));
 	}
 	
 	/**
@@ -456,6 +515,9 @@ public class Hex {
 		vapor = Integer.parseInt(result[5]);
 		deltaVapor = Integer.parseInt(result[6]);
 		vaporType = VaporEnum.valueOf(result[7]);
+		
+		if (vaporType == VaporEnum.SINK) GlobalFuncs.scenMap.vaporSinkList.add(this);
+		if (vaporType == VaporEnum.SOURCE) GlobalFuncs.scenMap.vaporSourceList.add(this); 
 		
 		if (result.length > 8) GUI_NB.GCO("Error reading data for hex!  Input string too long.");
 	}

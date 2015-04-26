@@ -1,5 +1,7 @@
 package terrain;
 
+import java.awt.Color;
+
 import unit.MoveClass;
 
 abstract public class TerrainType {
@@ -19,4 +21,6 @@ abstract public class TerrainType {
 	public abstract int generateDensity();	
 	public abstract int generateObsHeight();
 	public abstract int generateHeight();
+	
+	public abstract Color getColor();
 }
