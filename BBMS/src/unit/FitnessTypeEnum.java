@@ -65,6 +65,8 @@ public enum FitnessTypeEnum {
 			}
 		}
 		
+		if (GlobalFuncs.shareTeamFit) return (finger.spotCredits / GlobalFuncs.maxPossibleSpots) + JNEATIntegration.teamPerformance;
+		
 		// Now calculates the new unit fitness, which is total spots / total number of possible spots
 		return finger.spotCredits / GlobalFuncs.maxPossibleSpots;
 	}
@@ -86,6 +88,8 @@ public enum FitnessTypeEnum {
 				//GUI_NB.GCO("DEBUG: Unit " + finger.callsign + " credited with spotting " + x.target.callsign + " shared by " + y.records.size() + " (total credits: " + finger.spotCredits);
 			}
 		}
+		
+		if (GlobalFuncs.shareTeamFit) return (finger.spotCredits / GlobalFuncs.maxPossibleSpots) + JNEATIntegration.teamPerformance;
 		
 		return finger.spotCredits / GlobalFuncs.maxPossibleSpots;
 	}

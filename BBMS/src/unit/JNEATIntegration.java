@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.Vector;
 
+import terrain.TerrainEnum;
 import utilities.FIO;
 import clock.Clock;
 import clock.ClockControl;
@@ -24,6 +25,8 @@ public class JNEATIntegration {
 	
 	static int testNumber = 0;
 	
+	static double teamPerformance = 0.0;
+	
 	public static void EndofTest() {
 		ClockControl.SetPaused(true);
 		
@@ -31,14 +34,14 @@ public class JNEATIntegration {
 			death_count++;			
 		}
 		
-		GUI_NB.GCO(":::DESTROYED UNITS:::");
+		// GUI_NB.GCO(":::DESTROYED UNITS:::");
 		
 		for (int i = 0; i < GlobalFuncs.destroyedUnitList.size(); i++) {										
 			death_sum++;			
 			death_count++;
 		}
 		
-		GUI_NB.GCO("Spotted: " + GlobalFuncs.spottedSoFar + " out of " + GlobalFuncs.maxPossibleSpots);
+		// GUI_NB.GCO("Spotted: " + GlobalFuncs.spottedSoFar + " out of " + GlobalFuncs.maxPossibleSpots);
 		GlobalFuncs.iterationCount++;
 		
 		epoch_spotted += GlobalFuncs.spottedSoFar;
@@ -95,6 +98,8 @@ public class JNEATIntegration {
 	public static void EndofScenario() {
 		ClockControl.SetPaused(true);
 		
+		teamPerformance = (GlobalFuncs.spottedSoFar / GlobalFuncs.maxPossibleSpots);
+		
 		for (int i = 0; i < GlobalFuncs.friendlyUnitList.size(); i++) {
 			Unit finger = GlobalFuncs.friendlyUnitList.elementAt(i);
 			finger.org.AverageFitness(finger.fitType.EvaluateFitness(finger));
@@ -102,7 +107,7 @@ public class JNEATIntegration {
 			death_count++;			
 		}
 		
-		GUI_NB.GCO(":::DESTROYED UNITS:::");
+		// GUI_NB.GCO(":::DESTROYED UNITS:::");
 		
 		for (int i = 0; i < GlobalFuncs.destroyedUnitList.size(); i++) {
 			Unit finger = GlobalFuncs.destroyedUnitList.elementAt(i);
@@ -210,7 +215,7 @@ public class JNEATIntegration {
 			Organism org = GlobalFuncs.currentPop.organisms.elementAt(GlobalFuncs.orgAssignNum);
 			GlobalFuncs.orgAssignNum++;
 			
-			GUI_NB.GCO("Assiging organism #" + org.genome.genome_id + " to friendly unit " + finger.callsign);
+			//GUI_NB.GCO("Assiging organism #" + org.genome.genome_id + " to friendly unit " + finger.callsign);
 			finger.org = org;
 		}				
 	}
@@ -226,8 +231,9 @@ public class JNEATIntegration {
 	
 	public static void DeployRandomly(Unit u) {
 		Hex destination = GlobalFuncs.scenMap.RandomHexReconZone();
+		
 		while (destination.HexUnit != null) {
-			destination = GlobalFuncs.scenMap.RandomHexReconZone();
+			destination = GlobalFuncs.scenMap.RandomHexReconZone();			
 		}
 		u.TeleportTo(destination);			
 	}
@@ -267,7 +273,7 @@ public class JNEATIntegration {
 			u.emplaced = true;
 			u.UpdateSharedSpotting();
 		}
-		GUI_NB.GCO("Placing " + u.callsign + " with maxView " + maxView);
+		//GUI_NB.GCO("Placing " + u.callsign + " with maxView " + maxView);
 	}
 			
 	/** Based on sensor evaluations, determine where to deploy this unit */
@@ -289,7 +295,7 @@ public class JNEATIntegration {
 		
 		boolean foundSpot = false;
 		int errCount = 0;
-		double resultThreshold = 0.75;
+		double resultThreshold = GlobalFuncs.networkResultThreshold;
 		int maxErrCount = 30;
 		
 		// Cycle through hex locations
@@ -494,6 +500,8 @@ public class JNEATIntegration {
 	}
 	
 	public static void RunNextTest() {
+		testNumber = 5;
+		
 		switch (testNumber) {
 		case 1:
 			PopTestOn(GlobalFuncs.numScoutsPer, GlobalFuncs.numTests, "s30.scen");
@@ -517,12 +525,13 @@ public class JNEATIntegration {
 		
 		ClockControl.SetTimeScale((byte) 11);
 		ClockControl.SetPaused(true);
+		GlobalFuncs.displayMiniMap = true;
 		
     	GlobalFuncs.summaryOutput = new File("src/saves/" + GlobalFuncs.outputPrefix + "/Summary.txt").toPath();    	
     	FIO.newFile(GlobalFuncs.summaryOutput.toString());
-    	FIO.overwriteFile(GlobalFuncs.summaryOutput, PrintTestSummaryKey("s22.scen"));
+    	FIO.overwriteFile(GlobalFuncs.summaryOutput, PrintTestSummaryKey("s50.scen"));
 		
-		PopTestOn(numScouts, numTestsPer, "s22.scen");					
+		PopTestOn(numScouts, numTestsPer, "s50.scen");					
 	}
 	
     public static void PopTestOn(int numScouts, int numTestsPer, String scen) {
@@ -550,10 +559,10 @@ public class JNEATIntegration {
     	case 2:
     		GlobalFuncs.defaultOrgType = OrganismTypeEnum.SIMPLE_DUAL;
     		break;
-    	case 3:
+    	case 4:
     		GlobalFuncs.defaultOrgType = OrganismTypeEnum.BASE_MAXHEX;
     		break;
-    	case 4:
+    	case 5:
     		GlobalFuncs.defaultOrgType = OrganismTypeEnum.BASE_RANDOM;
     		break;
     	case 7:
@@ -728,6 +737,8 @@ public class JNEATIntegration {
 		FillAllScouts();		// Puts a Org in each unit
 		
 		DeployAll();			// Deploys those units accordingly
+		
+		GUI_NB.GCO(">>>> Iteration: " + GlobalFuncs.iterationCount + " of epoch " + GlobalFuncs.curEpoch);
 		
 		
 		GlobalFuncs.gui.repaint();

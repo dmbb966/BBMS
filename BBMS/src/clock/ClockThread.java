@@ -32,7 +32,7 @@ public class ClockThread implements Runnable {
 	            
 	            durationCycle = System.currentTimeMillis() - startCycle;
 	            if (durationCycle > ClockControl.GetClockDelay()) {
-		            GUI_NB.GCODTG("ERROR: Cycle duration of " + durationCycle + " exceeds step delay.");	            	
+		            //System.out.println("WARNING: Cycle duration of " + durationCycle + " exceeds step delay.");	            	
 	            }
 
 	            Clock.IncrementMs((int)(ClockControl.CLOCK_STEP)); //  * ClockControl.NumTimeScale()));

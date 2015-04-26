@@ -43,7 +43,7 @@ public class DialogLoadScen extends javax.swing.JDialog {
         jLabel5 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         NumHidden_Field = new javax.swing.JTextField();
-        NumOutputs_Field = new javax.swing.JTextField();
+        VisibilityField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         NumSensors_Field = new javax.swing.JTextField();
@@ -75,6 +75,12 @@ public class DialogLoadScen extends javax.swing.JDialog {
         DeathPenaltyField = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
         FitTypeField = new javax.swing.JTextField();
+        ForceTreePlacement = new javax.swing.JCheckBox();
+        NetworkThreshold = new javax.swing.JTextField();
+        jLabel16 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        MutateNetwork = new javax.swing.JTextField();
+        ShareTeamFit = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Load Scenario");
@@ -98,11 +104,11 @@ public class DialogLoadScen extends javax.swing.JDialog {
         NumHidden_Field.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         NumHidden_Field.setText("5");
 
-        NumOutputs_Field.setColumns(1);
-        NumOutputs_Field.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        NumOutputs_Field.setText("1");
+        VisibilityField.setColumns(1);
+        VisibilityField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        VisibilityField.setText("5");
 
-        jLabel2.setText("# Outputs");
+        jLabel2.setText("Visibility");
 
         jLabel3.setText("# Sensors");
 
@@ -112,7 +118,7 @@ public class DialogLoadScen extends javax.swing.JDialog {
 
         NumScouts_Field.setColumns(3);
         NumScouts_Field.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        NumScouts_Field.setText("100");
+        NumScouts_Field.setText("50");
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setText("Num Scouts");
@@ -190,98 +196,142 @@ public class DialogLoadScen extends javax.swing.JDialog {
 
         FitTypeField.setText("1");
 
+        ForceTreePlacement.setSelected(true);
+        ForceTreePlacement.setText("Force Scout Concealment");
+        ForceTreePlacement.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                ForceTreePlacementItemStateChanged(evt);
+            }
+        });
+
+        NetworkThreshold.setColumns(1);
+        NetworkThreshold.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        NetworkThreshold.setText("0.75");
+
+        jLabel16.setText("Net Thres");
+
+        jLabel17.setText("Mutate Prob");
+
+        MutateNetwork.setColumns(1);
+        MutateNetwork.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        MutateNetwork.setText("0.025");
+
+        ShareTeamFit.setSelected(true);
+        ShareTeamFit.setText("Share Team Fitness");
+        ShareTeamFit.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                ShareTeamFitItemStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(11, 11, 11)
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(ShareTeamFit)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(ForceTreePlacement))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(NumScouts_Field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(NumSensors_Field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(NumOutputs_Field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(NumHidden_Field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(LinkProb_Field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addComponent(Generate_Button))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(11, 11, 11)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(PauseIterCheckbox)
-                                    .addComponent(PauseEpochCheckbox)))))
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(LoadPopFile, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(31, 31, 31)
-                        .addComponent(Load_Button))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel14)
-                                .addComponent(jLabel6))
-                            .addGap(6, 6, 6)
-                            .addComponent(DeathPenaltyField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(FitTypeField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addGap(20, 20, 20)
-                            .addComponent(RandCOACheckbox)
-                            .addGap(18, 18, 18)
-                            .addComponent(jLabel15))))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel11)
-                            .addComponent(jLabel10))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(jLabel4)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(NumScouts_Field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(jLabel5)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(LinkProb_Field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(jLabel2))
+                                            .addComponent(jLabel3))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(NumSensors_Field)
+                                            .addComponent(VisibilityField)
+                                            .addComponent(NumHidden_Field))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                            .addGap(0, 0, Short.MAX_VALUE)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(PauseIterCheckbox)
+                                                .addComponent(PauseEpochCheckbox)))
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(jLabel16)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(NetworkThreshold))
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(Generate_Button)
+                                            .addGap(20, 20, 20)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel17)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(MutateNetwork, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE))))
+                            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(LoadPopFile, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(31, 31, 31)
+                                .addComponent(Load_Button))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jLabel14)
+                                        .addComponent(jLabel6))
+                                    .addGap(6, 6, 6)
+                                    .addComponent(DeathPenaltyField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(FitTypeField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addGap(20, 20, 20)
+                                    .addComponent(RandCOACheckbox)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(jLabel15))))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(PercentRunField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(RunPerOrgField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(DetailedOutputFileField, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
-                                .addComponent(SummaryOutputFileField))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(Warning_Label)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel12)
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel11)
+                                    .addComponent(jLabel10))
                                 .addGap(18, 18, 18)
-                                .addComponent(MaxEpochsField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(OverwriteCheckbox, javax.swing.GroupLayout.Alignment.TRAILING)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel8))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel13)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(PrefixOutputField, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(PercentRunField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(RunPerOrgField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(DetailedOutputFileField, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
+                                        .addComponent(SummaryOutputFileField))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(Warning_Label)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel12)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(MaxEpochsField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(OverwriteCheckbox, javax.swing.GroupLayout.Alignment.TRAILING)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jLabel8))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel13)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(PrefixOutputField, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addGap(17, 17, 17))
         );
         layout.setVerticalGroup(
@@ -291,16 +341,22 @@ public class DialogLoadScen extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(NumScouts_Field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
-                    .addComponent(jLabel7))
+                    .addComponent(jLabel7)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(MutateNetwork, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel17)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(NumSensors_Field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
-                    .addComponent(DetailedOutputFileField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(DetailedOutputFileField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(NetworkThreshold, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel16)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(NumOutputs_Field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(VisibilityField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel2)
                         .addComponent(Generate_Button))
                     .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING))
@@ -344,7 +400,6 @@ public class DialogLoadScen extends javax.swing.JDialog {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel10)
                             .addComponent(PercentRunField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -357,7 +412,11 @@ public class DialogLoadScen extends javax.swing.JDialog {
                     .addComponent(Warning_Label)
                     .addComponent(jLabel12)
                     .addComponent(MaxEpochsField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(14, 14, 14))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ForceTreePlacement)
+                    .addComponent(ShareTeamFit))
+                .addContainerGap())
         );
 
         pack();
@@ -370,7 +429,21 @@ public class DialogLoadScen extends javax.swing.JDialog {
         int maxE = Integer.parseInt(MaxEpochsField.getText());
         double deathP = Double.parseDouble(DeathPenaltyField.getText());
         int fitTyeNum = Integer.parseInt(FitTypeField.getText());
+        int visibility = Integer.parseInt(VisibilityField.getText());
+        double maxThresh = Double.parseDouble(NetworkThreshold.getText());
+        double mutProb = Double.parseDouble(MutateNetwork.getText());
+        int numbSensors = Integer.parseInt(NumSensors_Field.getText());
     	
+        if (mutProb < 0 || mutProb > 1) {
+            Warning_Label.setText("ERROR!  Mutate probability is wrong.");
+            return false;
+        }
+        
+        if (maxThresh < 0 || maxThresh > 1) {
+            Warning_Label.setText("ERROR!  Maximum threshould out of bounds.");
+            return false;
+        }
+        
     	if (ppr < 0.0 || ppr > 1.0) {
             Warning_Label.setText("ERROR: Percent per run out of bounds.");
             return false;
@@ -395,12 +468,19 @@ public class DialogLoadScen extends javax.swing.JDialog {
             Warning_Label.setText("ERROR: Fit type out of range.");
             return false;
         }
+        
+        if (visibility < 1) {
+            Warning_Label.setText("ERROR: Visibility < 1");
+            return false;
+        }
     	
     	GlobalFuncs.percentPerRun = ppr;
     	GlobalFuncs.maxRunsPerOrg = runsPerOrg;
         GlobalFuncs.maxEpochs = maxE;
         GlobalFuncs.outputPrefix = PrefixOutputField.getText();
         GlobalFuncs.deathPenalty = deathP;
+        GlobalFuncs.networkResultThreshold = maxThresh;
+        GlobalFuncs.mutateProbability = mutProb;
         
         FIO.newDirectory("src/saves/" + GlobalFuncs.outputPrefix);
             	
@@ -427,47 +507,70 @@ public class DialogLoadScen extends javax.swing.JDialog {
             GlobalFuncs.defaultFitType = FitnessTypeEnum.SHARED_SPOTTING;
             GlobalFuncs.calcShared = true;
         }
+        
+        switch(numbSensors) {
+                case 1: 
+                    GlobalFuncs.defaultOrgType = unit.OrganismTypeEnum.SIMPLE_SINGLE;
+                    this.numSensors = numbSensors;
+                    break;
+                case 2:
+                    GlobalFuncs.defaultOrgType = unit.OrganismTypeEnum.SIMPLE_DUAL;
+                    this.numSensors = numbSensors;
+                    break;
+                case 7:
+                    GlobalFuncs.defaultOrgType = unit.OrganismTypeEnum.SIX_DIRECTIONAL;
+                    this.numSensors = numbSensors;
+                    break;
+                case 88:
+                    GlobalFuncs.defaultOrgType = unit.OrganismTypeEnum.BASE_MAXHEX;
+                    this.numSensors = 4;
+                    break;
+                case 99:
+                    GlobalFuncs.defaultOrgType = unit.OrganismTypeEnum.BASE_RANDOM;
+                    this.numSensors = 5;
+                    break;                    
+            }
+        GlobalFuncs.visibility = visibility;
+        GUI_NB.GCO("World visibility set to: " + visibility);
+        
+        StringBuffer buf = new StringBuffer("");
+        buf.append("Vis: " + visibility + ", ");        
+        buf.append("Network: " + GlobalFuncs.defaultOrgType.toString() + ", ");
+        buf.append("Fitness: " + GlobalFuncs.defaultFitType.toString() + ", ");
+        buf.append("Death: " + GlobalFuncs.deathPenalty + ", ");
+        buf.append("Mutation: " + GlobalFuncs.mutateProbability + ", ");
+        buf.append("Net Thresh: " + GlobalFuncs.networkResultThreshold + ", ");
+        buf.append("Force conceal: " + GlobalFuncs.forceTreePlacement + ", ");
+        buf.append("Share Fit: " + GlobalFuncs.shareTeamFit);
+        
+                       
+        FIO.appendFile(GlobalFuncs.summaryOutput, buf.toString());
     	
     	return true;
     }
     
+    private int numSensors = 0;
+    
     private void Generate_ButtonMouseClicked(java.awt.event.MouseEvent evt) {                                             
         int popSize = Integer.parseInt(NumScouts_Field.getText());
-        int numSensors = Integer.parseInt(NumSensors_Field.getText());
-        int numOutputs = Integer.parseInt(NumOutputs_Field.getText());
+        //int numSensors = Integer.parseInt(NumSensors_Field.getText());
+        
         int numHidden = Integer.parseInt(NumHidden_Field.getText());
         double probLink = Double.parseDouble(LinkProb_Field.getText());
 
         if (popSize < 0) Warning_Label.setText("ERROR: Pop Size < 1");
-        else if (numSensors < 1) Warning_Label.setText("ERROR: Num Sensors < 1");
-        else if (numOutputs < 1) Warning_Label.setText("ERROR: Num Outputs < 1");
+        //else if (numSensors < 1) Warning_Label.setText("ERROR: Num Sensors < 1");
+
         else if (numHidden < 0) Warning_Label.setText("ERROR: Num Hidden < 1");
         else if (probLink < 0 || probLink > 1) Warning_Label.setText("ERROR: Prob Link not valid percent");
         else if (ValidateGlobalInputs()){
             
             
             
-            switch(numSensors) {
-                case 1: 
-                    GlobalFuncs.defaultOrgType = unit.OrganismTypeEnum.SIMPLE_SINGLE;
-                    break;
-                case 2:
-                    GlobalFuncs.defaultOrgType = unit.OrganismTypeEnum.SIMPLE_DUAL;
-                    break;
-                case 7:
-                    GlobalFuncs.defaultOrgType = unit.OrganismTypeEnum.SIX_DIRECTIONAL;
-                    break;
-                case 88:
-                    GlobalFuncs.defaultOrgType = unit.OrganismTypeEnum.BASE_MAXHEX;
-                    numSensors = 3;
-                    break;
-                case 99:
-                    GlobalFuncs.defaultOrgType = unit.OrganismTypeEnum.BASE_RANDOM;
-                    numSensors = 4;
-                    break;                    
-            }
             
-            bbms.GlobalFuncs.currentPop = new jneat.Population(Math.max(1, popSize), numSensors, numOutputs, numHidden, false, probLink);
+            
+            bbms.GlobalFuncs.currentPop = new jneat.Population(Math.max(1, popSize), numSensors, 1, numHidden, false, probLink);
+
             
             GUI_NB.GCO("New population added.");            
             GUI_NB.GCO("Running scenario iteration setup.");        
@@ -505,6 +608,16 @@ public class DialogLoadScen extends javax.swing.JDialog {
         if (evt.getStateChange() == 1) GlobalFuncs.randCOAEpoch = true;
         else GlobalFuncs.randCOAEpoch = false;
     }                                                
+
+    private void ForceTreePlacementItemStateChanged(java.awt.event.ItemEvent evt) {                                                    
+        if (evt.getStateChange() == 1) GlobalFuncs.forceTreePlacement = true;
+        else GlobalFuncs.forceTreePlacement = false;
+    }                                                   
+
+    private void ShareTeamFitItemStateChanged(java.awt.event.ItemEvent evt) {                                              
+        if (evt.getStateChange() == 1) GlobalFuncs.shareTeamFit = true;
+        else GlobalFuncs.shareTeamFit = false;
+    }                                             
 
     /**
      * @param args the command line arguments
@@ -552,13 +665,15 @@ public class DialogLoadScen extends javax.swing.JDialog {
     private javax.swing.JTextField DeathPenaltyField;
     private javax.swing.JTextField DetailedOutputFileField;
     private javax.swing.JTextField FitTypeField;
+    private javax.swing.JCheckBox ForceTreePlacement;
     private javax.swing.JButton Generate_Button;
     private javax.swing.JTextField LinkProb_Field;
     private javax.swing.JTextField LoadPopFile;
     private javax.swing.JButton Load_Button;
     private javax.swing.JTextField MaxEpochsField;
+    private javax.swing.JTextField MutateNetwork;
+    private javax.swing.JTextField NetworkThreshold;
     private javax.swing.JTextField NumHidden_Field;
-    private javax.swing.JTextField NumOutputs_Field;
     private javax.swing.JTextField NumScouts_Field;
     private javax.swing.JTextField NumSensors_Field;
     private javax.swing.JCheckBox OverwriteCheckbox;
@@ -568,7 +683,9 @@ public class DialogLoadScen extends javax.swing.JDialog {
     private javax.swing.JTextField PrefixOutputField;
     private javax.swing.JCheckBox RandCOACheckbox;
     private javax.swing.JTextField RunPerOrgField;
+    private javax.swing.JCheckBox ShareTeamFit;
     private javax.swing.JTextField SummaryOutputFileField;
+    private javax.swing.JTextField VisibilityField;
     private javax.swing.JLabel Warning_Label;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -577,6 +694,8 @@ public class DialogLoadScen extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

@@ -434,6 +434,14 @@ public class GUIKeyboard {
 			
 		}
 	}
+	
+	public static class MiniMapToggle extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			GlobalFuncs.displayMiniMap = !GlobalFuncs.displayMiniMap;
+			GlobalFuncs.gui.repaint();
+		}
+	}
 		
 	
 	/** Displays Keyboard Shortcut Info - also accessed from the Help Menu
@@ -459,6 +467,7 @@ public class GUIKeyboard {
 			GUI_NB.GCO(": - Removes the next waypoint for the currently selected unit");
 			GUI_NB.GCO("Q - Step the clock.");
 			GUI_NB.GCO("X - Test key, evals if in enemy/friendly zone");
+			GUI_NB.GCO("T - Toggle minimap");
 		}
 	}
 	
@@ -542,6 +551,10 @@ public class GUIKeyboard {
 		amap.put("accelerate time", new AccelerateTime());
 		imap.put(KeyStroke.getKeyStroke('p'), "pause");
 		amap.put("pause", new PauseTime());
+		
+		// Other
+		imap.put(KeyStroke.getKeyStroke('q'), "minimap");
+		amap.put("minimap", new MiniMapToggle());
 			
 	}
 	

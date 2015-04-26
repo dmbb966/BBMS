@@ -6,7 +6,8 @@ import bbms.GlobalFuncs;
 import gui.GUI_NB;
 import hex.Hex;
 
-public enum OrganismTypeEnum {
+public enum OrganismTypeEnum {	
+	
 	/** Used for testing purposes: a single sensor input going to a single output */
 	SIMPLE_SINGLE,
 	/** As Simple-Single, but has a separate sensor for the hex the unit is in. */
@@ -17,6 +18,8 @@ public enum OrganismTypeEnum {
 	BASE_RANDOM,
 	/** Base case that selects hexes which can see the most number of hexes */
 	BASE_MAXHEX;
+	
+	public static double maxObservedDV = 0.0;
 	
 	/** Senses the vapor DV for all hexes that it can see.  Will NOT count DV in the "friendly" zone */
 	public static double SenseFlowFOV(Hex origin, FitnessTypeEnum fT) {		
@@ -29,8 +32,14 @@ public enum OrganismTypeEnum {
 			Hex finger = visibleHexes.elementAt(i);
 			// finger.DisplayInfo();
 			if (!GlobalFuncs.scenMap.inFriendlyZone(finger)) {
-				if (fT == FitnessTypeEnum.SHARED_SPOTTING) sumDV += finger.CalcSharedDV();
-				else sumDV += finger.deltaVapor;
+				if (fT == FitnessTypeEnum.SHARED_SPOTTING) {
+					sumDV += finger.CalcSharedDV();
+					maxObservedDV = Math.max(maxObservedDV,  finger.CalcSharedDV());
+				}
+				else {
+					sumDV += finger.deltaVapor;
+					maxObservedDV = Math.max(maxObservedDV, finger.deltaVapor);
+				}
 			}
 		}
 		
@@ -38,6 +47,11 @@ public enum OrganismTypeEnum {
 		
 		return sumDV;
 	}	
+	
+	/** REQUIRES SenseFlowFOV to be run first */
+	public static double SenseFlowMax(Hex origin, FitnessTypeEnum fT) {
+		return (double) maxObservedDV / GlobalFuncs.maxsingleDV;				
+	}
 	
 	/** Returns the normalized delta vapor of the specified hex*/
 	public static double SenseFlowLocation(Hex origin, FitnessTypeEnum fT) {

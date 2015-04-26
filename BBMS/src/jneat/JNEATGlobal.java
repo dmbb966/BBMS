@@ -1,5 +1,7 @@
 package jneat;
 
+import bbms.GlobalFuncs;
+
 public class JNEATGlobal {
 	
 	// NOTE: Due to constructors, there may be some gaps, i.e. 
@@ -40,19 +42,19 @@ public class JNEATGlobal {
 	// /** Size of the population is locally defined in the Population class */
 	// public static int p_pop_size = 500;
 	
-	static double mutateProbConst = 0.05;
+	
 	
 	// Mutation probabilities
-	static double p_mutate_add_link_prob = mutateProbConst;
-	static double p_mutate_add_node_prob = mutateProbConst;	// 0.2
-	static double p_mutate_gene_reenable_prob = mutateProbConst;
+	static double p_mutate_add_link_prob = GlobalFuncs.mutateProbability;
+	static double p_mutate_add_node_prob = GlobalFuncs.mutateProbability;	// 0.2
+	static double p_mutate_gene_reenable_prob = GlobalFuncs.mutateProbability;
 	static double p_mutate_link_trait_prob = 0.0;
-	static double p_mutate_link_weights_prob = mutateProbConst;
+	static double p_mutate_link_weights_prob = GlobalFuncs.mutateProbability;
 	static double p_mutate_node_trait_prob = 0.0;
 	static double p_mutate_only_prob = 0.0;
 	static double p_mutate_random_trait_prob = 0.0; 
-	static double p_mutate_toggle_enable_prob = mutateProbConst;
-	static double p_mutate_toggle_reenable_prob = mutateProbConst;	// Probability of reenabling one gene in the genome during mutation
+	static double p_mutate_toggle_enable_prob = GlobalFuncs.mutateProbability;
+	static double p_mutate_toggle_reenable_prob = GlobalFuncs.mutateProbability;	// Probability of reenabling one gene in the genome during mutation
 	static double p_mutate_weight_power = 1.0;
 	static int p_newlink_tries = 1;
 	

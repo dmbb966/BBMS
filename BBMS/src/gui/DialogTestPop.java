@@ -43,6 +43,7 @@ public class DialogTestPop extends javax.swing.JDialog {
     private void initComponents() {
 
         jSplitPane1 = new javax.swing.JSplitPane();
+        jPasswordField1 = new javax.swing.JPasswordField();
         NumScouts_Field = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         LoadPopDir = new javax.swing.JTextField();
@@ -63,13 +64,20 @@ public class DialogTestPop extends javax.swing.JDialog {
         PauseIterCheckbox1 = new javax.swing.JCheckBox();
         jLabel14 = new javax.swing.JLabel();
         ShareSpotCheckbox = new javax.swing.JCheckBox();
+        jLabel12 = new javax.swing.JLabel();
+        NetworkThreshold = new javax.swing.JTextField();
+        ForceConcealment = new javax.swing.JCheckBox();
+        jLabel15 = new javax.swing.JLabel();
+        VisibilityField = new javax.swing.JTextField();
+
+        jPasswordField1.setText("jPasswordField1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Load Scenario");
 
         NumScouts_Field.setColumns(3);
         NumScouts_Field.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        NumScouts_Field.setText("10");
+        NumScouts_Field.setText("5");
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setText("Num Scouts");
@@ -117,7 +125,7 @@ public class DialogTestPop extends javax.swing.JDialog {
             }
         });
 
-        jLabel13.setText("Subdir");
+        jLabel13.setText("Output Dir");
 
         PrefixOutputField.setText(GlobalFuncs.dirPrefix);
 
@@ -134,6 +142,27 @@ public class DialogTestPop extends javax.swing.JDialog {
         ShareSpotCheckbox.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 ShareSpotCheckboxItemStateChanged(evt);
+            }
+        });
+
+        jLabel12.setText("Network Threshold");
+
+        NetworkThreshold.setText("0.75");
+
+        ForceConcealment.setSelected(true);
+        ForceConcealment.setText("Force Scout Concealment");
+        ForceConcealment.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                ForceConcealmentItemStateChanged(evt);
+            }
+        });
+
+        jLabel15.setText("Visibility");
+
+        VisibilityField.setText("5");
+        VisibilityField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                VisibilityFieldActionPerformed(evt);
             }
         });
 
@@ -161,34 +190,42 @@ public class DialogTestPop extends javax.swing.JDialog {
                         .addComponent(LoadPopDir, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(Load_Button))
-                    .addComponent(jLabel14))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addComponent(jLabel15)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(VisibilityField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel12)
+                                .addGap(18, 18, 18)
+                                .addComponent(NetworkThreshold, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel14))))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(Warning_Label)
-                                .addGap(142, 142, 142))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(ShareSpotCheckbox)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(DetailedOutputFileField, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
-                                    .addComponent(SummaryOutputFileField)))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel13)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(PrefixOutputField, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(Warning_Label)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ForceConcealment)
+                        .addGap(55, 55, 55))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel8)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel9)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(OverwriteCheckbox))
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel8))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(17, 17, 17))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(OverwriteCheckbox)
+                                    .addComponent(SummaryOutputFileField, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel13)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(PrefixOutputField, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(DetailedOutputFileField, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ShareSpotCheckbox))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -202,12 +239,11 @@ public class DialogTestPop extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(DetailedOutputFileField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(PauseIterCheckbox1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(ShareSpotCheckbox)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(SummaryOutputFileField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -218,7 +254,9 @@ public class DialogTestPop extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(OverwriteCheckbox)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Warning_Label)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(Warning_Label)
+                            .addComponent(ForceConcealment))
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -230,7 +268,15 @@ public class DialogTestPop extends javax.swing.JDialog {
                             .addComponent(RunsPerTestField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(26, 26, 26)
                         .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel15)
+                            .addComponent(VisibilityField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel12)
+                            .addComponent(NetworkThreshold, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel14)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -246,6 +292,18 @@ public class DialogTestPop extends javax.swing.JDialog {
     private void ValidateGlobalInputs() {
     	int numScouts = Integer.parseInt(NumScouts_Field.getText());
         int numRunsperTest = Integer.parseInt(RunsPerTestField.getText());
+        int setVisibility = Integer.parseInt(VisibilityField.getText());
+        double netThreshold = Double.parseDouble(NetworkThreshold.getText());
+        
+        if (netThreshold < 0 || netThreshold > 1) {
+            GUI_NB.GCO("ERROR!  Network threshold is out of range.");
+            return;
+        }
+        
+        if (setVisibility < 1) {
+            GUI_NB.GCO("ERROR!  Visibility too low.");
+            return;
+        }
         
         if (numScouts < 1) {
             GUI_NB.GCO("ERROR! Improper number of scouts.");
@@ -259,7 +317,8 @@ public class DialogTestPop extends javax.swing.JDialog {
         
        
 
-        GlobalFuncs.inputPrefix = LoadPopDir.getText();
+        GlobalFuncs.inputPrefix = LoadPopDir.getText();        
+        GlobalFuncs.networkResultThreshold = netThreshold;
         
         GlobalFuncs.outputPrefix = PrefixOutputField.getText();
         FIO.newDirectory("src/saves/" + GlobalFuncs.outputPrefix);
@@ -283,6 +342,17 @@ public class DialogTestPop extends javax.swing.JDialog {
         }
         
         
+        GlobalFuncs.visibility = setVisibility;
+        
+        StringBuffer buf = new StringBuffer("");
+        buf.append("Vis: " + setVisibility + ", ");        
+        buf.append("Network: " + GlobalFuncs.inputPrefix + ", ");
+        buf.append("Fitness: " + GlobalFuncs.defaultFitType.toString() + ", ");
+        buf.append("Death: " + GlobalFuncs.deathPenalty + ", ");
+        buf.append("Net Thresh: " + GlobalFuncs.networkResultThreshold + ", ");
+        buf.append("Force conceal: " + GlobalFuncs.forceTreePlacement);
+                       
+        FIO.appendFile(GlobalFuncs.summaryOutput, buf.toString());
         
         JNEATIntegration.PopTestFromDir(numScouts, numRunsperTest);
         dispose();    	
@@ -318,6 +388,15 @@ public class DialogTestPop extends javax.swing.JDialog {
         if (evt.getStateChange() == 1) GlobalFuncs.defaultFitType = FitnessTypeEnum.SHARED_SPOTTING;
         else GlobalFuncs.defaultFitType = FitnessTypeEnum.SIMPLE_GREEDY;
     }                                                  
+
+    private void ForceConcealmentItemStateChanged(java.awt.event.ItemEvent evt) {                                                  
+        if (evt.getStateChange() == 1) GlobalFuncs.forceTreePlacement = true;
+        else GlobalFuncs.forceTreePlacement = false;
+    }                                                 
+
+    private void VisibilityFieldActionPerformed(java.awt.event.ActionEvent evt) {                                                
+        // TODO add your handling code here:
+    }                                               
 
     /**
      * @param args the command line arguments
@@ -363,8 +442,10 @@ public class DialogTestPop extends javax.swing.JDialog {
 
     // Variables declaration - do not modify                     
     private javax.swing.JTextField DetailedOutputFileField;
+    private javax.swing.JCheckBox ForceConcealment;
     private javax.swing.JTextField LoadPopDir;
     private javax.swing.JButton Load_Button;
+    private javax.swing.JTextField NetworkThreshold;
     private javax.swing.JTextField NumScouts_Field;
     private javax.swing.JCheckBox OverwriteCheckbox;
     private javax.swing.JCheckBox PauseEpochCheckbox;
@@ -374,14 +455,18 @@ public class DialogTestPop extends javax.swing.JDialog {
     private javax.swing.JTextField RunsPerTestField;
     private javax.swing.JCheckBox ShareSpotCheckbox;
     private javax.swing.JTextField SummaryOutputFileField;
+    private javax.swing.JTextField VisibilityField;
     private javax.swing.JLabel Warning_Label;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JSplitPane jSplitPane1;
     // End of variables declaration                   
 }

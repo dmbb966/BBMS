@@ -133,16 +133,30 @@ public class HexMap {
 		GUI_NB.GCO("Calculated exact single hex normalized DV: " + mostSingleHex);
 	}
 	
-	/** Returns a random hex within the Recon Zone of the map */
+	/** Returns a random hex within the Recon Zone of the map, accounting for the force concealment attribute in GlobalFuncs */
 	public Hex RandomHexReconZone() {
-		int x = GlobalFuncs.randRange(friendlyZone + 1, enemyZone - 1);
-		int y = GlobalFuncs.randRange(0, yDim - 1);
+		int errCount = 0;
+		boolean foundIt = false;
 		
-		Hex finger = getHex(x, y);
+		Hex finger = null;
 		
-		if (!inReconZone(finger)) {
-			GUI_NB.GCO("ERROR!  Hex " + x + ", " + y + " is not in the recon zone!");
-		}
+		while (!foundIt) {
+			errCount++;
+			int x = GlobalFuncs.randRange(friendlyZone + 1, enemyZone - 1);
+			int y = GlobalFuncs.randRange(0, yDim - 1);
+			
+			finger = getHex(x, y);
+			
+			if (GlobalFuncs.forceTreePlacement) {
+				if (finger.tEnum == TerrainEnum.T_GRASS || finger.tEnum == TerrainEnum.TREES) foundIt = true; 
+			} 
+			else  if (errCount > 1000) {
+				GUI_NB.GCO("ERROR!  Could not find a concealment hex!  Disabling tree forcing for future units.");
+				GlobalFuncs.forceTreePlacement = false;
+				foundIt = true;
+			}
+			else foundIt = true;
+		}									
 		
 		return finger;
 	}
@@ -252,6 +266,7 @@ public class HexMap {
 		UpdateSourceSink();
 	}
 	
+	
 	public void ShowSideWaypoints(unit.SideEnum side) {		
 		// GUI_NB.GCO("Showing all wayspoints on side: " + side.toString());
 		// First, clears hex text
@@ -282,16 +297,24 @@ public class HexMap {
 					HexOff thisWP = finger.waypointList.waypointList.get(i);
 					Hex thisHex = GlobalFuncs.scenMap.getHex(thisWP);
 					//GUI_NB.GCO("DEBUG: Looking at WP " + (i + 1) + " at " + thisHex.toString());
-					
-					if (thisHex.hexText.equals("")) {
-						setHexText(thisHex, "WP " + (i + 1) + " :1", Color.WHITE);
-					} else	// Will only have WPs since we cleared text at the start 
-					{
-						String curHexText = getHexText(thisHex);
-						String[] splitText = curHexText.split(":");
-						int stackedWPs = Integer.parseInt(splitText[1]);
-						stackedWPs++;
-						setHexText(thisHex, "WP " + (i + 1) + " :" + Integer.toString(stackedWPs), Color.WHITE);
+					if (GlobalFuncs.displayMiniMap) {
+						int xCent = (int) (GlobalFuncs.miniMapSize * (thisHex.x + 2) + (GlobalFuncs.miniMapSize * 0.5) + ((thisHex.y & 1) * (GlobalFuncs.miniMapSize * 0.5)));
+						int yCent = (int) (GlobalFuncs.miniMapSize * (thisHex.y + 2) + (GlobalFuncs.miniMapSize * 0.5));
+						
+						GlobalFuncs.gui.getGraphics().setColor(Color.CYAN);
+						GlobalFuncs.gui.getGraphics().drawRect(xCent - 2,  yCent - 2, 4, 4);
+					}
+					else {
+						if (thisHex.hexText.equals("")) {
+							setHexText(thisHex, "WP " + (i + 1) + " :1", Color.WHITE);
+						} else	// Will only have WPs since we cleared text at the start 
+						{
+							String curHexText = getHexText(thisHex);
+							String[] splitText = curHexText.split(":");
+							int stackedWPs = Integer.parseInt(splitText[1]);
+							stackedWPs++;
+							setHexText(thisHex, "WP " + (i + 1) + " :" + Integer.toString(stackedWPs), Color.WHITE);
+						}
 					}
 				}
 			}

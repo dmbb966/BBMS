@@ -15,6 +15,7 @@ import javax.imageio.ImageIO;
 import bbms.GlobalFuncs;
 import terrain.*;
 import unit.MoveClass;
+import unit.SideEnum;
 
 
 public class Hex {
@@ -314,7 +315,7 @@ public class Hex {
 			
 			
 			if (this.vaporType == VaporEnum.SINK) g.setColor(Color.RED);
-			else if (this.vaporType == VaporEnum.SOURCE) g.setColor(Color.GREEN); 
+			else if (this.vaporType == VaporEnum.SOURCE) g.setColor(Color.ORANGE); 
 			else g.setColor(new Color(0, 0, colorScale));
 			
 			break;
@@ -326,12 +327,16 @@ public class Hex {
 									
 			
 			if (this.vaporType == VaporEnum.SINK) g.setColor(Color.RED);
-			else if (this.vaporType == VaporEnum.SOURCE) g.setColor(Color.GREEN); 
+			else if (this.vaporType == VaporEnum.SOURCE) g.setColor(Color.ORANGE); 
 			else g.setColor(new Color(0, 0, colorScale));			
 			break;
 		case TERRAIN:
-			if (this.vaporType == VaporEnum.SINK) g.setColor(Color.RED);
-			else if (this.vaporType == VaporEnum.SOURCE) g.setColor(Color.GREEN); 
+			if (this.HexUnit != null) {
+				if (this.HexUnit.side == SideEnum.FRIENDLY) g.setColor(Color.BLUE);
+				else g.setColor(Color.MAGENTA);
+			}
+			else if (this.vaporType == VaporEnum.SINK) g.setColor(Color.RED);
+			else if (this.vaporType == VaporEnum.SOURCE) g.setColor(Color.ORANGE); 
 			else g.setColor(c);
 			
 			break;
@@ -345,13 +350,19 @@ public class Hex {
 		g.drawRect(xi, yi, size, size);
 		
 		
+		int xCent = xi + (size / 2);
+		int yCent = yi + (size / 2);
 		
 		if (GlobalFuncs.MiniMapType == MiniMapEnum.VAPOR_AMT || GlobalFuncs.MiniMapType == MiniMapEnum.VAPOR_DV) {
-			int xCent = xi + (size / 2);
-			int yCent = yi + (size / 2);
+			
 			
 			g.setColor(tType.getColor());
 			if (tEnum != TerrainEnum.INVALID) g.fillRect(xCent - 1,  yCent - 1,  2,  2);
+		} else {
+			if (x == GlobalFuncs.scenMap.friendlyZone) g.setColor(Color.BLUE);
+			else if (x == GlobalFuncs.scenMap.enemyZone) g.setColor(Color.RED);
+			
+			if (tEnum != TerrainEnum.INVALID) g.fillRect(xCent - 2, yCent - 2, 4, 4); 
 		}
 		
 		g.setColor(oldBrush);

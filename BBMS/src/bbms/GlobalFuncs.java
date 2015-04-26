@@ -41,12 +41,16 @@ public class GlobalFuncs {
 	
 	public static int miniMapSize = 16;
 	public static boolean updateVapor = false;
+	public static boolean shareTeamFit = true;
 	
 	public static boolean RotateHull = true;
 	public static boolean runningTest = false;
 	
 	public static boolean displayMiniMap = false;
 	public static MiniMapEnum MiniMapType = MiniMapEnum.TERRAIN;
+	
+	public static double networkResultThreshold = 0.75;
+	public static double mutateProbability = 0.05;
 	
 	public static String dirPrefix = "T";
 	
@@ -63,6 +67,7 @@ public class GlobalFuncs {
 	public static OrganismTypeEnum defaultOrgType = OrganismTypeEnum.SIMPLE_SINGLE;
 	
 	public static boolean calcShared = false;
+	public static boolean forceTreePlacement = true;
 	
 	public static Population currentPop = null;	
 	public static String tempStr = "";				// Used for some dialog box results
@@ -117,7 +122,7 @@ public class GlobalFuncs {
 	
 	// Vapor variables
 	/** Universal modifier to vapor flow rate */	 
-	public static double flowRate = 3.00;
+	public static double flowRate = 1.00;
 	/** Maximum flow rate of the system - will adjust based on actual system performance */
 	public static double flowRateCap = 2.95;
 	/** Rate at which the flow rate increases or decreases */

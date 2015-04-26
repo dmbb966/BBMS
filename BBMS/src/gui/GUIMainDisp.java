@@ -127,6 +127,8 @@ public class GUIMainDisp extends JPanel {
 			cursorHexOff = pixelToHexOff(e.getX(), e.getY(), -defaultHexSize, -defaultHexSize);
 			Hex clickedHex = GlobalFuncs.scenMap.getHex(cursorHexOff.getX(), cursorHexOff.getY());
 			
+			GUI_NB.GCO("Hex " + clickedHex.x + ", " + clickedHex.y + ">>>");
+			
 			// Left button - select unit
 			if ((e.getModifiers() & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK) {
 				if (clickedHex.HexUnit == null) {
@@ -463,6 +465,8 @@ public class GUIMainDisp extends JPanel {
 	}
 	
 	public void drawUnits(Graphics g, int hexSize) {
+		if (GlobalFuncs.displayMiniMap) return;
+		
 		unit.Unit u;
 		for (int i = 0; i < GlobalFuncs.unitList.size(); i++) {
 			u = (Unit) GlobalFuncs.unitList.elementAt(i);
