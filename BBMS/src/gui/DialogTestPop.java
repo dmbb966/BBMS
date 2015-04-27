@@ -61,7 +61,6 @@ public class DialogTestPop extends javax.swing.JDialog {
         PauseIterCheckbox = new javax.swing.JCheckBox();
         jLabel13 = new javax.swing.JLabel();
         PrefixOutputField = new javax.swing.JTextField();
-        PauseIterCheckbox1 = new javax.swing.JCheckBox();
         jLabel14 = new javax.swing.JLabel();
         ShareSpotCheckbox = new javax.swing.JCheckBox();
         jLabel12 = new javax.swing.JLabel();
@@ -131,13 +130,6 @@ public class DialogTestPop extends javax.swing.JDialog {
 
         PrefixOutputField.setText(GlobalFuncs.dirPrefix);
 
-        PauseIterCheckbox1.setText("Top K Orgs");
-        PauseIterCheckbox1.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                PauseIterCheckbox1ItemStateChanged(evt);
-            }
-        });
-
         jLabel14.setText("Target Population Directory");
 
         ShareSpotCheckbox.setText("Shared Spotting?");
@@ -170,7 +162,7 @@ public class DialogTestPop extends javax.swing.JDialog {
 
         jLabel16.setText("EpochInterval");
 
-        EpochInterval.setText("10");
+        EpochInterval.setText("5");
         EpochInterval.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 EpochIntervalActionPerformed(evt);
@@ -195,7 +187,6 @@ public class DialogTestPop extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(PauseEpochCheckbox)
-                            .addComponent(PauseIterCheckbox1)
                             .addComponent(RunsPerTestField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(LoadPopDir, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -219,12 +210,6 @@ public class DialogTestPop extends javax.swing.JDialog {
                         .addGap(68, 68, 68)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(Warning_Label)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(ForceConcealment)
-                        .addGap(55, 55, 55))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel7)
@@ -232,16 +217,22 @@ public class DialogTestPop extends javax.swing.JDialog {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel9)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(OverwriteCheckbox)
-                                    .addComponent(SummaryOutputFileField, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(SummaryOutputFileField, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel13)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(PrefixOutputField, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(DetailedOutputFileField, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(ShareSpotCheckbox))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(OverwriteCheckbox))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(Warning_Label)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ShareSpotCheckbox)
+                            .addComponent(ForceConcealment))
+                        .addGap(55, 55, 55))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -252,14 +243,12 @@ public class DialogTestPop extends javax.swing.JDialog {
                     .addComponent(jLabel4)
                     .addComponent(jLabel7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(DetailedOutputFileField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(PauseIterCheckbox1))
+                .addComponent(DetailedOutputFileField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(ShareSpotCheckbox)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(OverwriteCheckbox)
+                        .addGap(33, 33, 33)
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(SummaryOutputFileField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -268,7 +257,7 @@ public class DialogTestPop extends javax.swing.JDialog {
                             .addComponent(jLabel13)
                             .addComponent(PrefixOutputField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(OverwriteCheckbox)
+                        .addComponent(ShareSpotCheckbox)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(Warning_Label)
@@ -406,10 +395,6 @@ public class DialogTestPop extends javax.swing.JDialog {
         else GlobalFuncs.pauseNewIter = false;
     }                                                  
 
-    private void PauseIterCheckbox1ItemStateChanged(java.awt.event.ItemEvent evt) {                                                    
-        // TODO add your handling code here:
-    }                                                   
-
     private void ShareSpotCheckboxItemStateChanged(java.awt.event.ItemEvent evt) {                                                   
         if (evt.getStateChange() == 1) {
             GlobalFuncs.defaultFitType = FitnessTypeEnum.SHARED_SPOTTING;
@@ -487,7 +472,6 @@ public class DialogTestPop extends javax.swing.JDialog {
     private javax.swing.JCheckBox OverwriteCheckbox;
     private javax.swing.JCheckBox PauseEpochCheckbox;
     private javax.swing.JCheckBox PauseIterCheckbox;
-    private javax.swing.JCheckBox PauseIterCheckbox1;
     private javax.swing.JTextField PrefixOutputField;
     private javax.swing.JTextField RunsPerTestField;
     private javax.swing.JCheckBox ShareSpotCheckbox;
