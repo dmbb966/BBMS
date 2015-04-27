@@ -352,7 +352,7 @@ public class JNEATIntegration {
 		
 	}
 	
-	public static String PrintTestSummaryKey(String scen) {
+	public static String PrintTestSummaryKey() {
 		StringBuffer buf = new StringBuffer("");
 		
 		buf.append("Scenario, ");
@@ -500,11 +500,11 @@ public class JNEATIntegration {
 	}
 	
 	public static void RunNextTest() {
-		testNumber = 5;
+		//testNumber = 5;
 		
 		switch (testNumber) {
 		case 1:
-			PopTestOn(GlobalFuncs.numScoutsPer, GlobalFuncs.numTests, "41.scen");
+			PopTestOn(GlobalFuncs.numScoutsPer, GlobalFuncs.numTests, "s41.scen");
 			break;		
 		case 2:
 			PopTestOn(GlobalFuncs.numScoutsPer, GlobalFuncs.numTests, "testSP1.scen");
@@ -527,11 +527,11 @@ public class JNEATIntegration {
 		ClockControl.SetPaused(true);
 		GlobalFuncs.displayMiniMap = true;
 		
-    	GlobalFuncs.summaryOutput = new File("src/saves/" + GlobalFuncs.outputPrefix + "/Summary.txt").toPath();    	
-    	FIO.newFile(GlobalFuncs.summaryOutput.toString());
-    	FIO.overwriteFile(GlobalFuncs.summaryOutput, PrintTestSummaryKey("s31.scen"));
+    	//GlobalFuncs.summaryOutput = new File("src/saves/" + GlobalFuncs.outputPrefix + "/Summary.txt").toPath();    	
+    	//FIO.newFile(GlobalFuncs.summaryOutput.toString());
+    	//FIO.overwriteFile(GlobalFuncs.summaryOutput, PrintTestSummaryKey());
 		
-		PopTestOn(numScouts, numTestsPer, "s50.scen");					
+		PopTestOn(numScouts, numTestsPer, "s51.scen");					
 	}
 	
     public static void PopTestOn(int numScouts, int numTestsPer, String scen) {
@@ -559,10 +559,10 @@ public class JNEATIntegration {
     	case 2:
     		GlobalFuncs.defaultOrgType = OrganismTypeEnum.SIMPLE_DUAL;
     		break;
-    	case 4:
+    	case 3:
     		GlobalFuncs.defaultOrgType = OrganismTypeEnum.BASE_MAXHEX;
     		break;
-    	case 5:
+    	case 4:
     		GlobalFuncs.defaultOrgType = OrganismTypeEnum.BASE_RANDOM;
     		break;
     	case 7:

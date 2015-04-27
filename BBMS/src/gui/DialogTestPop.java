@@ -361,7 +361,7 @@ public class DialogTestPop extends javax.swing.JDialog {
         
         if (overwriteDataFiles) {
             FIO.overwriteFile(GlobalFuncs.detailedOutput, "");
-            //FIO.overwriteFile(GlobalFuncs.summaryOutput, unit.JNEATIntegration.PrintTestSummaryKey());
+            FIO.overwriteFile(GlobalFuncs.summaryOutput, unit.JNEATIntegration.PrintTestSummaryKey());
             FIO.overwriteFile(GlobalFuncs.fullIterOutput, unit.JNEATIntegration.PrintDetailedIterKey());
             GUI_NB.GCO("Output files overwritten");
         }
@@ -371,11 +371,12 @@ public class DialogTestPop extends javax.swing.JDialog {
         
         StringBuffer buf = new StringBuffer("");
         buf.append("Vis: " + setVisibility + ", ");        
-        buf.append("Network: " + GlobalFuncs.inputPrefix + ", ");
+        buf.append("Population: " + GlobalFuncs.inputPrefix + ", ");
         buf.append("Fitness: " + GlobalFuncs.defaultFitType.toString() + ", ");
         buf.append("Death: " + GlobalFuncs.deathPenalty + ", ");
         buf.append("Net Thresh: " + GlobalFuncs.networkResultThreshold + ", ");
-        buf.append("Force conceal: " + GlobalFuncs.forceTreePlacement);
+        buf.append("Force conceal: " + GlobalFuncs.forceTreePlacement + ", ");
+        
                        
         FIO.appendFile(GlobalFuncs.summaryOutput, buf.toString());
         
