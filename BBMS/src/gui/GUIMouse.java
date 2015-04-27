@@ -62,7 +62,7 @@ public class GUIMouse {
 	 * @param unitType
 	 * @param side
 	 */
-	public static void SetPlaceUnit(java.awt.event.MouseEvent e, String unitType, SideEnum side) {
+	public static void SetPlaceUnit(java.awt.event.MouseEvent e, String unitType, SideEnum side) {		
 		HexOff cursorHexOff = GUIMainDisp.pixelToHexOff(e.getX(), e.getY(), -GlobalFuncs.gui.GMD.defaultHexSize, -GlobalFuncs.gui.GMD.defaultHexSize);
 		Hex h = GlobalFuncs.scenMap.getHex(cursorHexOff.getX(), cursorHexOff.getY());
 		GUI_NB.GCO("Adding " + unitType);

@@ -59,7 +59,7 @@ public class JNEATIntegration {
 							
 		if (GlobalFuncs.COAIndex > GlobalFuncs.allCOAs.size()) {
 			
-			GlobalFuncs.currentPopEpochNum += 1;
+			GlobalFuncs.currentPopEpochNum += GlobalFuncs.epochInterval;
 					
 			
 			if (GlobalFuncs.currentPopEpochNum > 50) {
@@ -504,13 +504,13 @@ public class JNEATIntegration {
 		
 		switch (testNumber) {
 		case 1:
-			PopTestOn(GlobalFuncs.numScoutsPer, GlobalFuncs.numTests, "s30.scen");
+			PopTestOn(GlobalFuncs.numScoutsPer, GlobalFuncs.numTests, "41.scen");
 			break;		
 		case 2:
-			PopTestOn(GlobalFuncs.numScoutsPer, GlobalFuncs.numTests, "s40.scen");
+			PopTestOn(GlobalFuncs.numScoutsPer, GlobalFuncs.numTests, "testSP1.scen");
 			break;
 		case 3:
-			PopTestOn(GlobalFuncs.numScoutsPer, GlobalFuncs.numTests, "testDurango.scen");
+			PopTestOn(GlobalFuncs.numScoutsPer, GlobalFuncs.numTests, "testD2.scen");
 			break;
 		default:
 			GUI_NB.GCO("Out of tests!");
@@ -529,7 +529,7 @@ public class JNEATIntegration {
 		
     	GlobalFuncs.summaryOutput = new File("src/saves/" + GlobalFuncs.outputPrefix + "/Summary.txt").toPath();    	
     	FIO.newFile(GlobalFuncs.summaryOutput.toString());
-    	FIO.overwriteFile(GlobalFuncs.summaryOutput, PrintTestSummaryKey("s50.scen"));
+    	FIO.overwriteFile(GlobalFuncs.summaryOutput, PrintTestSummaryKey("s31.scen"));
 		
 		PopTestOn(numScouts, numTestsPer, "s50.scen");					
 	}

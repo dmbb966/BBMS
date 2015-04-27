@@ -66,7 +66,8 @@ public class GUIMainDisp extends JPanel {
 	public static hex.HexOff pixelToMiniHex(int x, int y) {
 		
 		int yHex = y / GlobalFuncs.miniMapSize;
-		int xHex = (x - (GlobalFuncs.miniMapSize * yHex & 1 / 2)) / GlobalFuncs.miniMapSize;
+		int xHex = x / GlobalFuncs.miniMapSize;
+		//int xHex = (x - (GlobalFuncs.miniMapSize * yHex & 1 / 2)) / GlobalFuncs.miniMapSize;
 		
 		return new hex.HexOff(xHex - 2, yHex - 2);
 	}

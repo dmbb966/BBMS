@@ -361,6 +361,10 @@ public class Hex {
 		} else {
 			if (x == GlobalFuncs.scenMap.friendlyZone) g.setColor(Color.BLUE);
 			else if (x == GlobalFuncs.scenMap.enemyZone) g.setColor(Color.RED);
+			else {
+				g.setColor(oldBrush);
+				return;
+			}
 			
 			if (tEnum != TerrainEnum.INVALID) g.fillRect(xCent - 2, yCent - 2, 4, 4); 
 		}

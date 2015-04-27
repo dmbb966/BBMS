@@ -51,6 +51,7 @@ public class GlobalFuncs {
 	
 	public static double networkResultThreshold = 0.75;
 	public static double mutateProbability = 0.05;
+	public static int epochInterval = 10;
 	
 	public static String dirPrefix = "T";
 	
