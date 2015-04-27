@@ -559,10 +559,10 @@ public class JNEATIntegration {
     	case 2:
     		GlobalFuncs.defaultOrgType = OrganismTypeEnum.SIMPLE_DUAL;
     		break;
-    	case 3:
+    	case 4:
     		GlobalFuncs.defaultOrgType = OrganismTypeEnum.BASE_MAXHEX;
     		break;
-    	case 4:
+    	case 3:
     		GlobalFuncs.defaultOrgType = OrganismTypeEnum.BASE_RANDOM;
     		break;
     	case 7:

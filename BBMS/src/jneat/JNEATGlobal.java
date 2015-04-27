@@ -23,7 +23,7 @@ public class JNEATGlobal {
 	static double p_mutdiff_coeff = 0.1;		// Weight difference between genes
 	
 	/** Age at which the Species starts to be penalized */
-	static int p_dropoff_age = 50;
+	static int p_dropoff_age = 5;
 	
 	/** Fitness multiplier if age exceeds dropoff_age*/
 	static double p_dropoff_coeff = 0.5;	

@@ -411,8 +411,14 @@ public class DialogTestPop extends javax.swing.JDialog {
     }                                                   
 
     private void ShareSpotCheckboxItemStateChanged(java.awt.event.ItemEvent evt) {                                                   
-        if (evt.getStateChange() == 1) GlobalFuncs.defaultFitType = FitnessTypeEnum.SHARED_SPOTTING;
-        else GlobalFuncs.defaultFitType = FitnessTypeEnum.SIMPLE_GREEDY;
+        if (evt.getStateChange() == 1) {
+            GlobalFuncs.defaultFitType = FitnessTypeEnum.SHARED_SPOTTING;
+            GlobalFuncs.calcShared = true;
+        }
+        else {
+            GlobalFuncs.defaultFitType = FitnessTypeEnum.SIMPLE_GREEDY;
+            GlobalFuncs.calcShared = false;
+        }
     }                                                  
 
     private void ForceConcealmentItemStateChanged(java.awt.event.ItemEvent evt) {                                                  
