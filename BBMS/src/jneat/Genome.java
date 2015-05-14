@@ -314,7 +314,8 @@ public class Genome {
 					}
 					
 					// Choose a random trait
-					Trait chosenTrait = traits.elementAt(GlobalFuncs.randRange(0, traits.size() - 1));
+					//Trait chosenTrait = traits.elementAt(GlobalFuncs.randRange(0, traits.size() - 1));
+					Trait chosenTrait = new Trait();
 					
 					// Choose the new weight
 					double newWeight = GlobalFuncs.randPosNeg() * GlobalFuncs.randFloat() * 10.0;
@@ -411,7 +412,8 @@ public class Genome {
 				
 				int curnode_id = pop.getCurNodeID_Inc();
 				newNode = new NNode(NodeTypeEnum.NEURON, curnode_id, NodeLabelEnum.HIDDEN);
-				newNode.nodeTrait = traits.firstElement();
+				//newNode.nodeTrait = traits.firstElement();
+				newNode.nodeTrait = new Trait();
 				
 				int gene_innov1 = pop.getCurInnov_Inc();
 				newGene1 = new Gene(oldTrait, 1.0, in_node, newNode, oldLink.recurrent, gene_innov1, 0);
@@ -433,7 +435,8 @@ public class Genome {
 					
 					// Create the new genes and pass current nodeID to new node
 					newNode = new NNode(NodeTypeEnum.NEURON, _innov.newNode.id, NodeLabelEnum.HIDDEN);
-					newNode.nodeTrait = traits.firstElement();
+					//newNode.nodeTrait = traits.firstElement();
+					newNode.nodeTrait = new Trait();
 					
 					newGene1 = new Gene(oldTrait, 1.0, in_node, newNode, oldLink.recurrent, _innov.innovation_num1, 0);
 					newGene2 = new Gene(oldTrait, oldWeight, newNode, out_node, false, _innov.innovation_num2, 0);

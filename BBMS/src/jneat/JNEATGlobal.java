@@ -51,7 +51,7 @@ public class JNEATGlobal {
 	static double p_mutate_link_trait_prob = 0.0;
 	static double p_mutate_link_weights_prob = GlobalFuncs.mutateProbability;
 	static double p_mutate_node_trait_prob = 0.0;
-	static double p_mutate_only_prob = 0.0;
+	static double p_mutate_only_prob = 1.0;
 	static double p_mutate_random_trait_prob = 0.0; 
 	static double p_mutate_toggle_enable_prob = GlobalFuncs.mutateProbability;
 	static double p_mutate_toggle_reenable_prob = GlobalFuncs.mutateProbability;	// Probability of reenabling one gene in the genome during mutation

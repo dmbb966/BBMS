@@ -357,7 +357,7 @@ public class Hex {
 			
 			
 			g.setColor(tType.getColor());
-			if (tEnum != TerrainEnum.INVALID) g.fillRect(xCent - 1,  yCent - 1,  2,  2);
+			if (tEnum != TerrainEnum.INVALID && tEnum != TerrainEnum.CLEAR) g.fillRect(xCent - 1,  yCent - 1,  2,  2);
 		} else {
 			if (x == GlobalFuncs.scenMap.friendlyZone) g.setColor(Color.BLUE);
 			else if (x == GlobalFuncs.scenMap.enemyZone) g.setColor(Color.RED);

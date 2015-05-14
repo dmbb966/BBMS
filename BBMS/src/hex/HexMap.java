@@ -224,7 +224,7 @@ public class HexMap {
 	 */
 	public void recalcFlowRate() {
 		
-		if (GlobalFuncs.fixSlowRate) {
+		if (GlobalFuncs.fixSlowRate || Math.abs(GlobalFuncs.totalVaporDelta) < 20) {
 			GlobalFuncs.flowRate = 1.0;
 			return;
 		}
